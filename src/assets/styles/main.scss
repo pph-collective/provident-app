@@ -1,0 +1,20 @@
+$box-radius: 2px;
+
+@media (min-width: 900px) {
+  .desktop-container {
+    height: 70vh;
+    max-width: 900px;
+  }
+}
+
+.right-side {
+  width: 50%;
+  margin-left: 50%;
+}
+
+.left-side {
+  width: 50%;
+  margin-right: 50%;
+}
+
+@import '~bulma';
