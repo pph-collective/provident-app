@@ -15,8 +15,8 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRO_FOUND_VIDENT_BASE }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}'
           channelId: live
-          projectId: pro-found-vident-base
+          projectId: provident-ri
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels

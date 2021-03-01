@@ -3,7 +3,7 @@
     <section class="hero is-fullheight-with-navbar is-primary" id="top">
       <div class="hero-body">
         <h1 class="title">
-          PRO[FOUND|VIDENT]
+          PROVIDENT
         </h1>
         <h2 class="subtitle">A model with <i class="fas fa-heart" /></h2>
       </div>
