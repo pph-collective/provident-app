@@ -1,18 +1,3 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCzDuAs69PfILvMnh47yK7Seb-wpBfM_7w",
-  authDomain: "pro-found-vident-base.firebaseapp.com",
-  projectId: "pro-found-vident-base",
-  storageBucket: "pro-found-vident-base.appspot.com",
-  messagingSenderId: "757633754348",
-  appId: "1:757633754348:web:d3f39c13d5bca23e49b1c9"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
 // styling for scrollables
 import "aos/dist/aos.css";
 
@@ -20,9 +5,30 @@ import "aos/dist/aos.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 
+import store from "./store";
 import router from "./router";
+import fb from "@/firebase";
+
+// general styling
 require("@/assets/styles/main.scss");
+
+// listen for changes to user
+fb.auth.onAuthStateChanged(async user => {
+  store.dispatch("fetchUser", user);
+  if (user) {
+    let token = await user.getIdTokenResult();
+    console.log(token);
+    if (token.claims && token.claims.admin) {
+      store.dispatch("fetchAdmin", true);
+    } else {
+      store.dispatch("fetchAdmin", false);
+    }
+  } else {
+    store.dispatch("fetchAdmin", false);
+  }
+});
 
 createApp(App)
   .use(router)
+  .use(store)
   .mount("#app");
