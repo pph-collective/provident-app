@@ -27,7 +27,7 @@ export default {
   async login(email, password) {
     return await auth.signInWithEmailAndPassword(email, password);
   },
-  logout() {
-    auth.signOut();
+  async logout() {
+    await auth.signOut();
   }
 };

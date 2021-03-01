@@ -1,7 +1,7 @@
 <template>
   <FormCard>
     <h1 class="is-size-3 has-text-centered pb-3">Request Access</h1>
-    <form @submit.prevent="register">
+    <form v-if="!requested" @submit.prevent="register">
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input
@@ -23,23 +23,28 @@
             placeholder="Full Name"
             v-model="form.name"
           />
-          <span class="icon is-small is-left">
+          <span class="icon is-small">
             <i class="fas fa-user-circle"></i>
           </span>
         </p>
       </div>
       <div class="field">
-        <p class="control has-icons-left">
-          <input
-            class="input"
-            type="text"
-            placeholder="Organization"
-            v-model="form.organization"
-          />
-          <span class="icon is-small is-left">
+        <div class="control has-icons-left">
+          <div class="select">
+            <select v-model="form.organization">
+              <option
+                v-for="organization in organizations"
+                v-bind:value="organization"
+                :key="organization"
+              >
+                {{ organization }}
+              </option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
             <i class="fas fa-sitemap"></i>
-          </span>
-        </p>
+          </div>
+        </div>
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
@@ -47,14 +52,28 @@
             Request Access
           </button>
         </p>
-        <p v-if="requested">Requested!</p>
-        <p v-if="error">{{ error }}</p>
+        <p v-if="error" class="has-text-danger">
+          <strong>{{ error }}</strong>
+        </p>
       </div>
     </form>
+    <div v-else class="is-flex is-flex-direction-column">
+      <p><strong>Your request has been received.</strong></p>
+      <p>
+        An administrator will review your request and respond within a week.
+      </p>
+      <button
+        class="button my-2 is-info is-centered"
+        @click="$router.push('/')"
+      >
+        Back to Home
+      </button>
+    </div>
   </FormCard>
 </template>
 
 <script>
+import { reactive, ref } from "vue";
 import fb from "@/firebase";
 import FormCard from "@/components/FormCard";
 
@@ -62,29 +81,49 @@ export default {
   components: {
     FormCard
   },
-  data() {
-    return {
-      form: {
-        email: "",
-        name: "",
-        organization: "" // make this a dropdown
-      },
-      requested: false,
-      error: null
-    };
-  },
-  methods: {
-    async register() {
+  setup() {
+    const form = reactive({
+      email: "",
+      name: "",
+      organization: "" // make this a dropdown
+    });
+    const requested = ref(false);
+    const error = ref(null);
+    const organizations = ref([]);
+
+    fb.db
+      .collection("organizations")
+      .get()
+      .then(snapshot => {
+        organizations.value = snapshot.docs.map(doc => doc.data().name);
+      });
+
+    const register = async () => {
       try {
-        console.log(this.form);
-        let res = await fb.db.collection("user_requests").add({ ...this.form });
-        console.log(res);
-        this.requested = true;
+        await fb.db.collection("user_requests").add({ ...form });
+        requested.value = true;
       } catch (err) {
-        this.error = err.message;
-        console.log(err);
+        error.value = err.message;
       }
-    }
+    };
+
+    return {
+      form,
+      requested,
+      error,
+      organizations,
+      register
+    };
   }
 };
 </script>
+
+<style>
+.select {
+  width: 100%;
+}
+
+.select select {
+  width: 100%;
+}
+</style>

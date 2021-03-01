@@ -17,4 +17,9 @@ $box-radius: 2px;
   margin-right: 50%;
 }
 
+.is-centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @import '~bulma';

@@ -74,8 +74,8 @@ export default {
     toggleBurgerMenu() {
       this.hamburgerActive = !this.hamburgerActive;
     },
-    logout() {
-      fb.logout();
+    async logout() {
+      await fb.logout();
       this.$router.push("/");
     }
   }

@@ -67,7 +67,11 @@ export default {
         console.log(this.form);
         let res = await fb.login(this.form.email, this.form.password);
         console.log(res);
-        this.$router.replace({ name: "Snack" });
+        if (window.history.length > 1) {
+          this.$router.back();
+        } else {
+          this.$router.replace({ name: "Snack" });
+        }
       } catch (err) {
         console.log(err);
       }
