@@ -8,7 +8,9 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "shp2topo": "./shp2topo.sh"
+    "shp2topo": "./shp2topo.sh",
+    "firebase:dev": "firebase emulators:start --import emulator_data",
+    "firebase:savedev": "firebase emulators:export emulator_data"
   },
   "dependencies": {
     "aos": "^2.3.4",

@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
@@ -16,14 +17,17 @@ firebase.initializeApp(firebaseConfig);
 
 let db = firebase.firestore();
 let auth = firebase.auth();
+let fn = firebase.functions();
 if (location.hostname === "localhost") {
   db.useEmulator("localhost", 8080);
   auth.useEmulator("http://localhost:9099");
+  fn.useEmulator("localhost", 9090);
 }
 
 export default {
   auth,
   db,
+  fn,
   async login(email, password) {
     return await auth.signInWithEmailAndPassword(email, password);
   },

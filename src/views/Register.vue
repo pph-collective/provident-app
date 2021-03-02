@@ -100,7 +100,9 @@ export default {
 
     const register = async () => {
       try {
-        await fb.db.collection("user_requests").add({ ...form });
+        await fb.db
+          .collection("user_requests")
+          .add({ ...form, status: "pending" });
         requested.value = true;
       } catch (err) {
         error.value = err.message;
