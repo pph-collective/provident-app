@@ -1,45 +1,64 @@
 <template>
-  <div
-    class="container has-background-light p-5 my-5 content desktop-container"
-  >
-    <h1>Admin page</h1>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Organization</th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="req in userRequests" :key="req.email">
-          <td>{{ req.name }}</td>
-          <td>{{ req.organization }}</td>
-          <td>{{ req.email }}</td>
-          <td>
-            <span class="icon-text">
-              <span class="icon is-small" @click="approve(req)">
-                <i class="fas fa-user-check px-2 has-text-success"></i>
+  <div class="container">
+    <div
+      v-if="alert.message"
+      :class="['notification', 'mt-4', 'is-' + alert.color]"
+    >
+      <button class="delete" @click="dismissAlert"></button>
+      {{ alert.message }}
+    </div>
+    <section class="section">
+      <h1 class="title">Review Access Requests</h1>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Organization</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="req in userRequests" :key="req.email">
+            <td>{{ req.name }}</td>
+            <td>{{ req.organization }}</td>
+            <td>{{ req.email }}</td>
+            <td>
+              <span class="icon-text">
+                <span
+                  class="icon is-small px-3 is-clickable"
+                  @click="approve(req)"
+                >
+                  <i class="fas fa-user-check has-text-success"></i>
+                </span>
+                <span
+                  class="icon is-small px-3 is-clickable"
+                  @click="deny(req)"
+                >
+                  <i class="fas fa-user-times has-text-danger"></i>
+                </span>
               </span>
-              <span class="icon is-small" @click="deny(req)">
-                <i class="fas fa-user-times px-2 has-text-danger"></i>
-              </span>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
 </template>
 
 <script>
-import { ref, onUnmounted } from "vue";
+import { ref, reactive, onUnmounted } from "vue";
 import fb from "@/firebase";
 
 export default {
   setup() {
     const userRequests = ref([]);
+    const alert = reactive({ color: "", message: "" });
+
+    const dismissAlert = () => {
+      alert.message = "";
+    };
 
     let unsubUserRequests = fb.db
       .collection("user_requests")
@@ -58,24 +77,27 @@ export default {
 
     const approve = async userRequest => {
       try {
-        let { uid } = await addUser({
+        await addUser({
           email: userRequest.email,
           name: userRequest.name
         });
-        console.log(uid);
+
         // update request status
         fb.db
           .collection("user_requests")
           .doc(userRequest.id)
           .update({ status: "approved" });
+
         // send password reset email
-        // TODO: not sending properly? how to check, also need a page to reset the email at
-        fb.auth.sendPasswordResetEmail(userRequest.email);
+        await fb.auth.sendPasswordResetEmail(userRequest.email);
+
+        alert.color = "success";
+        alert.message = `Success! Email sent to ${userRequest.email} to set password`;
       } catch (err) {
         console.log(err);
+        alert.color = "danger";
+        alert.message = err.message;
       }
-
-      console.log("I approve!");
     };
 
     const deny = userRequest => {
@@ -86,7 +108,7 @@ export default {
       console.log("Denied!");
     };
 
-    return { userRequests, approve, deny };
+    return { userRequests, approve, deny, alert, dismissAlert };
   }
 };
 </script>

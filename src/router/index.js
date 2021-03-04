@@ -21,6 +21,21 @@ const routes = [
       import(/* webpackChunkName: "register" */ "../views/Register.vue")
   },
   {
+    path: "/auth",
+    redirect: to => {
+      const { query } = to;
+      if (query.action === "resetPassword") {
+        return { path: "/updatepassword", query: query };
+      }
+    }
+  },
+  {
+    path: "/updatepassword",
+    name: "ResetPassword",
+    component: () =>
+      import(/* webpackChunkName: "register" */ "../views/ResetPassword.vue")
+  },
+  {
     path: "/snack",
     name: "Snack",
     beforeEnter: (to, from, next) => {

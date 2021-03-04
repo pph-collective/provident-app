@@ -48,7 +48,17 @@
           >
             Log In
           </button>
-          <button v-else class="button my-2" @click="logout">Log Out</button>
+          <div v-else class="is-flex is-flex-row">
+            <div class="navbar-item">
+              <span class="icon-text has-text-light">
+                <span class="icon">
+                  <i class="fas fa-user-circle"></i>
+                </span>
+                <span>{{ user.data.displayName }}</span>
+              </span>
+            </div>
+            <a class="button my-2 navbar-item" @click="logout">Log Out</a>
+          </div>
         </div>
       </div>
     </div>

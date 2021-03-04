@@ -27,7 +27,7 @@ const store = createStore({
       commit("SET_LOGGED_IN", user !== null);
       if (user) {
         commit("SET_USER", {
-          email: user.email
+          ...user
         });
       } else {
         commit("SET_USER", null);

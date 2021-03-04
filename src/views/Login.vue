@@ -1,4 +1,8 @@
 <template>
+  <div v-if="alert.length > 0" class="notification is-primary">
+    <button @click="dismissAlert" class="delete"></button>
+    {{ alert }}
+  </div>
   <FormCard>
     <h1 class="is-size-3 has-text-centered pb-3">Log In</h1>
     <form @submit.prevent="submit">
@@ -27,6 +31,9 @@
             <i class="fas fa-lock"></i>
           </span>
         </p>
+        <p class="has-text-right">
+          <a @click="resetRequest">reset password</a>
+        </p>
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
@@ -40,6 +47,7 @@
           </button>
         </p>
       </div>
+      <p v-if="error" class="has-text-danger">{{ error }}</p>
     </form>
   </FormCard>
 </template>
@@ -58,8 +66,14 @@ export default {
         email: "",
         password: ""
       },
-      error: null
+      error: null,
+      alert: ""
     };
+  },
+  computed: {
+    emailValid() {
+      return true; // TODO - check this better...
+    }
   },
   methods: {
     async submit() {
@@ -73,8 +87,21 @@ export default {
           this.$router.replace({ name: "Snack" });
         }
       } catch (err) {
+        this.error = err.message;
         console.log(err);
       }
+    },
+    async resetRequest() {
+      try {
+        await fb.auth.sendPasswordResetEmail(this.form.email);
+        this.alert = "Success. Check your email to reset your password.";
+        this.error = null;
+      } catch (err) {
+        this.error = err.message;
+      }
+    },
+    dismissAlert() {
+      this.alert = "";
     }
   }
 };

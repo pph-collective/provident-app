@@ -20,11 +20,16 @@ exports.addUser = functions.https.onCall(async (data, context) => {
       "The function must be called " + "while authenticated as admin."
     );
   }
-  // Grab the text parameter.
-  const email = data.email;
-  const displayName = data.name;
 
-  const user = await admin.auth().createUser({ email, displayName });
-  // Send back a message that we've successfully written the message
-  return { uid: user.uid };
+  try {
+    // Grab the text parameter.
+    const email = data.email;
+    const displayName = data.name;
+
+    const user = await admin.auth().createUser({ email, displayName });
+    // Send back a message that we've successfully written the message
+    return { uid: user.uid };
+  } catch (err) {
+    throw new functions.https.HttpsError(err.message);
+  }
 });
