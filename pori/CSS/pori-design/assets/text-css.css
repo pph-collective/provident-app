@@ -1,0 +1,62 @@
+
+@import url('https://fonts.googleapis.com/css?family=Lora:400,700&display=swap');
+@import url("https://use.typekit.net/biy5yab.css");
+
+
+/* desktop reference url: http://pori-staging.s3-website-us-east-1.amazonaws.com */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lora", serif; /* 1 */
+  text-align: left;
+}
+
+h1 {
+  font-size: calc(46px + 2vw);
+  line-height: calc(56px + 2vw);
+  color: #2b3564;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: calc(32px + 2vw);
+  line-height: calc(32px + 1.8vw);
+  font-weight: normal;
+  margin-top: 3vh;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: calc(18px + 1vw);
+  color: #777;
+  text-align: left;
+  margin-top: 4vh;
+  margin-bottom: 3vh;
+}
+
+h5 {
+  font-size: calc(14px + 0.8vw);
+  line-height: calc(24px + 1.2vw);
+  font-weight: normal;
+}
+
+h6 {
+  font-size: 1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-family: 'futura-pt', sans-serif;
+  font-weight: 700;
+  text-decoration: underline;
+  letter-spacing: 0.5px;
+  text-underline-position: under;
+  color: #263564;
+}
+
+p {
+  text-align: left;
+  font-family: Georgia, serif;
+  font-size: calc(7px + 0.9vw);
+  line-height: calc(7px + 1.8vw);
+  color: #1a1a1a;
+  font-weight: 300;
+}
+
