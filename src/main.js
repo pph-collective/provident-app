@@ -17,7 +17,6 @@ fb.auth.onAuthStateChanged(async user => {
   store.dispatch("fetchUser", user);
   if (user) {
     let token = await user.getIdTokenResult();
-    console.log(token);
     if (token.claims && token.claims.admin) {
       store.dispatch("fetchAdmin", true);
     } else {

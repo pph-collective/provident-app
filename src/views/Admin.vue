@@ -79,7 +79,8 @@ export default {
       try {
         await addUser({
           email: userRequest.email,
-          name: userRequest.name
+          name: userRequest.name,
+          organization: userRequest.organization
         });
 
         // update request status

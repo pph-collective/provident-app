@@ -6,6 +6,11 @@ service cloud.firestore {
       allow create: if true;
     }
 
+    match /activity_log/{document=**} {
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+      allow create: if true;
+    }
+
     match /organizations/{organization} {
       allow read: if true;
     }

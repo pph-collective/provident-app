@@ -29,7 +29,13 @@ export default {
   db,
   fn,
   async login(email, password) {
-    return await auth.signInWithEmailAndPassword(email, password);
+    const res = await auth.signInWithEmailAndPassword(email, password);
+    db.collection("activity_log").add({
+      user: res.user.uid,
+      action: "login",
+      datetime: Date.now()
+    });
+    return res.user;
   },
   async logout() {
     await auth.signOut();

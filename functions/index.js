@@ -13,11 +13,11 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 exports.addUser = functions.https.onCall(async (data, context) => {
-  if (!context.auth && context.auth.token.admin) {
+  if (!context.auth || !context.auth.token.admin) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "The function must be called " + "while authenticated as admin."
+      "The function must be called while authenticated as an admin."
     );
   }
 
@@ -27,7 +27,11 @@ exports.addUser = functions.https.onCall(async (data, context) => {
     const displayName = data.name;
 
     const user = await admin.auth().createUser({ email, displayName });
-    // Send back a message that we've successfully written the message
+    await admin.auth().setCustomUserClaims(user.uid, {
+      organization: data.organization,
+      admin: false
+    });
+    // Send back a message that we've successfully created the user
     return { uid: user.uid };
   } catch (err) {
     throw new functions.https.HttpsError(err.message);

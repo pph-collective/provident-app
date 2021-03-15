@@ -38,11 +38,9 @@ const routes = [
   {
     path: "/snack",
     name: "Snack",
-    beforeEnter: (to, from, next) => {
-      if (store.state.user.authenticated) {
-        next();
-      } else {
-        next("/login");
+    beforeEnter: to => {
+      if (!store.state.user.authenticated) {
+        return { name: "Login", query: { redirect: to.path } };
       }
     },
     // route level code-splitting
@@ -54,12 +52,9 @@ const routes = [
   {
     path: "/admin",
     name: "Admin",
-    beforeEnter: (to, from, next) => {
-      console.log(store.state.user);
-      if (store.state.user.authenticated && store.state.user.admin) {
-        next();
-      } else {
-        next("/login");
+    beforeEnter: to => {
+      if (!store.state.user.authenticated || !store.state.user.admin) {
+        return { name: "Login", query: { redirect: to.path } };
       }
     },
     // route level code-splitting

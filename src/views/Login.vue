@@ -70,21 +70,14 @@ export default {
       alert: ""
     };
   },
-  computed: {
-    emailValid() {
-      return true; // TODO - check this better...
-    }
-  },
   methods: {
     async submit() {
       try {
-        console.log(this.form);
-        let res = await fb.login(this.form.email, this.form.password);
-        console.log(res);
-        if (window.history.length > 1) {
-          this.$router.back();
+        await fb.login(this.form.email, this.form.password);
+        if (this.$route.query.redirect) {
+          this.$router.push(this.$route.query.redirect);
         } else {
-          this.$router.replace({ name: "Snack" });
+          this.$router.back();
         }
       } catch (err) {
         this.error = err.message;
