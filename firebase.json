@@ -17,6 +17,9 @@
       }
     ]
   },
+  "functions": {
+    "runtime": "nodejs12"
+  },
   "emulators": {
     "auth": {
       "port": 9099
