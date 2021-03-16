@@ -166,7 +166,6 @@ export default {
         form.password = "";
         form.confirmPassword = "";
         await fb.auth.currentUser.updateProfile({ displayName: form.name });
-        await fb.logout();
         // to do set display name
         await fb.db
           .collection("users")
@@ -177,9 +176,12 @@ export default {
             organization: form.organization,
             status: "pending"
           });
+
+        await fb.logout();
         requested.value = true;
       } catch (err) {
         error.value = err.message;
+        await fb.logout();
       }
     };
 
