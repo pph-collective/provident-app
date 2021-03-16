@@ -13,6 +13,7 @@
             type="email"
             placeholder="Email"
             v-model="form.email"
+            autocomplete="username"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
@@ -26,6 +27,7 @@
             type="password"
             placeholder="Password"
             v-model="form.password"
+            autocomplete="current-password"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -42,7 +44,11 @@
           </button>
         </p>
         <p class="control">
-          <button class="button is-light" @click="$router.push('/register')">
+          <button
+            class="button is-light"
+            type="button"
+            @click="$router.push('/register')"
+          >
             Request Access
           </button>
         </p>
@@ -74,13 +80,20 @@ export default {
     async submit() {
       try {
         await fb.login(this.form.email, this.form.password);
-        if (this.$route.query.redirect) {
-          this.$router.push(this.$route.query.redirect);
+        const { status } = await fb.getUserRequest(this.form.email);
+        if (status === "approved") {
+          if (this.$route.query.redirect) {
+            this.$router.push(this.$route.query.redirect);
+          } else {
+            this.$router.back();
+          }
         } else {
-          this.$router.back();
+          this.error = `User account not approved: ${status}`;
+          await fb.logout();
         }
       } catch (err) {
         this.error = err.message;
+        await fb.logout();
         console.log(err);
       }
     },

@@ -17,9 +17,6 @@
       }
     ]
   },
-  "functions": {
-    "runtime": "nodejs12"
-  },
   "emulators": {
     "auth": {
       "port": 9099
@@ -29,9 +26,6 @@
     },
     "hosting": {
       "port": 5000
-    },
-    "functions": {
-      "port": 9090
     },
     "ui": {
       "enabled": true

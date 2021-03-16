@@ -14,17 +14,23 @@ require("@/assets/styles/main.scss");
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async user => {
-  store.dispatch("fetchUser", user);
   if (user) {
-    let token = await user.getIdTokenResult();
-    if (token.claims && token.claims.admin) {
-      store.dispatch("fetchAdmin", true);
-    } else {
-      store.dispatch("fetchAdmin", false);
+    const { status, organization } = await fb.getUserRequest(user.email);
+    if (status === "approved") {
+      store.dispatch("fetchUser", { ...user, status, organization });
+      let token = await user.getIdTokenResult();
+      if (token.claims && token.claims.admin) {
+        store.dispatch("fetchAdmin", true);
+      } else {
+        store.dispatch("fetchAdmin", false);
+      }
+      return;
     }
-  } else {
-    store.dispatch("fetchAdmin", false);
   }
+
+  // fallthrough
+  store.dispatch("fetchUser", null);
+  store.dispatch("fetchAdmin", false);
 });
 
 createApp(App)
