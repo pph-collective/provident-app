@@ -34,6 +34,6 @@ exports.addUser = functions.https.onCall(async (data, context) => {
     // Send back a message that we've successfully created the user
     return { uid: user.uid };
   } catch (err) {
-    throw new functions.https.HttpsError(err.message);
+    throw new functions.https.HttpsError("internal", err.message);
   }
 });
