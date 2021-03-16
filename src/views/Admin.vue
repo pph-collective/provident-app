@@ -49,6 +49,8 @@
 
 <script>
 import { ref, reactive, onUnmounted } from "vue";
+import functions from "firebase/functions";
+
 import fb from "@/firebase";
 
 export default {
@@ -73,7 +75,7 @@ export default {
     // unsubscribe when leaving this page
     onUnmounted(unsubUserRequests);
 
-    const addUser = fb.fn.httpsCallable("addUser");
+    const addUser = functions.region("us-central1").httpsCallable("addUser");
 
     const approve = async userRequest => {
       try {

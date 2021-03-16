@@ -22,8 +22,6 @@ if (location.hostname === "localhost") {
   db.useEmulator("localhost", 8088);
   auth.useEmulator("http://localhost:9099");
   fn.useEmulator("localhost", 9090);
-} else {
-  fn = fn.region("us-central1");
 }
 
 export default {
