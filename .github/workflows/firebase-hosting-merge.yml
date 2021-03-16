@@ -22,7 +22,4 @@ jobs:
           FIREBASE_CLI_PREVIEWS: hostingchannels
       - env:
           FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
-        run: |
-          cd functions
-          yarn
-          yarn deploy  --token "$FIREBASE_TOKEN"
+        run: yarn run firebase deploy --only functions --token "$FIREBASE_TOKEN"
