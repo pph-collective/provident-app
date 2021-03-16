@@ -48,7 +48,6 @@ export default {
         return {};
       }
     } catch (err) {
-      console.log(err);
       return {};
     }
   }

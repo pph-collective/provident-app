@@ -44,7 +44,11 @@
           </button>
         </p>
         <p class="control">
-          <button class="button is-light" @click="$router.push('/register')">
+          <button
+            class="button is-light"
+            type="button"
+            @click="$router.push('/register')"
+          >
             Request Access
           </button>
         </p>
