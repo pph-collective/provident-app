@@ -1,5 +1,5 @@
 {
-  "name": "pro-found-vident-base",
+  "name": "provident",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,9 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "shp2topo": "./shp2topo.sh"
+    "shp2topo": "./shp2topo.sh",
+    "firebase:dev": "firebase emulators:start --import emulator_data",
+    "firebase:savedev": "firebase emulators:export emulator_data"
   },
   "dependencies": {
     "aos": "^2.3.4",
@@ -22,7 +24,8 @@
     "vega-embed": "^6.15.1",
     "vega-lite": "^4.17.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuex": "4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

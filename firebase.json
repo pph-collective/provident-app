@@ -16,5 +16,22 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8088
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "functions": {
+      "port": 9090
+    },
+    "ui": {
+      "enabled": true
+    }
   }
 }

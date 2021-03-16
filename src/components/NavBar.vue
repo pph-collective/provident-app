@@ -4,7 +4,7 @@
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <img
-            src="https://bulma.io/images/bulma-logo.png"
+            src="assets/images/provident-text-logo.png"
             width="112"
             height="28"
           />
@@ -34,12 +34,31 @@
           <router-link to="/snack" class="navbar-item">Snack</router-link>
 
           <router-link to="/about" class="navbar-item">About</router-link>
+
+          <router-link v-if="user.admin" to="/admin" class="navbar-item"
+            >Admin</router-link
+          >
         </div>
 
         <div class="navbar-end">
-          <a class="navbar-item" href="https://github.com/marshall-lab">
-            <i class="fa-2x fab fa-github"></i>
-          </a>
+          <button
+            v-if="!user.authenticated"
+            class="button my-2"
+            @click="$router.push('login')"
+          >
+            Log In
+          </button>
+          <div v-else class="is-flex is-flex-row">
+            <div class="navbar-item">
+              <span class="icon-text has-text-light">
+                <span class="icon">
+                  <i class="fas fa-user-circle"></i>
+                </span>
+                <span>{{ user.data.displayName }}</span>
+              </span>
+            </div>
+            <a class="button my-2 navbar-item" @click="logout">Log Out</a>
+          </div>
         </div>
       </div>
     </div>
@@ -47,6 +66,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
+import fb from "@/firebase";
+
 export default {
   name: "NavBar",
   data() {
@@ -54,9 +77,16 @@ export default {
       hamburgerActive: false
     };
   },
+  computed: {
+    ...mapState(["user"])
+  },
   methods: {
     toggleBurgerMenu() {
       this.hamburgerActive = !this.hamburgerActive;
+    },
+    async logout() {
+      await fb.logout();
+      this.$router.push("/");
     }
   }
 };
