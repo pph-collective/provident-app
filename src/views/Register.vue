@@ -22,8 +22,9 @@
             type="text"
             placeholder="Full Name"
             v-model="form.name"
+            autocomplete="name"
           />
-          <span class="icon is-small">
+          <span class="icon is-small is-left">
             <i class="fas fa-user-circle"></i>
           </span>
         </p>
@@ -46,16 +47,51 @@
           </div>
         </div>
       </div>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input
+            class="input"
+            type="password"
+            placeholder="Password"
+            v-model="form.password"
+            autocomplete="new-password"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+        </p>
+      </div>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input
+            class="input"
+            type="password"
+            placeholder="Confirm Password"
+            v-model="form.confirmPassword"
+            autocomplete="new-password"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+        </p>
+      </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <button class="button is-success" type="submit">
+          <button
+            class="button is-success"
+            :disabled="!formValid.status"
+            type="submit"
+          >
             Request Access
           </button>
         </p>
-        <p v-if="error" class="has-text-danger">
-          <strong>{{ error }}</strong>
-        </p>
       </div>
+      <p v-if="error" class="has-text-danger">
+        {{ error }}
+      </p>
+      <p v-if="formValid.message.length > 0" class="has-text-danger">
+        {{ formValid.message }}
+      </p>
     </form>
     <div v-else class="is-flex is-flex-direction-column">
       <p><strong>Your request has been received.</strong></p>
@@ -73,7 +109,8 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
+
 import fb from "@/firebase";
 import FormCard from "@/components/FormCard";
 
@@ -82,10 +119,13 @@ export default {
     FormCard
   },
   setup() {
+    // TODO: terms and conditions
     const form = reactive({
       email: "",
       name: "",
-      organization: "" // make this a dropdown
+      organization: "",
+      password: "",
+      confirmPassword: ""
     });
     const requested = ref(false);
     const error = ref(null);
@@ -98,11 +138,45 @@ export default {
         organizations.value = snapshot.docs.map(doc => doc.data().name);
       });
 
+    const formValid = computed(() => {
+      // all fields must be filled in
+      if (
+        Object.values(form).reduce(
+          (acc, curr) => acc || curr.length === 0,
+          false
+        )
+      ) {
+        return { status: false, message: "" };
+      } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
+        return { status: false, message: "" };
+      } else if (form.password !== form.confirmPassword) {
+        return {
+          status: false,
+          message: "password and confirmation do not match"
+        };
+      } else {
+        return { status: true, message: "" };
+      }
+    });
+
     const register = async () => {
       try {
+        await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
+        //scrub out password
+        form.password = "";
+        form.confirmPassword = "";
+        await fb.auth.currentUser.updateProfile({ displayName: form.name });
+        await fb.logout();
+        // to do set display name
         await fb.db
-          .collection("user_requests")
-          .add({ ...form, status: "pending" });
+          .collection("users")
+          .doc(form.email)
+          .set({
+            email: form.email,
+            name: form.name,
+            organization: form.organization,
+            status: "pending"
+          });
         requested.value = true;
       } catch (err) {
         error.value = err.message;
@@ -111,6 +185,7 @@ export default {
 
     return {
       form,
+      formValid,
       requested,
       error,
       organizations,

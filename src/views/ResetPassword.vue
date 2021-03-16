@@ -43,20 +43,26 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <button class="button is-success" type="submit">
+          <button
+            class="button is-success"
+            :disabled="!formValid.status"
+            type="submit"
+          >
             Update Password
           </button>
         </p>
       </div>
       <p v-if="error" class="has-text-danger">{{ error }}</p>
-      <p v-if="formValid.length > 0" class="has-text-danger">{{ formValid }}</p>
+      <p v-if="formValid.message.length > 0" class="has-text-danger">
+        {{ formValid.message }}
+      </p>
     </form>
   </FormCard>
 </template>
 
 <script>
-import { ref, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { ref, reactive, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import fb from "@/firebase";
 import FormCard from "@/components/FormCard";
@@ -66,6 +72,7 @@ export default {
     FormCard
   },
   setup() {
+    const router = useRouter();
     const route = useRoute();
 
     const form = reactive({
@@ -75,23 +82,29 @@ export default {
     });
     const error = ref(null);
 
-    const formValid = () => {
-      if (form.password !== form.confirmPasword) {
-        return "password and confirmation do not match";
+    const formValid = computed(() => {
+      if (
+        form.resetCode.length === 0 ||
+        form.password.length < 6 ||
+        form.confirmPassword.length < 6
+      ) {
+        return { status: false, message: "" };
+      } else if (form.password !== form.confirmPassword) {
+        return {
+          status: false,
+          message: "password and confirmation do not match"
+        };
       } else {
-        return "";
+        return { status: true, message: "" };
       }
-    };
+    });
 
     const submit = async () => {
       try {
-        await fb.auth.confirmPasswordReset(
-          this.form.resetCode,
-          this.form.password
-        );
-        this.$router.replace({ name: "Login" });
+        await fb.auth.confirmPasswordReset(form.resetCode, form.password);
+        router.replace({ name: "Login" });
       } catch (err) {
-        this.error = `${err.message}`;
+        error.value = `${err.message}`;
       }
     };
 

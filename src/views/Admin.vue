@@ -49,7 +49,6 @@
 
 <script>
 import { ref, reactive, onUnmounted } from "vue";
-import functions from "firebase/functions";
 
 import fb from "@/firebase";
 
@@ -63,7 +62,7 @@ export default {
     };
 
     let unsubUserRequests = fb.db
-      .collection("user_requests")
+      .collection("users")
       .where("status", "==", "pending")
       .onSnapshot(snapshot => {
         userRequests.value = snapshot.docs.map(doc => {
@@ -75,27 +74,17 @@ export default {
     // unsubscribe when leaving this page
     onUnmounted(unsubUserRequests);
 
-    const addUser = functions.region("us-central1").httpsCallable("addUser");
-
-    const approve = async userRequest => {
+    const approve = async user => {
       try {
-        await addUser({
-          email: userRequest.email,
-          name: userRequest.name,
-          organization: userRequest.organization
-        });
-
         // update request status
+        // TODO: emails on approval/denial
         fb.db
-          .collection("user_requests")
-          .doc(userRequest.id)
+          .collection("users")
+          .doc(user.id)
           .update({ status: "approved" });
 
-        // send password reset email
-        await fb.auth.sendPasswordResetEmail(userRequest.email);
-
         alert.color = "success";
-        alert.message = `Success! Email sent to ${userRequest.email} to set password`;
+        alert.message = `Success!`;
       } catch (err) {
         console.log(err);
         alert.color = "danger";
@@ -105,7 +94,7 @@ export default {
 
     const deny = userRequest => {
       fb.db
-        .collection("user_requests")
+        .collection("users")
         .doc(userRequest.id)
         .update({ status: "denied" });
       console.log("Denied!");
