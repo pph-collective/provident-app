@@ -20,7 +20,9 @@ jobs:
           projectId: provident-ri
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-      - run: |
+      - env:
+          FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'
+        run: |
           cd functions
           yarn
-          yarn deploy
+          yarn deploy  --token "$FIREBASE_TOKEN"
