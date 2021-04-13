@@ -1,10 +1,10 @@
 <template>
-  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="container">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <img
-            src="assets/images/provident-text-logo.png"
+            src="assets/images/pori-provident-text-logo.png"
             width="112"
             height="28"
           />
@@ -26,14 +26,21 @@
 
       <div
         id="navbar-contents"
+        @click="toggleBurgerMenu"
         :class="['navbar-menu', { 'is-active': hamburgerActive }]"
       >
         <div class="navbar-start">
-          <router-link to="/" class="navbar-item">Home</router-link>
+          <router-link to="/" class="navbar-item has-text-primary"
+            >Home</router-link
+          >
 
-          <router-link to="/snack" class="navbar-item">Snack</router-link>
+          <router-link to="/snack" class="navbar-item has-text-primary"
+            >Snack</router-link
+          >
 
-          <router-link to="/about" class="navbar-item">About</router-link>
+          <router-link to="/about" class="navbar-item has-text-primary"
+            >About</router-link
+          >
 
           <router-link v-if="user.admin" to="/admin" class="navbar-item"
             >Admin</router-link
@@ -41,13 +48,13 @@
         </div>
 
         <div class="navbar-end">
-          <button
+          <router-link
             v-if="!user.authenticated"
-            class="button my-2"
-            @click="$router.push('login')"
+            to="/login"
+            class="button is-primary m-2 is-small navbar-item"
           >
             Log In
-          </button>
+          </router-link>
           <div v-else class="is-flex is-flex-row">
             <div class="navbar-item">
               <span class="icon-text has-text-light">
@@ -57,8 +64,19 @@
                 <span>{{ user.data.displayName }}</span>
               </span>
             </div>
-            <a class="button my-2 navbar-item" @click="logout">Log Out</a>
+            <a
+              class="button is-primary m-2 is-small navbar-item"
+              @click="logout"
+              >Log Out</a
+            >
           </div>
+
+          <a
+            class="button is-primary m-2 is-small navbar-item"
+            href="https://preventoverdoseri.org/"
+          >
+            Back to PORI
+          </a>
         </div>
       </div>
     </div>
@@ -91,3 +109,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.navbar-start .navbar-item {
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>

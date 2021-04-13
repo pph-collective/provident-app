@@ -39,7 +39,7 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <button class="button is-success" type="submit">
+          <button class="button is-primary" type="submit">
             Log In
           </button>
         </p>
