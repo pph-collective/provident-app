@@ -44,7 +44,7 @@ export default {
   grid-template-areas: "sidebar snack-content";
 
   &.collapsed {
-    grid-template-columns: 8ch auto;
+    grid-template-columns: 7ch auto;
   }
 }
 </style>

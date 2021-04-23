@@ -2,7 +2,7 @@
   <div class="p-2">
     <div class="has-text-right">
       <button type="button" class="button is-text bars" @click="toggle">
-        <i v-if="!collapsed" class="fas fa-times" />
+        <i v-if="!collapsed" class="fas fa-chevron-left" />
         <i v-else class="fas fa-chevron-right" />
       </button>
     </div>
@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     route() {
-      return this.$route.path.split("/").slice(-1);
+      return this.$route.path.split("/").slice(-1)[0];
     }
   },
   methods: {
@@ -100,7 +100,7 @@ export default {
 
 <style lang="scss" scoped>
 .is-active {
-  background-color: rgb(89, 81, 139) !important;
+  background-color: $primary !important;
 }
 .not-allowed-cursor {
   cursor: not-allowed;
