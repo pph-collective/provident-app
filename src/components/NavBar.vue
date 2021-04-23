@@ -48,35 +48,37 @@
         </div>
 
         <div class="navbar-end">
-          <router-link
-            v-if="!user.authenticated"
-            to="/login"
-            class="button is-primary m-2 is-small navbar-item"
-          >
-            Log In
-          </router-link>
-          <div v-else class="is-flex is-flex-row">
-            <div class="navbar-item">
-              <span class="icon-text has-text-light">
+          <div v-if="!user.authenticated" class="navbar-item">
+            <p class="control">
+              <router-link to="/login" class="button is-primary is-small">
+                Log In
+              </router-link>
+            </p>
+          </div>
+          <div v-else class="is-flex is-flex-row navbar-item">
+            <div class="navbar-item is-hidden-touch">
+              <span class="icon-text has-text-primary">
                 <span class="icon">
                   <i class="fas fa-user-circle"></i>
                 </span>
                 <span>{{ user.data.displayName }}</span>
               </span>
             </div>
-            <a
-              class="button is-primary m-2 is-small navbar-item"
-              @click="logout"
-              >Log Out</a
-            >
+            <p class="control">
+              <a class="button is-primary is-small" @click="logout">Log Out</a>
+            </p>
           </div>
 
-          <a
-            class="button is-primary m-2 is-small navbar-item"
-            href="https://preventoverdoseri.org/"
-          >
-            Back to PORI
-          </a>
+          <div class="navbar-item">
+            <p class="control">
+              <a
+                class="button is-primary is-small"
+                href="https://preventoverdoseri.org/"
+              >
+                Back to PORI
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
