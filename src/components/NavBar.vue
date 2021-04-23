@@ -1,10 +1,10 @@
 <template>
-  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="container">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <img
-            src="assets/images/provident-text-logo.png"
+            src="assets/images/pori-provident-text-logo.png"
             width="112"
             height="28"
           />
@@ -26,14 +26,21 @@
 
       <div
         id="navbar-contents"
+        @click="toggleBurgerMenu"
         :class="['navbar-menu', { 'is-active': hamburgerActive }]"
       >
         <div class="navbar-start">
-          <router-link to="/" class="navbar-item">Home</router-link>
+          <router-link to="/" class="navbar-item has-text-primary"
+            >Home</router-link
+          >
 
-          <router-link to="/snack" class="navbar-item">Snack</router-link>
+          <router-link to="/snack" class="navbar-item has-text-primary"
+            >Snack</router-link
+          >
 
-          <router-link to="/about" class="navbar-item">About</router-link>
+          <router-link to="/about" class="navbar-item has-text-primary"
+            >About</router-link
+          >
 
           <router-link v-if="user.admin" to="/admin" class="navbar-item"
             >Admin</router-link
@@ -41,23 +48,36 @@
         </div>
 
         <div class="navbar-end">
-          <button
-            v-if="!user.authenticated"
-            class="button my-2"
-            @click="$router.push('login')"
-          >
-            Log In
-          </button>
-          <div v-else class="is-flex is-flex-row">
-            <div class="navbar-item">
-              <span class="icon-text has-text-light">
+          <div v-if="!user.authenticated" class="navbar-item">
+            <p class="control">
+              <router-link to="/login" class="button is-primary is-small">
+                Log In
+              </router-link>
+            </p>
+          </div>
+          <div v-else class="is-flex is-flex-row navbar-item">
+            <div class="navbar-item is-hidden-touch">
+              <span class="icon-text has-text-primary">
                 <span class="icon">
                   <i class="fas fa-user-circle"></i>
                 </span>
                 <span>{{ user.data.displayName }}</span>
               </span>
             </div>
-            <a class="button my-2 navbar-item" @click="logout">Log Out</a>
+            <p class="control">
+              <a class="button is-primary is-small" @click="logout">Log Out</a>
+            </p>
+          </div>
+
+          <div class="navbar-item">
+            <p class="control">
+              <a
+                class="button is-primary is-small"
+                href="https://preventoverdoseri.org/"
+              >
+                Back to PORI
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -91,3 +111,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.navbar-start .navbar-item {
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>

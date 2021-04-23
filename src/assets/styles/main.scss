@@ -22,4 +22,33 @@ $box-radius: 2px;
   margin-right: auto;
 }
 
+// PORI styles:
+$family-serif: "lora", serif;
+$family-sans-serif: "proxima-nova", sans-serif;
+$family-primary: $family-serif;
+$family-secondary: $family-sans-serif;
+
+// $size-1: calc(46px + 2vw);
+// $size-2: calc(32px + 2vw);
+// $size-3: calc(18px + 1vw);
+// $size-5: calc(14px + 0.8vw);
+// $size-6: calc(10px + 1vw);
+// $size-7: calc(7px + 0.9vw);
+
+$radius: 3px;
+
+$pori-blue: #2A3465;
+$pori-red: #990000;
+$pori-link: #385AA8;
+$pori-black: #1A1A1A;
+
+$primary: $pori-blue;
+$link: $pori-link;
+$text: $pori-black;
+
+.button {
+    font-family: $family-secondary;
+    font-weight: bold;
+}
+
 @import '~bulma';
