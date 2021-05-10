@@ -15,5 +15,9 @@ service cloud.firestore {
     match /organizations/{organization} {
       allow read: if true;
     }
+
+    match /forms/{document=**} {
+      allow read: if request.auth != null;
+    }
   }
 }

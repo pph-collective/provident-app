@@ -5925,6 +5925,11 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+formvuelate@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/formvuelate/-/formvuelate-3.1.0.tgz#63042d23f6918d6416c580c33ae5f31183dea5cb"
+  integrity sha512-UZSv0LiFUiHIuKAxK6xJgW73gdz01qgcavpRhfbBk4DFVhOn0PXotnSMFkN3w6zE6fla+iJTDSrJL8RzjQgLwA==
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"

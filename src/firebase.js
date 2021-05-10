@@ -50,5 +50,19 @@ export default {
     } catch (err) {
       return {};
     }
+  },
+  async getForms() {
+    const forms = [];
+    try {
+      const docs = await db.collection("forms").get();
+      docs.forEach(doc => {
+        console.log(doc);
+        forms.push(doc.data());
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    return forms;
   }
 };
