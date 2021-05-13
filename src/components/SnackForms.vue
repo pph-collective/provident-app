@@ -1,5 +1,5 @@
 <template>
-  <div class="panel is-primary m-4">
+  <div class="panel is-primary m-4 has-background-white">
     <p class="panel-heading">
       I am forms!
     </p>
@@ -34,9 +34,9 @@
         </div>
 
         <div class="level-right">
-          <p class="level-item">
-            {{ form.status }}
-          </p>
+          <span class="level-item tag">
+            <p><strong>STATUS:</strong> {{ form.status }}</p>
+          </span>
           <button
             v-if="form.status !== 'Submitted'"
             class="button is-primary level-item"
@@ -47,7 +47,7 @@
           </button>
           <button
             v-else
-            class="button is-light level-item"
+            class="button is-primary is-light level-item"
             type="button"
             @click="activeForm = form"
           >
@@ -74,10 +74,14 @@
           <JSONForm
             :schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
+            :init-value="userForms[activeForm._id].response"
             @cancel="activeForm = {}"
-            @save="saveForm($event)"
-            @submitted="submitForm($event)"
+            @save="updateForm($event, 'Draft')"
+            @submitted="updateForm($event, 'Submitted')"
           />
+          <p v-if="formMessage" class="has-text-centered">
+            <small>{{ formMessage }}</small>
+          </p>
         </section>
       </div>
     </div>
@@ -101,6 +105,8 @@ export default {
     const activeForm = ref({});
     const tabs = ref(["To Do", "All", "Submitted"]);
     const selectedTab = ref("To Do");
+    const formMessage = ref("");
+
     const selectedForms = computed(() => {
       if (selectedTab.value === "All") return forms.value;
 
@@ -119,11 +125,13 @@ export default {
     });
 
     const store = useStore();
-    const user = computed(() => store.state.user);
+    const userEmail = computed(() =>
+      store.state.user.data ? store.state.user.data.email : ""
+    );
 
     onMounted(async () => {
       forms.value = await fb.getForms();
-      userForms.value = await fb.getUserForms(user.value.data.email);
+      userForms.value = await fb.getUserForms(userEmail.value);
 
       for (const [key, value] of Object.entries(forms.value)) {
         let userForm = userForms.value[key];
@@ -131,21 +139,28 @@ export default {
           value.status = userForm.status;
         } else {
           value.status = "Not Started";
+          userForms.value[key] = { status: "Not Started", response: {} };
         }
       }
-      console.log(forms.value);
-      console.log(userForms.value);
     });
 
-    const saveForm = formValues => {
-      console.log(`saving form!`);
-      console.log(formValues);
-    };
+    const updateForm = async (response, status) => {
+      const success = await fb.updateUserForm(
+        userEmail.value,
+        activeForm.value._id,
+        response,
+        status
+      );
+      if (success) {
+        formMessage.value = "Form successfully saved";
+        userForms.value[activeForm.value._id] = { status, response };
+        forms.value[activeForm.value._id].status = status;
+      } else {
+        formMessage.value = "Error saving form";
+      }
 
-    const submitForm = formValues => {
-      console.log("submitting form!");
-      console.log(formValues);
-      activeForm.value = {};
+      // show the message only for 6 seconds
+      setTimeout(() => (formMessage.value = ""), 6000);
     };
 
     return {
@@ -153,8 +168,9 @@ export default {
       activeForm,
       tabs,
       selectedTab,
-      saveForm,
-      submitForm
+      updateForm,
+      formMessage,
+      userForms
     };
   }
 };

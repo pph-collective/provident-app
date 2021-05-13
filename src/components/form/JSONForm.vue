@@ -68,11 +68,18 @@ export default {
       type: Boolean,
       requred: false,
       default: false
+    },
+    initValue: {
+      type: Object,
+      required: false,
+      default() {
+        return {};
+      }
     }
   },
   emits: ["cancel", "save", "submitted"],
-  setup() {
-    const value = ref({});
+  setup(props) {
+    const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
     return {

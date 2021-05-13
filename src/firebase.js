@@ -56,7 +56,7 @@ export default {
     try {
       const docs = await db.collection("forms").get();
       docs.forEach(doc => {
-        forms[doc.id] = doc.data();
+        forms[doc.id] = { _id: doc.id, ...doc.data() };
       });
     } catch (err) {
       console.log(err);
@@ -69,16 +69,30 @@ export default {
     try {
       const docs = await db
         .collection("users")
-        .get(email)
-        .get("form_responses")
+        .doc(email)
+        .collection("form_responses")
         .get();
       docs.forEach(doc => {
-        forms[doc.id] = doc.data();
+        forms[doc.id] = { _id: doc.id, ...doc.data() };
       });
     } catch (err) {
       console.log(err);
     }
 
     return forms;
+  },
+  async updateUserForm(email, form, response, status) {
+    try {
+      await db
+        .collection("users")
+        .doc(email)
+        .collection("form_responses")
+        .doc(form)
+        .set({ status, response, last_updated: Date.now() });
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 };
