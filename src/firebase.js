@@ -52,12 +52,28 @@ export default {
     }
   },
   async getForms() {
-    const forms = [];
+    const forms = {};
     try {
       const docs = await db.collection("forms").get();
       docs.forEach(doc => {
-        console.log(doc);
-        forms.push(doc.data());
+        forms[doc.id] = doc.data();
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    return forms;
+  },
+  async getUserForms(email) {
+    const forms = {};
+    try {
+      const docs = await db
+        .collection("users")
+        .get(email)
+        .get("form_responses")
+        .get();
+      docs.forEach(doc => {
+        forms[doc.id] = doc.data();
       });
     } catch (err) {
       console.log(err);

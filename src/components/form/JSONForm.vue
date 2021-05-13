@@ -1,28 +1,39 @@
 <template>
   <div class="container is-fluid">
-    <SchemaForm @submit="submitForm" :schema="schema">
-      <template v-slot:afterForm>
-        <div class="field is-grouped is-grouped-centered my-3">
-          <div class="control">
-            <button type="submit" class="button is-link">Submit</button>
+    <fieldset :disabled="readOnly">
+      <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
+        <template v-slot:afterForm>
+          <div
+            v-if="!readOnly"
+            class="field is-grouped is-grouped-centered my-3"
+          >
+            <div class="control">
+              <button type="submit" class="button is-link">
+                Submit
+              </button>
+            </div>
+            <div class="control">
+              <button
+                type="button"
+                class="button is-info"
+                @click="$emit('save', value)"
+              >
+                Save
+              </button>
+            </div>
+            <div class="control">
+              <button
+                type="button"
+                class="button is-link is-light"
+                @click="$emit('cancel')"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-          <div class="control">
-            <button type="button" class="button is-info" @click="saveForm">
-              Save
-            </button>
-          </div>
-          <div class="control">
-            <button
-              type="button"
-              class="button is-link is-light"
-              @click="cancelForm"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </template>
-    </SchemaForm>
+        </template>
+      </SchemaForm>
+    </fieldset>
   </div>
 </template>
 
@@ -52,29 +63,20 @@ export default {
     schema: {
       type: Object,
       required: true
+    },
+    readOnly: {
+      type: Boolean,
+      requred: false,
+      default: false
     }
   },
+  emits: ["cancel", "save", "submitted"],
   setup() {
     const value = ref({});
     useSchemaForm(value);
 
-    const submitForm = () => {
-      console.log(value.value);
-    };
-
-    const saveForm = () => {
-      console.log("save!");
-    };
-
-    const cancelForm = () => {
-      console.log("cancel!");
-    };
-
     return {
-      value,
-      submitForm,
-      saveForm,
-      cancelForm
+      value
     };
   }
 };
