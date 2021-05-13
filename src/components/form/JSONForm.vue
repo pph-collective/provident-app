@@ -16,6 +16,7 @@
               <button
                 type="button"
                 class="button is-info"
+                :disabled="JSON.stringify(initValue) === JSON.stringify(value)"
                 @click="$emit('save', value)"
               >
                 Save
@@ -60,7 +61,7 @@ const factory = SchemaFormFactory([], { TextInput, TextArea, Select, Radio });
 export default {
   components: { SchemaForm: factory },
   props: {
-    schema: {
+    initSchema: {
       type: Object,
       required: true
     },
@@ -82,8 +83,24 @@ export default {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
+    const schema = { ...props.initSchema };
+
+    const evalConditions = o => {
+      console.log(o);
+      for (const key in o) {
+        if (key === "condition") {
+          o[key] = eval(o[key]);
+        } else if (o[key] !== null && typeof o[key] === "object") {
+          //going one step down in the object tree!!
+          evalConditions(o[key]);
+        }
+      }
+    };
+    evalConditions(schema);
+
     return {
-      value
+      value,
+      schema
     };
   }
 };

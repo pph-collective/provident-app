@@ -72,7 +72,7 @@
         </header>
         <section class="modal-card-body">
           <JSONForm
-            :schema="activeForm.questions"
+            :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
             :init-value="userForms[activeForm._id].response"
             @cancel="activeForm = {}"
@@ -155,6 +155,9 @@ export default {
         formMessage.value = "Form successfully saved";
         userForms.value[activeForm.value._id] = { status, response };
         forms.value[activeForm.value._id].status = status;
+        if (status === "Submitted") {
+          activeForm.value = {};
+        }
       } else {
         formMessage.value = "Error saving form";
       }

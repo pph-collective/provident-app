@@ -2,12 +2,13 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control" :id="uuid">
-      <label v-for="(option, i) in options" :key="'option-' + i">
+      <label v-for="(option, i) in options" :key="'option-' + i" class="radio">
         <input
           type="radio"
           :name="uuid"
           :value="modelValue"
           :required="required"
+          :checked="modelValue === option"
           @input="$emit('update:modelValue', option)"
         />
         {{ option }}
