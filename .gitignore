@@ -3,9 +3,6 @@ node_modules
 /dist
 *.log
 
-# test data
-emulator_data
-
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 

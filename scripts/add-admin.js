@@ -1,11 +1,11 @@
 // env GOOGLE_APPLICATION_CREDENTIALS must contain the path to your firebase credentials
-// usage: `node run.js admin@email.com`
+// usage: `node add-admin.js admin@email.com`
 // the admin must already be a user
 
-var admin = require("firebase-admin");
-var app = admin.initializeApp();
+const admin = require("firebase-admin");
+const app = admin.initializeApp();
 
-var email = process.argv[2];
+const email = process.argv[2];
 
 app
   .auth()

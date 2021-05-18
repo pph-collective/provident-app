@@ -1,0 +1,25 @@
+# PROVIDENT Scripts
+
+This directory contains utility scripts for the PROVIDENT web app.
+
+To use any of the scripts, change into this directory, then run `yarn <script-name> <args>`.
+
+**NOTE:** The environment variable GOOGLE_APPLICATION_CREDENTIALS must contain the path to [firebase credentials](https://firebase.google.com/docs/admin/setup#initialize-sdk)
+
+## `add-admin`
+
+The `add-admin` script accepts a user's email and upgrades them to an admin user.
+
+### Usage
+```
+yarn add-admin <email address>
+```
+
+## `add-form`
+
+The `add-form` script takes a form specification (see the main README for details) as a json file and an id for the form, validates the keys are nominally correct, and uploads the form to firebase.
+
+### Usage
+```
+yarn add-form <id> <path to form>
+```

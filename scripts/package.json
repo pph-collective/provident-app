@@ -1,13 +1,13 @@
 {
-  "name": "add-admin",
+  "name": "scripts",
   "version": "1.0.0",
   "description": "",
-  "main": "run.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "add-admin": "node add-admin.js",
+    "add-form": "node add-form.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "firebase-admin": "^9.5.0"
   }
