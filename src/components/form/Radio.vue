@@ -13,6 +13,9 @@
         />
         {{ option }}
       </label>
+      <span class="has-text-danger is-size-7">{{
+        validation.errorMessage
+      }}</span>
     </div>
   </div>
 </template>
@@ -36,6 +39,10 @@ export default {
     options: {
       type: Array,
       required: true
+    },
+    validation: {
+      type: Object,
+      default: () => ({})
     }
   }
 };

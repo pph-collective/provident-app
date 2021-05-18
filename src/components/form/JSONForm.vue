@@ -40,23 +40,14 @@
 
 <script>
 import { SchemaFormFactory, useSchemaForm } from "formvuelate";
-import { ref, markRaw } from "vue";
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
+import * as yup from "yup";
+import { ref } from "vue";
 
-// import form components
-import TextInput from "@/components/form/TextInput";
-markRaw(TextInput);
-
-import TextArea from "@/components/form/TextArea";
-markRaw(TextArea);
-
-import Select from "@/components/form/Select";
-markRaw(Select);
-
-import Radio from "@/components/form/Radio";
-markRaw(Radio);
+// form components declared globally in main.js
 
 // Declare form components as local components
-const factory = SchemaFormFactory([], { TextInput, TextArea, Select, Radio });
+const factory = SchemaFormFactory([VeeValidatePlugin()]);
 
 export default {
   components: { SchemaForm: factory },
@@ -85,18 +76,20 @@ export default {
 
     const schema = { ...props.initSchema };
 
-    const evalConditions = o => {
-      console.log(o);
+    // evaluate strings that are really methods
+    const evalSchema = (o, yup) => {
       for (const key in o) {
-        if (key === "condition") {
+        if (["condition", "validations"].includes(key)) {
           o[key] = eval(o[key]);
+        } else if (key === "component") {
+          o[key] = "Form" + o[key];
         } else if (o[key] !== null && typeof o[key] === "object") {
           //going one step down in the object tree!!
-          evalConditions(o[key]);
+          evalSchema(o[key], yup);
         }
       }
     };
-    evalConditions(schema);
+    evalSchema(schema, yup);
 
     return {
       value,
