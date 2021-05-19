@@ -53,7 +53,7 @@ export default {
   components: { SchemaForm: factory },
   props: {
     initSchema: {
-      type: Object,
+      type: Array,
       required: true
     },
     readOnly: {
@@ -74,20 +74,22 @@ export default {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
-    const schema = { ...props.initSchema };
+    const schema = [...props.initSchema];
 
     // evaluate strings that are really methods
-    const evalSchema = (o, yup) => {
-      for (const key in o) {
-        if (["condition", "validations"].includes(key)) {
-          o[key] = eval(o[key]);
-        } else if (key === "component") {
-          o[key] = "Form" + o[key];
-        } else if (o[key] !== null && typeof o[key] === "object") {
-          //going one step down in the object tree!!
-          evalSchema(o[key], yup);
+    const evalSchema = (s, yup) => {
+      s.forEach(q => {
+        for (const key in q) {
+          if (["condition", "validations"].includes(key)) {
+            q[key] = eval(q[key]);
+          } else if (key === "component") {
+            q[key] = "Form" + q[key];
+          } else if (q[key] !== null && typeof q[key] === "object") {
+            // should never get hit, but need this to keep yup available (should be a better way...)
+            evalSchema(q[key], yup);
+          }
         }
-      }
+      });
     };
     evalSchema(schema, yup);
 

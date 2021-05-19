@@ -53,15 +53,17 @@ A sample JSON:
 {
   "title": "My Form",
   "release_date": "2021-05-21",
-  "questions": {
-    "age": {
+  "questions": [
+    {
+      "model": "age",
       "component": "TextInput",
       "type": "number",
       "label": "What is your age?",
       "validations": "yup.number().min(13).max(110).required()",
       "required": true
     },
-    "old": {
+    {
+      "model": "age",
       "component": "Radio",
       "label": "Do you feel old?",
       "condition": "(model) => model.age > 100",
@@ -71,7 +73,8 @@ A sample JSON:
         "Get off my lawn"
       ]
     },
-    "favorite_color": {
+    {
+      "model": "favorite_color",
       "component": "Select",
       "label": "What is your favorite color?",
       "required": true,
@@ -82,17 +85,19 @@ A sample JSON:
         "Other"
       ]
     },
-    "other_favorite_color": {
+    {
+      "model": "other_favorite_color",
       "component": "TextInput",
       "label": "Favorite Color",
       "required": true,
       "condition": "(model) => model.favorite_color === 'Other'"
     },
-    "color_essay": {
+    {
+      "model": "color_essay",
       "component": "TextArea",
       "label": "Please write an essay about your favorite color."
     }
-  }
+  ]
 }
 ```
 
@@ -109,6 +114,7 @@ The fields currently supported (component in `src/components/forms`) are:
 * `Select`: Drop down menu
 
 All of these fields require the following keys:
+* `model`: The identifier for the question result (e.g. `"age"`)
 * `component`: Which field to use (e.g. `TextInput`)
 * `label`: The question to display with the input (e.g. `"How old are you?"`)
 
