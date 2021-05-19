@@ -2,7 +2,7 @@
 
 This directory contains utility scripts for the PROVIDENT web app.
 
-To use any of the scripts, change into this directory, then run `yarn <script-name> <args>`.
+To use any of the scripts, run `yarn <script-name> <args>`.
 
 **NOTE:** The environment variable GOOGLE_APPLICATION_CREDENTIALS must contain the path to [firebase credentials](https://firebase.google.com/docs/admin/setup#initialize-sdk)
 

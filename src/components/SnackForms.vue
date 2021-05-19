@@ -15,15 +15,15 @@
     </div>
 
     <div
-      v-if="Object.keys(selectedForms).length === 0"
+      v-if="selectedForms.length === 0"
       class="panel-block is-justify-content-center"
     >
       <span>No forms here</span>
     </div>
     <div
       v-else
-      v-for="(form, id) in selectedForms"
-      :key="'form-' + id"
+      v-for="(form, idx) in selectedForms"
+      :key="'form-' + idx"
       class="panel-block"
     >
       <div class="level form-row">
@@ -34,6 +34,9 @@
         </div>
 
         <div class="level-right">
+          <span v-if="user.admin" class="level-item tag">
+            <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
+          </span>
           <span class="level-item tag">
             <p><strong>STATUS:</strong> {{ form.status }}</p>
           </span>
@@ -100,7 +103,7 @@ export default {
     JSONForm
   },
   setup() {
-    const forms = ref({});
+    const forms = ref([]);
     const userForms = ref({});
     const activeForm = ref({});
     const tabs = ref(["To Do", "All", "Submitted"]);
@@ -110,38 +113,47 @@ export default {
     const selectedForms = computed(() => {
       if (selectedTab.value === "All") return forms.value;
 
-      const res = {};
-      for (const [key, value] of Object.entries(forms.value)) {
+      return forms.value.filter(value => {
         if (selectedTab.value === "To Do" && value.status !== "Submitted") {
-          res[key] = value;
+          return true;
         } else if (
           selectedTab.value === "Submitted" &&
           value.status === "Submitted"
         ) {
-          res[key] = value;
+          return true;
         }
-      }
-      return res;
+
+        return false;
+      });
     });
 
     const store = useStore();
+    const user = computed(() => store.state.user);
     const userEmail = computed(() =>
-      store.state.user.data ? store.state.user.data.email : ""
+      user.value.data ? user.value.data.email : ""
     );
 
     onMounted(async () => {
       forms.value = await fb.getForms();
+      console.log(forms.value);
+      if (!user.value.admin) {
+        let tz = Date.now().getTimezoneOffset() / 60;
+        forms.value = forms.value.filter(f => {
+          let releaseDate = new Date(`${f.release_date}Z${tz}`);
+          return releaseDate <= Date.now();
+        });
+      }
       userForms.value = await fb.getUserForms(userEmail.value);
 
-      for (const [key, value] of Object.entries(forms.value)) {
-        let userForm = userForms.value[key];
+      forms.value.forEach(value => {
+        let userForm = userForms.value[value._id];
         if (userForm) {
           value.status = userForm.status;
         } else {
           value.status = "Not Started";
-          userForms.value[key] = { status: "Not Started", response: {} };
+          userForms.value[value._id] = { status: "Not Started", response: {} };
         }
-      }
+      });
     });
 
     const updateForm = async (response, status) => {
@@ -154,7 +166,7 @@ export default {
       if (success) {
         formMessage.value = "Form successfully saved";
         userForms.value[activeForm.value._id] = { status, response };
-        forms.value[activeForm.value._id].status = status;
+        forms.value.find(f => f._id === activeForm.value._id).status = status;
         if (status === "Submitted") {
           activeForm.value = {};
         }
@@ -173,7 +185,8 @@ export default {
       selectedTab,
       updateForm,
       formMessage,
-      userForms
+      userForms,
+      user
     };
   }
 };
