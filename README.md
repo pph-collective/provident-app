@@ -5,6 +5,7 @@ A base web application for the PROVIDENT project.
 ## Project setup
 ```
 yarn install
+yarn firebase login
 ```
 
 ### Compiles and hot-reloads for development

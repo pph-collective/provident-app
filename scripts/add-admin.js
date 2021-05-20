@@ -11,6 +11,8 @@ app
   .auth()
   .getUserByEmail(email)
   .then(user => {
-    app.auth().setCustomUserClaims(user.uid, { admin: true });
-    process.exit();
+    app
+      .auth()
+      .setCustomUserClaims(user.uid, { admin: true })
+      .then(() => process.exit());
   });

@@ -74,7 +74,7 @@ export default {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
-    const schema = [...props.initSchema];
+    const schema = ref([...props.initSchema]);
 
     // evaluate strings that are really methods
     const evalSchema = (s, yup) => {
@@ -82,7 +82,7 @@ export default {
         for (const key in q) {
           if (["condition", "validations"].includes(key)) {
             q[key] = eval(q[key]);
-          } else if (key === "component") {
+          } else if (key === "component" && !q[key].startsWith("Form")) {
             q[key] = "Form" + q[key];
           } else if (q[key] !== null && typeof q[key] === "object") {
             // should never get hit, but need this to keep yup available (should be a better way...)
@@ -91,7 +91,7 @@ export default {
         }
       });
     };
-    evalSchema(schema, yup);
+    evalSchema(schema.value, yup);
 
     return {
       value,

@@ -8,7 +8,7 @@ service cloud.firestore {
 
       match /form_responses/{form} {
         allow create: if request.auth != null && request.auth.token.email == user;
-        allow update: if request.auth != null && request.auth.token.email == user && resource.data.status != 'Submitted'; 
+        allow update: if request.auth != null && request.auth.token.email == user && resource.data.status != 'Submitted';
         allow read: if request.auth != null && request.auth.token.email == user;
       }
     }

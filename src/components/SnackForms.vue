@@ -135,7 +135,6 @@ export default {
 
     onMounted(async () => {
       forms.value = await fb.getForms();
-      console.log(forms.value);
       if (!user.value.admin) {
         let tz = Date.now().getTimezoneOffset() / 60;
         forms.value = forms.value.filter(f => {
