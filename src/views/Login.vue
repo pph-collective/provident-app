@@ -53,7 +53,7 @@
           </button>
         </p>
       </div>
-      <p v-if="error" class="has-text-danger">{{ error }}</p>
+      <p v-if="error" class="error_message has-text-danger">{{ error }}</p>
     </form>
   </FormCard>
 </template>
