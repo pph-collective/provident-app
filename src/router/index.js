@@ -51,6 +51,10 @@ const routes = [
       import(/* webpackChunkName: "snack" */ "../views/Snack.vue"),
     children: [
       {
+        path: "",
+        component: () => import("../components/SnackLanding.vue")
+      },
+      {
         path: "forms",
         component: () =>
           import(/* webpackChunkName: "snack" */ "../components/SnackForms.vue")
