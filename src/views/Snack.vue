@@ -34,6 +34,7 @@ export default {
 
 .snack-content {
   grid-area: snack-content;
+  min-height: 90vh;
 }
 
 .snack-area {

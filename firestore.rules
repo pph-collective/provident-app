@@ -5,6 +5,12 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.token.admin == true;
       allow read: if request.auth != null && (request.auth.token.email == resource.data.email || request.auth.token.admin == true);
       allow create: if request.auth != null && request.auth.token.email == request.resource.data.email;
+
+      match /form_responses/{form} {
+        allow create: if request.auth != null && request.auth.token.email == user;
+        allow update: if request.auth != null && request.auth.token.email == user && resource.data.status != 'Submitted';
+        allow read: if request.auth != null && request.auth.token.email == user;
+      }
     }
 
     match /activity_log/{document=**} {
@@ -14,6 +20,10 @@ service cloud.firestore {
 
     match /organizations/{organization} {
       allow read: if true;
+    }
+
+    match /forms/{document=**} {
+      allow read: if request.auth != null;
     }
   }
 }

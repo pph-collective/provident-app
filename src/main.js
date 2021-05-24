@@ -12,6 +12,12 @@ import fb from "@/firebase";
 // general styling
 require("@/assets/styles/main.scss");
 
+// form components - needed globally
+import FormTextInput from "@/components/form/TextInput";
+import FormTextArea from "@/components/form/TextArea";
+import FormSelect from "@/components/form/Select";
+import FormRadio from "@/components/form/Radio";
+
 // listen for changes to user
 fb.auth.onAuthStateChanged(async user => {
   if (user) {
@@ -36,4 +42,8 @@ fb.auth.onAuthStateChanged(async user => {
 createApp(App)
   .use(router)
   .use(store)
+  .component("FormTextInput", FormTextInput)
+  .component("FormTextArea", FormTextArea)
+  .component("FormSelect", FormSelect)
+  .component("FormRadio", FormRadio)
   .mount("#app");
