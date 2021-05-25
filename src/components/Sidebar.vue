@@ -14,7 +14,7 @@
         <abbr title="Exploration Datasets">PRV</abbr>
       </p>
       <ul class="menu-list">
-        <li v-for="item in datasets" :key="item.route">
+        <li v-for="item in pages" :key="item.route">
           <router-link
             :class="{ 'is-active': route === item.route }"
             :to="`/snack/${item.route}`"
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       collapsed: false,
-      datasets: [
+      pages: [
         {
           name: "Dashboard",
           route: "dashboard",
