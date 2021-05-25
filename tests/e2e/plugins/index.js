@@ -7,15 +7,23 @@
 // https://docs.cypress.io/api/plugins/preprocessors-api.html#Examples
 
 // /* eslint-disable import/no-extraneous-dependencies, global-require */
-// const webpack = require('@cypress/webpack-preprocessor')
+const admin = require("firebase-admin");
+const cypressFirebasePlugin = require("cypress-firebase").plugin;
+
+const { startDevServer } = require("@cypress/webpack-dev-server");
+const webpackConfig = require("@vue/cli-service/webpack.config.js");
 
 module.exports = (on, config) => {
-  // on('file:preprocessor', webpack({
-  //  webpackOptions: require('@vue/cli-service/webpack.config'),
-  //  watchOptions: {}
-  // }))
+  on("dev-server:start", options =>
+    startDevServer({
+      options,
+      webpackConfig
+    })
+  );
 
-  return Object.assign({}, config, {
+  const extendedConfig = cypressFirebasePlugin(on, config, admin);
+
+  return Object.assign({}, extendedConfig, {
     fixturesFolder: "tests/e2e/fixtures",
     integrationFolder: "tests/e2e/specs",
     screenshotsFolder: "tests/e2e/screenshots",
