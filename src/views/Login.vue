@@ -85,7 +85,7 @@ export default {
           if (this.$route.query.redirect) {
             this.$router.push(this.$route.query.redirect);
           } else {
-            this.$router.back();
+            console.error("no redirect found");
           }
         } else {
           this.error = `User account not approved: ${status}`;

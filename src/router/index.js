@@ -11,6 +11,11 @@ const routes = [
   {
     path: "/login",
     name: "Login",
+    beforeEnter: (to, from) => {
+      if (!to.query.redirect) {
+        return { path: to.path, query: { redirect: from.path } };
+      }
+    },
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/Login.vue")
   },
