@@ -20,6 +20,7 @@
           <input
             class="input"
             type="text"
+            id="form-name"
             placeholder="Full Name"
             v-model="form.name"
             autocomplete="name"
@@ -32,7 +33,7 @@
       <div class="field">
         <div class="control has-icons-left">
           <div class="select">
-            <select v-model="form.organization">
+            <select v-model="form.organization" id="form-organization">
               <option
                 v-for="organization in organizations"
                 v-bind:value="organization"
@@ -52,6 +53,7 @@
           <input
             class="input"
             type="password"
+            id="form-password"
             placeholder="Password"
             v-model="form.password"
             autocomplete="new-password"
@@ -66,6 +68,7 @@
           <input
             class="input"
             type="password"
+            id="form-confirm-password"
             placeholder="Confirm Password"
             v-model="form.confirmPassword"
             autocomplete="new-password"
