@@ -1,0 +1,76 @@
+{
+  "activity_log": {
+    "ZFyRETTHlHPpVb3g5gei": {
+      "action": "login",
+      "datetime": 1621344888683,
+      "user": "admin@admin.com"
+    }
+  },
+  "users": {
+    "admin@admin.com": {
+      "email": "admin@admin.com",
+      "name": "Admin",
+      "organization": "RI 4 Us",
+      "status": "approved"
+    }
+  },
+  "organizations": {
+    "Good Doers": {
+      "name": "Good Doers"
+    },
+    "RI 4 Us": {
+      "name": "RI 4 Us"
+    }
+  },
+  "forms": {
+    "test": {
+      "title": "My Form",
+      "release_date": "2021-05-21",
+      "questions": [
+        {
+          "model": "age",
+          "component": "TextInput",
+          "type": "number",
+          "label": "What is your age?",
+          "validations": "yup.number().min(13).max(110).required()",
+          "required": true
+        },
+        {
+          "model": "age",
+          "component": "Radio",
+          "label": "Do you feel old?",
+          "condition": "(model) => model.age > 100",
+          "options": [
+            "Yes",
+            "No",
+            "Get off my lawn"
+          ]
+        },
+        {
+          "model": "favorite_color",
+          "component": "Select",
+          "label": "What is your favorite color?",
+          "required": true,
+          "options": [
+            "Green",
+            "Rainbow",
+            "Sparkles",
+            "Other"
+          ]
+        },
+        {
+          "model": "other_favorite_color",
+          "component": "TextInput",
+          "label": "Favorite Color",
+          "required": true,
+          "condition": "(model) => model.favorite_color === 'Other'"
+        },
+        {
+          "model": "color_essay",
+          "component": "TextArea",
+          "label": "Please write an essay about your favorite color."
+        }
+      ]
+    }
+  }
+}
