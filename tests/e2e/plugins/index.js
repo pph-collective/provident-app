@@ -7,6 +7,7 @@
 // https://docs.cypress.io/api/plugins/preprocessors-api.html#Examples
 
 // /* eslint-disable import/no-extraneous-dependencies, global-require */
+const firebase = require("@firebase/rules-unit-testing");
 const admin = require("firebase-admin");
 const cypressFirebasePlugin = require("cypress-firebase").plugin;
 
@@ -20,6 +21,48 @@ module.exports = (on, config) => {
       webpackConfig
     })
   );
+
+  on("task", {
+    "db:teardown": () => {
+      try {
+        firebase.clearFirestoreData({
+          projectId: "provident-ri"
+        });
+        return true;
+      } catch (error) {
+        return error;
+      }
+    },
+    "db:seed": () => {
+      const seed = require("../../fixtures/seed.json");
+      if (seed) {
+        for (const [collection, documents] of Object.entries(seed)) {
+          for (const [documentPath, data] of Object.entries(documents)) {
+            admin
+              .firestore()
+              .collection(collection)
+              .doc(documentPath)
+              .set(data);
+          }
+        }
+      }
+      return seed;
+    },
+    "db:deleteUserByEmail": email => {
+      admin
+        .auth()
+        .getUserByEmail(email)
+        .then(function(userRecord) {
+          admin.auth().deleteUser(userRecord["uid"]);
+          return userRecord;
+        })
+        .catch(function(error) {
+          console.log("Error fetching user data:", error);
+          return error;
+        });
+      return false;
+    }
+  });
 
   const extendedConfig = cypressFirebasePlugin(on, config, admin);
 
