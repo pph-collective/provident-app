@@ -89,7 +89,7 @@
           </button>
         </p>
       </div>
-      <p v-if="error" class="has-text-danger">
+      <p v-if="error" id="error-message" class="has-text-danger">
         {{ error }}
       </p>
       <p v-if="formValid.message.length > 0" class="has-text-danger">

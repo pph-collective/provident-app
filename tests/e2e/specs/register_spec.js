@@ -1,6 +1,6 @@
 describe("Register User", () => {
   beforeEach(() => {
-    // TODO: Call db:teardown and db:seed from plugins/index.js prior to tests
+    cy.task("db:deleteUserByEmail", "register@register.com");
     cy.visit("/register");
   });
 
@@ -14,14 +14,9 @@ describe("Register User", () => {
       .should("be.disabled");
   });
 
-  // it("Requires passwords are the same", () => {
-  //
-  // });
-
   it("Submit valid form", () => {
     cy.get('[type="email"]').type("register@register.com");
     cy.get("#form-name").type("First Last");
-    // Select an organization
     cy.get("#form-organization").select("Good Doers");
     cy.get("#form-password").type("register-password");
     cy.get("#form-confirm-password").type("register-password");
@@ -30,9 +25,23 @@ describe("Register User", () => {
       .contains("Request Access")
       .should("be.enabled");
     cy.get("form").submit();
+    cy.get("#error-message").should("not.exist");
   });
 
-  // it("Email is already in use", () => {
-  //
-  // });
+  it("Email is already in use", () => {
+    cy.get('[type="email"]').type("admin@admin.com");
+    cy.get("#form-name").type("First Last");
+    cy.get("#form-organization").select("Good Doers");
+    cy.get("#form-password").type("register-password");
+    cy.get("#form-confirm-password").type("register-password");
+
+    cy.get(".button")
+      .contains("Request Access")
+      .should("be.enabled");
+    cy.get("form").submit();
+    cy.get("#error-message").should(
+      "contain",
+      "The email address is already in use by another account."
+    );
+  });
 });
