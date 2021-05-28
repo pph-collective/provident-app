@@ -2,6 +2,7 @@
   <div class="container">
     <div
       v-if="alert.message"
+      data-cy="alert-message"
       :class="['notification', 'mt-4', 'is-' + alert.color]"
     >
       <button class="delete" @click="dismissAlert"></button>
@@ -10,7 +11,7 @@
     <section class="section">
       <h1 class="title">Review Access Requests</h1>
 
-      <table class="table">
+      <table class="table" data-cy="user-requests">
         <thead>
           <tr>
             <th>Name</th>
@@ -21,18 +22,20 @@
         </thead>
         <tbody>
           <tr v-for="req in userRequests" :key="req.email">
-            <td>{{ req.name }}</td>
-            <td>{{ req.organization }}</td>
-            <td>{{ req.email }}</td>
+            <td data-cy="name">{{ req.name }}</td>
+            <td data-cy="organization">{{ req.organization }}</td>
+            <td data-cy="email">{{ req.email }}</td>
             <td>
               <span class="icon-text">
                 <span
+                  data-cy="approve"
                   class="icon is-small px-3 is-clickable"
                   @click="approve(req)"
                 >
                   <i class="fas fa-user-check has-text-success"></i>
                 </span>
                 <span
+                  data-cy="deny"
                   class="icon is-small px-3 is-clickable"
                   @click="deny(req)"
                 >

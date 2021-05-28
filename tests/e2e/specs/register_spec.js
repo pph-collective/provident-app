@@ -25,7 +25,7 @@ describe("Register User", () => {
       .contains("Request Access")
       .should("be.enabled");
     cy.get("form").submit();
-    cy.get("#error-message").should("not.exist");
+    cy.get('[data-cy="error-message"]').should("not.exist");
   });
 
   it("Email is already in use", () => {
@@ -39,7 +39,7 @@ describe("Register User", () => {
       .contains("Request Access")
       .should("be.enabled");
     cy.get("form").submit();
-    cy.get("#error-message").should(
+    cy.get('[data-cy="error-message"]').should(
       "contain",
       "The email address is already in use by another account."
     );

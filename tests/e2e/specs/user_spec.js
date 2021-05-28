@@ -11,12 +11,14 @@ describe("User Views", () => {
       .should("exist");
   });
 
-  it("navigation bar link to home should  exist", () => {
-    cy.get("#navbar-contents a").should("have.attr", "href", "/");
+  it("navigation bar link to home should exist", () => {
+    cy.get('[data-cy="home"]')
+      .should("exist")
+      .should("have.attr", "href", "/");
   });
 
   it("navigation bar to /admin doesn't exist", () => {
-    cy.get("#navbar-contents a").should("not.have.attr", "href", "/admin");
+    cy.get('[data-cy="admin"]').should("not.exist");
   });
 
   it("navigating to /admin shouldn't be allowed", () => {

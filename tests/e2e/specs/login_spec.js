@@ -17,7 +17,7 @@ describe("Log In View", () => {
 
   it("requires email", () => {
     cy.get("form").submit();
-    cy.get("#error-message").should(
+    cy.get('[data-cy="error-message"]').should(
       "contain",
       "The email address is badly formatted"
     );
@@ -25,7 +25,7 @@ describe("Log In View", () => {
 
   it("requires password", () => {
     cy.get('[type="email"]').type("admin@admin.com{enter}");
-    cy.get("#error-message").should(
+    cy.get('[data-cy="error-message"]').should(
       "contain",
       "The password is invalid or the user does not have a password"
     );
@@ -34,7 +34,7 @@ describe("Log In View", () => {
   it("requires valid username and password", () => {
     cy.get('[type="email"]').type("admin@admin.com");
     cy.get('[type="password"]').type("invalid{enter}");
-    cy.get("#error-message").should(
+    cy.get('[data-cy="error-message"]').should(
       "contain",
       "The password is invalid or the user does not have a password"
     );

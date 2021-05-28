@@ -30,20 +30,30 @@
         :class="['navbar-menu', { 'is-active': hamburgerActive }]"
       >
         <div class="navbar-start">
-          <router-link to="/" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="home"
+            to="/"
+            class="navbar-item has-text-primary"
             >Home</router-link
           >
 
-          <router-link to="/snack" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="snack"
+            to="/snack"
+            class="navbar-item has-text-primary"
             >Snack</router-link
           >
 
-          <router-link to="/about" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="about"
+            to="/about"
+            class="navbar-item has-text-primary"
             >About</router-link
           >
 
           <router-link
             v-if="user.admin"
+            data-cy="admin"
             to="/admin"
             class="navbar-item has-text-primary"
             >Admin</router-link
