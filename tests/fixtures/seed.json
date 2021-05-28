@@ -12,6 +12,18 @@
       "name": "Admin",
       "organization": "RI 4 Us",
       "status": "approved"
+    },
+    "user1@user.com": {
+      "email": "user1@user.com",
+      "name": "First Last",
+      "organization": "Good Doers",
+      "status": "pending"
+    },
+    "user@user.com": {
+      "email": "user@user.com",
+      "name": "User Name",
+      "organization": "Good Doers",
+      "status": "approved"
     }
   },
   "organizations": {
