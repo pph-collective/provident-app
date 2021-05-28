@@ -37,6 +37,10 @@ Cypress.Commands.add("login", (email, password) => {
   fb.login(email, password);
 });
 
+Cypress.Commands.add("logout", () => {
+  fb.logout();
+});
+
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //

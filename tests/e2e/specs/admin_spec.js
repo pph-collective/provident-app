@@ -1,13 +1,11 @@
-describe("Admin", () => {
+describe("Admin Views and Powers", () => {
   beforeEach(() => {
     cy.login("admin@admin.com", "admin1");
     cy.visit("/admin");
   });
 
   it("navigation bar to /admin", () => {
-    cy.get("#navbar-contents > div.navbar-start > a:nth-child(4)")
-      .should("have.attr", "href")
-      .and("include", "admin");
+    cy.get("#navbar-contents a").should("have.attr", "href", "/admin");
   });
 
   it("Review Access Requests header", () => {

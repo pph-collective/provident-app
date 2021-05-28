@@ -1,6 +1,33 @@
-// Before every test
-// Log in as user
+describe("User Views", () => {
+  beforeEach(() => {
+    cy.logout();
+    cy.login("user@user.com", "user-password");
+    cy.visit("/");
+  });
 
-// Tests
-// Test views that you can see
-// Test can't see admin tab AND can't navigate to admin tab
+  it("log out button exists", () => {
+    cy.get("#navbar-contents a")
+      .contains("Log Out")
+      .should("exist");
+  });
+
+  it("navigation bar link to home should  exist", () => {
+    cy.get("#navbar-contents a").should("have.attr", "href", "/");
+  });
+
+  it("navigation bar to /admin doesn't exist", () => {
+    cy.get("#navbar-contents a").should("not.have.attr", "href", "/admin");
+  });
+
+  it("navigating to /admin shouldn't be allowed", () => {
+    cy.visit("/admin");
+    // Validate that this isn't the admin page
+    // TODO: Where should it redirect to? Create a new page?
+    cy.contains("h1", "Log In").should("not.exist");
+  });
+
+  it("navigating to /snack shouldn't ask to log in", () => {
+    cy.visit("/snack");
+    cy.contains("h1", "Log In").should("not.exist");
+  });
+});

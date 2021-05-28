@@ -1,5 +1,6 @@
-describe("Log In", () => {
+describe("Log In View", () => {
   beforeEach(() => {
+    cy.logout();
     cy.visit("/login");
   });
 
