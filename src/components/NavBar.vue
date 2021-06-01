@@ -4,7 +4,7 @@
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <img
-            src="assets/images/pori-provident-text-logo.png"
+            src="/assets/images/pori-provident-text-logo.png"
             width="112"
             height="28"
           />
@@ -42,7 +42,10 @@
             >About</router-link
           >
 
-          <router-link v-if="user.admin" to="/admin" class="navbar-item"
+          <router-link
+            v-if="user.admin"
+            to="/admin"
+            class="navbar-item has-text-primary"
             >Admin</router-link
           >
         </div>

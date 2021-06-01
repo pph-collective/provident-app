@@ -44,6 +44,7 @@ const routes = [
     path: "/snack",
     name: "Snack",
     beforeEnter: to => {
+      console.log(store.state.user);
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       }
@@ -52,7 +53,23 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/Snack.vue")
+      import(/* webpackChunkName: "snack" */ "../views/Snack.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("../components/SnackLanding.vue")
+      },
+      {
+        path: "forms",
+        component: () =>
+          import(/* webpackChunkName: "snack" */ "../components/SnackForms.vue")
+      },
+      {
+        path: "dashboard",
+        component: () =>
+          import(/* webpackChunkName: "snack" */ "../components/Dashboard.vue")
+      }
+    ]
   },
   {
     path: "/admin",

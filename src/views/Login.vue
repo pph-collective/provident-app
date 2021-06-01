@@ -59,6 +59,10 @@
 </template>
 
 <script>
+import { reactive, ref, computed, watchEffect } from "vue";
+import { useStore } from "vuex";
+import { useRouter, useRoute } from "vue-router";
+
 import fb from "@/firebase";
 import FormCard from "@/components/FormCard";
 
@@ -66,49 +70,67 @@ export default {
   components: {
     FormCard
   },
-  data() {
-    return {
-      form: {
-        email: "",
-        password: ""
-      },
-      error: null,
-      alert: ""
-    };
-  },
-  methods: {
-    async submit() {
+  setup() {
+    const form = reactive({ email: "", password: "" });
+    const error = ref(null);
+    const alert = ref("");
+
+    const store = useStore();
+    const userAuthenticated = computed(() => store.state.user.authenticated);
+
+    const router = useRouter();
+    const route = useRoute();
+
+    // handle case of user log in via cookie post redirect
+    watchEffect(() => {
+      if (userAuthenticated.value && route.query.redirect && form.email == "") {
+        router.push(route.query.redirect);
+      }
+    });
+
+    const submit = async () => {
       try {
-        await fb.login(this.form.email, this.form.password);
-        const { status } = await fb.getUserRequest(this.form.email);
+        await fb.login(form.email, form.password);
+        const { status } = await fb.getUserRequest(form.email);
         if (status === "approved") {
-          if (this.$route.query.redirect) {
-            this.$router.push(this.$route.query.redirect);
+          if (route.query.redirect) {
+            router.push(route.query.redirect);
           } else {
             console.error("no redirect found");
           }
         } else {
-          this.error = `User account not approved: ${status}`;
+          error.value = `User account not approved: ${status}`;
           await fb.logout();
         }
       } catch (err) {
-        this.error = err.message;
+        error.value = err.message;
         await fb.logout();
         console.log(err);
       }
-    },
-    async resetRequest() {
+    };
+
+    const resetRequest = async () => {
       try {
-        await fb.auth.sendPasswordResetEmail(this.form.email);
+        await fb.auth.sendPasswordResetEmail(form.value.email);
         this.alert = "Success. Check your email to reset your password.";
-        this.error = null;
+        error.value = null;
       } catch (err) {
-        this.error = err.message;
+        error.value = err.message;
       }
-    },
-    dismissAlert() {
-      this.alert = "";
-    }
+    };
+
+    const dismissAlert = () => {
+      alert.value = "";
+    };
+
+    return {
+      submit,
+      resetRequest,
+      dismissAlert,
+      form,
+      alert,
+      error
+    };
   }
 };
 </script>
