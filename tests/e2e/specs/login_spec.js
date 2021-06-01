@@ -1,6 +1,8 @@
 describe("Log In View", () => {
   beforeEach(() => {
     cy.logout();
+    cy.task("db:teardown");
+    cy.task("db:seed");
     cy.visit("/login");
   });
 

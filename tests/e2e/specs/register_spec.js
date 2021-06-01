@@ -1,6 +1,8 @@
 describe("Register User", () => {
   beforeEach(() => {
     cy.task("db:deleteUserByEmail", "register@register.com");
+    cy.task("db:teardown");
+    cy.task("db:seed");
     cy.visit("/register");
   });
 
@@ -29,7 +31,7 @@ describe("Register User", () => {
   });
 
   it("Email is already in use", () => {
-    cy.get('[type="email"]').type("admin@admin.com");
+    cy.get('[type="email"]').type("user@user.com");
     cy.get("#form-name").type("First Last");
     cy.get("#form-organization").select("Good Doers");
     cy.get("#form-password").type("register-password");
