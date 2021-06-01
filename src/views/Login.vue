@@ -96,7 +96,7 @@ export default {
           if (route.query.redirect) {
             router.push(route.query.redirect);
           } else {
-            router.back();
+            console.error("no redirect found");
           }
         } else {
           error.value = `User account not approved: ${status}`;
