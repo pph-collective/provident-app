@@ -52,11 +52,11 @@ module.exports = (on, config) => {
       admin
         .auth()
         .getUserByEmail(email)
-        .then(function(userRecord) {
+        .then(userRecord => {
           admin.auth().deleteUser(userRecord["uid"]);
           return userRecord;
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log("Error fetching user data:", error);
           return error;
         });
