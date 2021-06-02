@@ -10,12 +10,6 @@
 import fb from "../../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
-// Emulate RTDB if Env variable is passed
-const rtdbEmulatorHost = Cypress.env("FIREBASE_DATABASE_EMULATOR_HOST");
-if (rtdbEmulatorHost) {
-  fb.firebaseConfig.databaseURL = `http://${rtdbEmulatorHost}?ns=${fb.firebaseConfig.projectId}`;
-}
-
 // Emulate Firestore if Env variable is passed
 const firestoreEmulatorHost = Cypress.env("FIRESTORE_EMULATOR_HOST");
 if (firestoreEmulatorHost) {

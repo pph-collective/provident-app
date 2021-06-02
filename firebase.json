@@ -21,9 +21,6 @@
     "auth": {
       "port": 9099
     },
-    "database": {
-      "port": 9000
-    },
     "firestore": {
       "port": 8088
     },
