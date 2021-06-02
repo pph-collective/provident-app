@@ -17,13 +17,13 @@ const routes = [
       }
     },
     component: () =>
-      import(/* webpackChunkName: "login" */ "../views/Login.vue")
+      import(/* webpackChunkName: "login" */ "../views/auth/Login.vue")
   },
   {
     path: "/register",
     name: "Register",
     component: () =>
-      import(/* webpackChunkName: "register" */ "../views/Register.vue")
+      import(/* webpackChunkName: "register" */ "../views/auth/Register.vue")
   },
   {
     path: "/auth",
@@ -38,7 +38,7 @@ const routes = [
     path: "/updatepassword",
     name: "ResetPassword",
     component: () =>
-      import(/* webpackChunkName: "register" */ "../views/ResetPassword.vue")
+      import(/* webpackChunkName: "reset" */ "../views/auth/ResetPassword.vue")
   },
   {
     path: "/snack",
@@ -53,21 +53,22 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/Snack.vue"),
+      import(/* webpackChunkName: "snack" */ "../views/snack/Snack.vue"),
     children: [
       {
         path: "",
-        component: () => import("../components/SnackLanding.vue")
+        component: () =>
+          import(/* webpackChunkName: "snack" */ "../views/snack/Landing.vue")
       },
       {
         path: "forms",
         component: () =>
-          import(/* webpackChunkName: "snack" */ "../components/SnackForms.vue")
+          import(/* webpackChunkName: "snack" */ "../views/snack/Forms.vue")
       },
       {
         path: "dashboard",
         component: () =>
-          import(/* webpackChunkName: "snack" */ "../components/Dashboard.vue")
+          import(/* webpackChunkName: "snack" */ "../views/snack/Dashboard.vue")
       }
     ]
   },
