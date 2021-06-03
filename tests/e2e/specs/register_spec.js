@@ -11,9 +11,7 @@ describe("Register User", () => {
   });
 
   it("Request Access Submit Button Disabled", () => {
-    cy.get(".button")
-      .contains("Request Access")
-      .should("be.disabled");
+    cy.get('[data-cy="request-access-button"]').should("be.disabled");
   });
 
   it("Submit valid form", () => {
@@ -28,6 +26,9 @@ describe("Register User", () => {
       .should("be.enabled");
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should("not.exist");
+    cy.get('[data-cy="success-message"]')
+      .should("exist")
+      .contains("Your request has been received.");
   });
 
   it("Email is already in use", () => {

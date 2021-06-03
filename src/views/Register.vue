@@ -81,6 +81,7 @@
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button
+            data-cy="request-access-button"
             class="button is-success"
             :disabled="!formValid.status"
             type="submit"
@@ -96,7 +97,11 @@
         {{ formValid.message }}
       </p>
     </form>
-    <div v-else class="is-flex is-flex-direction-column">
+    <div
+      v-else
+      data-cy="success-message"
+      class="is-flex is-flex-direction-column"
+    >
       <p><strong>Your request has been received.</strong></p>
       <p>
         An administrator will review your request and respond within a week.
