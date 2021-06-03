@@ -22,11 +22,6 @@ export default {
     geo: {
       type: Object,
       required: true
-    },
-    level: {
-      type: String,
-      required: false,
-      default: "blocks"
     }
   },
   computed: {
@@ -40,9 +35,14 @@ export default {
         background: "transparent",
         data: [
           {
-            name: "outlines",
+            name: "town_outlines",
             values: this.geo,
-            format: { type: "topojson", mesh: this.level }
+            format: { type: "topojson", mesh: "towns" }
+          },
+          {
+            name: "bg_outlines",
+            values: this.geo,
+            format: { type: "topojson", feature: "blocks" }
           }
         ],
         projections: [
@@ -50,18 +50,36 @@ export default {
             name: "projection",
             type: "mercator",
             size: { signal: "[width, height]" },
-            fit: { signal: 'data("outlines")' }
+            fit: { signal: 'data("town_outlines")' }
           }
         ],
         marks: [
           {
             type: "shape",
-            from: { data: "outlines" },
+            from: { data: "town_outlines" },
+            encode: {
+              enter: {
+                strokeWidth: { value: 3 },
+                stroke: { value: "#d3d3d3" },
+                fill: { value: "transparent" }
+              }
+            },
+            transform: [{ type: "geoshape", projection: "projection" }]
+          },
+          {
+            type: "shape",
+            from: { data: "bg_outlines" },
             encode: {
               enter: {
                 strokeWidth: { value: 1 },
                 stroke: { value: "#d3d3d3" },
                 fill: { value: "transparent" }
+              },
+              update: {
+                tooltip: {
+                  signal:
+                    "{Municipality: datum.properties.name, 'Block Group': datum.id}"
+                }
               }
             },
             transform: [{ type: "geoshape", projection: "projection" }]
