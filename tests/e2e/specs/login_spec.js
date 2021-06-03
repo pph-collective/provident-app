@@ -50,4 +50,12 @@ describe("Log In View", () => {
       .contains("Log Out")
       .should("exist");
   });
+
+  it("Logging in as a user that is still pending approval", () => {
+    cy.get('[type="email"]').type("user1@user.com");
+    cy.get('[type="password"]').type("user-password{enter}");
+    cy.get('[data-cy="error-message"]')
+      .should("exist")
+      .contains("User account not approved: pending");
+  });
 });
