@@ -10,10 +10,23 @@
 import fb from "../../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
+const accounts = require("../../fixtures/accounts.json");
+
 attachCustomCommands({ Cypress, cy, fb });
 
 Cypress.Commands.add("login", (email, password) => {
   fb.login(email, password);
+});
+
+Cypress.Commands.add("login_by_permission", permission_level => {
+  const account = accounts[permission_level];
+  if (account) {
+    fb.login(account["email"], account["password"]);
+  } else {
+    console.log(
+      `Account with the following permission level doesn't exist in accounts.json: ${permission_level}.`
+    );
+  }
 });
 
 Cypress.Commands.add("logout", () => {

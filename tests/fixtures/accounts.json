@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "email": "admin@admin.com",
+    "password": "admin1"
+  },
+  "approved": {
+    "email": "user@user.com",
+    "password": "user-password"
+  },
+  "pending": {
+    "email": "user1@user.com",
+    "password": "user-password"
+  }
+}
