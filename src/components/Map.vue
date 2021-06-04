@@ -1,27 +1,26 @@
 <template>
-  <VegaBase :spec="spec" v-bind="$attrs" />
+  <div ref="el"></div>
 </template>
 
 <script>
+import { ref, toRefs, computed } from "vue";
+
 import * as topology from "topojson-server";
 import * as tc from "topojson-client";
 import * as ts from "topojson-simplify";
 const topojson = Object.assign(ts, tc);
 
-import VegaBase from "@/components/VegaBase";
+import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
 export default {
   name: "Map",
-  components: {
-    VegaBase
-  },
   props: {
     dataset: {
       type: Array,
       required: true
     },
-    height: {
+    minHeight: {
       type: Number,
       default: 720
     },
@@ -32,12 +31,17 @@ export default {
       }
     }
   },
-  computed: {
-    filteredGeo() {
+  setup(props) {
+    const { minHeight, filterTowns } = toRefs(props);
+
+    const el = ref(null);
+
+    // filter geo data and simplify
+    const filteredGeo = computed(() => {
       let filtered = geo;
-      if (this.filterTowns.length > 0) {
+      if (filterTowns.value.length > 0) {
         filtered = geo.filter(g =>
-          this.filterTowns.includes(g.properties.name)
+          filterTowns.value.includes(g.properties.name)
         );
       }
 
@@ -60,8 +64,6 @@ export default {
         )
       );
 
-      console.log(topo);
-
       // merge block groups into town as well
       let target = (topo.objects["towns"] = {
         type: "GeometryCollection",
@@ -77,7 +79,6 @@ export default {
       });
 
       for (let k in geometriesByKey) {
-        console.log(geometriesByKey[k]);
         let o = topojson.mergeArcs(topo, geometriesByKey[k]);
         o.id = k;
         o.properties = { name: k };
@@ -85,22 +86,25 @@ export default {
       }
 
       return topo;
-    },
-    spec() {
-      console.log(`${this.filterTownsString}`);
+    });
+
+    const hasData = computed(() => {
+      return Object.keys(filteredGeo.value).length > 0;
+    });
+
+    const spec = computed(() => {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
-        height: this.height,
         background: "transparent",
         data: [
           {
             name: "town_outlines",
-            values: this.filteredGeo,
+            values: filteredGeo.value,
             format: { type: "topojson", feature: "towns" }
           },
           {
             name: "bg_outlines",
-            values: this.filteredGeo,
+            values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" }
           }
         ],
@@ -145,7 +149,18 @@ export default {
           }
         ]
       };
-    }
+    });
+
+    useVega({
+      spec,
+      el,
+      hasData,
+      minHeight
+    });
+
+    return {
+      el
+    };
   }
 };
 </script>

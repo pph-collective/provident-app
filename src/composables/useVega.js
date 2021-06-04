@@ -3,10 +3,10 @@ import embed from "vega-embed";
 
 export function useVega({
   spec,
-  minWidth,
-  minHeight,
-  includeActions,
-  hasData,
+  minWidth = ref(200),
+  minHeight = ref(200),
+  includeActions = ref(false),
+  hasData = ref(true),
   el
 }) {
   const actionsWidth = computed(() => (includeActions.value ? 38 : 0));
@@ -27,7 +27,7 @@ export function useVega({
     if (el.value) {
       return Math.max(
         minHeight.value,
-        el.value.parentElement.clientHeight - 10
+        Math.min(el.value.parentElement.clientHeight - 10, window.innerHeight)
       );
     }
     return minHeight.value;
