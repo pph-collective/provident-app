@@ -3,7 +3,7 @@
     <ControlPanel :drop-downs="dropDowns" @selected="updateControl($event)" />
     <p>{{ controls }}</p>
     <div class="map-container box">
-      <Map :dataset="[]" :geo="geo" />
+      <Map :dataset="[]" />
     </div>
   </div>
 </template>
@@ -13,7 +13,6 @@ import { ref } from "vue";
 
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/Map.vue";
-import geo from "@/assets/geojson/ri.json";
 
 export default {
   components: {
@@ -44,8 +43,7 @@ export default {
     return {
       dropDowns,
       controls,
-      updateControl,
-      geo
+      updateControl
     };
   }
 };

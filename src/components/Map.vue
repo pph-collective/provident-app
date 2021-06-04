@@ -1,9 +1,15 @@
 <template>
-  <VegaBase :spec="spec" :has-data="hasData" v-bind="$attrs" />
+  <VegaBase :spec="spec" v-bind="$attrs" />
 </template>
 
 <script>
+import * as topology from "topojson-server";
+import * as tc from "topojson-client";
+import * as ts from "topojson-simplify";
+const topojson = Object.assign(ts, tc);
+
 import VegaBase from "@/components/VegaBase";
+import geo from "@/assets/geojson/ri.json";
 
 export default {
   name: "Map",
@@ -19,16 +25,69 @@ export default {
       type: Number,
       default: 720
     },
-    geo: {
-      type: Object,
-      required: true
+    filterTowns: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   computed: {
-    hasData() {
-      return Object.keys(this.geo).length > 0;
+    filteredGeo() {
+      let filtered = geo;
+      if (this.filterTowns.length > 0) {
+        filtered = geo.filter(g =>
+          this.filterTowns.includes(g.properties.name)
+        );
+      }
+
+      const collection = {
+        blocks: { type: "FeatureCollection", features: filtered }
+      };
+
+      let topo = topology.topology(collection, 1e5);
+
+      // simplify/smooth out the geometry a bit
+      const sphericalArea = 5e-9;
+      topo = topojson.presimplify(topo, topojson.sphericalTriangleArea);
+      topo = topojson.simplify(topo, sphericalArea);
+      topo = topojson.filter(
+        topo,
+        topojson.filterAttachedWeight(
+          topo,
+          sphericalArea,
+          topojson.sphericalRingArea
+        )
+      );
+
+      console.log(topo);
+
+      // merge block groups into town as well
+      let target = (topo.objects["towns"] = {
+        type: "GeometryCollection",
+        geometries: []
+      });
+      let geometries = target.geometries;
+
+      const geometriesByKey = {};
+      topo.objects["blocks"].geometries.forEach(geometry => {
+        let k = geometry.properties.name;
+        if (geometriesByKey[k]) geometriesByKey[k].push(geometry);
+        else geometriesByKey[k] = [geometry];
+      });
+
+      for (let k in geometriesByKey) {
+        console.log(geometriesByKey[k]);
+        let o = topojson.mergeArcs(topo, geometriesByKey[k]);
+        o.id = k;
+        o.properties = { name: k };
+        geometries.push(o);
+      }
+
+      return topo;
     },
     spec() {
+      console.log(`${this.filterTownsString}`);
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         height: this.height,
@@ -36,12 +95,12 @@ export default {
         data: [
           {
             name: "town_outlines",
-            values: this.geo,
-            format: { type: "topojson", mesh: "towns" }
+            values: this.filteredGeo,
+            format: { type: "topojson", feature: "towns" }
           },
           {
             name: "bg_outlines",
-            values: this.geo,
+            values: this.filteredGeo,
             format: { type: "topojson", feature: "blocks" }
           }
         ],
