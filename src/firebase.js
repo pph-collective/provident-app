@@ -18,7 +18,9 @@ let db = firebase.firestore();
 let auth = firebase.auth();
 if (location.hostname === "localhost") {
   db.settings({
-    experimentalForceLongPolling: true
+    experimentalForceLongPolling: true,
+    host: "localhost:8088",
+    ssl: false
   });
   db.useEmulator("localhost", 8088);
   auth.useEmulator("http://localhost:9099");
