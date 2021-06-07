@@ -1,6 +1,6 @@
 <template>
-  <div class="panel is-primary m-4 has-background-white">
-    <p class="panel-heading">
+  <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
+    <p class="panel-heading" data-cy="form-panel-heading">
       I am forms!
     </p>
 
@@ -16,17 +16,19 @@
 
     <div
       v-if="selectedForms.length === 0"
+      data-cy="forms-panel-block"
       class="panel-block is-justify-content-center"
     >
       <span>No forms here</span>
     </div>
     <div
       v-else
+      data-cy="forms-panel-block"
       v-for="(form, idx) in selectedForms"
       :key="'form-' + idx"
       class="panel-block"
     >
-      <div class="level form-row">
+      <div class="level form-row" data-cy="form-row">
         <div class="level-left">
           <p class="level-item is-size-5">
             {{ form.title }}
@@ -34,15 +36,20 @@
         </div>
 
         <div class="level-right">
-          <span v-if="user.admin" class="level-item tag">
+          <span
+            v-if="user.admin"
+            class="level-item tag"
+            data-cy="release-date-tag"
+          >
             <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
           </span>
-          <span class="level-item tag">
+          <span class="level-item tag" data-cy="status-tag">
             <p><strong>STATUS:</strong> {{ form.status }}</p>
           </span>
           <button
             v-if="form.status !== 'Submitted'"
             class="button is-primary level-item"
+            data-cy="launch-form-button"
             type="button"
             @click="activeForm = form"
           >
@@ -51,6 +58,7 @@
           <button
             v-else
             class="button is-primary is-light level-item"
+            data-cy="review-form-button"
             type="button"
             @click="activeForm = form"
           >
@@ -62,18 +70,25 @@
   </div>
 
   <teleport to="body">
-    <div v-if="activeForm.questions" class="modal is-active">
+    <div
+      v-if="activeForm.questions"
+      class="modal is-active"
+      data-cy="active-form"
+    >
       <div class="modal-background" @click="activeForm = {}"></div>
       <div class="modal-content">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ activeForm.title }}</p>
+          <p class="modal-card-title" data-cy="form-title">
+            {{ activeForm.title }}
+          </p>
           <button
             class="delete"
+            data-cy="close-form"
             aria-label="close"
             @click="activeForm = {}"
           ></button>
         </header>
-        <section class="modal-card-body">
+        <section class="modal-card-body" data-cy="form-body">
           <JSONForm
             :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
@@ -82,7 +97,7 @@
             @save="updateForm($event, 'Draft')"
             @submitted="updateForm($event, 'Submitted')"
           />
-          <p v-if="formMessage" class="has-text-centered">
+          <p v-if="formMessage" class="has-text-centered" data-cy="form-body">
             <small>{{ formMessage }}</small>
           </p>
         </section>
