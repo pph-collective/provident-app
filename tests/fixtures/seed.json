@@ -83,6 +83,17 @@
           "label": "Please write an essay about your favorite color."
         }
       ]
+    },
+    "test2": {
+      "title": "Simple Form",
+      "release_date": "2021-05-21",
+      "questions": [
+        {
+          "model": "Anything",
+          "component": "TextArea",
+          "label": "Type anything"
+        }
+      ]
     }
   }
 }

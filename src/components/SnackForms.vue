@@ -97,7 +97,11 @@
             @save="updateForm($event, 'Draft')"
             @submitted="updateForm($event, 'Submitted')"
           />
-          <p v-if="formMessage" class="has-text-centered" data-cy="form-body">
+          <p
+            v-if="formMessage"
+            class="has-text-centered"
+            data-cy="form-message"
+          >
             <small>{{ formMessage }}</small>
           </p>
         </section>
