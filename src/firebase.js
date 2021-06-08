@@ -29,7 +29,6 @@ if (location.hostname === "localhost") {
 export default {
   auth,
   db,
-  firebaseConfig,
   async login(email, password) {
     const res = await auth.signInWithEmailAndPassword(email, password);
     await db.collection("activity_log").add({
