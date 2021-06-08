@@ -39,41 +39,42 @@ describe("Forms as an admin", () => {
   });
 
   it("Launch form should bring up modal", () => {
+    // Confirm that forms are loaded prior to continuing
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
     );
+
+    cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
 
     cy.get('[data-cy="launch-form-button"]')
       .should("exist")
       .first()
       .click();
     cy.get('[data-cy="active-form"]').should("exist");
-    cy.get('[data-cy="form-title"]').should("contain", "My Form");
+    cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
   });
 
   it("Save form as a draft", () => {
+    // Confirm that the forms are loaded prior to continuing
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
     );
 
-    // TODO: Remove this once the uncaught exception bug is fixed
-    Cypress.on("uncaught:exception", err => {
-      // returning false here prevents Cypress from
-      // failing the test
-      // debugger
-      console.log("Skipping the following error");
-      console.log(err.message);
-      return false;
-    });
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
 
     // Click to launch the Simple Form
-    cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
-      .eq(1)
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
       .find('[data-cy="launch-form-button"]')
-      .should("exist")
       .click();
+
+    // Assert that this is the simple form
+    cy.get('[data-cy="active-form-title"]').should("contain", "Simple Form");
 
     // Save button should be disabled
     cy.get('[data-cy="active-form"]')
@@ -110,15 +111,71 @@ describe("Forms as an admin", () => {
 
     // Reopen
     // Click to launch the Simple Form
-    cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
-      .eq(1)
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
       .find('[data-cy="launch-form-button"]')
+      .click();
+
+    // Check if textarea is saved and if editable
+    cy.get('[data-cy="active-form"]')
+      .find("textarea")
+      .should("have.value", "Hello, how are you?")
+      .type(" I'm doing well.")
+      .should("have.value", "Hello, how are you? I'm doing well.");
+
+    // Submit the form
+    cy.get('[data-cy="active-form"]')
+      .find("button")
+      .contains("Submit")
+      .should("be.enabled")
+      .click();
+
+    // Check no longer in to do
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form").should(
+      "not.exist"
+    );
+
+    // Click All
+    // panel-tabs, contains submitted
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("All")
+      .click();
+
+    // Check form
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Submitted");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find("launch-form-button")
+      .should("not.exist");
+
+    // Review form
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find('[data-cy="review-form-button"]')
       .should("exist")
       .click();
 
-    // Check if textarea is saved
     cy.get('[data-cy="active-form"]')
       .find("textarea")
-      .should("have.value", "Hello, how are you?");
+      .should("be.disabled");
+
+    cy.get('[data-cy="close-form"]').click();
+
+    // Check submitted tab
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("Submitted")
+      .click();
+
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Submitted");
+
+    // Review form
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find('[data-cy="review-form-button"]')
+      .should("exist");
   });
 });

@@ -4,7 +4,7 @@
       I am forms!
     </p>
 
-    <div class="panel-tabs">
+    <div class="panel-tabs" data-cy="panel-tabs">
       <a
         v-for="tab in tabs"
         :key="tab"
@@ -30,7 +30,7 @@
     >
       <div class="level form-row" data-cy="form-row">
         <div class="level-left">
-          <p class="level-item is-size-5">
+          <p class="level-item is-size-5" data-cy="form-title">
             {{ form.title }}
           </p>
         </div>
@@ -78,7 +78,7 @@
       <div class="modal-background" @click="activeForm = {}"></div>
       <div class="modal-content">
         <header class="modal-card-head">
-          <p class="modal-card-title" data-cy="form-title">
+          <p class="modal-card-title" data-cy="active-form-title">
             {{ activeForm.title }}
           </p>
           <button
