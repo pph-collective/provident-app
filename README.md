@@ -64,7 +64,7 @@ A sample JSON:
       "required": true
     },
     {
-      "model": "age",
+      "model": "old",
       "component": "Radio",
       "label": "Do you feel old?",
       "condition": "(model) => model.age > 100",

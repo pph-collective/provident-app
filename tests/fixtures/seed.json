@@ -48,7 +48,7 @@
           "required": true
         },
         {
-          "model": "age",
+          "model": "old",
           "component": "Radio",
           "label": "Do you feel old?",
           "condition": "(model) => model.age > 100",
@@ -89,7 +89,7 @@
       "release_date": "2021-05-21",
       "questions": [
         {
-          "model": "Anything",
+          "model": "anything",
           "component": "TextArea",
           "label": "Type anything"
         }
