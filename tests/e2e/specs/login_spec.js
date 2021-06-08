@@ -58,4 +58,13 @@ describe("Log In View", () => {
       .should("exist")
       .contains("User account not approved: pending");
   });
+
+  it("Log In and Out to check Auth Listener", () => {
+    cy.login_by_permission("admin");
+    cy.get('[data-cy="navbar-burger"]').click();
+    cy.get('[data-cy="logout-button"]').should("exist");
+
+    cy.logout();
+    cy.get('[data-cy="login-button"]').should("exist");
+  });
 });

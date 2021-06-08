@@ -13,6 +13,7 @@
         <a
           role="button"
           :class="['navbar-burger', { 'is-active': hamburgerActive }]"
+          data-cy="navbar-burger"
           aria-label="menu"
           aria-expanded="false"
           data-target="navbar-contents"
@@ -63,7 +64,11 @@
         <div class="navbar-end">
           <div v-if="!user.authenticated" class="navbar-item">
             <p class="control">
-              <router-link to="/login" class="button is-primary is-small">
+              <router-link
+                to="/login"
+                class="button is-primary is-small"
+                data-cy="login-button"
+              >
                 Log In
               </router-link>
             </p>
@@ -78,7 +83,13 @@
               </span>
             </div>
             <p class="control">
-              <a class="button is-primary is-small" @click="logout">Log Out</a>
+              <a
+                class="button is-primary is-small"
+                data-cy="logout-button"
+                @click="logout"
+              >
+                Log Out
+              </a>
             </p>
           </div>
 
