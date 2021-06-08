@@ -16,8 +16,10 @@ export function useVega({
   const getWidth = () => {
     if (el.value) {
       return (
-        Math.max(minWidth.value, el.value.parentElement.clientWidth) -
-        actionsWidth.value
+        Math.max(
+          minWidth.value,
+          Math.min(el.value.parentElement.clientWidth, window.innerWidth)
+        ) - actionsWidth.value
       );
     }
     return minWidth.value;

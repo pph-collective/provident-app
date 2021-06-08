@@ -51,6 +51,16 @@ export default {
       return {};
     }
   },
+  async getOrgs() {
+    const res = [];
+    try {
+      const docs = await db.collection("organizations").get();
+      docs.forEach(doc => res.push(doc.data()));
+    } catch (err) {
+      console.log(err);
+    }
+    return res;
+  },
   async getForms() {
     const forms = [];
     try {

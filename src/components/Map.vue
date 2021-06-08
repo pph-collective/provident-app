@@ -24,7 +24,7 @@ export default {
       type: Number,
       default: 720
     },
-    filterTowns: {
+    filterMunicipalities: {
       type: Array,
       default() {
         return [];
@@ -32,16 +32,16 @@ export default {
     }
   },
   setup(props) {
-    const { minHeight, filterTowns } = toRefs(props);
+    const { minHeight, filterMunicipalities } = toRefs(props);
 
     const el = ref(null);
 
     // filter geo data and simplify
     const filteredGeo = computed(() => {
       let filtered = geo;
-      if (filterTowns.value.length > 0) {
+      if (filterMunicipalities.value.length > 0) {
         filtered = geo.filter(g =>
-          filterTowns.value.includes(g.properties.name)
+          filterMunicipalities.value.includes(g.properties.name)
         );
       }
 

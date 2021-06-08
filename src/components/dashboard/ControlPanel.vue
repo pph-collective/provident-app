@@ -6,13 +6,12 @@
       :key="'control-panel-dropdown-' + type"
     >
       <span class="select">
-        <select
-          @input="$emit('selected', { type, value: $event.target.value })"
-        >
+        <select v-model="selected[type]">
           <option
             v-for="(option, index) in options.values"
             :key="'option-' + index"
-            >{{ option }}</option
+            :value="option"
+            >{{ option.name || option }}</option
           >
         </select>
       </span>
@@ -24,6 +23,8 @@
 </template>
 
 <script>
+import { reactive, toRefs, watch } from "vue";
+
 export default {
   props: {
     dropDowns: {
@@ -31,7 +32,25 @@ export default {
       required: true
     }
   },
-  emits: ["selected"]
+  emits: ["selected"],
+  setup(props, { emit }) {
+    const { dropDowns } = toRefs(props);
+
+    const res = {};
+    Object.keys(dropDowns.value).forEach(k => {
+      res[k] = dropDowns.value[k].values[0];
+    });
+
+    const selected = reactive(res);
+
+    watch(selected, () => {
+      emit("selected", selected);
+    });
+
+    return {
+      selected
+    };
+  }
 };
 </script>
 

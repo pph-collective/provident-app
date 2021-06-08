@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import fb from "@/firebase.js";
 
 const store = createStore({
   state() {
@@ -7,7 +8,8 @@ const store = createStore({
         authenticated: false,
         data: null,
         admin: false
-      }
+      },
+      organizations: []
     };
   },
   mutations: {
@@ -19,10 +21,13 @@ const store = createStore({
     },
     SET_ADMIN(state, admin) {
       state.user.admin = admin;
+    },
+    SET_ORGS(state, orgs) {
+      state.organizations = orgs;
     }
   },
   actions: {
-    fetchUser({ commit }, user) {
+    async fetchUser({ commit }, user) {
       commit("SET_LOGGED_IN", user !== null);
       if (user) {
         commit("SET_USER", {
@@ -34,6 +39,10 @@ const store = createStore({
     },
     fetchAdmin({ commit }, admin) {
       commit("SET_ADMIN", admin);
+    },
+    async fetchOrgs({ commit }) {
+      const orgs = await fb.getOrgs();
+      commit("SET_ORGS", orgs);
     }
   }
 });
