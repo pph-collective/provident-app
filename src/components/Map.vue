@@ -52,7 +52,7 @@ export default {
       let topo = topology.topology(collection, 1e5);
 
       // simplify/smooth out the geometry a bit
-      const sphericalArea = 5e-9;
+      const sphericalArea = 1e-9;
       topo = topojson.presimplify(topo, topojson.sphericalTriangleArea);
       topo = topojson.simplify(topo, sphericalArea);
       topo = topojson.filter(

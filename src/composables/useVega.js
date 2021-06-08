@@ -55,6 +55,9 @@ export function useVega({
     // don't try to render if we don't have data yet
     if (!hasData.value) return;
 
+    // no element to render into yet
+    if (!el.value) return;
+
     embed(el.value, spec.value, {
       actions: includeActions.value,
       theme: "vox",

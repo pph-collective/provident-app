@@ -1,31 +1,40 @@
 <template>
-  <div class="control-panel box">
-    <div
-      v-for="(options, type) in dropDowns"
-      class="control-panel-dropdown control has-icons-left"
-      :key="'control-panel-dropdown-' + type"
-    >
-      <span class="select">
-        <select v-model="selected[type]">
-          <option
-            v-for="(option, index) in options.values"
-            :key="'option-' + index"
-            :value="option"
-            >{{ option.name || option }}</option
-          >
-        </select>
-      </span>
-      <span class="icon is-small is-left pl-1">
-        <i :class="options.icon"></i>
-      </span>
-    </div>
-  </div>
+  <Card :no-header="true">
+    <template #content>
+      <div class="control-panel">
+        <div
+          v-for="(options, type) in dropDowns"
+          class="control-panel-dropdown control has-icons-left"
+          :key="'control-panel-dropdown-' + type"
+        >
+          <span class="select">
+            <select v-model="selected[type]">
+              <option
+                v-for="(option, index) in options.values"
+                :key="'option-' + index"
+                :value="option"
+                >{{ option.name || option }}</option
+              >
+            </select>
+          </span>
+          <span class="icon is-small is-left pl-1">
+            <i :class="options.icon"></i>
+          </span>
+        </div>
+      </div>
+    </template>
+  </Card>
 </template>
 
 <script>
 import { reactive, toRefs, watch } from "vue";
 
+import Card from "@/components/dashboard/Card.vue";
+
 export default {
+  components: {
+    Card
+  },
   props: {
     dropDowns: {
       type: Object,
@@ -42,6 +51,7 @@ export default {
     });
 
     const selected = reactive(res);
+    emit("selected", selected);
 
     watch(selected, () => {
       emit("selected", selected);

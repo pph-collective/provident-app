@@ -1,15 +1,18 @@
 <template>
   <div class="dashboard p-4">
     <ControlPanel :drop-downs="dropDowns" @selected="controls = $event" />
-    <p>{{ controls }}</p>
-    <div class="map-container box">
-      <Map
-        :dataset="[]"
-        :filter-municipalities="
-          controls.geography ? controls.geography.municipalities : []
-        "
-      />
-    </div>
+    <Card v-if="controls.geography">
+      <template #title>Map: {{ controls.geography.name }}</template>
+      <template #subtitle>Some really great insights</template>
+      <template #content>
+        <div class="map-container">
+          <Map
+            :dataset="[]"
+            :filter-municipalities="controls.geography.municipalities"
+          />
+        </div>
+      </template>
+    </Card>
   </div>
 </template>
 
@@ -17,13 +20,15 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
+import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/Map.vue";
 
 export default {
   components: {
     ControlPanel,
-    Map
+    Map,
+    Card
   },
   setup() {
     const store = useStore();
@@ -54,22 +59,40 @@ export default {
 
     const controls = ref({});
 
-    // const updateControl = e => {
-    //   console.log(e.value.name);
-    //   controls.value[e.type] = e.value;
-    // };
-
     return {
       dropDowns,
       controls
-      // updateControl
     };
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@import "bulma";
+
 .map-container {
   max-width: 90vw;
+}
+
+.dashboard {
+  @extend .px-4;
+  @extend .py-4;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto;
+  column-gap: 15px;
+  row-gap: 15px;
+  justify-items: stretch;
+  align-items: stretch;
+  justify-content: space-between;
+  align-content: start;
+  grid-auto-flow: row;
+  @include mobile {
+    grid-template-columns: 100vw;
+    column-gap: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 </style>
