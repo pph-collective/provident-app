@@ -73,7 +73,7 @@
     <div
       v-if="activeForm.questions"
       class="modal is-active"
-      data-cy="active-form"
+      data-cy="active-form-modal"
     >
       <div class="modal-background" @click="activeForm = {}"></div>
       <div class="modal-content">
