@@ -16,10 +16,10 @@ describe("Register User", () => {
 
   it("Submit valid form", () => {
     cy.get('[type="email"]').type("register@register.com");
-    cy.get("#form-name").type("First Last");
-    cy.get("#form-organization").select("Good Doers");
-    cy.get("#form-password").type("register-password");
-    cy.get("#form-confirm-password").type("register-password");
+    cy.get('[data-cy="form-name"]').type("First Last");
+    cy.get('[data-cy="form-organization"]').select("Good Doers");
+    cy.get('[data-cy="form-password"]').type("register-password");
+    cy.get('[data-cy="form-confirm-password"]').type("register-password");
 
     cy.get(".button")
       .contains("Request Access")
@@ -33,14 +33,12 @@ describe("Register User", () => {
 
   it("Email is already in use", () => {
     cy.get('[type="email"]').type("user@user.com");
-    cy.get("#form-name").type("First Last");
-    cy.get("#form-organization").select("Good Doers");
-    cy.get("#form-password").type("register-password");
-    cy.get("#form-confirm-password").type("register-password");
+    cy.get('[data-cy="form-name"]').type("First Last");
+    cy.get('[data-cy="form-organization"]').select("Good Doers");
+    cy.get('[data-cy="form-password"]').type("register-password");
+    cy.get('[data-cy="form-confirm-password"]').type("register-password");
 
-    cy.get(".button")
-      .contains("Request Access")
-      .should("be.enabled");
+    cy.get('[data-cy="request-access-button"]').should("be.enabled");
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should(
       "contain",
