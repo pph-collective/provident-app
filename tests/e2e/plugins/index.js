@@ -9,6 +9,10 @@
 // /* eslint-disable import/no-extraneous-dependencies, global-require */
 const firebase = require("@firebase/rules-unit-testing");
 const admin = require("firebase-admin");
+
+const firebaseJSON = require("../../../firebase.json");
+process.env.FIRESTORE_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.firestore.port}`;
+process.env.FIREBASE_AUTH_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.auth.port}`;
 const cypressFirebasePlugin = require("cypress-firebase").plugin;
 
 const { startDevServer } = require("@cypress/webpack-dev-server");
@@ -25,6 +29,8 @@ module.exports = (on, config) => {
   on("task", {
     "db:teardown": () => {
       try {
+        // Clears all data associated with a particular project
+        // in the locally running Firestore instance
         firebase.clearFirestoreData({
           projectId: "provident-ri"
         });
@@ -34,19 +40,23 @@ module.exports = (on, config) => {
       }
     },
     "db:seed": () => {
-      const seed = require("../../fixtures/seed.json");
-      if (seed) {
-        for (const [collection, documents] of Object.entries(seed)) {
-          for (const [documentPath, data] of Object.entries(documents)) {
-            admin
-              .firestore()
-              .collection(collection)
-              .doc(documentPath)
-              .set(data);
+      if (admin.firestore()._settings.servicePath === "localhost") {
+        const seed = require("../../fixtures/seed.json");
+        if (seed) {
+          for (const [collection, documents] of Object.entries(seed)) {
+            for (const [documentPath, data] of Object.entries(documents)) {
+              admin
+                .firestore()
+                .collection(collection)
+                .doc(documentPath)
+                .set(data);
+            }
           }
         }
+        return seed;
+      } else {
+        return "SKIPPING db:seed -- admin is not on localhost";
       }
-      return seed;
     },
     "db:deleteUserByEmail": email => {
       admin
