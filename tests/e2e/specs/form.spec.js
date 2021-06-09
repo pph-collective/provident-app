@@ -9,7 +9,7 @@ describe("Form functionality", () => {
   });
 
   it("Form title heading", () => {
-    cy.get('[data-cy="form-panel-heading"]').should("contain", "I am forms!");
+    cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
   });
 
   it("Release date is viewable as an admin", () => {
