@@ -29,6 +29,14 @@ describe("Register User", () => {
     cy.get('[data-cy="success-message"]')
       .should("exist")
       .contains("Your request has been received.");
+
+    // Try to log in
+    cy.visit("/login");
+    cy.get('[type="email"]').type("register@register.com");
+    cy.get('[type="password"]').type("register-password{enter}");
+    cy.get('[data-cy="error-message"]')
+      .should("exist")
+      .contains("User account not approved: pending");
   });
 
   it("Email is already in use", () => {
