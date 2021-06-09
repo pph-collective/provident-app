@@ -155,10 +155,11 @@ export default {
     onMounted(async () => {
       forms.value = await fb.getForms();
       if (!user.value.admin) {
-        let tz = Date.now().getTimezoneOffset() / 60;
+        let today = new Date(); // Local time
+        today = today.toISOString().split("T")[0]; // Date to ISO string without time
         forms.value = forms.value.filter(f => {
-          let releaseDate = new Date(`${f.release_date}Z${tz}`);
-          return releaseDate <= Date.now();
+          let releaseDate = `${f.release_date}`;
+          return releaseDate <= today;
         });
       }
       userForms.value = await fb.getUserForms(userEmail.value);
