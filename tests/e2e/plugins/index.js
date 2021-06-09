@@ -67,18 +67,24 @@ module.exports = (on, config) => {
       }
     },
     "db:deleteUserByEmail": email => {
-      admin
-        .auth()
-        .getUserByEmail(email)
-        .then(userRecord => {
-          admin.auth().deleteUser(userRecord["uid"]);
-          return userRecord;
-        })
-        .catch(error => {
-          console.log("Error fetching user data:", error);
-          return error;
-        });
-      return false;
+      let auth_url_format = admin.auth().authRequestHandler
+        .tenantMgmtResourceBuilder.urlFormat;
+      if (auth_url_format.includes("localhost")) {
+        admin
+          .auth()
+          .getUserByEmail(email)
+          .then(userRecord => {
+            admin.auth().deleteUser(userRecord["uid"]);
+            return userRecord;
+          })
+          .catch(error => {
+            console.log("Error fetching user data:", error);
+            return error;
+          });
+        return false;
+      } else {
+        return "SKIPPING db:seed -- admin is not on localhost";
+      }
     }
   });
 
