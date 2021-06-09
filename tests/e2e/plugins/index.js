@@ -18,6 +18,15 @@ const cypressFirebasePlugin = require("cypress-firebase").plugin;
 const { startDevServer } = require("@cypress/webpack-dev-server");
 const webpackConfig = require("@vue/cli-service/webpack.config.js");
 
+const seed = require("../../fixtures/seed.json");
+
+// Edit the Seed
+// Set the unreleased form to release tomorrow
+let today = new Date();
+let tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+seed.forms.test3.release_date = tomorrow.toISOString().split("T")[0];
+
 module.exports = (on, config) => {
   on("dev-server:start", options =>
     startDevServer({
@@ -41,7 +50,6 @@ module.exports = (on, config) => {
     },
     "db:seed": () => {
       if (admin.firestore()._settings.servicePath === "localhost") {
-        const seed = require("../../fixtures/seed.json");
         if (seed) {
           for (const [collection, documents] of Object.entries(seed)) {
             for (const [documentPath, data] of Object.entries(documents)) {
