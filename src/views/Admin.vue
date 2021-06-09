@@ -11,7 +11,7 @@
     <section class="section">
       <h1 class="title">Review Access Requests</h1>
 
-      <table class="table" data-cy="user-requests">
+      <table class="table" data-cy="user-request-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -21,7 +21,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="req in userRequests" :key="req.email">
+          <tr
+            v-for="req in userRequests"
+            :key="req.email"
+            data-cy="user-request"
+          >
             <td data-cy="name">{{ req.name }}</td>
             <td data-cy="organization">{{ req.organization }}</td>
             <td data-cy="email">{{ req.email }}</td>
@@ -81,7 +85,7 @@ export default {
       try {
         // update request status
         // TODO: emails on approval/denial
-        fb.db
+        await fb.db
           .collection("users")
           .doc(user.id)
           .update({ status: "approved" });

@@ -1,9 +1,11 @@
+import accounts from "../../fixtures/accounts.json";
+
 describe("Admin Views and Powers", () => {
   beforeEach(() => {
     cy.logout();
     cy.task("db:teardown");
     cy.task("db:seed");
-    cy.login("admin@admin.com", "admin1");
+    cy.login_by_permission("admin");
     cy.visit("/admin");
   });
 
@@ -18,15 +20,13 @@ describe("Admin Views and Powers", () => {
   });
 
   it("View pending users", () => {
-    cy.get('[data-cy="user-requests"]')
-      .contains("td", "user1@user.com")
-      .should("be.visible");
+    cy.contains('[data-cy="user-request"]', accounts.pending.email).should(
+      "exist"
+    );
   });
 
   it("Approving a user", () => {
-    cy.get('[data-cy="user-requests"]')
-      .contains('[data-cy="email"]', "user1@user.com")
-      .siblings()
+    cy.contains('[data-cy="user-request"]', accounts.pending.email)
       .get('[data-cy="approve"]')
       .should("exist")
       .click();
@@ -37,8 +37,8 @@ describe("Admin Views and Powers", () => {
     // Try to log in
     cy.logout();
     cy.visit("/login");
-    cy.get('[type="email"]').type("user1@user.com");
-    cy.get('[type="password"]').type("user-password{enter}");
+    cy.get('[type="email"]').type(accounts.pending.email);
+    cy.get('[type="password"]').type(`${accounts.pending.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
     cy.get("a")
       .contains("Log Out")
@@ -46,9 +46,7 @@ describe("Admin Views and Powers", () => {
   });
 
   it("Denying a user", () => {
-    cy.get('[data-cy="user-requests"]')
-      .contains('[data-cy="email"]', "user1@user.com")
-      .siblings()
+    cy.contains('[data-cy="user-request"]', accounts.pending.email)
       .get('[data-cy="deny"]')
       .should("exist")
       .click();
@@ -56,8 +54,8 @@ describe("Admin Views and Powers", () => {
     // Try to log in as the denied user
     cy.logout();
     cy.visit("/login");
-    cy.get('[type="email"]').type("user1@user.com");
-    cy.get('[type="password"]').type("user-password{enter}");
+    cy.get('[type="email"]').type(accounts.pending.email);
+    cy.get('[type="password"]').type(`${accounts.pending.password}{enter}`);
     cy.get('[data-cy="error-message"]')
       .should("exist")
       .contains("User account not approved: denied");
