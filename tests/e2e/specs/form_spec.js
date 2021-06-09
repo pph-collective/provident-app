@@ -1,4 +1,4 @@
-describe("Forms as an admin", () => {
+describe("Form functionality", () => {
   beforeEach(() => {
     cy.logout();
     cy.task("db:teardown");
@@ -70,255 +70,296 @@ describe("Forms as an admin", () => {
   });
 
   it("Submitting a valid form, My Form", () => {
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Not Started");
+    cy.wrap(["admin", "approved"]).each(permission_level => {
+      cy.logout();
+      cy.login_by_permission(permission_level);
+      cy.visit("/snack/forms");
 
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="launch-form-button"]')
-      .click();
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Not Started");
 
-    cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Not Started");
 
-    // Too young
-    cy.get('[model="age"]')
-      .find("input")
-      .type("10");
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="launch-form-button"]')
+        .click();
 
-    cy.get('[model="old"]').should("not.exist");
+      cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
 
-    cy.get('[model="age"]')
-      .find(".has-text-danger")
-      .should("contain", "this must be greater than or equal to 13");
+      // Too young
+      cy.get('[model="age"]')
+        .find("input")
+        .type("10");
 
-    // Old
-    cy.get('[model="age"]')
-      .find("input")
-      .clear()
-      .type("103");
+      cy.get('[model="old"]').should("not.exist");
 
-    // Select yes
-    cy.get('[model="old"]')
-      .should("exist")
-      .find("input")
-      .first()
-      .check();
+      cy.get('[model="age"]')
+        .find(".has-text-danger")
+        .should("contain", "this must be greater than or equal to 13");
 
-    // What's your favorite color, dropdown menu
-    cy.get('[model="favorite_color"]')
-      .find("select")
-      .select("Green");
+      // Old
+      cy.get('[model="age"]')
+        .find("input")
+        .clear()
+        .type("103");
 
-    cy.get('[model="other_favorite_color"]').should("not.exist");
+      // Select yes
+      cy.get('[model="old"]')
+        .should("exist")
+        .find("input")
+        .first()
+        .check();
 
-    // Other Favorite Color
-    cy.get('[model="favorite_color"]')
-      .find("select")
-      .select("Other");
+      // What's your favorite color, dropdown menu
+      cy.get('[model="favorite_color"]')
+        .find("select")
+        .select("Green");
 
-    cy.get('[model="other_favorite_color"]')
-      .should("exist")
-      .find("input")
-      .type("all of them");
+      cy.get('[model="other_favorite_color"]').should("not.exist");
 
-    // Essay about favorite color
-    cy.get('[model="color_essay"]')
-      .find("textarea")
-      .type("I can't decide on a single color.");
+      // Other Favorite Color
+      cy.get('[model="favorite_color"]')
+        .find("select")
+        .select("Other");
 
-    // Submit the form
-    cy.get('[data-cy="active-form-modal"]')
-      .find("button")
-      .contains("Submit")
-      .should("be.enabled")
-      .click();
+      cy.get('[model="other_favorite_color"]')
+        .should("exist")
+        .find("input")
+        .type("all of them");
 
-    cy.contains('[data-cy="forms-panel-block"]', "My Form").should("not.exist");
+      // Essay about favorite color
+      cy.get('[model="color_essay"]')
+        .find("textarea")
+        .type("I can't decide on a single color.");
 
-    // Click All
-    // panel-tabs, contains submitted
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("All")
-      .click();
+      // Submit the form
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Submit")
+        .should("be.enabled")
+        .click();
 
-    // Check form status
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Submitted");
+      cy.contains('[data-cy="forms-panel-block"]', "My Form").should(
+        "not.exist"
+      );
 
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find("launch-form-button")
-      .should("not.exist");
+      // Click All
+      // panel-tabs, contains submitted
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("All")
+        .click();
 
-    // Review form
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="review-form-button"]')
-      .should("exist")
-      .click();
+      // Check form status
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Submitted");
 
-    // Everything is disabled and has the previous value
-    cy.get('[model="age"]')
-      .find("input")
-      .should("exist")
-      .should("be.disabled")
-      .should("have.value", "103");
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find("launch-form-button")
+        .should("not.exist");
 
-    cy.get('[model="old"]')
-      .find("input")
-      .should("be.disabled")
-      .first()
-      .should("be.checked");
+      // Review form
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="review-form-button"]')
+        .should("exist")
+        .click();
 
-    cy.get('[model="favorite_color"]')
-      .find("select")
-      .should("be.disabled")
-      .find("option:selected");
+      // Everything is disabled and has the previous value
+      cy.get('[model="age"]')
+        .find("input")
+        .should("exist")
+        .should("be.disabled")
+        .should("have.value", "103");
 
-    cy.get('[model="other_favorite_color"]')
-      .should("exist")
-      .find("input")
-      .should("be.disabled")
-      .should("have.value", "all of them");
+      cy.get('[model="old"]')
+        .find("input")
+        .should("be.disabled")
+        .first()
+        .should("be.checked");
 
-    cy.get('[data-cy="close-form"]').click();
+      cy.get('[model="favorite_color"]')
+        .find("select")
+        .should("be.disabled")
+        .find("option:selected");
 
-    // Check submitted tab
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Submitted")
-      .click();
+      cy.get('[model="other_favorite_color"]')
+        .should("exist")
+        .find("input")
+        .should("be.disabled")
+        .should("have.value", "all of them");
 
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .should("exist")
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Submitted");
+      cy.get('[data-cy="close-form"]').click();
 
-    // Review form
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="review-form-button"]')
-      .should("exist");
+      // Check submitted tab
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("Submitted")
+        .click();
+
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .should("exist")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Submitted");
+
+      // Review form
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="review-form-button"]')
+        .should("exist");
+    });
   });
 
   it("Save form as a draft, then submitting", () => {
+    cy.wrap(["admin", "approved"]).each(permission_level => {
+      cy.logout();
+      cy.login_by_permission(permission_level);
+      cy.visit("/snack/forms");
+
+      // Confirm that the forms are loaded prior to continuing
+      cy.get('[data-cy="forms-panel-block"]').should(
+        "not.contain",
+        "No forms here"
+      );
+
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Not Started");
+
+      // Click to launch the Simple Form
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="launch-form-button"]')
+        .click();
+
+      // Assert that this is the simple form
+      cy.get('[data-cy="active-form-title"]').should("contain", "Simple Form");
+
+      // Save button should be disabled
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.disabled");
+
+      // Type into the textarea
+      cy.get('[data-cy="active-form-modal"]')
+        .find("textarea")
+        .type("Hello, how are you?");
+
+      // Save the form
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.enabled")
+        .click();
+
+      // Form message
+      cy.get('[data-cy="form-message"]').should(
+        "contain",
+        "Form successfully saved"
+      );
+
+      // Close form
+      cy.get('[data-cy="close-form"]').click();
+
+      // Assert Status: Draft
+      cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
+        .eq(1)
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Draft");
+
+      // Reopen
+      // Click to launch the Simple Form
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="launch-form-button"]')
+        .click();
+
+      // Check if textarea is saved and if editable
+      cy.get('[data-cy="active-form-modal"]')
+        .find("textarea")
+        .should("have.value", "Hello, how are you?")
+        .type(" I'm doing well.")
+        .should("have.value", "Hello, how are you? I'm doing well.");
+
+      // Submit the form
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Submit")
+        .should("be.enabled")
+        .click();
+
+      // Check no longer in to do
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form").should(
+        "not.exist"
+      );
+
+      // Click All
+      // panel-tabs, contains submitted
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("All")
+        .click();
+
+      // Check form
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Submitted");
+
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find("launch-form-button")
+        .should("not.exist");
+
+      // Review form
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="review-form-button"]')
+        .should("exist")
+        .click();
+
+      cy.get('[data-cy="active-form-modal"]')
+        .find("textarea")
+        .should("be.disabled");
+
+      cy.get('[data-cy="close-form"]').click();
+
+      // Check submitted tab
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("Submitted")
+        .click();
+
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .should("exist")
+        .find('[data-cy="status-tag"]')
+        .should("contain", "Submitted");
+
+      // Review form
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+        .find('[data-cy="review-form-button"]')
+        .should("exist");
+    });
+  });
+
+  it("Unreleased form is viewable as an admin", () => {
     // Confirm that the forms are loaded prior to continuing
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
     );
 
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+    cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form")
       .find('[data-cy="status-tag"]')
       .should("contain", "Not Started");
 
     // Click to launch the Simple Form
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+    cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
     // Assert that this is the simple form
-    cy.get('[data-cy="active-form-title"]').should("contain", "Simple Form");
-
-    // Save button should be disabled
-    cy.get('[data-cy="active-form-modal"]')
-      .find("button")
-      .contains("Save")
-      .should("be.disabled");
-
-    // Type into the textarea
-    cy.get('[data-cy="active-form-modal"]')
-      .find("textarea")
-      .type("Hello, how are you?");
-
-    // Save the form
-    cy.get('[data-cy="active-form-modal"]')
-      .find("button")
-      .contains("Save")
-      .should("be.enabled")
-      .click();
-
-    // Form message
-    cy.get('[data-cy="form-message"]').should(
+    cy.get('[data-cy="active-form-title"]').should(
       "contain",
-      "Form successfully saved"
+      "Unreleased Form"
     );
-
-    // Close form
-    cy.get('[data-cy="close-form"]').click();
-
-    // Assert Status: Draft
-    cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
-      .eq(1)
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Draft");
-
-    // Reopen
-    // Click to launch the Simple Form
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .find('[data-cy="launch-form-button"]')
-      .click();
-
-    // Check if textarea is saved and if editable
-    cy.get('[data-cy="active-form-modal"]')
-      .find("textarea")
-      .should("have.value", "Hello, how are you?")
-      .type(" I'm doing well.")
-      .should("have.value", "Hello, how are you? I'm doing well.");
-
-    // Submit the form
-    cy.get('[data-cy="active-form-modal"]')
-      .find("button")
-      .contains("Submit")
-      .should("be.enabled")
-      .click();
-
-    // Check no longer in to do
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form").should(
-      "not.exist"
-    );
-
-    // Click All
-    // panel-tabs, contains submitted
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("All")
-      .click();
-
-    // Check form
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Submitted");
-
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .find("launch-form-button")
-      .should("not.exist");
-
-    // Review form
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .find('[data-cy="review-form-button"]')
-      .should("exist")
-      .click();
-
-    cy.get('[data-cy="active-form-modal"]')
-      .find("textarea")
-      .should("be.disabled");
-
-    cy.get('[data-cy="close-form"]').click();
-
-    // Check submitted tab
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Submitted")
-      .click();
-
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .should("exist")
-      .find('[data-cy="status-tag"]')
-      .should("contain", "Submitted");
-
-    // Review form
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-      .find('[data-cy="review-form-button"]')
-      .should("exist");
   });
 });
