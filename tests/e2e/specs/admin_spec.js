@@ -33,6 +33,16 @@ describe("Admin Views and Powers", () => {
     cy.get('[data-cy="alert-message"]')
       .should("exist")
       .should("contain", "Success!");
+
+    // Try to log in
+    cy.logout();
+    cy.visit("/login");
+    cy.get('[type="email"]').type("user1@user.com");
+    cy.get('[type="password"]').type("user-password{enter}");
+    cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get("a")
+      .contains("Log Out")
+      .should("exist");
   });
 
   it("Denying a user", () => {
@@ -42,8 +52,14 @@ describe("Admin Views and Powers", () => {
       .get('[data-cy="deny"]')
       .should("exist")
       .click();
-    cy.get('[data-cy="alert-message"]')
+
+    // Try to log in as the denied user
+    cy.logout();
+    cy.visit("/login");
+    cy.get('[type="email"]').type("user1@user.com");
+    cy.get('[type="password"]').type("user-password{enter}");
+    cy.get('[data-cy="error-message"]')
       .should("exist")
-      .should("contain", "Successfully denied!");
+      .contains("User account not approved: denied");
   });
 });
