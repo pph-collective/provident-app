@@ -1,0 +1,110 @@
+{
+  "activity_log": {
+    "ZFyRETTHlHPpVb3g5gei": {
+      "action": "login",
+      "datetime": 1621344888683,
+      "user": "admin@admin.com"
+    }
+  },
+  "users": {
+    "admin@admin.com": {
+      "email": "admin@admin.com",
+      "name": "Admin",
+      "organization": "RI 4 Us",
+      "status": "approved"
+    },
+    "user1@user.com": {
+      "email": "user1@user.com",
+      "name": "First Last",
+      "organization": "Good Doers",
+      "status": "pending"
+    },
+    "user@user.com": {
+      "email": "user@user.com",
+      "name": "User Name",
+      "organization": "Good Doers",
+      "status": "approved"
+    }
+  },
+  "organizations": {
+    "Good Doers": {
+      "name": "Good Doers"
+    },
+    "RI 4 Us": {
+      "name": "RI 4 Us"
+    }
+  },
+  "forms": {
+    "test": {
+      "title": "My Form",
+      "release_date": "2021-05-21",
+      "questions": [
+        {
+          "model": "age",
+          "component": "TextInput",
+          "type": "number",
+          "label": "What is your age?",
+          "validations": "yup.number().min(13).max(110).required()",
+          "required": true
+        },
+        {
+          "model": "old",
+          "component": "Radio",
+          "label": "Do you feel old?",
+          "condition": "(model) => model.age > 100",
+          "options": [
+            "Yes",
+            "No",
+            "Get off my lawn"
+          ]
+        },
+        {
+          "model": "favorite_color",
+          "component": "Select",
+          "label": "What is your favorite color?",
+          "required": true,
+          "options": [
+            "Green",
+            "Rainbow",
+            "Sparkles",
+            "Other"
+          ]
+        },
+        {
+          "model": "other_favorite_color",
+          "component": "TextInput",
+          "label": "Favorite Color",
+          "required": true,
+          "condition": "(model) => model.favorite_color === 'Other'"
+        },
+        {
+          "model": "color_essay",
+          "component": "TextArea",
+          "label": "Please write an essay about your favorite color."
+        }
+      ]
+    },
+    "test2": {
+      "title": "Simple Form",
+      "release_date": "2021-05-21",
+      "questions": [
+        {
+          "model": "anything",
+          "component": "TextArea",
+          "label": "Type anything"
+        }
+      ]
+    },
+    "test3": {
+      "title": "Unreleased Form",
+      "release_date": "3000-01-01",
+      "questions": [
+        {
+          "model": "anything",
+          "component": "TextArea",
+          "label": "Type anything"
+        }
+      ]
+    }
+  }
+}

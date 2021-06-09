@@ -64,7 +64,7 @@ A sample JSON:
       "required": true
     },
     {
-      "model": "age",
+      "model": "old",
       "component": "Radio",
       "label": "Do you feel old?",
       "condition": "(model) => model.age > 100",
@@ -160,3 +160,18 @@ This web app uses firebase auth to restrict access to the `snacks` and `admin` p
 To create a user, navigate to `/login`, then select the `Request Account` button and fill out the form.  An admin can then approve that request.  (This can also be done manually in the database by marking the user as `status: "approved"`).
 
 To make a user an admin, see the [add-admin script](scripts/README.md).  (The key differentiating feature of an admin vs normal user is that their JWT includes an `admin: true` claim).
+
+## Testing
+This web app uses the Cypress testing framework alongside a locally run Firestore emulator. It uses`cypress-firebase`, `firebase-admin`, and `@firebase/rules-unit-testing` packages to connect Cypress to Firebase and it includes additional methods and commands for admins and testing purposes interacting with Firestore.
+
+**Setup**
+
+In order for `firebase-admin` to have read/write access during testing, we need to include a private key.
+
+1. Navigate to the Firebase console to generate a private key (Settings > Service Accounts).
+1. Click **Generate New Private Key** and save the JSON file as `serviceAccount.json`
+1. Add that JSON file to the project root directory. This file is listed in the `.gitignore`. Do not share this private key.
+
+**Notes**
+
+In order for Cypress to access admin firebase commands in test specs, use/create custom Cypress tasks in `./tests/e2e/plugins/index.js` or use the custom Cypress commands included in [cypress-firebase](https://github.com/prescottprue/cypress-firebase).

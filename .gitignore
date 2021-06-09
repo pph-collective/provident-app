@@ -6,6 +6,8 @@ node_modules
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 
+# Private Keys Files
+serviceAccount.json
 
 # local env files
 .env.local

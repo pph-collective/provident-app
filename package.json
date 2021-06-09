@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e": "cypress open",
     "lint": "vue-cli-service lint",
     "shp2topo": "./shp2topo.sh",
     "firebase:dev": "firebase emulators:start --import emulator_data",
@@ -34,6 +34,10 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@cypress/vue": "^3.0.1",
+    "@cypress/webpack-dev-server": "^1.3.0",
+    "@cypress/webpack-preprocessor": "^5.8.0",
+    "@firebase/rules-unit-testing": "^1.3.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-e2e-cypress": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
@@ -45,6 +49,8 @@
     "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
+    "cypress": "7.5.0",
+    "cypress-firebase": "^1.9.1",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^7.0.0-0",
@@ -53,7 +59,8 @@
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "serve": "^11.3.2"
   },
   "eslintConfig": {
     "root": true,

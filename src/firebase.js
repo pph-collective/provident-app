@@ -17,6 +17,11 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 let auth = firebase.auth();
 if (location.hostname === "localhost") {
+  db.settings({
+    experimentalForceLongPolling: true,
+    host: "localhost:8088",
+    ssl: false
+  });
   db.useEmulator("localhost", 8088);
   auth.useEmulator("http://localhost:9099");
 }
@@ -26,7 +31,7 @@ export default {
   db,
   async login(email, password) {
     const res = await auth.signInWithEmailAndPassword(email, password);
-    db.collection("activity_log").add({
+    await db.collection("activity_log").add({
       user: res.user.email,
       action: "login",
       datetime: Date.now()
