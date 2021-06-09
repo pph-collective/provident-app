@@ -22,6 +22,7 @@ Cypress.Commands.add("login_by_permission", permission_level => {
   const account = accounts[permission_level];
   if (account) {
     fb.login(account["email"], account["password"]);
+    cy.log(`Logged in with permission level: ${permission_level}`);
   } else {
     console.log(
       `Account with the following permission level doesn't exist in accounts.json: ${permission_level}.`
@@ -31,6 +32,7 @@ Cypress.Commands.add("login_by_permission", permission_level => {
 
 Cypress.Commands.add("logout", () => {
   fb.logout();
+  cy.log("Logged out");
 });
 
 // -- This is a child command --
