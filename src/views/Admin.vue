@@ -91,7 +91,7 @@ export default {
           .update({ status: "approved" });
 
         alert.color = "success";
-        alert.message = `Success!`;
+        alert.message = `Success! ${user.email} was approved.`;
       } catch (err) {
         console.log(err);
         alert.color = "danger";
@@ -104,7 +104,9 @@ export default {
         .collection("users")
         .doc(userRequest.id)
         .update({ status: "denied" });
-      console.log("Denied!");
+
+      alert.color = "info";
+      alert.message = `${userRequest.email} was denied.`;
     };
 
     return { userRequests, approve, deny, alert, dismissAlert };

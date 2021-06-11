@@ -32,7 +32,7 @@ describe("Admin Views and Powers", () => {
       .click();
     cy.get('[data-cy="alert-message"]')
       .should("exist")
-      .should("contain", "Success!");
+      .should("contain", `Success! ${accounts.pending.email} was approved`);
 
     // Try to log in
     cy.logout();
@@ -50,6 +50,9 @@ describe("Admin Views and Powers", () => {
       .get('[data-cy="deny"]')
       .should("exist")
       .click();
+    cy.get('[data-cy="alert-message"]')
+      .should("exist")
+      .should("contain", `${accounts.pending.email} was denied`);
 
     // Try to log in as the denied user
     cy.logout();
