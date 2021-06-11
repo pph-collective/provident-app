@@ -1,14 +1,15 @@
 describe("User Views", () => {
   beforeEach(() => {
     cy.logout();
-    cy.login("user@user.com", "user-password");
+    cy.task("db:teardown");
+    cy.task("db:seed");
+    cy.login_by_permission("approved");
     cy.visit("/");
   });
 
   it("log out button exists", () => {
-    cy.get("#navbar-contents a")
-      .contains("Log Out")
-      .should("exist");
+    cy.get('[data-cy="navbar-burger"]').click();
+    cy.get('[data-cy="logout-button"]').should("exist");
   });
 
   it("navigation bar link to home should exist", () => {
@@ -23,9 +24,9 @@ describe("User Views", () => {
 
   it("navigating to /admin shouldn't be allowed", () => {
     cy.visit("/admin");
-    // Validate that this isn't the admin page
-    // TODO: Where should it redirect to? Create a new page?
-    cy.contains("h1", "Log In").should("not.exist");
+
+    // User should be redirected
+    cy.url().should("eq", Cypress.config().baseUrl);
   });
 
   it("navigating to /snack shouldn't ask to log in", () => {

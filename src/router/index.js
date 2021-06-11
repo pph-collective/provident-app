@@ -75,8 +75,10 @@ const routes = [
     path: "/admin",
     name: "Admin",
     beforeEnter: to => {
-      if (!store.state.user.authenticated || !store.state.user.admin) {
+      if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
+      } else if (!store.state.user.admin) {
+        return { name: "Home" };
       }
     },
     // route level code-splitting
