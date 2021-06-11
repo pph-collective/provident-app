@@ -9,7 +9,7 @@ describe("User Views", () => {
 
   it("log out button exists", () => {
     cy.get('[data-cy="navbar-burger"]').click();
-    cy.get('[data-cy="login-button"]').should("exist");
+    cy.get('[data-cy="logout-button"]').should("exist");
   });
 
   it("navigation bar link to home should exist", () => {
