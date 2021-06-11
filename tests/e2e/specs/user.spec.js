@@ -26,7 +26,7 @@ describe("User Views", () => {
     cy.visit("/admin");
 
     // User should be redirected
-    cy.url().should("eq", `${Cypress.config().baseUrl}?redirect=/admin`);
+    cy.url().should("eq", Cypress.config().baseUrl);
   });
 
   it("navigating to /snack shouldn't ask to log in", () => {

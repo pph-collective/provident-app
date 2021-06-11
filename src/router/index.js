@@ -78,7 +78,7 @@ const routes = [
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       } else if (!store.state.user.admin) {
-        return { name: "Home", query: { redirect: to.path } };
+        return { name: "Home" };
       }
     },
     // route level code-splitting
