@@ -13,38 +13,12 @@ jobs:
         with:
           # Disable running of tests within install job
           runTests: false
-          build: yarn && yarn build
+          build: | 
+            yarn
+            yarn build
       - name: Save build folder
         uses: actions/upload-artifact@v2
         with:
           name: dist
           if-no-files-found: error
           path: dist
-
-  cypress-run:
-    runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download the build folders
-        uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-
-      - name: 'UI Tests - Chrome'
-        uses: cypress-io/github-action@v2
-        with:
-          # we have already installed all dependencies above
-          install: false
-          start: yarn serve
-          wait-on: 'http://localhost:8080'
-          wait-on-timeout: 120
-          browser: chrome
-          record: true
-          parallel: true
-          group: 'UI - Chrome'
-          spec: tests/e2e/*
