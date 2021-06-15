@@ -13,6 +13,7 @@
         <a
           role="button"
           :class="['navbar-burger', { 'is-active': hamburgerActive }]"
+          data-cy="navbar-burger"
           aria-label="menu"
           aria-expanded="false"
           data-target="navbar-contents"
@@ -30,20 +31,30 @@
         :class="['navbar-menu', { 'is-active': hamburgerActive }]"
       >
         <div class="navbar-start">
-          <router-link to="/" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="home"
+            to="/"
+            class="navbar-item has-text-primary"
             >Home</router-link
           >
 
-          <router-link to="/snack" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="snack"
+            to="/snack"
+            class="navbar-item has-text-primary"
             >Snack</router-link
           >
 
-          <router-link to="/about" class="navbar-item has-text-primary"
+          <router-link
+            data-cy="about"
+            to="/about"
+            class="navbar-item has-text-primary"
             >About</router-link
           >
 
           <router-link
             v-if="user.admin"
+            data-cy="admin"
             to="/admin"
             class="navbar-item has-text-primary"
             >Admin</router-link
@@ -53,7 +64,11 @@
         <div class="navbar-end">
           <div v-if="!user.authenticated" class="navbar-item">
             <p class="control">
-              <router-link to="/login" class="button is-primary is-small">
+              <router-link
+                to="/login"
+                class="button is-primary is-small"
+                data-cy="login-button"
+              >
                 Log In
               </router-link>
             </p>
@@ -68,7 +83,13 @@
               </span>
             </div>
             <p class="control">
-              <a class="button is-primary is-small" @click="logout">Log Out</a>
+              <a
+                class="button is-primary is-small"
+                data-cy="logout-button"
+                @click="logout"
+              >
+                Log Out
+              </a>
             </p>
           </div>
 

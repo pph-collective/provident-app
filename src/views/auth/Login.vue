@@ -14,6 +14,7 @@
             placeholder="Email"
             v-model="form.email"
             autocomplete="username"
+            required
           />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
@@ -28,6 +29,7 @@
             placeholder="Password"
             v-model="form.password"
             autocomplete="current-password"
+            required
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -39,7 +41,11 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <button class="button is-primary" type="submit">
+          <button
+            class="button is-primary"
+            type="submit"
+            data-cy="login-form-button"
+          >
             Log In
           </button>
         </p>
@@ -53,7 +59,9 @@
           </button>
         </p>
       </div>
-      <p v-if="error" class="has-text-danger">{{ error }}</p>
+      <p v-if="error" data-cy="error-message" class="has-text-danger">
+        {{ error }}
+      </p>
     </form>
   </FormCard>
 </template>

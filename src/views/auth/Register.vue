@@ -20,6 +20,7 @@
           <input
             class="input"
             type="text"
+            data-cy="form-name"
             placeholder="Full Name"
             v-model="form.name"
             autocomplete="name"
@@ -32,7 +33,7 @@
       <div class="field">
         <div class="control has-icons-left">
           <div class="select">
-            <select v-model="form.organization">
+            <select v-model="form.organization" data-cy="form-organization">
               <option
                 v-for="organization in organizations"
                 v-bind:value="organization"
@@ -52,6 +53,7 @@
           <input
             class="input"
             type="password"
+            data-cy="form-password"
             placeholder="Password"
             v-model="form.password"
             autocomplete="new-password"
@@ -66,6 +68,7 @@
           <input
             class="input"
             type="password"
+            data-cy="form-confirm-password"
             placeholder="Confirm Password"
             v-model="form.confirmPassword"
             autocomplete="new-password"
@@ -78,6 +81,7 @@
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button
+            data-cy="request-access-button"
             class="button is-success"
             :disabled="!formValid.status"
             type="submit"
@@ -86,14 +90,18 @@
           </button>
         </p>
       </div>
-      <p v-if="error" class="has-text-danger">
+      <p v-if="error" data-cy="error-message" class="has-text-danger">
         {{ error }}
       </p>
       <p v-if="formValid.message.length > 0" class="has-text-danger">
         {{ formValid.message }}
       </p>
     </form>
-    <div v-else class="is-flex is-flex-direction-column">
+    <div
+      v-else
+      data-cy="success-message"
+      class="is-flex is-flex-direction-column"
+    >
       <p><strong>Your request has been received.</strong></p>
       <p>
         An administrator will review your request and respond within a week.
