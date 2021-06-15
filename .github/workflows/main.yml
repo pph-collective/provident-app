@@ -1,18 +1,55 @@
-name: Cypress Tests
+name: Cypress Tests using Cypress Docker Image
 
 on: [push]
 
 jobs:
-  cypress-run:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
+      - name: Save build folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          if-no-files-found: error
+          path: dist
+      - name: Cypress install
         uses: cypress-io/github-action@v2
         with:
-          build: yarn build
-          firebase: yarn firebase:dev
+          # Disable running of tests within install job
+          runTests: false
+          build: yarn && yarn build
+
+  cypress-run:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node12.18.3-chrome87-ff82
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+      - name: 'UI Tests - Chrome'
+        uses: cypress-io/github-action@v2
+        with:
+          # we have already installed all dependencies above
+          install: false
           start: yarn serve
+          wait-on: 'http://localhost:8080'
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          parallel: true
+          group: 'UI - Chrome'
+          spec: tests/e2e/*
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
