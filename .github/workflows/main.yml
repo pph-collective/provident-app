@@ -40,7 +40,7 @@ jobs:
       
       - name: Firebase Emulator
         run: |
-          yarn install -g firebase-tools
+          yarn install firebase-tools
           firebase emulators:start
       
   cypress-run:
