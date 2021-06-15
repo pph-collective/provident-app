@@ -37,7 +37,11 @@ jobs:
           name: dist
           if-no-files-found: error
           path: dist
-      - run: firebase emulators:start
+      
+      - name: Firebase Emulator
+        run: |
+          yarn install -g firebase-tools
+          firebase emulators:start
       
   cypress-run:
     runs-on: ubuntu-latest
