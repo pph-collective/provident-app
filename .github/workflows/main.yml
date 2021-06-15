@@ -22,9 +22,28 @@ jobs:
           name: dist
           if-no-files-found: error
           path: dist
+  firebase-run:
+    runs-on: ubuntu-latest
+    name: Firebase Run
+    needs: build
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: emulators:start --import emulator_data
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
   cypress-run:
     runs-on: ubuntu-latest
-    needs: build
+    needs: firebase-run
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -33,8 +52,6 @@ jobs:
         with:
           name: dist
           path: dist
-      - run: yarn
-      - run: yarn firebase:dev
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
