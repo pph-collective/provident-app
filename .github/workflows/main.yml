@@ -34,12 +34,7 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: emulators:start --import emulator_data
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - run: yarn firebase:dev
       
   cypress-run:
     runs-on: ubuntu-latest
