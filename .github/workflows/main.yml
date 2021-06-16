@@ -38,11 +38,6 @@ jobs:
           if-no-files-found: error
           path: dist
       
-      - name: Firebase Emulator
-        run: |
-          yarn add firebase-tools
-          firebase emulators:start
-      
   cypress-run:
     runs-on: ubuntu-latest
     needs: build
@@ -58,6 +53,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
+          run: firebase emulators:start
           start: yarn serve
           # quote the url to be safe against YML parsing surprises
 #           wait-on: 'http://localhost:8080'
