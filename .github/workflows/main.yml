@@ -49,6 +49,11 @@ jobs:
         with:
           name: dist
           path: dist
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - name: Install Firebase Emulator Suite
+        run: npm install -g firebase-tools
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
