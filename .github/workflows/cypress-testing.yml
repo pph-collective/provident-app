@@ -72,8 +72,8 @@ jobs:
           browser: chrome
           start: | 
             yarn firebase:dev
-            yarn serve
-          wait-on: http://localhost:8080/
+            serve -s dist -p 8080
+          wait-on: ${{ cat cypress.json | jq .baseUrl }}
           wait-on-timeout: 120
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
