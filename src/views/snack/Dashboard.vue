@@ -1,6 +1,10 @@
 <template>
   <div class="dashboard p-4">
-    <ControlPanel :drop-downs="dropDowns" @selected="controls = $event" />
+    <ControlPanel
+      data-cy="control-panel"
+      :drop-downs="dropDowns"
+      @selected="controls = $event"
+    />
     <Card v-if="controls.geography">
       <template #title>Map: {{ controls.geography.name }}</template>
       <template #subtitle>Some really great insights</template>

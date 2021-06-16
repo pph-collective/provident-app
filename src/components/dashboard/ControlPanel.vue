@@ -8,7 +8,7 @@
           :key="'control-panel-dropdown-' + type"
         >
           <span class="select">
-            <select v-model="selected[type]">
+            <select v-model="selected[type]" :id="type">
               <option
                 v-for="(option, index) in options.values"
                 :key="'option-' + index"

@@ -15,13 +15,16 @@ const accounts = require("../../fixtures/accounts.json");
 attachCustomCommands({ Cypress, cy, fb });
 
 Cypress.Commands.add("login", (email, password) => {
-  fb.login(email, password);
+  cy.wrap(fb.login(email, password));
 });
 
 Cypress.Commands.add("login_by_permission", permission_level => {
   const account = accounts[permission_level];
   if (account) {
-    fb.login(account["email"], account["password"]);
+    cy.wrap(fb.login(account["email"], account["password"])).should(
+      "not.eq",
+      "{}"
+    );
     cy.log(`Logged in with permission level: ${permission_level}`);
   } else {
     console.log(
