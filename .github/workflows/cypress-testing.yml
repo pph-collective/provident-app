@@ -73,7 +73,7 @@ jobs:
           start: | 
             yarn firebase:dev
             serve -s dist -p 8080
-          wait-on: ${{ cat cypress.json | jq .baseUrl }}
+          wait-on: "http://localhost:8080/"
           wait-on-timeout: 120
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
