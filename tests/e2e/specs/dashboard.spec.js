@@ -62,7 +62,6 @@ describe("Dashboard viewed as an admin", () => {
   it("Has a control panel with all dropdowns", () => {
     cy.get('[data-cy="control-panel"]')
       .find("select")
-      .should("have.length", "3")
       .eq(0)
       .find("option")
       .then(options => {

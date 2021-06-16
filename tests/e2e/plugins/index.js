@@ -53,15 +53,10 @@ module.exports = (on, config) => {
       if (admin.firestore()._settings.servicePath === "localhost") {
         const promises = [];
         if (SEED) {
-          for (const [collection, documents] of Object.entries(SEED)) {
+          for (const [collectionName, documents] of Object.entries(SEED)) {
+            let collection = admin.firestore().collection(collectionName);
             for (const [documentPath, data] of Object.entries(documents)) {
-              promises.push(
-                admin
-                  .firestore()
-                  .collection(collection)
-                  .doc(documentPath)
-                  .set(data)
-              );
+              promises.push(collection.doc(documentPath).set(data));
             }
           }
         }
