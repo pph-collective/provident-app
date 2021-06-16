@@ -67,7 +67,9 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          start: yarn firebase:dev
+          start: | 
+            yarn firebase:dev
+            yarn serve
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           # quote the url to be safe against YML parsing surprises
