@@ -6,17 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repo
         uses: actions/checkout@v2
         
-      - name: Cache node modules
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+        
+      - name: Cache NPM Dependencies
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
             
-      - name: Install packages
-        run: yarn install
+      - name: Install Dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: 0 # Skip installing of cypress
+        run: yarn install --frozen-lockfile
       
       - name: Cypress install
         uses: cypress-io/github-action@v2
@@ -36,6 +43,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+      
       - name: Checkout
         uses: actions/checkout@v2
         
@@ -45,21 +57,18 @@ jobs:
           name: dist
           path: dist
           
-      - name: Cache firebase emulators
-        uses: actions/cache@v2
+      - name: Cache Firebase Emulator Binaries
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/firebase/emulators
-          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
-      
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "14"
-      - name: Install Firebase Emulator Suite
-        run: npm install -g firebase-tools
+          key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
+
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          start: firebase emulators:exec 'yarn serve' --import emulator_data
+          start: yarn firebase:dev
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           # quote the url to be safe against YML parsing surprises
 #           wait-on: 'http://localhost:8080'
