@@ -53,7 +53,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          run: firebase emulators:start
-          start: yarn serve
+          start: firebase emulators:exec "yarn serve"
           # quote the url to be safe against YML parsing surprises
 #           wait-on: 'http://localhost:8080'
