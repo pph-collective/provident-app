@@ -72,5 +72,5 @@ jobs:
             yarn serve
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          # quote the url to be safe against YML parsing surprises
-#           wait-on: 'http://localhost:8080'
+          # Service Account (used for creating custom auth tokens)
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
