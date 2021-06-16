@@ -63,6 +63,9 @@ jobs:
           path: ~/.cache/firebase/emulators
           key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
 
+      - name: Set Test Environment Settings
+        run: echo "CYPRESS_BASE_URL=$(cat cypress.json | jq .baseUrl)" >> $GITHUB_ENV
+
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
@@ -70,6 +73,8 @@ jobs:
           start: | 
             yarn firebase:dev
             yarn serve
+          wait-on: ${{ env.CYPRESS_BASE_URL }}
+          wait-on-timeout: 120
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           # Service Account (used for creating custom auth tokens)
