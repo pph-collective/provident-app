@@ -73,8 +73,8 @@ jobs:
           start: | 
             yarn firebase:dev
             serve -s dist -p 8080
-          wait-on: "http://localhost:8080/"
-          wait-on-timeout: 120
+#           wait-on: "http://localhost:8080/"
+#           wait-on-timeout: 120
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           # Service Account (used for creating custom auth tokens)
