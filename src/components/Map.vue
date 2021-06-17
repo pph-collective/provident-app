@@ -96,6 +96,37 @@ export default {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "transparent",
+        signals: [
+          {
+            name: "tileUrl",
+            value: "https://stamen-tiles.a.ssl.fastly.net/toner-lines/"
+          },
+          { name: "zoom", update: "geoWidth > 0.005 ? 11 : 12" },
+          { name: "tilesCount", update: "pow(2,zoom)" },
+          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
+          { name: "basePoint", update: "invert('projection',[0,0])" },
+          { name: "maxPoint", update: "invert('projection', [width, height])" },
+          { name: "geoWidth", update: "abs(basePoint[0] - maxPoint[0]) / 360" },
+          { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
+          { name: "di", update: "floor(dii)" },
+          {
+            name: "djj",
+            update:
+              "((1-log(tan(basePoint[1]*PI/180) + 1/cos(basePoint[1]*PI/180))/PI)/2 *tilesCount)"
+          },
+          { name: "dj", update: "floor(djj)" },
+          { name: "phi", update: "(1 - dj / tilesCount) * 2 * PI - PI" },
+          {
+            name: "tileSize",
+            update:
+              "scale('projection', [(di+1) * 360 / tilesCount + 180, 0])[0] - scale('projection', [(di) * 360 / tilesCount + 180, 0])[0]"
+          },
+          {
+            name: "offset",
+            update:
+              "scale('projection',[di * 360 / tilesCount + 180, atan((pow(E, phi) - pow(E, -1 * phi)) / 2) / PI * 180])"
+          }
+        ],
         data: [
           {
             name: "town_outlines",
@@ -106,6 +137,29 @@ export default {
             name: "bg_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" }
+          },
+          {
+            name: "tile_list",
+            transform: [
+              { type: "sequence", start: 0, stop: { signal: "maxTiles" } },
+              { type: "cross", filter: "(datum.a.data>=0)&(datum.b.data>=0)" },
+              {
+                type: "formula",
+                as: "url",
+                expr:
+                  "tileUrl+zoom+'/'+(datum.a.data+di+tilesCount)%tilesCount+ '/'+((datum.b.data+dj))+'.png'"
+              },
+              {
+                type: "formula",
+                as: "x",
+                expr: "datum.a.data*tileSize + offset[0]"
+              },
+              {
+                type: "formula",
+                as: "y",
+                expr: "datum.b.data*tileSize + offset[1]"
+              }
+            ]
           }
         ],
         projections: [
@@ -117,6 +171,21 @@ export default {
           }
         ],
         marks: [
+          {
+            type: "image",
+            from: { data: "tile_list" },
+            clip: true,
+            encode: {
+              update: {
+                url: { field: "url" },
+                x: { field: "x" },
+                y: { field: "y" },
+                width: { signal: "tileSize" },
+                height: { signal: "tileSize" },
+                zindex: { value: 1 }
+              }
+            }
+          },
           {
             type: "shape",
             from: { data: "town_outlines" },
@@ -155,7 +224,8 @@ export default {
       spec,
       el,
       hasData,
-      minHeight
+      minHeight,
+      includeActions: true
     });
 
     return {
