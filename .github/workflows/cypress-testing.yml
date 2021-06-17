@@ -70,11 +70,11 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          start:|
+          start: |
              yarn firebase:dev
              yarn serve:dist
-           wait-on: "http://localhost:8080/"
-           wait-on-timeout: 120
+          wait-on: "http://localhost:8080/"
+          wait-on-timeout: 120
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           # Service Account (used for creating custom auth tokens)
