@@ -36,7 +36,6 @@ describe("Dashboard viewed as a user", () => {
 
     it("is Good Doers", () => {
       cy.get("select#geography").select("Good Doers");
-      cy.wait(200);
 
       cy.get(".map-container .vega-embed svg")
         .trigger("mouseover", "center")
