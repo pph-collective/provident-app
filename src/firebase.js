@@ -30,13 +30,18 @@ export default {
   auth,
   db,
   async login(email, password) {
-    const res = await auth.signInWithEmailAndPassword(email, password);
-    await db.collection("activity_log").add({
-      user: res.user.email,
-      action: "login",
-      datetime: Date.now()
-    });
-    return res.user;
+    try {
+      const res = await auth.signInWithEmailAndPassword(email, password);
+      await db.collection("activity_log").add({
+        user: res.user.email,
+        action: "login",
+        datetime: Date.now()
+      });
+      return res.user.toJSON();
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   },
   async logout() {
     await auth.signOut();
@@ -55,6 +60,16 @@ export default {
     } catch (err) {
       return {};
     }
+  },
+  async getOrgs() {
+    const res = [];
+    try {
+      const docs = await db.collection("organizations").get();
+      docs.forEach(doc => res.push(doc.data()));
+    } catch (err) {
+      console.log(err);
+    }
+    return res;
   },
   async getForms() {
     const forms = [];
