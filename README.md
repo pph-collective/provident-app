@@ -164,7 +164,7 @@ To make a user an admin, see the [add-admin script](scripts/README.md).  (The ke
 ## Testing
 This web app uses the Cypress testing framework alongside a locally run Firestore emulator. It uses`cypress-firebase`, `firebase-admin`, and `@firebase/rules-unit-testing` packages to connect Cypress to Firebase and it includes additional methods and commands for admins and testing purposes interacting with Firestore.
 
-**Setup**
+### Setup
 
 In order for `firebase-admin` to have read/write access during testing, we need to include a private key.
 
@@ -172,6 +172,10 @@ In order for `firebase-admin` to have read/write access during testing, we need 
 1. Click **Generate New Private Key** and save the JSON file as `serviceAccount.json`
 1. Add that JSON file to the project root directory. This file is listed in the `.gitignore`. Do not share this private key.
 
-**Notes**
+### Running the tests
+
+In separate terminals, run `yarn firebase:dev`, `yarn serve`, and then `yarn test:e2e`.
+
+### Notes
 
 In order for Cypress to access admin firebase commands in test specs, use/create custom Cypress tasks in `./tests/e2e/plugins/index.js` or use the custom Cypress commands included in [cypress-firebase](https://github.com/prescottprue/cypress-firebase).

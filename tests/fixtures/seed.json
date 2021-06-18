@@ -28,10 +28,12 @@
   },
   "organizations": {
     "Good Doers": {
-      "name": "Good Doers"
+      "name": "Good Doers",
+      "municipalities": ["Little Compton", "Tiverton", "Portsmouth"]
     },
     "RI 4 Us": {
-      "name": "RI 4 Us"
+      "name": "RI 4 Us",
+      "municipalities": ["Providence", "Pawtucket"]
     }
   },
   "forms": {
