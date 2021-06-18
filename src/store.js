@@ -28,7 +28,6 @@ const store = createStore({
   },
   actions: {
     async fetchUser({ commit }, user) {
-      commit("SET_LOGGED_IN", user !== null);
       if (user) {
         commit("SET_USER", {
           ...user
@@ -36,6 +35,7 @@ const store = createStore({
       } else {
         commit("SET_USER", null);
       }
+      commit("SET_LOGGED_IN", user !== null);
     },
     fetchAdmin({ commit }, admin) {
       commit("SET_ADMIN", admin);

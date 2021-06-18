@@ -92,6 +92,7 @@ export default {
       return Object.keys(filteredGeo.value).length > 0;
     });
 
+    // TODO: pick a map
     const spec = computed(() => {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -99,9 +100,14 @@ export default {
         signals: [
           {
             name: "tileUrl",
-            value: "https://stamen-tiles.a.ssl.fastly.net/toner-lines/"
+            value: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/"
           },
-          { name: "zoom", update: "geoWidth > 0.005 ? 11 : 12" },
+          {
+            name: "mapboxToken",
+            value:
+              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ"
+          },
+          { name: "zoom", update: "geoWidth > 0.005 ? 10 : 11" },
           { name: "tilesCount", update: "pow(2,zoom)" },
           { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
           { name: "basePoint", update: "invert('projection',[0,0])" },
@@ -147,7 +153,7 @@ export default {
                 type: "formula",
                 as: "url",
                 expr:
-                  "tileUrl+zoom+'/'+(datum.a.data+di+tilesCount)%tilesCount+ '/'+((datum.b.data+dj))+'.png'"
+                  "tileUrl+zoom+'/'+(datum.a.data+di+tilesCount)%tilesCount+ '/'+((datum.b.data+dj)) + mapboxToken"
               },
               {
                 type: "formula",
@@ -225,7 +231,7 @@ export default {
       el,
       hasData,
       minHeight,
-      includeActions: true
+      includeActions: ref(false)
     });
 
     return {

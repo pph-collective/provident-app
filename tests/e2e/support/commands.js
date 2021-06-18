@@ -35,6 +35,7 @@ Cypress.Commands.add("login_by_permission", permission_level => {
 
 Cypress.Commands.add("logout", () => {
   fb.logout();
+  cy.visit("/");
   cy.log("Logged out");
 });
 

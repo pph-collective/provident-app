@@ -81,7 +81,7 @@ module.exports = (on, config) => {
             return error;
           });
       } else {
-        return "SKIPPING db:SEED -- admin is not on localhost";
+        return "SKIPPING db:seed -- admin is not on localhost";
       }
     }
   });
