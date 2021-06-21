@@ -13,6 +13,7 @@
           <Map
             :dataset="[]"
             :filter-municipalities="controls.geography.municipalities"
+            :data-cy="controls.geography.name"
           />
         </div>
       </template>
