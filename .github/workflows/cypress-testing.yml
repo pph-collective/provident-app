@@ -46,7 +46,7 @@ jobs:
           start: |
              yarn build
              yarn firebase:dev
-             yarn serve:dist
+             yarn start
           wait-on: "http://localhost:8080/"
           wait-on-timeout: 120
         env:
