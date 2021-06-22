@@ -43,8 +43,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
+          build: yarn build
           start: |
-             yarn build
              yarn firebase:dev
              yarn start
           wait-on: "http://localhost:8080/"
