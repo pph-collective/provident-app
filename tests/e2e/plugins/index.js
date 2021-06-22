@@ -77,11 +77,13 @@ module.exports = (on, config) => {
             return userRecord;
           })
           .catch(error => {
-            console.log("Error fetching user data:", error);
+            console.log(
+              `User account associated with ${email} not found. Therefore no account was deleted.`
+            );
             return error;
           });
       } else {
-        return "SKIPPING db:seed -- admin is not on localhost";
+        return "SKIPPING db:deleteUserByEmail -- admin is not on localhost";
       }
     }
   });
