@@ -2,5 +2,8 @@
   "baseUrl": "http://localhost:8080/",
   "chromeWebSecurity": false,
   "pluginsFile": "tests/e2e/plugins/index.js",
+  "retries": {
+    "runMode": 2
+  },
   "video": false
 }
