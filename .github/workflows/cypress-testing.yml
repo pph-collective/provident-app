@@ -30,13 +30,6 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
       
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-        with:
-          # Disable running of tests within install job
-          runTests: false
-          build: yarn build
-          
       - name: Cache firebase emulators
         uses: actions/cache@v2
         with:
@@ -51,6 +44,7 @@ jobs:
         with:
           browser: chrome
           start: |
+             yarn build
              yarn firebase:dev
              yarn serve:dist
           wait-on: "http://localhost:8080/"
