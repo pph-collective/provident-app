@@ -119,8 +119,8 @@ export default {
 
     const resetRequest = async () => {
       try {
-        await fb.auth.sendPasswordResetEmail(form.value.email);
-        this.alert = "Success. Check your email to reset your password.";
+        await fb.auth.sendPasswordResetEmail(form.email);
+        alert.value = "Success. Check your email to reset your password.";
         error.value = null;
       } catch (err) {
         error.value = err.message;
