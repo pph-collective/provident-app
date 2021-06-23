@@ -1,6 +1,6 @@
 <template>
   <FormCard>
-    <h1 class="is-size-3 has-text-centered pb-3">Log In</h1>
+    <h1 class="is-size-3 has-text-centered pb-3">Reset Password</h1>
     <form @submit.prevent="submit">
       <div class="field">
         <p class="control has-icons-left has-icons-right">
