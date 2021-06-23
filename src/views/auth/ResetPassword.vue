@@ -20,7 +20,7 @@
           <input
             class="input"
             type="password"
-            placeholder="Password"
+            placeholder="New password"
             v-model="form.password"
           />
           <span class="icon is-small is-left">
@@ -33,7 +33,7 @@
           <input
             class="input"
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Confirm new password"
             v-model="form.confirmPassword"
           />
           <span class="icon is-small is-left">
@@ -102,7 +102,7 @@ export default {
     const submit = async () => {
       try {
         await fb.auth.confirmPasswordReset(form.resetCode, form.password);
-        router.replace({ name: "Login" });
+        await router.push({ name: "Login" });
       } catch (err) {
         error.value = `${err.message}`;
       }
