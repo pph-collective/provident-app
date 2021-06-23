@@ -1,5 +1,5 @@
 <template>
-  <div v-if="alert.length > 0" class="notification is-primary">
+  <div v-if="alert.length > 0" class="notification is-primary" data-cy="alert">
     <button @click="dismissAlert" class="delete"></button>
     {{ alert }}
   </div>
