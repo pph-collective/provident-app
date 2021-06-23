@@ -36,7 +36,7 @@
           </span>
         </p>
         <p class="has-text-right">
-          <a @click="resetRequest">reset password</a>
+          <a @click="resetRequest" data-cy="reset-password">reset password</a>
         </p>
       </div>
       <div class="field is-grouped is-grouped-centered">
@@ -118,6 +118,11 @@ export default {
     };
 
     const resetRequest = async () => {
+      if (!form.email || !form.email.includes("@")) {
+        error.value = "Enter an email and then click reset password.";
+        return;
+      }
+
       try {
         await fb.auth.sendPasswordResetEmail(form.email);
         alert.value = "Success. Check your email to reset your password.";
