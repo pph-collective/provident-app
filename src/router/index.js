@@ -13,7 +13,11 @@ const routes = [
     name: "Login",
     beforeEnter: (to, from) => {
       if (!to.query.redirect) {
-        return { path: to.path, query: { redirect: from.path } };
+        if (from.name === "ResetPassword") {
+          return { path: to.path, query: { redirect: "/" } };
+        } else {
+          return { path: to.path, query: { redirect: from.path } };
+        }
       }
     },
     component: () =>
