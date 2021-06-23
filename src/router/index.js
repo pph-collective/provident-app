@@ -29,7 +29,7 @@ const routes = [
     path: "/auth",
     redirect: to => {
       const { query } = to;
-      if (query.action === "resetPassword") {
+      if (query.mode === "resetPassword") {
         return { path: "/updatepassword", query: query };
       }
     }
