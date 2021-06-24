@@ -2,7 +2,6 @@ import accounts from "../../fixtures/accounts.json";
 
 describe("Login Page: Requesting an email to reset password", () => {
   beforeEach(() => {
-    cy.logout();
     cy.visit("/login");
   });
 
@@ -99,7 +98,6 @@ describe("Login Page: Requesting an email to reset password", () => {
 
 describe("Reset Password Page", () => {
   beforeEach(() => {
-    cy.logout();
     cy.visit("/login");
 
     // Intercept the password email reset request

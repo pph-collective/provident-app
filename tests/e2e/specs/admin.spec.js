@@ -2,9 +2,6 @@ import accounts from "../../fixtures/accounts.json";
 
 describe("Admin Views and Powers", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("admin");
     cy.visit("/admin");
   });

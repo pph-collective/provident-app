@@ -1,8 +1,5 @@
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("approved");
     cy.visit("/snack/dashboard");
   });
@@ -52,9 +49,6 @@ describe("Dashboard viewed as a user", () => {
 
 describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("admin");
     cy.visit("/snack/dashboard");
   });

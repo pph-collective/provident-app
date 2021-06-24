@@ -1,8 +1,5 @@
 describe("Form functionality", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("admin").then(() => {
       cy.visit("/snack/forms");
     });
