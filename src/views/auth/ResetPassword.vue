@@ -9,6 +9,7 @@
             type="text"
             placeholder="Reset Code"
             v-model="form.resetCode"
+            disabled
           />
           <span class="icon is-small is-left">
             <i class="fas fa-shield-alt"></i>
@@ -22,6 +23,7 @@
             type="password"
             placeholder="New password"
             v-model="form.password"
+            data-cy="new-password"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -35,6 +37,7 @@
             type="password"
             placeholder="Confirm new password"
             v-model="form.confirmPassword"
+            data-cy="confirm-new-password"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -47,6 +50,7 @@
             class="button is-success"
             :disabled="!formValid.status"
             type="submit"
+            data-cy="update-password-button"
           >
             Update Password
           </button>

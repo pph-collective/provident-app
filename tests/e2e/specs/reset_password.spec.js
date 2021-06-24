@@ -36,19 +36,23 @@ describe("Reset Password", () => {
 
   it("Reset a password for an account that does exist", () => {
     // Intercept the password email reset request
-    cy.intercept("POST", "http://localhost:9099/**", req => {
-      // Assert the request
-      expect(req.body.requestType).to.equal("PASSWORD_RESET");
-      expect(req.body.email).to.equal(`${accounts.approved.email}`);
+    cy.intercept(
+      "POST",
+      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?**",
+      req => {
+        // Assert the request
+        expect(req.body.requestType).to.equal("PASSWORD_RESET");
+        expect(req.body.email).to.equal(accounts.approved.email);
 
-      // Asset the response
-      req.continue(res => {
-        expect(res.statusCode).to.equal(200);
-      });
-    }).as("password-email-reset-request");
+        // Asset the response
+        req.continue(res => {
+          expect(res.statusCode).to.equal(200);
+        });
+      }
+    ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
-    cy.get('[type="email"]').type(`${accounts.approved.email}`);
+    cy.get('[type="email"]').type(accounts.approved.email);
     cy.get('[data-cy="reset-password"]').click();
 
     // Getting pass this wait asserts that that a request of this type happened
@@ -67,17 +71,49 @@ describe("Reset Password", () => {
     cy.request(
       "GET",
       "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes"
-    ).as("oobCodes");
+    ).as("oobCodes-request");
 
-    cy.get("@oobCodes").then(res => {
+    cy.get("@oobCodes-request").then(res => {
       cy.log(res);
       expect(res.status).to.equal(200);
       expect(res.body).to.have.property("oobCodes");
+      expect(res.body.oobCodes).to.not.be.empty;
+
+      const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
+      expect(oobCode.email).to.equal(accounts.approved.email);
+      expect(oobCode.requestType).to.equal("PASSWORD_RESET");
+      expect(oobCode.oobCode).to.exist;
 
       // Use the oobCode to then go reset password!
       // navigate to /auth?mode=resetPassword&oobCode=??????
+      cy.visit(`/auth?mode=resetPassword&oobCode=${oobCode.oobCode}`);
+
       // assert redirect to /updatePassword
+      cy.url().should(
+        "eq",
+        `${Cypress.config().baseUrl}updatepassword?mode=resetPassword&oobCode=${
+          oobCode.oobCode
+        }`
+      );
+
+      cy.get('[data-cy="update-password-button"]').should("be.disabled");
+
+      // Set up intercepts
+      cy.intercept(
+        "POST",
+        "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
+      ).as("reset-password-request");
+
       // fill in new password & confirm new password
+      cy.log("Resetting to old password");
+      cy.get('[data-cy="new-password"]').type(accounts.approved.password);
+      cy.get('[data-cy="confirm-new-password"]').type(
+        accounts.approved.password
+      );
+
+      cy.get('[data-cy="update-password-button"]').click();
+
+      // cy.wait("@reset-password-request");
       // submit
       // go to login & test logging in
       // old password
