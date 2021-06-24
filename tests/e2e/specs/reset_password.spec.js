@@ -35,25 +35,54 @@ describe("Reset Password", () => {
   });
 
   it("Reset a password for an account that does exist", () => {
-    cy.intercept("POST", "http://localhost:9099/**", {
-      statusCode: 200,
-      body: {
-        requestType: "PASSWORD_RESET",
-        email: `${accounts.approved.email}`
-      }
+    // Intercept the password email reset request
+    cy.intercept("POST", "http://localhost:9099/**", req => {
+      // Assert the request
+      expect(req.body.requestType).to.equal("PASSWORD_RESET");
+      expect(req.body.email).to.equal(`${accounts.approved.email}`);
+
+      // Asset the response
+      req.continue(res => {
+        expect(res.statusCode).to.equal(200);
+      });
     }).as("password-email-reset-request");
 
+    // User types in email and clicks reset password
     cy.get('[type="email"]').type(`${accounts.approved.email}`);
     cy.get('[data-cy="reset-password"]').click();
 
-    // assert that a matching successful password reset request has been made
+    // Getting pass this wait asserts that that a request of this type happened
+    // User was sent an email
     cy.wait("@password-email-reset-request").then(req => {
       cy.log(req);
     });
 
+    // Assert notification to user
     cy.get('[data-cy="alert"]').should(
       "contain",
       "Success. Check your email to reset your password."
     );
+
+    // Get the oobCode
+    cy.request(
+      "GET",
+      "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes"
+    ).as("oobCodes");
+
+    cy.get("@oobCodes").then(res => {
+      cy.log(res);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.property("oobCodes");
+
+      // Use the oobCode to then go reset password!
+      // navigate to /auth?mode=resetPassword&oobCode=??????
+      // assert redirect to /updatePassword
+      // fill in new password & confirm new password
+      // submit
+      // go to login & test logging in
+      // old password
+      // new password
+      // assert navigated to home
+    });
   });
 });
