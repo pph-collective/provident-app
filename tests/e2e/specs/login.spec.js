@@ -1,4 +1,4 @@
-import accounts from "../../fixtures/accounts.json";
+import ACCOUNTS from "../../fixtures/accounts.json";
 
 describe("Log In View", () => {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe("Log In View", () => {
   });
 
   it("Requires a password", () => {
-    cy.get('[type="email"]').type(`${accounts.admin.email}`);
+    cy.get('[type="email"]').type(`${ACCOUNTS.admin.email}`);
     cy.get('[data-cy="login-form-button"]').click();
     // If an exception was thrown here, cypress will fail the test
 
@@ -40,7 +40,7 @@ describe("Log In View", () => {
   });
 
   it("Requires valid username and password", () => {
-    cy.get('[type="email"]').type(accounts.admin.email);
+    cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type("invalid{enter}");
     cy.get('[data-cy="error-message"]').should(
       "contain",
@@ -49,8 +49,8 @@ describe("Log In View", () => {
   });
 
   it("Navigates to / on successful login", () => {
-    cy.get('[type="email"]').type(accounts.admin.email);
-    cy.get('[type="password"]').type(`${accounts.admin.password}{enter}`);
+    cy.get('[type="email"]').type(ACCOUNTS.admin.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
     cy.get("a")
       .contains("Log Out")
@@ -58,8 +58,8 @@ describe("Log In View", () => {
   });
 
   it("Logging in as a user that is still pending approval", () => {
-    cy.get('[type="email"]').type(accounts.pending.email);
-    cy.get('[type="password"]').type(`${accounts.pending.password}{enter}`);
+    cy.get('[type="email"]').type(ACCOUNTS.pending.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.pending.password}{enter}`);
     cy.get('[data-cy="error-message"]')
       .should("exist")
       .contains("User account not approved: pending");

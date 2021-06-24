@@ -1,4 +1,4 @@
-import accounts from "../../fixtures/accounts.json";
+import ACCOUNTS from "../../fixtures/accounts.json";
 
 describe("Login Page: Requesting an email to reset password", () => {
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       req => {
         // Assert the request
         expect(req.body.requestType).to.equal("PASSWORD_RESET");
-        expect(req.body.email).to.equal(accounts.approved.email);
+        expect(req.body.email).to.equal(ACCOUNTS.approved.email);
 
         // Asset the response
         req.continue(res => {
@@ -49,7 +49,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
-    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[data-cy="reset-password"]').click();
 
     // Getting pass this wait asserts that that a request of this type happened
@@ -77,7 +77,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       expect(res.body.oobCodes).to.not.be.empty;
 
       const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
-      expect(oobCode.email).to.equal(accounts.approved.email);
+      expect(oobCode.email).to.equal(ACCOUNTS.approved.email);
       expect(oobCode.requestType).to.equal("PASSWORD_RESET");
       expect(oobCode.oobCode).to.exist;
 
@@ -107,7 +107,7 @@ describe("Reset Password Page", () => {
     ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
-    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[data-cy="reset-password"]').click();
 
     // Getting pass this wait asserts that that a request of this type happened
@@ -136,8 +136,8 @@ describe("Reset Password Page", () => {
 
   it("Log in with old password before reset", () => {
     cy.visit("/login");
-    cy.get('[type="email"]').type(accounts.approved.email);
-    cy.get('[type="password"]').type(`${accounts.approved.password}{enter}`);
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     // Assert redirected home
     cy.url().should("eq", Cypress.config().baseUrl);
@@ -152,15 +152,15 @@ describe("Reset Password Page", () => {
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
-    cy.get('[data-cy="new-password"]').type(accounts.approved.password);
-    cy.get('[data-cy="confirm-new-password"]').type(accounts.approved.password);
+    cy.get('[data-cy="new-password"]').type(ACCOUNTS.approved.password);
+    cy.get('[data-cy="confirm-new-password"]').type(ACCOUNTS.approved.password);
     cy.get('[data-cy="update-password-button"]').click();
     cy.wait("@reset-password-request");
 
     // Assert we are on the login page
     cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
-    cy.get('[type="email"]').type(accounts.admin.email);
-    cy.get('[type="password"]').type(`${accounts.admin.password}{enter}`);
+    cy.get('[type="email"]').type(ACCOUNTS.admin.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
     cy.get("a")
       .contains("Log Out")
@@ -182,7 +182,7 @@ describe("Reset Password Page", () => {
 
     // Assert we are on the login page
     cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
-    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type("new-password{enter}");
 
     // Assert redirected home
@@ -192,8 +192,8 @@ describe("Reset Password Page", () => {
     // Log out and try to sign in with old password
     cy.logout();
     cy.visit("/login");
-    cy.get('[type="email"]').type(accounts.approved.email);
-    cy.get('[type="password"]').type(`${accounts.approved.password}{enter}`);
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     cy.get('[data-cy="error-message"]').should(
       "eq",
