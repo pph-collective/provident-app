@@ -1,10 +1,8 @@
 import accounts from "../../fixtures/accounts.json";
 
-describe("Reset Password", () => {
+describe("Login Page: Requesting an email to reset password", () => {
   beforeEach(() => {
     cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.visit("/login");
   });
 
@@ -34,7 +32,7 @@ describe("Reset Password", () => {
     );
   });
 
-  it("Reset a password for an account that does exist", () => {
+  it("Submit valid reset email request", () => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
@@ -95,30 +93,70 @@ describe("Reset Password", () => {
           oobCode.oobCode
         }`
       );
-
-      cy.get('[data-cy="update-password-button"]').should("be.disabled");
-
-      // Set up intercepts
-      cy.intercept(
-        "POST",
-        "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
-      ).as("reset-password-request");
-
-      // fill in new password & confirm new password
-      cy.log("Resetting to old password");
-      cy.get('[data-cy="new-password"]').type(accounts.approved.password);
-      cy.get('[data-cy="confirm-new-password"]').type(
-        accounts.approved.password
-      );
-
-      cy.get('[data-cy="update-password-button"]').click();
-
-      // cy.wait("@reset-password-request");
-      // submit
-      // go to login & test logging in
-      // old password
-      // new password
-      // assert navigated to home
     });
+  });
+});
+
+describe("Reset Password Page", () => {
+  beforeEach(() => {
+    cy.logout();
+    cy.visit("/login");
+
+    // Intercept the password email reset request
+    cy.intercept(
+      "POST",
+      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?**"
+    ).as("password-email-reset-request");
+
+    // User types in email and clicks reset password
+    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[data-cy="reset-password"]').click();
+
+    // Getting pass this wait asserts that that a request of this type happened
+    // User was sent an email
+    cy.wait("@password-email-reset-request");
+
+    // Get the oobCode
+    cy.request(
+      "GET",
+      "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes"
+    ).as("oobCodes-request");
+
+    cy.get("@oobCodes-request").then(res => {
+      const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
+      cy.visit(`/auth?mode=resetPassword&oobCode=${oobCode.oobCode}`);
+
+      // assert redirect to /updatePassword
+      cy.url().should(
+        "eq",
+        `${Cypress.config().baseUrl}updatepassword?mode=resetPassword&oobCode=${
+          oobCode.oobCode
+        }`
+      );
+    });
+  });
+
+  it("Reset to old password", () => {
+    // Set up intercepts
+    cy.intercept(
+      "POST",
+      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
+    ).as("reset-password-request");
+
+    // fill in new password & confirm new password
+    cy.log("Resetting to old password");
+    cy.get('[data-cy="new-password"]').type(accounts.approved.password);
+    cy.get('[data-cy="confirm-new-password"]').type(accounts.approved.password);
+    cy.get('[data-cy="update-password-button"]').click();
+    cy.wait("@reset-password-request");
+
+    // Assert we are on the login page
+    cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
+    cy.get('[type="email"]').type(accounts.admin.email);
+    cy.get('[type="password"]').type(`${accounts.admin.password}{enter}`);
+    cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get("a")
+      .contains("Log Out")
+      .should("exist");
   });
 });
