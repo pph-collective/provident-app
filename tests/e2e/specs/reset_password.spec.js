@@ -159,4 +159,39 @@ describe("Reset Password Page", () => {
       .contains("Log Out")
       .should("exist");
   });
+
+  it("Reset to new password", () => {
+    // Set up intercepts
+    cy.intercept(
+      "POST",
+      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
+    ).as("reset-password-request");
+
+    // fill in new password & confirm new password
+    cy.log("Resetting to old password");
+    cy.get('[data-cy="new-password"]').type("new-password");
+    cy.get('[data-cy="confirm-new-password"]').type("new-password");
+    cy.get('[data-cy="update-password-button"]').click();
+    cy.wait("@reset-password-request");
+
+    // Assert we are on the login page
+    cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
+    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="password"]').type("new-password{enter}");
+
+    // Assert redirected home
+    cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get('[data-cy="logout-button"]').should("exist");
+
+    // Log out and try to sign in with old password
+    cy.logout();
+    cy.visit("/login");
+    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="password"]').type(`${accounts.approved.password}{enter}`);
+
+    cy.get('[data-cy="error-message"]').should(
+      "eq",
+      "The password is invalid or the user does not have a password."
+    );
+  });
 });
