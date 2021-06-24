@@ -134,6 +134,16 @@ describe("Reset Password Page", () => {
     });
   });
 
+  it("Log in with old password before reset", () => {
+    cy.visit("/login");
+    cy.get('[type="email"]').type(accounts.approved.email);
+    cy.get('[type="password"]').type(`${accounts.approved.password}{enter}`);
+
+    // Assert redirected home
+    cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get('[data-cy="logout-button"]').should("exist");
+  });
+
   it("Reset to old password", () => {
     // Set up intercepts
     cy.intercept(
@@ -142,7 +152,6 @@ describe("Reset Password Page", () => {
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
-    cy.log("Resetting to old password");
     cy.get('[data-cy="new-password"]').type(accounts.approved.password);
     cy.get('[data-cy="confirm-new-password"]').type(accounts.approved.password);
     cy.get('[data-cy="update-password-button"]').click();
@@ -166,7 +175,6 @@ describe("Reset Password Page", () => {
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
-    cy.log("Resetting to old password");
     cy.get('[data-cy="new-password"]').type("new-password");
     cy.get('[data-cy="confirm-new-password"]').type("new-password");
     cy.get('[data-cy="update-password-button"]').click();
