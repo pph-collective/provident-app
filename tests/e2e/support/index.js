@@ -19,6 +19,7 @@ import "./commands";
 // Runs prior to every test across all files
 beforeEach(() => {
   cy.logout();
+  cy.reset_users();
   cy.task("db:teardown");
   cy.task("db:seed");
 });
