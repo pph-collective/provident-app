@@ -102,9 +102,9 @@ export default {
         const { status } = await fb.getUserRequest(form.email);
         if (status === "approved") {
           if (route.query.redirect) {
-            router.push(route.query.redirect);
+            await router.push(route.query.redirect);
           } else {
-            console.error("no redirect found");
+            await router.push({ name: "Home" });
           }
         } else {
           error.value = `User account not approved: ${status}`;
