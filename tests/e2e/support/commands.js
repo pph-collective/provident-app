@@ -38,26 +38,3 @@ Cypress.Commands.add("logout", () => {
   cy.visit("/");
   cy.log("Logged out");
 });
-
-Cypress.Commands.add("reset_users", () => {
-  cy.request(
-    "DELETE",
-    "http://localhost:9099/emulator/v1/projects/provident-ri/accounts"
-  ).as("deleteAccounts");
-  cy.get("@deleteAccounts").then(res => {
-    expect(res.status).to.equal(200);
-    cy.log("Auth accounts deleted");
-
-    if (ACCOUNTS) {
-      for (const account of Object.values(ACCOUNTS)) {
-        cy.wrap(
-          fb.auth.createUserWithEmailAndPassword(
-            account.email,
-            account.password
-          )
-        );
-      }
-      cy.log("Auth accounts created");
-    }
-  });
-});

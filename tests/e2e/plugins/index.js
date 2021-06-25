@@ -85,6 +85,22 @@ module.exports = (on, config) => {
       } else {
         return "SKIPPING db:deleteUserByEmail -- admin is not on localhost";
       }
+    },
+    "auth:updateUserByEmail": ({ email, userData }) => {
+      let auth_url_format = admin.auth().authRequestHandler
+        .tenantMgmtResourceBuilder.urlFormat;
+      if (auth_url_format.includes("localhost")) {
+        admin
+          .auth()
+          .getUserByEmail(email)
+          .then(userRecord => {
+            admin.auth().updateUser(userRecord.uid, userData);
+            return true;
+          });
+        return false;
+      } else {
+        return "SKIPPING auth:updateUserByEmail -- admin is not on localhost";
+      }
     }
   });
 

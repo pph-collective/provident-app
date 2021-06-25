@@ -15,11 +15,21 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
+import ACCOUNTS from "../../fixtures/accounts.json";
 
 // Runs prior to every test across all files
 beforeEach(() => {
   cy.logout();
-  cy.reset_users();
+
+  // Reset auth
+  // Currently only resets the password for approved user since it is altered in reset-password.spec.js
+  // If needed to reset all of the auth, loop through all of ACCOUNTS
+  cy.task("auth:updateUserByEmail", {
+    email: ACCOUNTS.approved.email,
+    userData: { password: ACCOUNTS.approved.password }
+  });
+
+  // Reset database
   cy.task("db:teardown");
   cy.task("db:seed");
 });
