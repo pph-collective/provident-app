@@ -5,7 +5,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     cy.visit("/login");
   });
 
-  it("Submit empty email", () => {
+  it("Submit empty form to reset password", () => {
     cy.get('[data-cy="reset-password"]').click();
     cy.get('[data-cy="error-message"]').should(
       "contain",
@@ -22,7 +22,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     );
   });
 
-  it("Reset invalid email", () => {
+  it("Submit an invalid email", () => {
     cy.get('[type="email"]').type("doesnotexist@doesnotexist.com");
     cy.get('[data-cy="reset-password"]').click();
     cy.get('[data-cy="error-message"]').should(
@@ -85,7 +85,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       // navigate to /auth?mode=resetPassword&oobCode=??????
       cy.visit(`/auth?mode=resetPassword&oobCode=${oobCode.oobCode}`);
 
-      // assert redirect to /updatePassword
+      // assert redirect to /updatepassword
       cy.url().should(
         "eq",
         `${Cypress.config().baseUrl}updatepassword?mode=resetPassword&oobCode=${
