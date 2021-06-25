@@ -29,6 +29,8 @@ beforeEach(() => {
     userData: { password: ACCOUNTS.approved.password }
   });
 
+  cy.logout();
+
   // Reset database
   cy.task("db:teardown");
   cy.task("db:seed");

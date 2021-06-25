@@ -157,14 +157,14 @@ describe("Reset Password Page", () => {
     cy.get('[data-cy="update-password-button"]').click();
     cy.wait("@reset-password-request");
 
-    // Assert we are on the login page
-    cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
+    // Assert we are on the login page and log in
+    cy.url().should("contains", `${Cypress.config().baseUrl}login`);
     cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
+
+    // Assert logged in
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get("a")
-      .contains("Log Out")
-      .should("exist");
+    cy.get('[data-cy="logout-button"]').should("exist");
   });
 
   it("Reset to new password", () => {
@@ -181,7 +181,7 @@ describe("Reset Password Page", () => {
     cy.wait("@reset-password-request");
 
     // Assert we are on the login page
-    cy.url().should("eq", `${Cypress.config().baseUrl}login?redirect=/`);
+    cy.url().should("contain", `${Cypress.config().baseUrl}login`);
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type("new-password{enter}");
 
@@ -195,8 +195,9 @@ describe("Reset Password Page", () => {
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
+    // Assert old password does not work
     cy.get('[data-cy="error-message"]').should(
-      "eq",
+      "contain",
       "The password is invalid or the user does not have a password."
     );
   });
