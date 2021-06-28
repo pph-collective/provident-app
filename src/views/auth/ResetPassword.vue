@@ -106,7 +106,7 @@ export default {
     const submit = async () => {
       try {
         await fb.auth.confirmPasswordReset(form.resetCode, form.password);
-        await router.push({ name: "Login" });
+        await router.replace({ name: "Login" });
       } catch (err) {
         error.value = `${err.message}`;
       }
