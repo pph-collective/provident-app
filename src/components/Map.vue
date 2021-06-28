@@ -252,7 +252,7 @@ export default {
       spec,
       el,
       minHeight,
-      includeActions: ref(true)
+      includeActions: ref(false)
     });
 
     return {

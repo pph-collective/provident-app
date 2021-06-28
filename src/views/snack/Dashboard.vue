@@ -6,7 +6,8 @@
       :drop-downs="dropDowns"
       @selected="updateControls"
     />
-    <Card v-if="controls.geography">
+
+    <Card v-if="controls.geography" width="two-thirds">
       <template #title>Map: {{ controls.geography.name }}</template>
       <template #subtitle>Some really great insights</template>
       <template #content>
@@ -20,23 +21,37 @@
         </div>
       </template>
     </Card>
+
+    <Card width="one-third">
+      <template #title>Stats from {{ controls.model_version }}</template>
+      <template #content>
+        <StatsTable
+          v-if="dataset.length > 0"
+          :dataset="dataset"
+          geoid="440010303002"
+        />
+      </template>
+    </Card>
   </div>
 </template>
 
 <script>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import fb from "@/firebase.js";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/Map.vue";
+import StatsTable from "@/components/dashboard/StatsTable.vue";
+
+import fb from "@/firebase.js";
 
 export default {
   components: {
     ControlPanel,
     Map,
-    Card
+    Card,
+    StatsTable
   },
   setup() {
     const store = useStore();
@@ -74,7 +89,6 @@ export default {
     const controls = ref({});
 
     const updateControls = newControls => {
-      console.log(newControls);
       if (newControls.model_version !== controls.value.model_version) {
         fb.getResults(newControls.model_version).then(res => {
           dataset.value = res;
