@@ -29,10 +29,16 @@ export default {
       default() {
         return [];
       }
+    },
+    flagProperty: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
-    const { minHeight, filterMunicipalities } = toRefs(props);
+    const { minHeight, filterMunicipalities, dataset, flagProperty } = toRefs(
+      props
+    );
 
     const el = ref(null);
 
@@ -44,6 +50,12 @@ export default {
           filterMunicipalities.value.includes(g.properties.name)
         );
       }
+
+      filtered.forEach(g => {
+        g.properties.flag = dataset.value.find(d => d.geoid === g.id)[
+          flagProperty.value
+        ];
+      });
 
       const collection = {
         blocks: { type: "FeatureCollection", features: filtered }
@@ -88,10 +100,6 @@ export default {
       return topo;
     });
 
-    const hasData = computed(() => {
-      return Object.keys(filteredGeo.value).length > 0;
-    });
-
     // TODO: pick a map
     const spec = computed(() => {
       return {
@@ -109,11 +117,14 @@ export default {
           },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
-          { name: "geoWidth", update: "abs(basePoint[0] - maxPoint[0]) / 360" },
+          {
+            name: "geoWidth",
+            update: "width / abs(basePoint[0] - maxPoint[0])"
+          },
           {
             name: "zoom",
             update:
-              "geoWidth > 0.004 ? 9 : (geoWidth > 0.002 ? 10 : (geoWidth > 0.001 ? 11 : 12))"
+              "geoWidth < 750 ? 9 : (geoWidth < 1500 ? 10 : (geoWidth < 3000 ? 11 : 12))"
           },
           { name: "tilesCount", update: "pow(2,zoom)" },
           { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
@@ -138,6 +149,10 @@ export default {
           }
         ],
         data: [
+          {
+            name: "model_results",
+            values: dataset.value
+          },
           {
             name: "town_outlines",
             values: filteredGeo.value,
@@ -215,12 +230,15 @@ export default {
               enter: {
                 strokeWidth: { value: 1 },
                 stroke: { value: "#d3d3d3" },
-                fill: { value: "transparent" }
+                fill: [
+                  { test: "datum.properties.flag === '1'", value: "red" },
+                  { value: "transparent" }
+                ]
               },
               update: {
                 tooltip: {
                   signal:
-                    "{Municipality: datum.properties.name, 'Block Group': datum.id}"
+                    "{ Municipality: datum.properties.name, 'Block Group': datum.id, Flag: datum.properties.flag }"
                 }
               }
             },
@@ -233,9 +251,8 @@ export default {
     useVega({
       spec,
       el,
-      hasData,
       minHeight,
-      includeActions: ref(false)
+      includeActions: ref(true)
     });
 
     return {

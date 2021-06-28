@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard p-4">
     <ControlPanel
+      v-if="resultPeriods.length > 0"
       data-cy="control-panel"
       :drop-downs="dropDowns"
       @selected="controls = $event"
@@ -11,8 +12,10 @@
       <template #content>
         <div class="map-container">
           <Map
-            :dataset="[]"
+            v-if="dataset.length > 0"
+            :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
+            flag-property="flag_1"
           />
         </div>
       </template>
@@ -21,8 +24,9 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import { useStore } from "vuex";
+import fb from "@/firebase.js";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
@@ -37,6 +41,7 @@ export default {
   setup() {
     const store = useStore();
     const user = computed(() => store.state.user);
+    const dataset = ref([]);
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -48,6 +53,11 @@ export default {
       }
     });
 
+    const resultPeriods = ref([]);
+    onMounted(async () => {
+      resultPeriods.value = await fb.getResultPeriods();
+    });
+
     const dropDowns = computed(() => {
       return {
         geography: {
@@ -56,16 +66,24 @@ export default {
         },
         model_version: {
           icon: "fas fa-calendar-alt",
-          values: ["Current", "2020 Q1"]
+          values: resultPeriods.value
         }
       };
     });
 
     const controls = ref({});
 
+    watchEffect(async () => {
+      if (controls.value.model_version) {
+        dataset.value = await fb.getResults(controls.value.model_version);
+      }
+    });
+
     return {
       dropDowns,
-      controls
+      controls,
+      resultPeriods,
+      dataset
     };
   }
 };
