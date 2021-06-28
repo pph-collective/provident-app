@@ -107,12 +107,15 @@ export default {
             value:
               "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ"
           },
-          { name: "zoom", update: "geoWidth > 0.005 ? 10 : 11" },
-          { name: "tilesCount", update: "pow(2,zoom)" },
-          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           { name: "geoWidth", update: "abs(basePoint[0] - maxPoint[0]) / 360" },
+          {
+            name: "zoom",
+            update:
+              "geoWidth > 0.004 ? 9 : (geoWidth > 0.002 ? 10 : (geoWidth > 0.001 ? 11 : 12))"
+          },
+          { name: "tilesCount", update: "pow(2,zoom)" },
           { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
           { name: "di", update: "floor(dii)" },
           {
@@ -127,6 +130,7 @@ export default {
             update:
               "scale('projection', [(di+1) * 360 / tilesCount + 180, 0])[0] - scale('projection', [(di) * 360 / tilesCount + 180, 0])[0]"
           },
+          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
           {
             name: "offset",
             update:
