@@ -23,3 +23,22 @@ The `add-form` script takes a form specification (see the main README for detail
 ```
 yarn add-form <id> <path to form>
 ```
+
+## `add-results`
+
+The `add-reults` script reads in a csv with results, and loads them to the firestore "results" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.
+
+### Usage
+```
+yarn add-results <path to csv> [--emulator]
+```
+
+## `shp2topo`
+
+The `shp2topo` script downloads shp file data from the census wibsite and processes it into the format needed fot the `Map.vue` component.
+
+### Usage
+Make sure the script is updated as needed before running (e.g. correct census url).
+```
+yarn shp2topo
+```
