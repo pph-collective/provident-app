@@ -65,7 +65,7 @@ module.exports = (on, config) => {
         return "SKIPPING db:seed -- admin is not on localhost";
       }
     },
-    "db:deleteUserByEmail": email => {
+    "auth:deleteUserByEmail": email => {
       let auth_url_format = admin.auth().authRequestHandler
         .tenantMgmtResourceBuilder.urlFormat;
       if (auth_url_format.includes("localhost")) {
@@ -83,7 +83,28 @@ module.exports = (on, config) => {
             return error;
           });
       } else {
-        return "SKIPPING db:deleteUserByEmail -- admin is not on localhost";
+        return "SKIPPING auth:deleteUserByEmail -- admin is not on localhost";
+      }
+    },
+    "auth:updateUserByEmail": ({ email, userData }) => {
+      let auth_url_format = admin.auth().authRequestHandler
+        .tenantMgmtResourceBuilder.urlFormat;
+      if (auth_url_format.includes("localhost")) {
+        return admin
+          .auth()
+          .getUserByEmail(email)
+          .then(userRecord => {
+            admin.auth().updateUser(userRecord.uid, userData);
+            return true;
+          })
+          .catch(error => {
+            console.log(
+              `User account associated with ${email} not found. Therefore no account was updated.`
+            );
+            return error;
+          });
+      } else {
+        return "SKIPPING auth:updateUserByEmail -- admin is not on localhost";
       }
     }
   });

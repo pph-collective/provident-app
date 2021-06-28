@@ -1,5 +1,5 @@
 <template>
-  <div v-if="alert.length > 0" class="notification is-primary">
+  <div v-if="alert.length > 0" class="notification is-primary" data-cy="alert">
     <button @click="dismissAlert" class="delete"></button>
     {{ alert }}
   </div>
@@ -36,7 +36,7 @@
           </span>
         </p>
         <p class="has-text-right">
-          <a @click="resetRequest">reset password</a>
+          <a @click="resetRequest" data-cy="reset-password">reset password</a>
         </p>
       </div>
       <div class="field is-grouped is-grouped-centered">
@@ -102,9 +102,9 @@ export default {
         const { status } = await fb.getUserRequest(form.email);
         if (status === "approved") {
           if (route.query.redirect) {
-            router.push(route.query.redirect);
+            await router.push(route.query.redirect);
           } else {
-            console.error("no redirect found");
+            await router.push({ name: "Home" });
           }
         } else {
           error.value = `User account not approved: ${status}`;
@@ -118,9 +118,14 @@ export default {
     };
 
     const resetRequest = async () => {
+      if (!form.email || !form.email.includes("@")) {
+        error.value = "Enter an email and then click reset password.";
+        return;
+      }
+
       try {
-        await fb.auth.sendPasswordResetEmail(form.value.email);
-        this.alert = "Success. Check your email to reset your password.";
+        await fb.auth.sendPasswordResetEmail(form.email);
+        alert.value = "Success. Check your email to reset your password.";
         error.value = null;
       } catch (err) {
         error.value = err.message;

@@ -1,8 +1,5 @@
 describe("User Views", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("approved");
     cy.visit("/");
   });
