@@ -124,7 +124,7 @@ describe("Reset Password Page", () => {
       const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
       cy.visit(`/auth?mode=resetPassword&oobCode=${oobCode.oobCode}`);
 
-      // assert redirect to /updatePassword
+      // assert redirect to /updatepassword
       cy.url().should(
         "eq",
         `${Cypress.config().baseUrl}updatepassword?mode=resetPassword&oobCode=${
