@@ -158,10 +158,7 @@ describe("Reset Password Page", () => {
     cy.wait("@reset-password-request");
 
     // Assert we are on the login page and log in
-    // cy.url().should("contains", `${Cypress.config().baseUrl}login`);
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq("/login");
-    });
+    cy.url().should("contains", `${Cypress.config().baseUrl}login`);
     cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
 
@@ -184,10 +181,7 @@ describe("Reset Password Page", () => {
     cy.wait("@reset-password-request");
 
     // Assert we are on the login page
-    // cy.url().should("contain", `${Cypress.config().baseUrl}login`);
-    cy.location().should(loc => {
-      expect(loc.pathname).to.contain("/login");
-    });
+    cy.url().should("contain", `${Cypress.config().baseUrl}login`);
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type("new-password{enter}");
 
