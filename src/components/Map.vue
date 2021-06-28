@@ -150,10 +150,6 @@ export default {
         ],
         data: [
           {
-            name: "model_results",
-            values: dataset.value
-          },
-          {
             name: "town_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "towns" }
@@ -213,18 +209,6 @@ export default {
           },
           {
             type: "shape",
-            from: { data: "town_outlines" },
-            encode: {
-              enter: {
-                strokeWidth: { value: 3 },
-                stroke: { value: "#d3d3d3" },
-                fill: { value: "transparent" }
-              }
-            },
-            transform: [{ type: "geoshape", projection: "projection" }]
-          },
-          {
-            type: "shape",
             from: { data: "bg_outlines" },
             encode: {
               enter: {
@@ -240,6 +224,18 @@ export default {
                   signal:
                     "{ Municipality: datum.properties.name, 'Block Group': datum.id, Flag: datum.properties.flag }"
                 }
+              }
+            },
+            transform: [{ type: "geoshape", projection: "projection" }]
+          },
+          {
+            type: "shape",
+            from: { data: "town_outlines" },
+            encode: {
+              enter: {
+                strokeWidth: { value: 3 },
+                stroke: { value: "#d3d3d3" },
+                fill: { value: "transparent" }
               }
             },
             transform: [{ type: "geoshape", projection: "projection" }]
