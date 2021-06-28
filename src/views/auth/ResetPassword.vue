@@ -9,7 +9,7 @@
             type="text"
             placeholder="Reset Code"
             v-model="form.resetCode"
-            disabled
+            :disabled="resetCodeExists"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-shield-alt"></i>
@@ -79,6 +79,10 @@ export default {
     const router = useRouter();
     const route = useRoute();
 
+    const resetCodeExists = computed(() => {
+      return Boolean(route.query.oobCode);
+    });
+
     const form = reactive({
       resetCode: route.query.oobCode ? route.query.oobCode : "",
       password: "",
@@ -113,6 +117,7 @@ export default {
     };
 
     return {
+      resetCodeExists,
       form,
       error,
       formValid,
