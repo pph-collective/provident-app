@@ -4,7 +4,7 @@
       v-if="resultPeriods.length > 0"
       data-cy="control-panel"
       :drop-downs="dropDowns"
-      @selected="controls = $event"
+      @selected="updateControls"
     />
     <Card v-if="controls.geography">
       <template #title>Map: {{ controls.geography.name }}</template>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watchEffect } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import fb from "@/firebase.js";
 
@@ -73,17 +73,25 @@ export default {
 
     const controls = ref({});
 
-    watchEffect(async () => {
-      if (controls.value.model_version) {
-        dataset.value = await fb.getResults(controls.value.model_version);
+    const updateControls = newControls => {
+      console.log(newControls);
+      if (newControls.model_version !== controls.value.model_version) {
+        fb.getResults(newControls.model_version).then(res => {
+          dataset.value = res;
+        });
       }
-    });
+
+      for (const [k, v] of Object.entries(newControls)) {
+        controls.value[k] = v;
+      }
+    };
 
     return {
       dropDowns,
       controls,
       resultPeriods,
-      dataset
+      dataset,
+      updateControls
     };
   }
 };

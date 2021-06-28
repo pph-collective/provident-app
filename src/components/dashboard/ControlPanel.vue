@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, watchEffect } from "vue";
+import { reactive, toRefs, watch } from "vue";
 
 import Card from "@/components/dashboard/Card.vue";
 
@@ -51,10 +51,15 @@ export default {
     });
 
     const selected = reactive(res);
+    emit("selected", selected);
 
-    watchEffect(() => {
-      emit("selected", selected);
-    });
+    watch(
+      () => selected,
+      () => {
+        emit("selected", selected);
+      },
+      { deep: true }
+    );
 
     return {
       selected
