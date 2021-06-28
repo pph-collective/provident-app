@@ -90,14 +90,19 @@ module.exports = (on, config) => {
       let auth_url_format = admin.auth().authRequestHandler
         .tenantMgmtResourceBuilder.urlFormat;
       if (auth_url_format.includes("localhost")) {
-        admin
+        return admin
           .auth()
           .getUserByEmail(email)
           .then(userRecord => {
             admin.auth().updateUser(userRecord.uid, userData);
             return true;
+          })
+          .catch(error => {
+            console.log(
+              `User account associated with ${email} not found. Therefore no account was updated.`
+            );
+            return error;
           });
-        return false;
       } else {
         return "SKIPPING auth:updateUserByEmail -- admin is not on localhost";
       }
