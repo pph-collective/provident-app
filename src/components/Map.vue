@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ref, toRefs, computed } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 
 import * as topology from "topojson-server";
 import * as tc from "topojson-client";
@@ -34,7 +34,8 @@ export default {
       required: true
     }
   },
-  setup(props) {
+  emits: ["new-active-bg", "new-active-municipality"],
+  setup(props, { emit }) {
     const { minHeight, filterMunicipalities, dataset, flagProperty } = toRefs(
       props
     );
@@ -145,6 +146,14 @@ export default {
             name: "offset",
             update:
               "scale('projection',[di * 360 / tilesCount + 180, atan((pow(E, phi) - pow(E, -1 * phi)) / 2) / PI * 180])"
+          },
+          {
+            name: "hovered",
+            value: null,
+            on: [
+              { events: "@block_groups:mouseover", update: "datum" },
+              { events: "mouseout", update: "null" }
+            ]
           }
         ],
         data: [
@@ -208,6 +217,7 @@ export default {
           },
           {
             type: "shape",
+            name: "block_groups",
             from: { data: "bg_outlines" },
             encode: {
               enter: {
@@ -221,7 +231,7 @@ export default {
               update: {
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, 'Block Group': datum.properties.bg_id, Flag: datum.properties.flag }"
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
                 }
               }
             },
@@ -243,11 +253,51 @@ export default {
       };
     });
 
-    useVega({
+    const { view } = useVega({
       spec,
       el,
       minHeight,
-      includeActions: ref(false)
+      includeActions: ref(true)
+    });
+
+    let currentBg = "";
+    let currentMuni = "";
+
+    watch(view, () => {
+      if (view.value) {
+        view.value.addSignalListener("hovered", (name, value) => {
+          if (value) {
+            if (value.properties.bg_id !== currentBg) {
+              currentBg = value.properties.bg_id;
+              emit("new-active-bg", currentBg);
+            }
+
+            if (value.properties.name !== currentMuni) {
+              currentMuni = value.properties.name;
+              emit("new-active-municipality", currentMuni);
+            }
+          } else {
+            if (currentBg) {
+              currentBg = "";
+              emit("new-active-bg", currentBg);
+            }
+            if (currentMuni) {
+              currentMuni = "";
+              emit("new-active-municipality", currentMuni);
+            }
+          }
+        });
+
+        // view.value.addSignalListener("clicked", (name, value) => {
+        //   clicked.value = value;
+        //   if (value !== false) {
+        //     emit("new-active-geography", value ? value.properties.name : false);
+        //     view.value.runAfter(v => {
+        //       v.signal("otherActive", null).run();
+        //     });
+        //   }
+        // });
+      }
     });
 
     return {

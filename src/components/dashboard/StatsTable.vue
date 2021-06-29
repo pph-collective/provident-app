@@ -1,5 +1,5 @@
 <template>
-  <table class="table">
+  <table class="table is-family-secondary">
     <thead>
       <tr>
         <th>Metric</th>
@@ -59,7 +59,7 @@ export default {
       }
     }
 
-    const formatNumber = format(".2f");
+    const formatNumber = format(".1~f");
 
     const dt = computed(() => {
       return aq.from(dataset.value);
@@ -82,7 +82,7 @@ export default {
 
     const bg = computed(() => {
       return dt.value
-        .filter(`d => d.geoid === '${geoid.value}'`)
+        .filter(`d => d.bg_id === '${geoid.value}'`)
         .rollup(statFns)
         .derive({ area: `'${geoid.value}'` })
         .objects()[0];

@@ -17,6 +17,8 @@
             :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="flag_1"
+            @new-active-municipality="activeMuni = $event"
+            @new-active-bg="activeGeoid = $event"
           />
         </div>
       </template>
@@ -28,8 +30,8 @@
         <StatsTable
           v-if="dataset.length > 0"
           :dataset="dataset"
-          municipality="Little Compton"
-          geoid="0303002"
+          :municipality="activeMuni"
+          :geoid="activeGeoid"
         />
       </template>
     </Card>
@@ -58,6 +60,8 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.user);
     const dataset = ref([]);
+    const activeGeoid = ref("");
+    const activeMuni = ref("");
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -106,7 +110,9 @@ export default {
       controls,
       resultPeriods,
       dataset,
-      updateControls
+      updateControls,
+      activeMuni,
+      activeGeoid
     };
   }
 };
