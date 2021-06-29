@@ -14,6 +14,8 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 const app = admin.initializeApp();
 const db = app.firestore();
 
+const TOWN_BG_FILE = "src/assets/RI_CBG_Town.csv";
+
 function writeToFirestore(period, records) {
   const batchCommits = [];
   let batch = db.batch();
@@ -29,24 +31,43 @@ async function importCsv(csvFileName) {
     if (err) {
       console.log(err);
     } else {
-      try {
-        let dt = aq
-          .from(records)
-          .select(aq.not(""))
-          .derive({ id: d => `${d.year}-${d.period}` });
-        let periods = dt.select("id").dedupe();
-        for (const periodRow of periods) {
-          let period = periodRow.id;
-          console.log(`loading data for period ${period}`);
-          let periodRows = dt.filter(`d.id === '${period}'`).objects();
-          await writeToFirestore(period, periodRows);
+      const lookupContents = fs.readFileSync(TOWN_BG_FILE, "utf8");
+      parse(
+        lookupContents,
+        { columns: true },
+        async (lookupErr, lookupRecords) => {
+          if (lookupErr) {
+            console.log(lookupErr);
+          } else {
+            try {
+              let lookupDt = aq
+                .from(lookupRecords)
+                .derive({ municipality: d => aq.op.trim(d.NAME) })
+                .select("GEOID", "NAMELSAD", "municipality");
+              let dt = aq
+                .from(records)
+                .select(aq.not(""))
+                .derive({
+                  id: d => `${d.year}-${d.period}`,
+                  bg_id: d => aq.op.substring(d.geoid, 5)
+                })
+                .join(lookupDt, ["geoid", "GEOID"]);
+              let periods = dt.select("id").dedupe();
+              for (const periodRow of periods) {
+                let period = periodRow.id;
+                console.log(`loading data for period ${period}`);
+                let periodRows = dt.filter(`d.id === '${period}'`).objects();
+                await writeToFirestore(period, periodRows);
+              }
+            } catch (e) {
+              console.error(e);
+              process.exit(1);
+            }
+          }
         }
-      } catch (e) {
-        console.error(e);
-        process.exit(1);
-      }
-      console.log(`Wrote ${records.length} records`);
+      );
     }
+    console.log(`Wrote ${records.length} records`);
   });
 }
 

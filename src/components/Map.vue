@@ -14,7 +14,6 @@ import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
 export default {
-  name: "Map",
   props: {
     dataset: {
       type: Array,
@@ -222,7 +221,7 @@ export default {
               update: {
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, 'Block Group': datum.id, Flag: datum.properties.flag }"
+                    "{ Municipality: datum.properties.name, 'Block Group': datum.properties.bg_id, Flag: datum.properties.flag }"
                 }
               }
             },

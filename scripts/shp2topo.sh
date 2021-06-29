@@ -15,7 +15,7 @@ shp2json -n build/$filename.shp \
   | ndjson-filter "$filter_str" \
   | ndjson-map '(d.id = d.properties.GEOID, d.properties = {}, d)' \
   | ndjson-join 'd.id' 'd.GEOID' - <(csv2json -n src/assets/RI_CBG_Town.csv) \
-  | ndjson-map '(d[0].properties = {name: d[1].NAME.trim()}, d[0])' \
+  | ndjson-map '(d[0].properties = {name: d[1].NAME.trim(), bg_id: d[1].GEOID.slice(5)}, d[0])' \
   | ndjson-reduce \
   > src/assets/geojson/${state_name}.json
 

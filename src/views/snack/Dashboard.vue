@@ -28,7 +28,8 @@
         <StatsTable
           v-if="dataset.length > 0"
           :dataset="dataset"
-          geoid="440010303002"
+          municipality="Little Compton"
+          geoid="0303002"
         />
       </template>
     </Card>
