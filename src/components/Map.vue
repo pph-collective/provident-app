@@ -154,6 +154,20 @@ export default {
               { events: "@block_groups:mouseover", update: "datum" },
               { events: "mouseout", update: "null" }
             ]
+          },
+          {
+            name: "clicked",
+            value: null,
+            on: [
+              {
+                events: "@block_groups:click",
+                update: "clicked === datum ? null : datum"
+              }
+            ]
+          },
+          {
+            name: "activeGeography",
+            update: "clicked || hovered"
           }
         ],
         data: [
@@ -210,8 +224,7 @@ export default {
                 x: { field: "x" },
                 y: { field: "y" },
                 width: { signal: "tileSize" },
-                height: { signal: "tileSize" },
-                zindex: { value: 1 }
+                height: { signal: "tileSize" }
               }
             }
           },
@@ -222,13 +235,24 @@ export default {
             encode: {
               enter: {
                 strokeWidth: { value: 1 },
-                stroke: { value: "#d3d3d3" },
+                stroke: [
+                  { test: "datum === activeGeography", value: "blue" },
+                  { value: "#d3d3d3" }
+                ],
                 fill: [
                   { test: "datum.properties.flag === '1'", value: "red" },
-                  { value: "transparent" }
+                  { value: "white" }
                 ]
               },
               update: {
+                fillOpacity: [
+                  { test: "datum === activeGeography", value: 1 },
+                  { value: 0.5 }
+                ],
+                zindex: [
+                  { test: "datum === activeGeography", value: 1 },
+                  { value: 0 }
+                ],
                 tooltip: {
                   signal:
                     "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
@@ -265,7 +289,7 @@ export default {
 
     watch(view, () => {
       if (view.value) {
-        view.value.addSignalListener("hovered", (name, value) => {
+        view.value.addSignalListener("activeGeography", (name, value) => {
           if (value) {
             if (value.properties.bg_id !== currentBg) {
               currentBg = value.properties.bg_id;

@@ -25,6 +25,7 @@ function writeToFirestore(period, records) {
   return Promise.all(batchCommits);
 }
 
+// TODO: there are currently a couple block groups without a town name (review when 2020 census switchover happens)
 async function importCsv(csvFileName) {
   const fileContents = fs.readFileSync(csvFileName, "utf8");
   parse(fileContents, { columns: true }, async (err, records) => {
