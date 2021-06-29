@@ -152,7 +152,7 @@ export default {
           {
             name: "town_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", feature: "towns" }
+            format: { type: "topojson", mesh: "towns" }
           },
           {
             name: "bg_outlines",
@@ -235,7 +235,7 @@ export default {
               enter: {
                 strokeWidth: { value: 3 },
                 stroke: { value: "#d3d3d3" },
-                fill: { value: "transparent" }
+                fillOpacity: { value: 0 }
               }
             },
             transform: [{ type: "geoshape", projection: "projection" }]
