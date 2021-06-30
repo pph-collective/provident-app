@@ -20,7 +20,7 @@ export default {
     Sidebar
   },
   setup() {
-    const sidebarCollapsed = ref(false);
+    const sidebarCollapsed = ref(true);
 
     return {
       sidebarCollapsed
