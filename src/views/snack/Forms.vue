@@ -76,7 +76,7 @@
       data-cy="active-form-modal"
     >
       <div class="modal-background" @click="activeForm = {}"></div>
-      <div class="modal-content">
+      <div class="modal-content set-font-family-secondary">
         <header class="modal-card-head">
           <p class="modal-card-title" data-cy="active-form-title">
             {{ activeForm.title }}

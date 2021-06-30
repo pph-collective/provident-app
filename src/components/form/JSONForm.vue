@@ -58,7 +58,7 @@ export default {
     },
     readOnly: {
       type: Boolean,
-      requred: false,
+      required: false,
       default: false
     },
     initValue: {
