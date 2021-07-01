@@ -311,16 +311,6 @@ export default {
             }
           }
         });
-
-        // view.value.addSignalListener("clicked", (name, value) => {
-        //   clicked.value = value;
-        //   if (value !== false) {
-        //     emit("new-active-geography", value ? value.properties.name : false);
-        //     view.value.runAfter(v => {
-        //       v.signal("otherActive", null).run();
-        //     });
-        //   }
-        // });
       }
     });
 
