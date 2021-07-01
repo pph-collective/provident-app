@@ -95,7 +95,6 @@
             :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
             :init-value="userForms[activeForm._id].response"
-            @cancel="activeForm = {}"
             @save="updateForm($event, 'Draft')"
             @submitted="updateForm($event, 'Submitted')"
           />

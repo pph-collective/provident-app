@@ -22,15 +22,6 @@
                 Save
               </button>
             </div>
-            <div class="control">
-              <button
-                type="button"
-                class="button is-link is-light"
-                @click="$emit('cancel')"
-              >
-                Cancel
-              </button>
-            </div>
           </div>
         </template>
       </SchemaForm>
@@ -69,7 +60,7 @@ export default {
       }
     }
   },
-  emits: ["cancel", "save", "submitted"],
+  emits: ["save", "submitted"],
   setup(props) {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
