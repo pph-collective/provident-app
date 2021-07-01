@@ -46,24 +46,26 @@
           <span class="level-item tag" data-cy="status-tag">
             <p><strong>STATUS:</strong> {{ form.status }}</p>
           </span>
-          <button
-            v-if="form.status !== 'Submitted'"
-            class="button is-primary level-item"
-            data-cy="launch-form-button"
-            type="button"
-            @click="activeForm = form"
-          >
-            Launch Form
-          </button>
-          <button
-            v-else
-            class="button is-primary is-light level-item"
-            data-cy="review-form-button"
-            type="button"
-            @click="activeForm = form"
-          >
-            Review Form
-          </button>
+          <div class="level-item">
+            <button
+              v-if="form.status !== 'Submitted'"
+              class="button is-primary level-item"
+              data-cy="launch-form-button"
+              type="button"
+              @click="activeForm = form"
+            >
+              Launch Form
+            </button>
+            <button
+              v-else
+              class="button is-primary is-light level-item"
+              data-cy="review-form-button"
+              type="button"
+              @click="activeForm = form"
+            >
+              Review Form
+            </button>
+          </div>
         </div>
       </div>
     </div>
