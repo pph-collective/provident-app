@@ -30,6 +30,7 @@
         <StatsTable
           v-if="dataset.length > 0"
           :dataset="dataset"
+          :previous-dataset="previousDataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
         />
@@ -60,6 +61,7 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.user);
     const dataset = ref([]);
+    const previousDataset = ref([]);
     const activeGeoid = ref("");
     const activeMuni = ref("");
 
@@ -94,10 +96,21 @@ export default {
     const controls = ref({});
 
     const updateControls = newControls => {
+      activeMuni.value = "";
+      activeGeoid.value = "";
       if (newControls.model_version !== controls.value.model_version) {
+        previousDataset.value = [];
         fb.getResults(newControls.model_version).then(res => {
           dataset.value = res;
         });
+        const prevPeriodIdx =
+          resultPeriods.value.findIndex(p => p === newControls.model_version) +
+          1;
+        if (prevPeriodIdx < resultPeriods.value.length) {
+          fb.getResults(resultPeriods.value[prevPeriodIdx]).then(res => {
+            previousDataset.value = res;
+          });
+        }
       }
 
       for (const [k, v] of Object.entries(newControls)) {
@@ -110,6 +123,7 @@ export default {
       controls,
       resultPeriods,
       dataset,
+      previousDataset,
       updateControls,
       activeMuni,
       activeGeoid

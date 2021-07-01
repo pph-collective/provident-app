@@ -13,6 +13,10 @@ export default {
       type: Object,
       required: true
     },
+    previousStats: {
+      type: Object,
+      required: true
+    },
     metric: {
       type: String,
       required: true
@@ -23,22 +27,51 @@ export default {
     }
   },
   setup(props) {
-    const { stats, metric, location } = toRefs(props);
+    const { stats, metric, location, previousStats } = toRefs(props);
+
+    const getTertile = (s, m) => {
+      if (s[m] <= s[m + "_lower"]) {
+        return 1;
+      } else if (s[m] <= s[m + "_upper"]) {
+        return 2;
+      } else {
+        return 3;
+      }
+    };
 
     const icon = computed(() => {
+      let color = "light";
+      let type = [];
       if (location.value) {
-        if (stats.value[metric.value] <= stats.value[metric.value + "_lower"]) {
-          return { type: "fas fa-chevron-circle-down", color: "success" };
-        } else if (
-          stats.value[metric.value] <= stats.value[metric.value + "_upper"]
-        ) {
-          return { type: "fas fa-minus-circle", color: "warning" };
+        const currentTertile = getTertile(stats.value, metric.value);
+        switch (currentTertile) {
+          case 1:
+            color = "success";
+            break;
+          case 2:
+            color = "warning";
+            break;
+          case 3:
+            color = "danger";
+            break;
+        }
+
+        if (previousStats.value[metric.value]) {
+          type.push("fas", "fa-arrow-alt-circle-right");
+          const previousTertile = getTertile(previousStats.value, metric.value);
+          if (currentTertile < previousTertile) {
+            type.push("rotate-down");
+          } else if (currentTertile > previousTertile) {
+            type.push("rotate-up");
+          }
         } else {
-          return { type: "fas fa-chevron-circle-up", color: "danger" };
+          type.push("fas", "fa-circle");
         }
       } else {
-        return { type: "far fa-circle", color: "light" };
+        type.push("far", "fa-circle");
       }
+
+      return { color, type };
     });
 
     return {
@@ -47,3 +80,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.rotate-up {
+  transform: rotate(-45deg);
+}
+
+.rotate-down {
+  transform: rotate(45deg);
+}
+</style>
