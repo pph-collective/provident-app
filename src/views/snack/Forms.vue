@@ -35,7 +35,7 @@
           </p>
         </div>
 
-        <div class="level-right">
+        <div class="level-right has-text-centered">
           <span
             v-if="user.admin"
             class="level-item tag"
@@ -214,5 +214,27 @@ export default {
 <style scoped>
 .form-row {
   width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal-content {
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .modal-card-body {
+    /* 65 px is the height of the header */
+    height: calc(100vh - 65px);
+  }
+
+  /* Reduce the padding when on mobile */
+  .modal-card-body {
+    padding: 10px;
+  }
+
+  .modal .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 </style>
