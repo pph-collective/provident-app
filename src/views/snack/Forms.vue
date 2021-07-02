@@ -39,11 +39,22 @@
           <span
             v-if="user.admin"
             class="level-item tag"
+            :class="{
+              'is-success is-light': form.release_date <= today
+            }"
             data-cy="release-date-tag"
           >
             <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
           </span>
-          <span class="level-item tag" data-cy="status-tag">
+          <span
+            class="level-item tag"
+            :class="{
+              'is-warning is-light': form.status === 'Not Started',
+              'is-info is-light': form.status === 'Draft',
+              'is-success is-light': form.status === 'Submitted'
+            }"
+            data-cy="status-tag"
+          >
             <p><strong>STATUS:</strong> {{ form.status }}</p>
           </span>
           <div class="level-item">
@@ -153,11 +164,12 @@ export default {
       user.value.data ? user.value.data.email : ""
     );
 
+    let today = new Date(); // Local time
+    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+
     onMounted(async () => {
       forms.value = await fb.getForms();
       if (!user.value.admin) {
-        let today = new Date(); // Local time
-        today = today.toISOString().split("T")[0]; // Date to ISO string without time
         forms.value = forms.value.filter(f => {
           return f.release_date <= today;
         });
@@ -204,6 +216,7 @@ export default {
       selectedTab,
       updateForm,
       formMessage,
+      today,
       userForms,
       user
     };
