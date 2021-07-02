@@ -61,8 +61,13 @@
 <script>
 export default {
   data() {
+    let collapsed = false;
+    if (screen.width <= 760) {
+      collapsed = true;
+    }
+
     return {
-      collapsed: true,
+      collapsed: collapsed,
       pages: [
         {
           name: "Dashboard",

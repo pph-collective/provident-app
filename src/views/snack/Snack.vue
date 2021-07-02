@@ -20,7 +20,10 @@ export default {
     Sidebar
   },
   setup() {
-    const sidebarCollapsed = ref(true);
+    let sidebarCollapsed = ref(false);
+    if (screen.width <= 760) {
+      sidebarCollapsed = ref(true);
+    }
 
     return {
       sidebarCollapsed
