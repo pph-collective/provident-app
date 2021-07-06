@@ -75,15 +75,13 @@ describe("Log In View", () => {
   });
 
   it("Redirect back to previous page prior to logging in after login", () => {
-    cy.visit("/about");
-    cy.get('[data-cy="navbar-burger"]').click();
-    cy.get('[data-cy="login-button"]').click();
+    cy.visit("/snack");
 
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq("/about");
+      expect(loc.pathname).to.eq("/snack");
     });
   });
 });
