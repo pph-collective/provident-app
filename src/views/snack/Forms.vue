@@ -224,12 +224,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "bulma";
+
 .form-row {
   width: 100%;
 }
 
-@media only screen and (max-width: 600px) {
+@include mobile {
   .modal-content {
     height: 100vh;
     max-height: 100vh;
