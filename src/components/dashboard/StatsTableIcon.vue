@@ -56,7 +56,7 @@ export default {
             break;
         }
 
-        if (previousStats.value[metric.value]) {
+        if (previousStats.value[metric.value] !== undefined) {
           type.push("fas", "fa-arrow-alt-circle-right");
           const previousTertile = getTertile(previousStats.value, metric.value);
           if (currentTertile < previousTertile) {

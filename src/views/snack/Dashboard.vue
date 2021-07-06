@@ -24,11 +24,10 @@
       </template>
     </Card>
 
-    <Card width="one-third">
+    <Card v-if="dataset.length > 0" width="one-third">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
-          v-if="dataset.length > 0"
           :dataset="dataset"
           :previous-dataset="previousDataset"
           :municipality="activeMuni"
@@ -96,8 +95,11 @@ export default {
     const controls = ref({});
 
     const updateControls = newControls => {
+      // if either drop down changes, clear out the selected block group
       activeMuni.value = "";
       activeGeoid.value = "";
+
+      // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
         previousDataset.value = [];
         fb.getResults(newControls.model_version).then(res => {
@@ -113,6 +115,7 @@ export default {
         }
       }
 
+      // update the control selections
       for (const [k, v] of Object.entries(newControls)) {
         controls.value[k] = v;
       }
