@@ -46,13 +46,6 @@
           >
 
           <router-link
-            data-cy="about"
-            to="/about"
-            class="navbar-item has-text-primary"
-            >About</router-link
-          >
-
-          <router-link
             v-if="user.admin"
             data-cy="admin"
             to="/admin"
