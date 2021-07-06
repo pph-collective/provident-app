@@ -59,10 +59,13 @@
 </template>
 
 <script>
+import { useMobileListener } from "@/composables/useMobileListener";
+const { isMobile } = useMobileListener();
+
 export default {
   data() {
     let collapsed = false;
-    if (screen.width <= 760) {
+    if (isMobile) {
       collapsed = true;
     }
 

@@ -14,6 +14,9 @@
 import { ref } from "vue";
 
 import Sidebar from "@/components/Sidebar";
+import { useMobileListener } from "@/composables/useMobileListener";
+
+const { isMobile } = useMobileListener();
 
 export default {
   components: {
@@ -21,7 +24,8 @@ export default {
   },
   setup() {
     let sidebarCollapsed = ref(false);
-    if (screen.width <= 760) {
+
+    if (isMobile) {
       sidebarCollapsed = ref(true);
     }
 
