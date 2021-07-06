@@ -52,9 +52,8 @@ export default {
       }
 
       filtered.forEach(g => {
-        g.properties.flag = dataset.value.find(d => d.geoid === g.id)[
-          flagProperty.value
-        ];
+        const datum = dataset.value.find(d => d.geoid === g.id) ?? {};
+        g.properties.flag = datum[flagProperty.value] ?? "-1";
       });
 
       const collection = {
@@ -235,12 +234,10 @@ export default {
             encode: {
               enter: {
                 strokeWidth: { value: 1 },
-                stroke: [
-                  { test: "datum === activeGeography", value: "blue" },
-                  { value: "#d3d3d3" }
-                ],
+                stroke: { value: "#d3d3d3" },
                 fill: [
                   { test: "datum.properties.flag === '1'", value: "red" },
+                  { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
                   { value: "white" }
                 ]
               },
@@ -287,6 +284,7 @@ export default {
     let currentBg = "";
     let currentMuni = "";
 
+    // TODO: the tooltip/stats table isn't as reactive as I'd like - maybe look into debouncing these updates
     watch(view, () => {
       if (view.value) {
         view.value.addSignalListener("activeGeography", (name, value) => {

@@ -17,6 +17,16 @@ describe("Dashboard viewed as a user", () => {
         const actual = [...options].map(o => o.text);
         expect(actual).to.deep.eq(["Good Doers", "All of Rhode Island"]);
       });
+
+    cy.get('[data-cy="control-panel"]')
+      .find("select")
+      .should("have.length", "2")
+      .eq(1)
+      .find("option")
+      .then(options => {
+        const actual = [...options].map(o => o.text);
+        expect(actual).to.deep.eq(["2019-1", "2018-2"]);
+      });
   });
 
   describe("Changes map on geography drop down", () => {

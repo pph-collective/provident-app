@@ -56,7 +56,7 @@
 import { toRefs } from "vue";
 import * as aq from "arquero";
 
-import useStats from "@/composables/useStats.js";
+import { useStats } from "@/composables/useStats.js";
 import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
 
 export default {
@@ -114,10 +114,11 @@ export default {
       municipality,
       geoid
     });
+
     const { stats: previous } = useStats({
       statFns,
       tertileFns,
-      previousDataset,
+      dataset: previousDataset,
       municipality,
       geoid
     });
