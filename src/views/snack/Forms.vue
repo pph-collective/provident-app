@@ -47,11 +47,11 @@
             <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
           </span>
           <span
-            class="level-item tag"
+            class="level-item tag is-light"
             :class="{
-              'is-warning is-light': form.status === 'Not Started',
-              'is-info is-light': form.status === 'Draft',
-              'is-success is-light': form.status === 'Submitted'
+              'is-warning': form.status === 'Not Started',
+              'is-info': form.status === 'Draft',
+              'is-success': form.status === 'Submitted'
             }"
             data-cy="status-tag"
           >
@@ -89,7 +89,7 @@
       data-cy="active-form-modal"
     >
       <div class="modal-background" @click="activeForm = {}"></div>
-      <div class="modal-content set-font-family-secondary">
+      <div class="modal-content is-family-secondary">
         <header class="modal-card-head">
           <p class="modal-card-title" data-cy="active-form-title">
             {{ activeForm.title }}
