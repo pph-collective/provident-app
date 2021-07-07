@@ -1,8 +1,6 @@
 describe("Register User", () => {
   beforeEach(() => {
-    cy.task("db:deleteUserByEmail", "register@register.com");
-    cy.task("db:teardown");
-    cy.task("db:seed");
+    cy.task("auth:deleteUserByEmail", "register@register.com");
     cy.visit("/register");
   });
 

@@ -1,6 +1,6 @@
 <template>
   <FormCard>
-    <h1 class="is-size-3 has-text-centered pb-3">Log In</h1>
+    <h1 class="is-size-3 has-text-centered pb-3">Reset Password</h1>
     <form @submit.prevent="submit">
       <div class="field">
         <p class="control has-icons-left has-icons-right">
@@ -9,6 +9,7 @@
             type="text"
             placeholder="Reset Code"
             v-model="form.resetCode"
+            :disabled="oobCodeExists"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-shield-alt"></i>
@@ -20,8 +21,9 @@
           <input
             class="input"
             type="password"
-            placeholder="Password"
+            placeholder="New password"
             v-model="form.password"
+            data-cy="new-password"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -33,8 +35,9 @@
           <input
             class="input"
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Confirm new password"
             v-model="form.confirmPassword"
+            data-cy="confirm-new-password"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-lock"></i>
@@ -47,6 +50,7 @@
             class="button is-success"
             :disabled="!formValid.status"
             type="submit"
+            data-cy="update-password-button"
           >
             Update Password
           </button>
@@ -75,6 +79,10 @@ export default {
     const router = useRouter();
     const route = useRoute();
 
+    const oobCodeExists = computed(() => {
+      return Boolean(route.query.oobCode);
+    });
+
     const form = reactive({
       resetCode: route.query.oobCode ? route.query.oobCode : "",
       password: "",
@@ -102,13 +110,14 @@ export default {
     const submit = async () => {
       try {
         await fb.auth.confirmPasswordReset(form.resetCode, form.password);
-        router.replace({ name: "Login" });
+        await router.replace({ name: "Login" });
       } catch (err) {
         error.value = `${err.message}`;
       }
     };
 
     return {
+      oobCodeExists,
       form,
       error,
       formValid,
