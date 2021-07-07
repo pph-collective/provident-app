@@ -240,17 +240,7 @@ export default {
 
 @include mobile {
   .modal-content {
-    height: 100vh;
     max-height: 100vh;
-  }
-
-  .modal-card-head {
-    height: 65px;
-  }
-
-  .modal-card-body {
-    /* 65 px is the height of the header */
-    height: calc(100vh - 65px);
   }
 
   /* Reduce the padding when on mobile */
