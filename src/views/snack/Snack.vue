@@ -16,16 +16,15 @@ import { ref } from "vue";
 import Sidebar from "@/components/Sidebar";
 import { useMobileListener } from "@/composables/useMobileListener";
 
-const { isMobile } = useMobileListener();
-
 export default {
   components: {
     Sidebar
   },
   setup() {
+    const { isMobile } = useMobileListener();
     let sidebarCollapsed = ref(false);
 
-    if (isMobile) {
+    if (isMobile.value) {
       sidebarCollapsed = ref(true);
     }
 
