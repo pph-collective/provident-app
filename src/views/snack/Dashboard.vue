@@ -7,7 +7,7 @@
       @selected="updateControls"
     />
 
-    <Card v-if="controls.geography" width="two-thirds">
+    <Card v-if="controls.geography" width="two-thirds" id="map">
       <template #title>Map: {{ controls.geography.name }}</template>
       <template #subtitle>Some really great insights</template>
       <template #content>
@@ -24,7 +24,7 @@
       </template>
     </Card>
 
-    <Card v-if="dataset.length > 0" width="one-third">
+    <Card v-if="dataset.length > 0" width="one-third" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable

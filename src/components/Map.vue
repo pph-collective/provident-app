@@ -233,6 +233,7 @@ export default {
             from: { data: "bg_outlines" },
             encode: {
               enter: {
+                cursor: { value: "pointer" },
                 strokeWidth: { value: 1 },
                 stroke: { value: "#d3d3d3" },
                 fill: [
@@ -278,7 +279,7 @@ export default {
       spec,
       el,
       minHeight,
-      includeActions: ref(true)
+      includeActions: ref(false)
     });
 
     let currentBg = "";
