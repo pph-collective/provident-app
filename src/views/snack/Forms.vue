@@ -231,10 +231,22 @@ export default {
   width: 100%;
 }
 
+.modal-card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 40px);
+}
+
 @include mobile {
   .modal-content {
     height: 100vh;
     max-height: 100vh;
+  }
+
+  .modal-card-head {
+    height: 65px;
+    width: inherit;
   }
 
   .modal-card-body {
