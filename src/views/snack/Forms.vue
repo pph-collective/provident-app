@@ -246,7 +246,6 @@ export default {
 
   .modal-card-head {
     height: 65px;
-    width: inherit;
   }
 
   .modal-card-body {
