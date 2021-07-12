@@ -12,7 +12,7 @@ const routes = [
     path: "/login",
     name: "Login",
     beforeEnter: (to, from) => {
-      if (!to.query.redirect) {
+      if (!to.query.redirect && from.name !== "ResetPassword") {
         return { path: to.path, query: { redirect: from.path } };
       }
     },
@@ -29,7 +29,7 @@ const routes = [
     path: "/auth",
     redirect: to => {
       const { query } = to;
-      if (query.action === "resetPassword") {
+      if (query.mode === "resetPassword") {
         return { path: "/updatepassword", query: query };
       }
     }
@@ -87,15 +87,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "admin" */ "../views/Admin.vue")
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
   }
 ];
 

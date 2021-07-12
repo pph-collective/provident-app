@@ -1,8 +1,5 @@
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("approved");
     cy.visit("/snack/dashboard");
   });
@@ -33,7 +30,7 @@ describe("Dashboard viewed as a user", () => {
     it("is All of Rhode Island", () => {
       cy.get("select#geography").select("All of Rhode Island");
 
-      cy.get(".map-container .vega-embed svg")
+      cy.get('.map-container [data-cy="All of Rhode Island"] svg')
         .trigger("mouseover", "center")
         .trigger("mousemove", "center");
 
@@ -68,7 +65,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("select#geography").select("Good Doers");
 
-      cy.get(".map-container .vega-embed svg")
+      cy.get('.map-container [data-cy="Good Doers"] svg')
         .trigger("mouseover", "center")
         .trigger("mousemove", "center")
         .trigger("click", "center");
@@ -105,9 +102,6 @@ describe("Dashboard viewed as a user", () => {
 
 describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
-    cy.logout();
-    cy.task("db:teardown");
-    cy.task("db:seed");
     cy.login_by_permission("admin");
     cy.visit("/snack/dashboard");
   });

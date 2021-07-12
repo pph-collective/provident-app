@@ -19,6 +19,7 @@
             flag-property="flag_1"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
+            :data-cy="controls.geography.name"
           />
         </div>
       </template>
