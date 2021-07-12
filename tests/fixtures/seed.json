@@ -107,6 +107,49 @@
           "label": "Type anything"
         }
       ]
+    },
+    "sample_form": {
+      "title": "Neighborhood Rapid Assessment",
+      "release_date": "2021-07-12",
+      "questions": [
+        {
+          "model": "organization_name",
+          "component": "TextInput",
+          "label": "Organization Name",
+          "required": true
+        },
+        {
+          "model": "census_tract_id",
+          "component": "Select",
+          "label": "Census Tract ID",
+          "required": true,
+          "options": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "model": "available_services",
+          "component": "Checkbox",
+          "label": "Which of these services are currently available in this Census Tract?: (Check all that apply)",
+          "options": [
+            "Office-based needle exchange",
+            "Mobile needle exchange",
+            "Rapid HIV test",
+            "Rapid HCV test",
+            "Fentanyl test strips",
+            "Safer drug use equipment",
+            "Referral to a health clinic",
+            "Referral for mental health care",
+            "Meeting with a peer counselor/coach for recovery from substance use",
+            "Community-based support groups for recovery from substance use (like AA, NA)",
+            "Referral to Medications for addiction (MAT), like buprenophine",
+            "Linkage to care and/or case management for HIV or HCV",
+            "Other"
+          ]
+        }
+      ]
     }
   }
 }

@@ -153,6 +153,10 @@ The `Radio` field requires the `options` key, which is an array of strings which
 
 The `Select` field requires the `options` key, which is an array of strings which the user can select.
 
+#### `Checkbox`
+
+The `Checkbox` field requires the `options` key, which is an array of strings which the user can select.
+
 ## Authentication
 
 This web app uses firebase auth to restrict access to the `snacks` and `admin` paths.
