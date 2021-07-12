@@ -110,28 +110,34 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import fb from "@/firebase";
 
 export default {
-  name: "NavBar",
-  data() {
-    return {
-      hamburgerActive: false
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.user);
+
+    let hamburgerActive = false;
+    const toggleBurgerMenu = () => {
+      hamburgerActive = !hamburgerActive;
     };
-  },
-  computed: {
-    ...mapState(["user"])
-  },
-  methods: {
-    toggleBurgerMenu() {
-      this.hamburgerActive = !this.hamburgerActive;
-    },
-    async logout() {
+
+    const router = useRouter();
+
+    const logout = async () => {
       await fb.logout();
-      this.$router.push("/");
-    }
+      router.push("/");
+    };
+
+    return {
+      user,
+      hamburgerActive,
+      toggleBurgerMenu,
+      logout
+    };
   }
 };
 </script>
