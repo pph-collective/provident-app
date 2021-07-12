@@ -36,7 +36,7 @@ $box-radius: 2px;
   font-family: $family-sans-serif;
   h2 {
     margin-bottom: 0.2em;
-    font-weight: 600;
+    font-weight: bold;
   }
   table {
     tr {
@@ -45,7 +45,7 @@ $box-radius: 2px;
         padding-bottom: 1px;
 
         &.value {
-          font-weight: 600;
+          font-weight: bold;
         }
       }
     }
