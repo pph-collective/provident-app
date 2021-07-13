@@ -31,9 +31,7 @@ export default {
     watch(
       () => isMobile.value,
       () => {
-        if (isMobile.value) {
-          sidebarCollapsed.value = true;
-        }
+        sidebarCollapsed.value = isMobile.value;
       }
     );
 

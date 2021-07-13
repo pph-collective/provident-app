@@ -75,9 +75,7 @@ export default {
     watch(
       () => isMobile.value,
       () => {
-        if (isMobile.value) {
-          collapsed.value = true;
-        }
+        collapsed.value = isMobile.value;
       }
     );
 
