@@ -59,41 +59,57 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      collapsed: false,
-      pages: [
-        {
-          name: "Dashboard",
-          route: "dashboard",
-          icon: "fa-chart-line"
-        },
-        {
-          name: "Forms",
-          route: "forms",
-          icon: "fa-file-alt"
-        }
-      ]
-    };
-  },
-  computed: {
-    route() {
-      return this.$route.path.split("/").slice(-1)[0];
-    }
-  },
-  methods: {
-    toggle() {
-      this.collapsed = !this.collapsed;
-      return this.$emit("toggle", this.collapsed);
-    },
+import { useRoute } from "vue-router";
+import { ref, watch } from "vue";
+import { useMobileListener } from "@/composables/useMobileListener";
 
-    getInitials(str) {
+export default {
+  emits: ["toggle"],
+  setup(_, { emit }) {
+    const { isMobile } = useMobileListener();
+    const collapsed = ref(false);
+    if (isMobile.value) {
+      collapsed.value = true;
+    }
+
+    watch(isMobile, () => {
+      collapsed.value = isMobile.value;
+    });
+
+    const pages = [
+      {
+        name: "Dashboard",
+        route: "dashboard",
+        icon: "fa-chart-line"
+      },
+      {
+        name: "Forms",
+        route: "forms",
+        icon: "fa-file-alt"
+      }
+    ];
+
+    const route = useRoute();
+
+    const toggle = () => {
+      collapsed.value = !collapsed.value;
+      return emit("toggle", collapsed.value);
+    };
+
+    const getInitials = str => {
       return str
         .split(" ")
         .map(s => s[0].toUpperCase())
         .join("");
-    }
+    };
+
+    return {
+      collapsed,
+      pages,
+      route,
+      toggle,
+      getInitials
+    };
   }
 };
 </script>

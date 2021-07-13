@@ -103,28 +103,41 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import { computed, ref, watch } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useMobileListener } from "@/composables/useMobileListener";
 import fb from "@/firebase";
 
 export default {
-  name: "NavBar",
-  data() {
-    return {
-      hamburgerActive: false
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.user);
+
+    const hamburgerActive = ref(false);
+    const toggleBurgerMenu = () => {
+      hamburgerActive.value = !hamburgerActive.value;
     };
-  },
-  computed: {
-    ...mapState(["user"])
-  },
-  methods: {
-    toggleBurgerMenu() {
-      this.hamburgerActive = !this.hamburgerActive;
-    },
-    async logout() {
+
+    const router = useRouter();
+
+    const logout = async () => {
       await fb.logout();
-      this.$router.push("/");
-    }
+      await router.push("/");
+    };
+
+    // On window resize, collapse the hamburger menu always
+    const { isMobile } = useMobileListener();
+    watch(isMobile, () => {
+      hamburgerActive.value = false;
+    });
+
+    return {
+      user,
+      hamburgerActive,
+      toggleBurgerMenu,
+      logout
+    };
   }
 };
 </script>
