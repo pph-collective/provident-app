@@ -135,13 +135,9 @@ export default {
 
     // On window resize, collapse the hamburger menu always
     const { isMobile } = useMobileListener();
-    watch(
-      () => isMobile,
-      () => {
-        hamburgerActive.value = false;
-      },
-      { deep: true }
-    );
+    watch(isMobile, () => {
+      hamburgerActive.value = false;
+    });
 
     return {
       user,

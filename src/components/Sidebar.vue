@@ -72,13 +72,9 @@ export default {
       collapsed.value = true;
     }
 
-    watch(
-      () => isMobile,
-      () => {
-        collapsed.value = isMobile.value;
-      },
-      { deep: true }
-    );
+    watch(isMobile, () => {
+      collapsed.value = isMobile.value;
+    });
 
     const pages = [
       {

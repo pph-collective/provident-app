@@ -28,13 +28,9 @@ export default {
       sidebarCollapsed.value = true;
     }
 
-    watch(
-      () => isMobile,
-      () => {
-        sidebarCollapsed.value = isMobile.value;
-      },
-      { deep: true }
-    );
+    watch(isMobile, () => {
+      sidebarCollapsed.value = isMobile.value;
+    });
 
     return {
       sidebarCollapsed
