@@ -110,9 +110,10 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useMobileListener } from "@/composables/useMobileListener";
 import fb from "@/firebase";
 
 export default {
@@ -120,9 +121,10 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.user);
 
-    let hamburgerActive = false;
+    let hamburgerActive = ref(false);
     const toggleBurgerMenu = () => {
-      hamburgerActive = !hamburgerActive;
+      hamburgerActive.value = !hamburgerActive.value;
+      console.log("toggle burger menu");
     };
 
     const router = useRouter();
@@ -131,6 +133,15 @@ export default {
       await fb.logout();
       await router.push("/");
     };
+
+    // On window resize, collapse the hamburger menu always
+    const { isMobile } = useMobileListener();
+    watch(
+      () => isMobile.value,
+      () => {
+        hamburgerActive.value = false;
+      }
+    );
 
     return {
       user,
