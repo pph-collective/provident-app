@@ -67,16 +67,17 @@ export default {
   emits: ["toggle"],
   setup(_, { emit }) {
     const { isMobile } = useMobileListener();
-    let collapsed = ref(false);
+    const collapsed = ref(false);
     if (isMobile.value) {
-      collapsed = ref(true);
+      collapsed.value = true;
     }
 
     watch(
-      () => isMobile.value,
+      () => isMobile,
       () => {
         collapsed.value = isMobile.value;
-      }
+      },
+      { deep: true }
     );
 
     const pages = [

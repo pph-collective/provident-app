@@ -22,17 +22,18 @@ export default {
   },
   setup() {
     const { isMobile } = useMobileListener();
-    let sidebarCollapsed = ref(false);
+    const sidebarCollapsed = ref(false);
 
     if (isMobile.value) {
-      sidebarCollapsed = ref(true);
+      sidebarCollapsed.value = true;
     }
 
     watch(
-      () => isMobile.value,
+      () => isMobile,
       () => {
         sidebarCollapsed.value = isMobile.value;
-      }
+      },
+      { deep: true }
     );
 
     return {

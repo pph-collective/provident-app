@@ -121,10 +121,9 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.user);
 
-    let hamburgerActive = ref(false);
+    const hamburgerActive = ref(false);
     const toggleBurgerMenu = () => {
       hamburgerActive.value = !hamburgerActive.value;
-      console.log("toggle burger menu");
     };
 
     const router = useRouter();
@@ -137,10 +136,11 @@ export default {
     // On window resize, collapse the hamburger menu always
     const { isMobile } = useMobileListener();
     watch(
-      () => isMobile.value,
+      () => isMobile,
       () => {
         hamburgerActive.value = false;
-      }
+      },
+      { deep: true }
     );
 
     return {
