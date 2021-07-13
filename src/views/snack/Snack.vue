@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import Sidebar from "@/components/Sidebar";
 import { useMobileListener } from "@/composables/useMobileListener";
@@ -27,6 +27,15 @@ export default {
     if (isMobile.value) {
       sidebarCollapsed = ref(true);
     }
+
+    watch(
+      () => isMobile.value,
+      () => {
+        if (isMobile.value) {
+          sidebarCollapsed.value = true;
+        }
+      }
+    );
 
     return {
       sidebarCollapsed

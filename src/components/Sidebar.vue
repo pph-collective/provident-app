@@ -60,16 +60,26 @@
 
 <script>
 import { useRoute } from "vue-router";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {
+  emits: ["toggle"],
   setup(_, { emit }) {
     const { isMobile } = useMobileListener();
     let collapsed = ref(false);
     if (isMobile.value) {
       collapsed = ref(true);
     }
+
+    watch(
+      () => isMobile.value,
+      () => {
+        if (isMobile.value) {
+          collapsed.value = true;
+        }
+      }
+    );
 
     const pages = [
       {

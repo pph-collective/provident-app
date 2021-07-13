@@ -129,7 +129,7 @@ export default {
 
     const logout = async () => {
       await fb.logout();
-      router.push("/");
+      await router.push("/");
     };
 
     return {
