@@ -120,12 +120,6 @@
       "release_date": "2021-07-12",
       "questions": [
         {
-          "model": "organization_name",
-          "component": "TextInput",
-          "label": "Organization Name",
-          "required": true
-        },
-        {
           "model": "census_tract_id",
           "component": "Select",
           "label": "Census Tract ID",
@@ -155,6 +149,32 @@
             "Linkage to care and/or case management for HIV or HCV",
             "Other"
           ]
+        },
+        {
+          "model": "other_available_services",
+          "component": "TextInput",
+          "label": "Other",
+          "required": true,
+          "condition": "(model) => model.available_services && model.available_services.includes('Other')"
+        },
+        {
+          "model": "rate_radio",
+          "component": "Radio",
+          "label": "It is easy to get sterile needles in this census tract",
+          "required": true,
+          "options": [
+            "Strongly Disagree",
+            "Disagree",
+            "Neutral",
+            "Agree",
+            "Strongly Agree"
+          ]
+        },
+        {
+          "model": "rate_likert_scale",
+          "component": "LikertScale",
+          "label": "Please rate how much you Disagree or Agree with each of these statements",
+          "required": true
         }
       ]
     }
