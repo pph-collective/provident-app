@@ -25,5 +25,9 @@ service cloud.firestore {
     match /forms/{document=**} {
       allow read: if request.auth != null;
     }
+
+    match /results/{document=**} {
+      allow read: if request.auth != null;
+    }
   }
 }

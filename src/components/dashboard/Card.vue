@@ -5,9 +5,11 @@
   >
     <header v-if="!noHeader" class="dashboard-card-header">
       <h2 class="title"><slot name="title"></slot></h2>
-      <h3 class="subtitle"><slot name="subtitle"></slot></h3>
+      <h3 class="subtitle is-family-secondary">
+        <slot name="subtitle"></slot>
+      </h3>
     </header>
-    <section class="dashboard-card-content">
+    <section class="dashboard-card-content  is-family-secondary">
       <slot name="content"></slot>
     </section>
   </div>

@@ -45,7 +45,20 @@ export function useVega({
     }
   };
 
-  const resizeObserver = new ResizeObserver(resizePlot);
+  let timeout;
+
+  const resizeObserver = new ResizeObserver(() => {
+    // If there's a timer, cancel it
+    if (timeout) {
+      window.clearTimeout(timeout);
+    }
+
+    // Setup the new requestAnimationFrame()
+    timeout = window.setTimeout(() => {
+      // Run our resize functions
+      resizePlot();
+    }, 50);
+  });
 
   const updatePlot = () => {
     if (view.value) {

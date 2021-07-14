@@ -1,7 +1,7 @@
 <template>
   <Card :no-header="true">
     <template #content>
-      <div class="control-panel">
+      <div class="control-panel is-family-secondary">
         <div
           v-for="(options, type) in dropDowns"
           class="control-panel-dropdown control has-icons-left"
@@ -53,9 +53,13 @@ export default {
     const selected = reactive(res);
     emit("selected", selected);
 
-    watch(selected, () => {
-      emit("selected", selected);
-    });
+    watch(
+      () => selected,
+      () => {
+        emit("selected", selected);
+      },
+      { deep: true }
+    );
 
     return {
       selected

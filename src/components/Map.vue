@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ref, toRefs, computed } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 
 import * as topology from "topojson-server";
 import * as tc from "topojson-client";
@@ -14,7 +14,6 @@ import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
 export default {
-  name: "Map",
   props: {
     dataset: {
       type: Array,
@@ -29,10 +28,17 @@ export default {
       default() {
         return [];
       }
+    },
+    flagProperty: {
+      type: String,
+      required: true
     }
   },
-  setup(props) {
-    const { minHeight, filterMunicipalities } = toRefs(props);
+  emits: ["new-active-bg", "new-active-municipality"],
+  setup(props, { emit }) {
+    const { minHeight, filterMunicipalities, dataset, flagProperty } = toRefs(
+      props
+    );
 
     const el = ref(null);
 
@@ -44,6 +50,11 @@ export default {
           filterMunicipalities.value.includes(g.properties.name)
         );
       }
+
+      filtered.forEach(g => {
+        const datum = dataset.value.find(d => d.geoid === g.id) ?? {};
+        g.properties.flag = datum[flagProperty.value] ?? "-1";
+      });
 
       const collection = {
         blocks: { type: "FeatureCollection", features: filtered }
@@ -88,10 +99,6 @@ export default {
       return topo;
     });
 
-    const hasData = computed(() => {
-      return Object.keys(filteredGeo.value).length > 0;
-    });
-
     // TODO: pick a map
     const spec = computed(() => {
       return {
@@ -107,12 +114,18 @@ export default {
             value:
               "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ"
           },
-          { name: "zoom", update: "geoWidth > 0.005 ? 10 : 11" },
-          { name: "tilesCount", update: "pow(2,zoom)" },
-          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
-          { name: "geoWidth", update: "abs(basePoint[0] - maxPoint[0]) / 360" },
+          {
+            name: "geoWidth",
+            update: "width / abs(basePoint[0] - maxPoint[0])"
+          },
+          {
+            name: "zoom",
+            update:
+              "geoWidth < 750 ? 9 : (geoWidth < 1500 ? 10 : (geoWidth < 3000 ? 11 : 12))"
+          },
+          { name: "tilesCount", update: "pow(2,zoom)" },
           { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
           { name: "di", update: "floor(dii)" },
           {
@@ -127,17 +140,40 @@ export default {
             update:
               "scale('projection', [(di+1) * 360 / tilesCount + 180, 0])[0] - scale('projection', [(di) * 360 / tilesCount + 180, 0])[0]"
           },
+          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
           {
             name: "offset",
             update:
               "scale('projection',[di * 360 / tilesCount + 180, atan((pow(E, phi) - pow(E, -1 * phi)) / 2) / PI * 180])"
+          },
+          {
+            name: "hovered",
+            value: null,
+            on: [
+              { events: "@block_groups:mouseover", update: "datum" },
+              { events: "mouseout", update: "null" }
+            ]
+          },
+          {
+            name: "clicked",
+            value: null,
+            on: [
+              {
+                events: "@block_groups:click",
+                update: "clicked === datum ? null : datum"
+              }
+            ]
+          },
+          {
+            name: "activeGeography",
+            update: "clicked || hovered"
           }
         ],
         data: [
           {
             name: "town_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", feature: "towns" }
+            format: { type: "topojson", mesh: "towns" }
           },
           {
             name: "bg_outlines",
@@ -187,10 +223,41 @@ export default {
                 x: { field: "x" },
                 y: { field: "y" },
                 width: { signal: "tileSize" },
-                height: { signal: "tileSize" },
-                zindex: { value: 1 }
+                height: { signal: "tileSize" }
               }
             }
+          },
+          {
+            type: "shape",
+            name: "block_groups",
+            from: { data: "bg_outlines" },
+            encode: {
+              enter: {
+                cursor: { value: "pointer" },
+                strokeWidth: { value: 1 },
+                stroke: { value: "#d3d3d3" },
+                fill: [
+                  { test: "datum.properties.flag === '1'", value: "red" },
+                  { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
+                  { value: "white" }
+                ]
+              },
+              update: {
+                fillOpacity: [
+                  { test: "datum === activeGeography", value: 1 },
+                  { value: 0.5 }
+                ],
+                zindex: [
+                  { test: "datum === activeGeography", value: 1 },
+                  { value: 0 }
+                ],
+                tooltip: {
+                  signal:
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
+                }
+              }
+            },
+            transform: [{ type: "geoshape", projection: "projection" }]
           },
           {
             type: "shape",
@@ -199,25 +266,7 @@ export default {
               enter: {
                 strokeWidth: { value: 3 },
                 stroke: { value: "#d3d3d3" },
-                fill: { value: "transparent" }
-              }
-            },
-            transform: [{ type: "geoshape", projection: "projection" }]
-          },
-          {
-            type: "shape",
-            from: { data: "bg_outlines" },
-            encode: {
-              enter: {
-                strokeWidth: { value: 1 },
-                stroke: { value: "#d3d3d3" },
-                fill: { value: "transparent" }
-              },
-              update: {
-                tooltip: {
-                  signal:
-                    "{Municipality: datum.properties.name, 'Block Group': datum.id}"
-                }
+                fillOpacity: { value: 0 }
               }
             },
             transform: [{ type: "geoshape", projection: "projection" }]
@@ -226,12 +275,42 @@ export default {
       };
     });
 
-    useVega({
+    const { view } = useVega({
       spec,
       el,
-      hasData,
       minHeight,
       includeActions: ref(false)
+    });
+
+    let currentBg = "";
+    let currentMuni = "";
+
+    // TODO: the tooltip/stats table isn't as reactive as I'd like - maybe look into debouncing these updates
+    watch(view, () => {
+      if (view.value) {
+        view.value.addSignalListener("activeGeography", (name, value) => {
+          if (value) {
+            if (value.properties.bg_id !== currentBg) {
+              currentBg = value.properties.bg_id;
+              emit("new-active-bg", currentBg);
+            }
+
+            if (value.properties.name !== currentMuni) {
+              currentMuni = value.properties.name;
+              emit("new-active-municipality", currentMuni);
+            }
+          } else {
+            if (currentBg) {
+              currentBg = "";
+              emit("new-active-bg", currentBg);
+            }
+            if (currentMuni) {
+              currentMuni = "";
+              emit("new-active-municipality", currentMuni);
+            }
+          }
+        });
+      }
     });
 
     return {

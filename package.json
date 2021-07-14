@@ -9,15 +9,17 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "cypress open",
     "lint": "vue-cli-service lint",
-    "shp2topo": "./shp2topo.sh",
+    "shp2topo": "scripts/shp2topo.sh",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data",
     "add-admin": "node scripts/add-admin.js",
-    "add-form": "node scripts/add-form.js"
+    "add-form": "node scripts/add-form.js",
+    "add-results": "node scripts/add-results.js"
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^2.2.1",
     "aos": "^2.3.4",
+    "arquero": "^4.8.4",
     "bulma": "^0.9.2",
     "core-js": "^3.6.5",
     "firebase": "^8.2.6",
@@ -50,6 +52,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
+    "csv-parse": "^4.16.0",
     "cypress": "7.7.0",
     "cypress-firebase": "^1.9.1",
     "d3-dsv": "^2.0.0",
