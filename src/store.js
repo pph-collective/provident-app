@@ -13,36 +13,31 @@ const store = createStore({
     };
   },
   mutations: {
-    SET_LOGGED_IN(state, value) {
-      state.user.authenticated = value;
+    mutate(state, payload) {
+      state[payload.property] = payload.with;
     },
-    SET_USER(state, data) {
-      state.user.data = data;
-    },
-    SET_ADMIN(state, admin) {
-      state.user.admin = admin;
-    },
-    SET_ORGS(state, orgs) {
-      state.organizations = orgs;
+    mutateUser(state, payload) {
+      state.user[payload.property] = payload.with;
     }
   },
   actions: {
     async fetchUser({ commit }, user) {
       if (user) {
-        commit("SET_USER", {
-          ...user
+        commit("mutateUser", {
+          property: "data",
+          with: user
         });
       } else {
-        commit("SET_USER", null);
+        commit("mutateUser", { property: "data", with: null });
       }
-      commit("SET_LOGGED_IN", user !== null);
+      commit("mutateUser", { property: "authenticated", with: user !== null });
     },
     fetchAdmin({ commit }, admin) {
-      commit("SET_ADMIN", admin);
+      commit("mutateUser", { property: "admin", with: admin });
     },
     async fetchOrgs({ commit }) {
       const orgs = await fb.getOrgs();
-      commit("SET_ORGS", orgs);
+      commit("mutate", { property: "organizations", with: orgs });
     }
   }
 });

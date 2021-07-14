@@ -30,3 +30,28 @@ $box-radius: 2px;
 }
 
 @import '~bulma';
+
+#vg-tooltip-element.vg-tooltip {
+  color: #333333;
+  font-family: $family-sans-serif;
+  h2 {
+    margin-bottom: 0.2em;
+    font-weight: bold;
+  }
+  table {
+    tr {
+      td {
+        padding-top: 1px;
+        padding-bottom: 1px;
+
+        &.value {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  @include mobile {
+    display: none;
+  }
+}

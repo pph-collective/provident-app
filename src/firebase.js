@@ -114,5 +114,31 @@ export default {
       console.log(e);
       return false;
     }
+  },
+  async getResultPeriods() {
+    const res = [];
+    try {
+      const docs = await db.collection("results").get();
+      docs.forEach(doc => res.push(doc.id));
+    } catch (err) {
+      console.log(err);
+    }
+    return res.sort().reverse();
+  },
+  async getResults(period) {
+    try {
+      const doc = await db
+        .collection("results")
+        .doc(period)
+        .get();
+      if (doc.exists) {
+        return doc.data().data;
+      } else {
+        return [];
+      }
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 };

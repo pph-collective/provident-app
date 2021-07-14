@@ -14,9 +14,19 @@ describe("Dashboard viewed as a user", () => {
         const actual = [...options].map(o => o.text);
         expect(actual).to.deep.eq(["Good Doers", "All of Rhode Island"]);
       });
+
+    cy.get('[data-cy="control-panel"]')
+      .find("select")
+      .should("have.length", "2")
+      .eq(1)
+      .find("option")
+      .then(options => {
+        const actual = [...options].map(o => o.text);
+        expect(actual).to.deep.eq(["2019-1", "2018-2"]);
+      });
   });
 
-  describe("Changes map on geography drop down", () => {
+  describe("Changes map and stats on geography drop down", () => {
     it("is All of Rhode Island", () => {
       cy.get("select#geography").select("All of Rhode Island");
 
@@ -32,17 +42,60 @@ describe("Dashboard viewed as a user", () => {
     });
 
     it("is Good Doers", () => {
+      cy.get("div#stats")
+        .find("section div p")
+        .first()
+        .should("have.text", "Municipality: ");
+
+      // ri should be filled
+      cy.get("div#stats")
+        .find("tbody tr td span")
+        .first()
+        .should("have.class", "has-text-success")
+        .find("i")
+        .should("have.class", "fa-arrow-alt-circle-right");
+
+      // empty circle
+      cy.get("div#stats")
+        .find("tbody tr td span")
+        .last()
+        .should("have.class", "has-text-light")
+        .find("i")
+        .should("have.class", "fa-circle");
+
       cy.get("select#geography").select("Good Doers");
 
       cy.get('.map-container [data-cy="Good Doers"] svg')
         .trigger("mouseover", "center")
-        .trigger("mousemove", "center");
+        .trigger("mousemove", "center")
+        .trigger("click", "center");
 
       cy.get("#vg-tooltip-element")
         .find("tbody tr")
         .first()
         .find("td.value")
         .should("have.text", "Portsmouth");
+
+      cy.get("div#stats")
+        .find("section div p")
+        .first()
+        .should("have.text", "Municipality: Portsmouth");
+
+      // ri unchanged
+      cy.get("div#stats")
+        .find("tbody tr td span")
+        .first()
+        .should("have.class", "has-text-success")
+        .find("i")
+        .should("have.class", "fa-arrow-alt-circle-right");
+
+      // empty circle now filled arrow
+      cy.get("div#stats")
+        .find("tbody tr td span")
+        .last()
+        .should("not.have.class", "has-text-light")
+        .find("i")
+        .should("have.class", "fa-arrow-alt-circle-right");
     });
   });
 });
