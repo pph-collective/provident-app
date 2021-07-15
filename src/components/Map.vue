@@ -108,7 +108,7 @@ export default {
           {
             name: "tileUrl",
             value:
-              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/tiles/"
+              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/static/"
           },
           {
             name: "mapboxToken",
@@ -179,29 +179,6 @@ export default {
             name: "bg_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" }
-          },
-          {
-            name: "tile_list",
-            transform: [
-              { type: "sequence", start: 0, stop: { signal: "maxTiles" } },
-              { type: "cross", filter: "(datum.a.data>=0)&(datum.b.data>=0)" },
-              {
-                type: "formula",
-                as: "url",
-                expr:
-                  "tileUrl+zoom+'/'+(datum.a.data+di+tilesCount)%tilesCount+ '/'+((datum.b.data+dj)) + mapboxToken"
-              },
-              {
-                type: "formula",
-                as: "x",
-                expr: "datum.a.data*tileSize + offset[0]"
-              },
-              {
-                type: "formula",
-                as: "y",
-                expr: "datum.b.data*tileSize + offset[1]"
-              }
-            ]
           }
         ],
         projections: [
@@ -215,15 +192,15 @@ export default {
         marks: [
           {
             type: "image",
-            from: { data: "tile_list" },
             clip: true,
             encode: {
               update: {
-                url: { field: "url" },
-                x: { field: "x" },
-                y: { field: "y" },
-                width: { signal: "tileSize" },
-                height: { signal: "tileSize" }
+                url: {
+                  signal:
+                    "tileUrl + '[' + basePoint[0] + ',' + maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] +']/' + width + 'x' + height + mapboxToken"
+                },
+                width: { signal: "width" },
+                height: { signal: "height" }
               }
             }
           },
@@ -275,10 +252,13 @@ export default {
       };
     });
 
+    // max width and height set due to mapbox static image limits
     const { view } = useVega({
       spec,
       el,
       minHeight,
+      maxHeight: ref(1280),
+      maxWidth: ref(1280),
       includeActions: ref(false)
     });
 
