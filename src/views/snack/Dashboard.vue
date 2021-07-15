@@ -154,6 +154,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// TODO: center the dashboard in the space and add a max width to it at something like 2000 px?
 @import "bulma";
 
 .map-container {

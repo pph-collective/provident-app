@@ -118,35 +118,6 @@ export default {
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
-            name: "geoWidth",
-            update: "width / abs(basePoint[0] - maxPoint[0])"
-          },
-          {
-            name: "zoom",
-            update: "floor(log(geoWidth) * LOG2E)"
-          },
-          { name: "tilesCount", update: "pow(2,zoom)" },
-          { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
-          { name: "di", update: "floor(dii)" },
-          {
-            name: "djj",
-            update:
-              "((1-log(tan(basePoint[1]*PI/180) + 1/cos(basePoint[1]*PI/180))/PI)/2 *tilesCount)"
-          },
-          { name: "dj", update: "floor(djj)" },
-          { name: "phi", update: "(1 - dj / tilesCount) * 2 * PI - PI" },
-          {
-            name: "tileSize",
-            update:
-              "scale('projection', [(di+1) * 360 / tilesCount + 180, 0])[0] - scale('projection', [(di) * 360 / tilesCount + 180, 0])[0]"
-          },
-          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
-          {
-            name: "offset",
-            update:
-              "scale('projection',[di * 360 / tilesCount + 180, atan((pow(E, phi) - pow(E, -1 * phi)) / 2) / PI * 180])"
-          },
-          {
             name: "hovered",
             value: null,
             on: [
@@ -197,7 +168,7 @@ export default {
               update: {
                 url: {
                   signal:
-                    "tileUrl + '[' + basePoint[0] + ',' + maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] +']/' + width + 'x' + height + mapboxToken"
+                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + '@2x' + mapboxToken"
                 },
                 width: { signal: "width" },
                 height: { signal: "height" }
@@ -230,7 +201,7 @@ export default {
                 ],
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag, geoWidth: geoWidth, zoom: zoom }"
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
                 }
               }
             },

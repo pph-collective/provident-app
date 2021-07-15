@@ -5,6 +5,8 @@ export function useVega({
   spec,
   minWidth = ref(200),
   minHeight = ref(200),
+  maxWidth = ref(4000),
+  maxHeight = ref(4000),
   includeActions = ref(false),
   hasData = ref(true),
   el
@@ -15,7 +17,8 @@ export function useVega({
 
   const getWidth = () => {
     if (el.value) {
-      return (
+      return Math.min(
+        maxWidth.value,
         Math.max(
           minWidth.value,
           Math.min(el.value.parentElement.clientWidth, window.innerWidth)
@@ -27,9 +30,12 @@ export function useVega({
 
   const getHeight = () => {
     if (el.value) {
-      return Math.max(
-        minHeight.value,
-        Math.min(el.value.parentElement.clientHeight - 10, window.innerHeight)
+      return Math.min(
+        maxHeight.value,
+        Math.max(
+          minHeight.value,
+          Math.min(el.value.parentElement.clientHeight - 10, window.innerHeight)
+        )
       );
     }
     return minHeight.value;
