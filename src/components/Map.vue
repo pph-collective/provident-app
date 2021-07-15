@@ -107,7 +107,8 @@ export default {
         signals: [
           {
             name: "tileUrl",
-            value: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/"
+            value:
+              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/tiles/"
           },
           {
             name: "mapboxToken",
@@ -122,8 +123,7 @@ export default {
           },
           {
             name: "zoom",
-            update:
-              "geoWidth < 750 ? 9 : (geoWidth < 1500 ? 10 : (geoWidth < 3000 ? 11 : 12))"
+            update: "floor(log(geoWidth) * LOG2E)"
           },
           { name: "tilesCount", update: "pow(2,zoom)" },
           { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
@@ -237,15 +237,15 @@ export default {
                 strokeWidth: { value: 1 },
                 stroke: { value: "#d3d3d3" },
                 fill: [
-                  { test: "datum.properties.flag === '1'", value: "red" },
+                  { test: "datum.properties.flag === '1'", value: "#2A3465" },
                   { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
                   { value: "white" }
                 ]
               },
               update: {
                 fillOpacity: [
-                  { test: "datum === activeGeography", value: 1 },
-                  { value: 0.5 }
+                  { test: "datum === activeGeography", value: 0.7 },
+                  { value: 0.3 }
                 ],
                 zindex: [
                   { test: "datum === activeGeography", value: 1 },
@@ -253,7 +253,7 @@ export default {
                 ],
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag, geoWidth: geoWidth, zoom: zoom }"
                 }
               }
             },

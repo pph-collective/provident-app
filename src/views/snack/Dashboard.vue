@@ -68,10 +68,27 @@ export default {
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
       const orgs = store.state.organizations;
+      const towns = [];
+      dataset.value.forEach(d => {
+        if (
+          d.municipality &&
+          !towns.some(town => d.municipality === town.name)
+        ) {
+          towns.push({
+            name: d.municipality,
+            municipalities: [d.municipality]
+          });
+        }
+      });
+      towns.sort((a, b) => (a.name < b.name ? -1 : 1));
       if (user.value.admin) {
-        return [ri, ...orgs];
+        return [ri, ...orgs, ...towns];
       } else {
-        return [orgs.find(o => o.name === user.value.data.organization), ri];
+        return [
+          orgs.find(o => o.name === user.value.data.organization),
+          ri,
+          ...towns
+        ];
       }
     });
 
