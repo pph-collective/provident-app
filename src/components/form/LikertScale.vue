@@ -20,7 +20,17 @@
                 :key="'options-' + j"
                 :data-label="option"
               >
-                <input type="radio" :name="'statements-' + i" />
+                <input
+                  type="radio"
+                  :name="'statements-' + i"
+                  :value="option"
+                  :checked="
+                    modelValue
+                      ? modelValue['statements-' + i] === option
+                      : false
+                  "
+                  @input="updateValue($event, modelValue)"
+                />
               </td>
             </tr>
           </tbody>
@@ -65,7 +75,7 @@ export default {
       default: () => ({})
     }
   },
-  setup() {
+  setup(_, { emit }) {
     const statements = [
       "It is easy to get sterile needles in this census tract",
       "It is easy to get new works (like cookers, cottons, sterile water) in this census tract",
@@ -75,8 +85,15 @@ export default {
       "It is easy to get to a licensed provider for buprenorphine in this census tract"
     ];
 
+    const updateValue = (event, modelValue) => {
+      let result = modelValue ?? {};
+      result[event.target.name] = event.target.value;
+      emit("update:modelValue", result);
+    };
+
     return {
-      statements
+      statements,
+      updateValue
     };
   }
 };
