@@ -29,6 +29,7 @@
                       ? modelValue['statements-' + i] === option
                       : false
                   "
+                  :required="required"
                   @input="updateValue($event, modelValue)"
                 />
               </td>
