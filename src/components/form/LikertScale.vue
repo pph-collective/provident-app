@@ -1,51 +1,32 @@
 <template>
   <div class="field">
     <label class="label">{{ label }}</label>
-    <div v-for="(statement, i) in statements" :key="'statement-' + i">
-      <p :for="uuid">{{ statement }}</p>
-      <div class="control" :id="uuid">
-        <label
-          v-for="(option, i) in options"
-          :key="'option-' + i"
-          class="radio"
-        >
-          <input
-            type="radio"
-            :name="uuid"
-            :value="modelValue"
-            :required="required"
-            :checked="modelValue === option"
-            @input="$emit('update:modelValue', option)"
-          />
-          {{ option }}
-        </label>
-        <span class="has-text-danger is-size-7">{{
-          validation.errorMessage
-        }}</span>
+    <div class="b-table">
+      <div class="table-wrapper has-mobile-cards">
+        <table class="table is-fullwidth is-striped is-fullwidth">
+          <thead>
+            <tr>
+              <th></th>
+              <th v-for="(option, i) in options" :key="'options-' + i">
+                {{ option }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(statement, i) in statements" :key="'statements-' + i">
+              <th>{{ statement }}</th>
+              <td
+                v-for="(option, i) in options"
+                :key="'options-' + i"
+                :data-label="option"
+              >
+                <input type="radio" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-
-  <div class="field">
-    <label class="label">{{ label }}</label>
-    <table class="table">
-      <thead>
-        <tr>
-          <th></th>
-          <th v-for="(option, i) in options" :key="'options-' + i">
-            {{ option }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(statement, i) in statements" :key="'statements-' + i">
-          <th>{{ statement }}</th>
-          <td v-for="(option, i) in options" :key="'options-' + i">
-            <input type="radio" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -100,3 +81,7 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "bulma-responsive-tables";
+</style>
