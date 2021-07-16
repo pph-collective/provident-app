@@ -16,11 +16,11 @@
             <tr v-for="(statement, i) in statements" :key="'statements-' + i">
               <th>{{ statement }}</th>
               <td
-                v-for="(option, i) in options"
-                :key="'options-' + i"
+                v-for="(option, j) in options"
+                :key="'options-' + j"
                 :data-label="option"
               >
-                <input type="radio" />
+                <input type="radio" :name="'statements-' + i" />
               </td>
             </tr>
           </tbody>
