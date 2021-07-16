@@ -70,21 +70,16 @@ export default {
       },
       required: false
     },
+    statements: {
+      type: Array,
+      required: true
+    },
     validation: {
       type: Object,
       default: () => ({})
     }
   },
   setup(_, { emit }) {
-    const statements = [
-      "It is easy to get sterile needles in this census tract",
-      "It is easy to get new works (like cookers, cottons, sterile water) in this census tract",
-      "It is easy to get naloxone in this census tract",
-      "It is easy to get access to healthcare in this census tract (low cost clinic, ED, free clinic)",
-      "It is easy to get to a licensed clinic for methadone in this census tract",
-      "It is easy to get to a licensed provider for buprenorphine in this census tract"
-    ];
-
     const updateValue = (event, modelValue) => {
       let result = modelValue ?? {};
       result[event.target.name] = event.target.value;
@@ -92,7 +87,6 @@ export default {
     };
 
     return {
-      statements,
       updateValue
     };
   }

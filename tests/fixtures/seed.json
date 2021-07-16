@@ -158,23 +158,18 @@
           "condition": "(model) => model.available_services && model.available_services.includes('Other')"
         },
         {
-          "model": "rate_radio",
-          "component": "Radio",
-          "label": "It is easy to get sterile needles in this census tract",
-          "required": true,
-          "options": [
-            "Strongly Disagree",
-            "Disagree",
-            "Neutral",
-            "Agree",
-            "Strongly Agree"
-          ]
-        },
-        {
           "model": "rate_likert_scale",
           "component": "LikertScale",
           "label": "Please rate how much you Disagree or Agree with each of these statements",
-          "required": true
+          "required": true,
+          "statements": [
+            "It is easy to get sterile needles in this census tract",
+            "It is easy to get new works (like cookers, cottons, sterile water) in this census tract",
+            "It is easy to get naloxone in this census tract",
+            "It is easy to get access to healthcare in this census tract (low cost clinic, ED, free clinic)",
+            "It is easy to get to a licensed clinic for methadone in this census tract",
+            "It is easy to get to a licensed provider for buprenorphine in this census tract"
+          ]
         }
       ]
     }
