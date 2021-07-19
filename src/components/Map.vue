@@ -113,7 +113,7 @@ export default {
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
             name: "resolution",
-            value: navigator?.connection?.downlink > 3 ? "@2x" : ""
+            value: navigator?.connection?.downlink > 2 ? "@2x" : ""
           },
           {
             name: "hovered",
@@ -210,8 +210,8 @@ export default {
             from: { data: "town_outlines" },
             encode: {
               enter: {
-                strokeWidth: { value: 3 },
-                stroke: { value: "#d3d3d3" },
+                strokeWidth: { value: 2 },
+                stroke: { value: "#393939" },
                 fillOpacity: { value: 0 }
               }
             },
