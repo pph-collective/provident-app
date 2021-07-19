@@ -113,7 +113,7 @@ export default {
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
             name: "resolution",
-            value: navigator.connection.downlink > 3 ? "@2x" : ""
+            value: navigator?.connection?.downlink > 3 ? "@2x" : ""
           },
           {
             name: "hovered",
