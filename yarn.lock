@@ -1235,9 +1235,9 @@
   integrity sha512-dZMzN0uAjwJXWYYAcnxIwXqRTZw3o14hGe7O6uhwjD1ZQWPVYA5lASgnNskEBra0knVBsOXB4KXg+HnlKewN/A==
 
 "@formvuelate/plugin-vee-validate@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@formvuelate/plugin-vee-validate/-/plugin-vee-validate-2.2.1.tgz#3c7b7e424b9d0b2e1e8442242caad24370a76781"
-  integrity sha512-sO8DXebHmzEG+ORvEys8ooRqmCAVkGhYNKCd8FESjVuy59LlUVGAf6tjCwCrOLpudQ3H2YiP1WRTcmhGlAEBqw==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@formvuelate/plugin-vee-validate/-/plugin-vee-validate-2.3.0.tgz#da7050bfc0d6f8af9b95414239390be616d5a675"
+  integrity sha512-ADUKrmVt1fTYUNhkEIS2UHjgbZFoW13BoqVaIOwNQXi204FhAWhqLIRuIUaCUK76JquhXS+fLc81XVhNt2zWTQ==
 
 "@google-cloud/common@^3.6.0":
   version "3.7.0"
@@ -6735,9 +6735,9 @@ form-data@~2.3.2:
     mime-types "^2.1.12"
 
 formvuelate@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/formvuelate/-/formvuelate-3.1.0.tgz#63042d23f6918d6416c580c33ae5f31183dea5cb"
-  integrity sha512-UZSv0LiFUiHIuKAxK6xJgW73gdz01qgcavpRhfbBk4DFVhOn0PXotnSMFkN3w6zE6fla+iJTDSrJL8RzjQgLwA==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/formvuelate/-/formvuelate-3.3.0.tgz#f52b714f7d2ac7803d92acbf3f5b615edd2ab431"
+  integrity sha512-7DSpZtf5zzoG5/xsO0x8dfET8dyhCuxgG9ObmYq7t8TlgykUF8+TvzMBGUhpSYz1C+JWU4d4QzGAYr3YveNN/A==
 
 forwarded@0.2.0:
   version "0.2.0"
@@ -14084,10 +14084,10 @@ vary@^1, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vee-validate@^4.4.0-alpha.2:
-  version "4.4.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-4.4.0-alpha.2.tgz#8c18e51e62732753f96b198749fede40682982e7"
-  integrity sha512-GTo0D/byZQOd4M1yvtcBhtHp1x1MaoJbd0x8ylpGft+JVoXRunLCQIJtbhUYTzR73GKLFMiXtQ3qzHAZepIHnQ==
+vee-validate@^4.4.6:
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-4.4.6.tgz#de057be770275c658dde8136f4c459e5b6007433"
+  integrity sha512-Bv9w+/2dDQDu10KPP3Phm6okupP990up3wUUPi1tZhjui8Bgxgj1idDiIMdIFbtWd0ki1s7c1OLY65MbFTGIDw==
 
 vega-canvas@^1.2.5:
   version "1.2.6"
