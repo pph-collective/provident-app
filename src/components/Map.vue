@@ -19,10 +19,6 @@ export default {
       type: Array,
       required: true
     },
-    minHeight: {
-      type: Number,
-      default: 720
-    },
     filterMunicipalities: {
       type: Array,
       default() {
@@ -36,9 +32,7 @@ export default {
   },
   emits: ["new-active-bg", "new-active-municipality"],
   setup(props, { emit }) {
-    const { minHeight, filterMunicipalities, dataset, flagProperty } = toRefs(
-      props
-    );
+    const { filterMunicipalities, dataset, flagProperty } = toRefs(props);
 
     const el = ref(null);
 
@@ -227,7 +221,7 @@ export default {
     const { view } = useVega({
       spec,
       el,
-      minHeight,
+      minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
       includeActions: ref(false)

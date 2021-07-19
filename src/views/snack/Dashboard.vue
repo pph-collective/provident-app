@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard p-4">
+  <div class="dashboard p-4 container">
     <ControlPanel
       v-if="resultPeriods.length > 0"
       data-cy="control-panel"
@@ -159,6 +159,8 @@ export default {
 
 .map-container {
   max-width: 90vw;
+  height: 80vh;
+  max-height: 1280px;
 }
 
 .dashboard {
