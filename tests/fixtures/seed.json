@@ -121,17 +121,12 @@
       "questions": [
         {
           "model": "census_tract_id",
-          "component": "Select",
+          "component": "TextInput",
           "label": "Census Tract ID",
-          "required": true,
-          "options": [
-            "1",
-            "2",
-            "3"
-          ]
+          "required": true
         },
         {
-          "model": "available_services",
+          "model": "q1_available_services",
           "component": "Checkbox",
           "label": "Which of these services are currently available in this Census Tract?: (Check all that apply)",
           "options": [
@@ -151,14 +146,148 @@
           ]
         },
         {
-          "model": "other_available_services",
+          "model": "q1_other_available_services",
           "component": "TextInput",
           "label": "Other",
           "required": true,
-          "condition": "(model) => model.available_services && model.available_services.includes('Other')"
+          "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')"
         },
         {
-          "model": "rate_likert_scale",
+          "model": "q2_other_related_services",
+          "component":  "TextArea",
+          "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)"
+        },
+        {
+          "model": "q3_reason_for_focus",
+          "component": "Checkbox",
+          "label": "What made you choose to focus on these services in this Neighborhood/Town (check all that apply)",
+          "options": [
+            "Our organization has historically worked here",
+            "Anecdotal evidence that these services are needed at this location",
+            "Grant funding was tired to working in this location",
+            "It is close to our main office / easily accessible",
+            "A hotspot map or ROARR report from RIDOH, the Overdose Task Force or others",
+            "Prior Relationships with organizations in this Census Tract",
+            "Other"
+          ]
+        },
+        {
+          "model": "q3_other_reason_for_focus",
+          "component": "TextInput",
+          "label": "Other",
+          "condition": "(model) => model.q3_reason_for_focus && model.q3_reason_for_focus.includes('Other')"
+        },
+        {
+          "model": "types_of_peer_recovery",
+          "component": "Checkbox",
+          "label": "What types of peer recovery outreach services are available in this Neighborhood/Town? (Check all that apply)",
+          "options": [
+            "Pharmacy",
+            "Office-based needle exchange",
+            "Delivery or street-based needle exchange",
+            "Outreach organization (like PONI or Anchor MORE)",
+            "Emergency department",
+            "Other"
+          ]
+        },
+        {
+          "model": "other_types_of_peer_recovery",
+          "component": "TextInput",
+          "label": "Other",
+          "condition": "(model) => model.types_of_peer_recovery && model.types_of_peer_recovery.includes('Other')"
+        },
+        {
+          "model": "q4_sources_for_naloxone",
+          "component": "Checkbox",
+          "label": "What are the sources for naloxone available in this Neighborhood/Town? (Check all that apply)",
+          "options": [
+            "Pharmacy",
+            "Office-based needle exchange",
+            "Delivery or street-based needle exchange",
+            "Outreach organization (like PONI or Anchor MORE)",
+            "Emergency department",
+            "Other"
+          ]
+        },
+        {
+          "model": "q4_other_sources_for_naloxone",
+          "component": "TextInput",
+          "label": "Other",
+          "condition": "(model) => model.q4_sources_for_naloxone && model.q4_sources_for_naloxone.includes('Other')"
+        },
+        {
+          "model": "q5_sources_for_fentanyl_test_strips",
+          "component": "Checkbox",
+          "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
+          "options": [
+            "Pharmacy",
+            "Office-based needle exchange",
+            "Delivery or street-based needle exchange",
+            "Outreach organization (like PONI or Anchor MORE)",
+            "Emergency department",
+            "Other"
+          ]
+        },
+        {
+          "model": "q5_other_sources_for_fentanyl_test_strips",
+          "component": "TextInput",
+          "label": "Other",
+          "condition": "(model) => model.q5_sources_for_fentanyl_test_strips && model.q5_sources_for_fentanyl_test_strips.includes('Other')"
+        },
+        {
+          "model": "q6_sources_for_sterile_needles_and_works",
+          "component": "Checkbox",
+          "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
+          "options": [
+            "Pharmacy",
+            "Office-based needle exchange",
+            "Delivery or street-based needle exchange",
+            "Outreach organization (like PONI or Anchor MORE)",
+            "Emergency department",
+            "Other"
+          ]
+        },
+        {
+          "model": "endorsed_office_based_needle_exchange",
+          "component": "TextInput",
+          "type": "number",
+          "label": "Office-based needle exchange: How many hours per week is this service available?"
+        },
+        {
+          "model": "endorsed_delivery_based_needle_exchange",
+          "component": "TextInput",
+          "type": "number",
+          "label": "Delivery-based needle exchange: How many hours per week is this services available?"
+        },
+        {
+          "model": "endorsed_sterile_needle_exchange",
+          "component": "TextInput",
+          "type": "number",
+          "label": "Sterile needle exchange: How many hours per week is this service available?"
+        },
+        {
+          "model": "q4_barriers_to_outreach",
+          "component": "Checkbox",
+          "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
+          "options": [
+            "Limited public transportation",
+            "I don't know anyone who is familiar with this neighborhood",
+            "Limited community service organizations for partnerships",
+            "I don't know where there is a good place to distribute services",
+            "Funding",
+            "I do not have the time to go to these places",
+            "I do not see many barriers",
+            "Other"
+          ]
+        },
+        {
+          "model": "q4_other_barriers_to_outreach",
+          "component": "TextInput",
+          "label": "Other",
+          "condition": "(model) => model.q4_barriers_to_outreach && model.q4_barriers_to_outreach.includes('Other')"
+        },
+        {
+          "model": "q12_rate_likert_scale",
           "component": "LikertScale",
           "label": "Please rate how much you Disagree or Agree with each of these statements",
           "required": true,
