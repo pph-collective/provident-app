@@ -115,7 +115,7 @@
         }
       ]
     },
-    "sample_form": {
+    "neighborhood_rapid_assessment": {
       "title": "Neighborhood Rapid Assessment",
       "release_date": "2021-07-12",
       "questions": [
@@ -164,7 +164,7 @@
           "options": [
             "Our organization has historically worked here",
             "Anecdotal evidence that these services are needed at this location",
-            "Grant funding was tired to working in this location",
+            "Grant funding was tied to working in this location",
             "It is close to our main office / easily accessible",
             "A hotspot map or ROARR report from RIDOH, the Overdose Task Force or others",
             "Prior Relationships with organizations in this Census Tract",

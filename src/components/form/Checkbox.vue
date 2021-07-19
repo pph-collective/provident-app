@@ -2,9 +2,9 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <ul class="is-flex-direction-column is-flex-wrap">
+      <ul class="is-flex-direction-column is-flex-wrap-wrap">
         <li v-for="(option, i) in options" :key="'option-' + i">
-          <label class="container">
+          <label>
             <input
               type="checkbox"
               :name="uuid"
@@ -77,5 +77,7 @@ li {
   // Hanging indent
   text-indent: -1em;
   margin: 0.33em 0.5em 0.5em 1.5em;
+
+  break-inside: avoid-column;
 }
 </style>
