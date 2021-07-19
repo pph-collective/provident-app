@@ -261,8 +261,7 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // Assert Status: Draft
-      cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
-        .eq(1)
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
         .find('[data-cy="status-tag"]')
         .should("contain", "Draft");
 
