@@ -2,7 +2,7 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <ul>
+      <ul class="is-flex-direction-column is-flex-wrap">
         <li v-for="(option, i) in options" :key="'option-' + i">
           <label class="container">
             <input
@@ -67,3 +67,15 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+ul {
+  column-width: 200px;
+}
+
+li {
+  // Hanging indent
+  text-indent: -1em;
+  margin: 0.33em 0.5em 0.5em 1.5em;
+}
+</style>
