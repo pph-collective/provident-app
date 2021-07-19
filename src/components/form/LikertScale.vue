@@ -84,10 +84,13 @@ export default {
   setup(_, { emit }) {
     const checkRadio = (event, modelValue) => {
       if (event.target.tagName.toLowerCase() === "td") {
-        const radioButton = event.target.querySelector("input[type=radio]");
-        radioButton.checked = true;
+        const fieldset = event.target.closest("fieldset");
+        if (!fieldset.disabled) {
+          const radioButton = event.target.querySelector("input[type=radio]");
+          radioButton.checked = true;
 
-        updateValue(radioButton, modelValue);
+          updateValue(radioButton, modelValue);
+        }
       }
     };
 
