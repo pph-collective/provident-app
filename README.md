@@ -173,7 +173,7 @@ statements: [
 The `options` key is optional. It is a list of strings on a rating scale and defaults to the following:
 ```
 options: [
-    "Strongly disagree", 
+    "Strongly Disagree", 
     "Disagree", 
     "Neutral", 
     "Agree", 

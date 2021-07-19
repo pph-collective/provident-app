@@ -1,5 +1,5 @@
 // env GOOGLE_APPLICATION_CREDENTIALS must contain the path to your firebase credentials
-// usage: `node add-form.js my_id form.json`
+// usage: `node add-form.js form_id form.json`
 
 const admin = require("firebase-admin");
 const app = admin.initializeApp();

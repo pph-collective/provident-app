@@ -90,6 +90,44 @@
           "model": "color_essay",
           "component": "TextArea",
           "label": "Please write an essay about your favorite color."
+        },
+        {
+          "model": "checkbox_mammals",
+          "component": "Checkbox",
+          "label": "Which of the following are mammals?",
+          "options": [
+            "Cat",
+            "Elephant",
+            "Salmon",
+            "Hummingbird"
+          ]
+        },
+        {
+          "model": "likert_scale_food_debates",
+          "component": "LikertScale",
+          "label": "Please rate how much you Disagree or Agree with the following statements",
+          "statements": [
+            "Waffles are better than pancakes",
+            "Pineapple belongs on pizza"
+          ],
+          "required": true
+        },
+        {
+          "model": "likert_scale_activities",
+          "component": "LikertScale",
+          "label": "How often do you the following?",
+          "statements": [
+            "Exercise",
+            "Watch a movie"
+          ],
+          "options": [
+            "Always",
+            "Often",
+            "Sometimes",
+            "Rarely",
+            "Never"
+          ],
+          "required": true
         }
       ]
     },

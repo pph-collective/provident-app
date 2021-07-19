@@ -63,7 +63,7 @@ export default {
       type: Array,
       default: () => {
         return [
-          "Strongly disagree",
+          "Strongly Disagree",
           "Disagree",
           "Neutral",
           "Agree",

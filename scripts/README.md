@@ -21,7 +21,7 @@ The `add-form` script takes a form specification (see the main README for detail
 
 ### Usage
 ```
-yarn add-form <id> <path to form>
+yarn add-form <form id> <path to form>
 ```
 
 ## `add-results`
