@@ -55,9 +55,19 @@ const validateForm = form => {
             warnAndExit(`question component requires options: ${key}`);
           }
           break;
+        case "Checkbox":
+          if (!question["options"]) {
+            warnAndExit(`question component requires options: ${key}`);
+          }
+          break;
+        case "LikertScale":
+          if (!question["statements"]) {
+            warnAndExit(`question component requires statements: ${key}`);
+          }
+          break;
         default:
           warnAndExit(
-            `question has unknown component: ${key} - ${question["component"]} (must be one of TextArea, TextInput, Select, Radio)`
+            `question has unknown component: ${key} - ${question["component"]} (must be one of TextArea, TextInput, Select, Radio, Checkbox, LikertScale)`
           );
       }
     }

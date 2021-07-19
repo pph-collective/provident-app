@@ -113,6 +113,8 @@ The fields currently supported (component in `src/components/forms`) are:
 * `TextArea`: A multi-line text input
 * `Radio`: Radio button group
 * `Select`: Drop down menu
+* `Checkbox`: A list of checkboxes to check
+* `LikertScale`: A table of radio buttons to rate statements
 
 All of these fields require the following keys:
 * `model`: The identifier for the question result (e.g. `"age"`)
@@ -156,6 +158,29 @@ The `Select` field requires the `options` key, which is an array of strings whic
 #### `Checkbox`
 
 The `Checkbox` field requires the `options` key, which is an array of strings which the user can select.
+
+#### `LikertScale`
+
+Requires the `statements` key, which is a list of strings to rate. For example,
+```
+statements: [
+    "It is easy to get sterile needles in this census tract",
+    "It is easy to get new works (like cookers, cottons, sterile water) in this census tract",
+    "It is easy to get naloxone in this census tract"
+]
+```
+
+The `options` key is optional. It is a list of strings on a rating scale and defaults to the following:
+```
+options: [
+    "Strongly disagree", 
+    "Disagree", 
+    "Neutral", 
+    "Agree", 
+    "Strongly Agree", 
+    "N/A"
+]
+```
 
 ## Authentication
 
