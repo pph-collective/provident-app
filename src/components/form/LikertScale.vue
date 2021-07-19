@@ -19,6 +19,7 @@
                 v-for="(option, j) in options"
                 :key="'options-' + j"
                 :data-label="option"
+                @click="checkRadio($event, modelValue)"
               >
                 <input
                   type="radio"
@@ -30,7 +31,7 @@
                       : false
                   "
                   :required="required"
-                  @input="updateValue($event, modelValue)"
+                  @input="updateValue($event.target, modelValue)"
                 />
               </td>
             </tr>
@@ -81,13 +82,23 @@ export default {
     }
   },
   setup(_, { emit }) {
-    const updateValue = (event, modelValue) => {
+    const checkRadio = (event, modelValue) => {
+      if (event.target.tagName.toLowerCase() === "td") {
+        const radioButton = event.target.querySelector("input[type=radio]");
+        radioButton.checked = true;
+
+        updateValue(radioButton, modelValue);
+      }
+    };
+
+    const updateValue = (radioButton, modelValue) => {
       let result = modelValue ?? {};
-      result[event.target.name] = event.target.value;
+      result[radioButton.name] = radioButton.value;
       emit("update:modelValue", result);
     };
 
     return {
+      checkRadio,
       updateValue
     };
   }
