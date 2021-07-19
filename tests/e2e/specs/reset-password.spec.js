@@ -36,13 +36,13 @@ describe("Login Page: Requesting an email to reset password", () => {
     cy.intercept(
       "POST",
       "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?**",
-      req => {
+      (req) => {
         // Assert the request
         expect(req.body.requestType).to.equal("PASSWORD_RESET");
         expect(req.body.email).to.equal(ACCOUNTS.approved.email);
 
         // Asset the response
-        req.continue(res => {
+        req.continue((res) => {
           expect(res.statusCode).to.equal(200);
         });
       }
@@ -54,7 +54,7 @@ describe("Login Page: Requesting an email to reset password", () => {
 
     // Getting pass this wait asserts that that a request of this type happened
     // User was sent an email
-    cy.wait("@password-email-reset-request").then(req => {
+    cy.wait("@password-email-reset-request").then((req) => {
       cy.log(req);
     });
 
@@ -70,7 +70,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes"
     ).as("oobCodes-request");
 
-    cy.get("@oobCodes-request").then(res => {
+    cy.get("@oobCodes-request").then((res) => {
       cy.log(res);
       expect(res.status).to.equal(200);
       expect(res.body).to.have.property("oobCodes");
@@ -120,7 +120,7 @@ describe("Reset Password Page", () => {
       "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes"
     ).as("oobCodes-request");
 
-    cy.get("@oobCodes-request").then(res => {
+    cy.get("@oobCodes-request").then((res) => {
       const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
       cy.visit(`/auth?mode=resetPassword&oobCode=${oobCode.oobCode}`);
 

@@ -124,7 +124,7 @@ import FormCard from "@/components/FormCard";
 
 export default {
   components: {
-    FormCard
+    FormCard,
   },
   setup() {
     // TODO: terms and conditions
@@ -133,7 +133,7 @@ export default {
       name: "",
       organization: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     });
     const requested = ref(false);
     const error = ref(null);
@@ -142,8 +142,8 @@ export default {
     fb.db
       .collection("organizations")
       .get()
-      .then(snapshot => {
-        organizations.value = snapshot.docs.map(doc => doc.data().name);
+      .then((snapshot) => {
+        organizations.value = snapshot.docs.map((doc) => doc.data().name);
       });
 
     const formValid = computed(() => {
@@ -160,7 +160,7 @@ export default {
       } else if (form.password !== form.confirmPassword) {
         return {
           status: false,
-          message: "password and confirmation do not match"
+          message: "password and confirmation do not match",
         };
       } else {
         return { status: true, message: "" };
@@ -175,15 +175,12 @@ export default {
         form.confirmPassword = "";
         await fb.auth.currentUser.updateProfile({ displayName: form.name });
         // to do set display name
-        await fb.db
-          .collection("users")
-          .doc(form.email)
-          .set({
-            email: form.email,
-            name: form.name,
-            organization: form.organization,
-            status: "pending"
-          });
+        await fb.db.collection("users").doc(form.email).set({
+          email: form.email,
+          name: form.name,
+          organization: form.organization,
+          status: "pending",
+        });
 
         await fb.logout();
         requested.value = true;
@@ -199,9 +196,9 @@ export default {
       requested,
       error,
       organizations,
-      register
+      register,
     };
-  }
+  },
 };
 </script>
 

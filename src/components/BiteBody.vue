@@ -16,8 +16,8 @@ export default {
     title: String,
     icon: String,
     description: String,
-    isActive: Boolean
-  }
+    isActive: Boolean,
+  },
 };
 </script>
 

@@ -6,7 +6,7 @@ export function useStats({
   tertileFns,
   dataset,
   municipality,
-  geoid
+  geoid,
 }) {
   const dt = computed(() => {
     return aq.from(dataset.value);
@@ -39,7 +39,7 @@ export function useStats({
       return dt.value
         .groupby("municipality")
         .rollup(statFns)
-        .derive({ area: d => d.municipality })
+        .derive({ area: (d) => d.municipality })
         .cross(tertiles.value)
         .objects();
     } else {
@@ -50,7 +50,7 @@ export function useStats({
   const bgs = computed(() => {
     if (isData.value) {
       return dt.value
-        .derive({ area: d => d.bg_id })
+        .derive({ area: (d) => d.bg_id })
         .cross(tertiles.value)
         .objects();
     } else {
@@ -59,18 +59,18 @@ export function useStats({
   });
 
   const muni = computed(() => {
-    return munis.value.find(o => o.municipality === municipality.value) ?? {};
+    return munis.value.find((o) => o.municipality === municipality.value) ?? {};
   });
 
   const bg = computed(() => {
-    return bgs.value.find(o => o.bg_id === geoid.value) ?? {};
+    return bgs.value.find((o) => o.bg_id === geoid.value) ?? {};
   });
 
   const stats = computed(() => {
     return {
       ri: ri.value,
       municipality: muni.value,
-      geoid: bg.value
+      geoid: bg.value,
     };
   });
 

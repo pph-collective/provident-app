@@ -71,8 +71,8 @@ export default {
     let unsubUserRequests = fb.db
       .collection("users")
       .where("status", "==", "pending")
-      .onSnapshot(snapshot => {
-        userRequests.value = snapshot.docs.map(doc => {
+      .onSnapshot((snapshot) => {
+        userRequests.value = snapshot.docs.map((doc) => {
           let userRequest = doc.data();
           return { ...userRequest, id: doc.id };
         });
@@ -81,7 +81,7 @@ export default {
     // unsubscribe when leaving this page
     onUnmounted(unsubUserRequests);
 
-    const approve = async user => {
+    const approve = async (user) => {
       try {
         // update request status
         // TODO: emails on approval/denial
@@ -99,7 +99,7 @@ export default {
       }
     };
 
-    const deny = userRequest => {
+    const deny = (userRequest) => {
       fb.db
         .collection("users")
         .doc(userRequest.id)
@@ -110,6 +110,6 @@ export default {
     };
 
     return { userRequests, approve, deny, alert, dismissAlert };
-  }
+  },
 };
 </script>

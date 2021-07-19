@@ -14,14 +14,14 @@ import Footer from "@/components/Footer.vue";
 export default {
   components: {
     NavBar,
-    Footer
+    Footer,
   },
   setup() {
     const store = useStore();
     onMounted(async () => {
       await store.dispatch("fetchOrgs");
     });
-  }
+  },
 };
 </script>
 

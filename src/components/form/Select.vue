@@ -9,9 +9,9 @@
           :id="uuid"
           @input="$emit('update:modelValue', $event.target.value)"
         >
-          <option v-for="(option, i) in options" :key="'option-' + i">{{
-            option
-          }}</option>
+          <option v-for="(option, i) in options" :key="'option-' + i">
+            {{ option }}
+          </option>
         </select>
       </div>
       <span class="has-text-danger is-size-7">{{
@@ -27,31 +27,31 @@ export default {
     modelValue: { required: true },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: String,
-      default: "text"
+      default: "text",
     },
     uuid: {
       type: Number,
-      default: 0
+      default: 0,
     },
     placeholder: {
-      default: ""
+      default: "",
     },
     options: {
       type: Array,
-      required: true
+      required: true,
     },
     validation: {
       type: Object,
-      default: () => ({})
-    }
-  }
+      default: () => ({}),
+    },
+  },
 };
 </script>

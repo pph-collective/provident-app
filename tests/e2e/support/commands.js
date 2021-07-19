@@ -18,7 +18,7 @@ Cypress.Commands.add("login", (email, password) => {
   cy.wrap(fb.login(email, password));
 });
 
-Cypress.Commands.add("login_by_permission", permission_level => {
+Cypress.Commands.add("login_by_permission", (permission_level) => {
   const account = ACCOUNTS[permission_level];
   if (account) {
     cy.wrap(fb.login(account["email"], account["password"])).should(

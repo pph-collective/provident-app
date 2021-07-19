@@ -1,8 +1,6 @@
 <template>
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-    <p class="panel-heading" data-cy="form-panel-heading">
-      I am forms!
-    </p>
+    <p class="panel-heading" data-cy="form-panel-heading">I am forms!</p>
 
     <div class="panel-tabs" data-cy="panel-tabs">
       <a
@@ -119,7 +117,7 @@ import JSONForm from "@/components/form/JSONForm.vue";
 
 export default {
   components: {
-    JSONForm
+    JSONForm,
   },
   setup() {
     const forms = ref([]);
@@ -132,7 +130,7 @@ export default {
     const selectedForms = computed(() => {
       if (selectedTab.value === "All") return forms.value;
 
-      return forms.value.filter(value => {
+      return forms.value.filter((value) => {
         if (selectedTab.value === "To Do" && value.status !== "Submitted") {
           return true;
         } else if (
@@ -157,13 +155,13 @@ export default {
       if (!user.value.admin) {
         let today = new Date(); // Local time
         today = today.toISOString().split("T")[0]; // Date to ISO string without time
-        forms.value = forms.value.filter(f => {
+        forms.value = forms.value.filter((f) => {
           return f.release_date <= today;
         });
       }
       userForms.value = await fb.getUserForms(userEmail.value);
 
-      forms.value.forEach(value => {
+      forms.value.forEach((value) => {
         let userForm = userForms.value[value._id];
         if (userForm) {
           value.status = userForm.status;
@@ -184,7 +182,7 @@ export default {
       if (success) {
         formMessage.value = "Form successfully saved";
         userForms.value[activeForm.value._id] = { status, response };
-        forms.value.find(f => f._id === activeForm.value._id).status = status;
+        forms.value.find((f) => f._id === activeForm.value._id).status = status;
         if (status === "Submitted") {
           activeForm.value = {};
         }
@@ -204,9 +202,9 @@ export default {
       updateForm,
       formMessage,
       userForms,
-      user
+      user,
     };
-  }
+  },
 };
 </script>
 

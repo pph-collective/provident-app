@@ -1,11 +1,21 @@
 <template>
   <footer
     id="site_footer"
-    class="has-background-primary has-text-light is-family-secondary is-flex is-justify-content-center"
+    class="
+      has-background-primary has-text-light
+      is-family-secondary is-flex is-justify-content-center
+    "
   >
     <div class="footer-content mt-6">
       <div
-        class="is-flex is-flex-direction-row is-flex-wrap is-justify-content-center is-align-items-center py-4"
+        class="
+          is-flex
+          is-flex-direction-row
+          is-flex-wrap
+          is-justify-content-center
+          is-align-items-center
+          py-4
+        "
       >
         <a
           href="http://www.brown.edu"
@@ -54,9 +64,7 @@
       </div>
 
       <div class="py-4">
-        <p class="is-uppercase has-text-weight-bold">
-          What is this site?
-        </p>
+        <p class="is-uppercase has-text-weight-bold">What is this site?</p>
         <br />
         <p>
           This website is an initiative of the Rhode Island Governor's
@@ -74,7 +82,7 @@
 
 <script>
 export default {
-  name: "Footer"
+  name: "Footer",
 };
 </script>
 

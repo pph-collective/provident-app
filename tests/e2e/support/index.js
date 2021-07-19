@@ -26,7 +26,7 @@ beforeEach(() => {
   // If needed to reset all of the auth, loop through all of ACCOUNTS
   cy.task("auth:updateUserByEmail", {
     email: ACCOUNTS.approved.email,
-    userData: { password: ACCOUNTS.approved.password }
+    userData: { password: ACCOUNTS.approved.password },
   });
 
   // Reset database

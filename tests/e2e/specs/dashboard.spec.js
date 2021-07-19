@@ -10,8 +10,8 @@ describe("Dashboard viewed as a user", () => {
       .should("have.length", "2")
       .eq(0)
       .find("option")
-      .then(options => {
-        const actual = [...options].map(o => o.text);
+      .then((options) => {
+        const actual = [...options].map((o) => o.text);
         expect(actual).to.deep.eq(["Good Doers", "All of Rhode Island"]);
       });
 
@@ -20,8 +20,8 @@ describe("Dashboard viewed as a user", () => {
       .should("have.length", "2")
       .eq(1)
       .find("option")
-      .then(options => {
-        const actual = [...options].map(o => o.text);
+      .then((options) => {
+        const actual = [...options].map((o) => o.text);
         expect(actual).to.deep.eq(["2019-1", "2018-2"]);
       });
   });
@@ -111,12 +111,12 @@ describe("Dashboard viewed as an admin", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .then(options => {
-        const actual = [...options].map(o => o.text);
+      .then((options) => {
+        const actual = [...options].map((o) => o.text);
         expect(actual).to.deep.eq([
           "All of Rhode Island",
           "Good Doers",
-          "RI 4 Us"
+          "RI 4 Us",
         ]);
       });
   });
