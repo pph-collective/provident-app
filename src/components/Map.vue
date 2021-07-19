@@ -112,6 +112,10 @@ export default {
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
+            name: "resolution",
+            value: navigator.connection.downlink > 3 ? "@2x" : ""
+          },
+          {
             name: "hovered",
             value: null,
             on: [
@@ -162,7 +166,7 @@ export default {
               update: {
                 url: {
                   signal:
-                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + '@2x' + mapboxToken"
+                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + resolution + mapboxToken"
                 },
                 width: { signal: "width" },
                 height: { signal: "height" }
