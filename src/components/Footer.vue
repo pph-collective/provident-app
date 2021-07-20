@@ -29,28 +29,6 @@
             title="RIDOH"
             alt="RIDOH"
         /></a>
-        <a
-          href="http://www.ri.gov"
-          class="image is-128x128 m-3 is-flex is-align-items-center"
-          target="_blank"
-          rel="noopener"
-          ><img
-            class="footer-logo"
-            src="https://preventoverdoseri.org/wp-content/uploads/2019/10/logo-footer-RI.png"
-            title="RI Gov"
-            alt="RI Gov"
-        /></a>
-        <a
-          href="https://bhddh.ri.gov"
-          class="image is-128x128 m-3 is-flex is-align-items-center"
-          target="_blank"
-          rel="noopener"
-          ><img
-            class="footer-logo"
-            src="https://preventoverdoseri.org/wp-content/uploads/2019/10/logo-footer-BHDDH.png"
-            title="BHDDH"
-            alt="BHDDH"
-        /></a>
       </div>
 
       <div class="py-4">
@@ -64,6 +42,15 @@
           Department of Health (RIDOH), the RI Department of Behavioral
           Healthcare and Developmental Disabilities and Hospitals (BHDDH), and
           Brown University School of Public Health.
+        </p>
+        <br />
+        <p>
+          If you have an issue to report or a suggestion, please
+          <a
+            href="mailto:preventoverdoseri@brown.edu?subject=PROVIDENT Question"
+            class="has-text-link-light is-underlined"
+            >contact us</a
+          >.
         </p>
       </div>
 
