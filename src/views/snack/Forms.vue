@@ -33,35 +33,48 @@
           </p>
         </div>
 
-        <div class="level-right">
+        <div class="level-right has-text-centered">
           <span
             v-if="user.admin"
             class="level-item tag"
+            :class="{
+              'is-success is-light': form.release_date <= today,
+            }"
             data-cy="release-date-tag"
           >
             <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
           </span>
-          <span class="level-item tag" data-cy="status-tag">
+          <span
+            class="level-item tag is-light"
+            :class="{
+              'is-warning': form.status === 'Not Started',
+              'is-info': form.status === 'Draft',
+              'is-success': form.status === 'Submitted',
+            }"
+            data-cy="status-tag"
+          >
             <p><strong>STATUS:</strong> {{ form.status }}</p>
           </span>
-          <button
-            v-if="form.status !== 'Submitted'"
-            class="button is-primary level-item"
-            data-cy="launch-form-button"
-            type="button"
-            @click="activeForm = form"
-          >
-            Launch Form
-          </button>
-          <button
-            v-else
-            class="button is-primary is-light level-item"
-            data-cy="review-form-button"
-            type="button"
-            @click="activeForm = form"
-          >
-            Review Form
-          </button>
+          <div class="level-item">
+            <button
+              v-if="form.status !== 'Submitted'"
+              class="button is-primary level-item"
+              data-cy="launch-form-button"
+              type="button"
+              @click="activeForm = form"
+            >
+              Launch Form
+            </button>
+            <button
+              v-else
+              class="button is-primary is-light level-item"
+              data-cy="review-form-button"
+              type="button"
+              @click="activeForm = form"
+            >
+              Review Form
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +87,7 @@
       data-cy="active-form-modal"
     >
       <div class="modal-background" @click="activeForm = {}"></div>
-      <div class="modal-content">
+      <div class="modal-content is-family-secondary">
         <header class="modal-card-head">
           <p class="modal-card-title" data-cy="active-form-title">
             {{ activeForm.title }}
@@ -91,7 +104,6 @@
             :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
             :init-value="userForms[activeForm._id].response"
-            @cancel="activeForm = {}"
             @save="updateForm($event, 'Draft')"
             @submitted="updateForm($event, 'Submitted')"
           />
@@ -150,11 +162,12 @@ export default {
       user.value.data ? user.value.data.email : ""
     );
 
+    let today = new Date(); // Local time
+    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+
     onMounted(async () => {
       forms.value = await fb.getForms();
       if (!user.value.admin) {
-        let today = new Date(); // Local time
-        today = today.toISOString().split("T")[0]; // Date to ISO string without time
         forms.value = forms.value.filter((f) => {
           return f.release_date <= today;
         });
@@ -201,6 +214,7 @@ export default {
       selectedTab,
       updateForm,
       formMessage,
+      today,
       userForms,
       user,
     };
@@ -208,8 +222,33 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "bulma";
+
 .form-row {
   width: 100%;
+}
+
+.modal-card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 40px);
+}
+
+@include mobile {
+  .modal-content {
+    max-height: 100vh;
+  }
+
+  /* Reduce the padding when on mobile */
+  .modal-card-body {
+    padding: 10px;
+  }
+
+  .modal .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 </style>

@@ -11,16 +11,26 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import Sidebar from "@/components/Sidebar";
+import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {
   components: {
     Sidebar,
   },
   setup() {
+    const { isMobile } = useMobileListener();
     const sidebarCollapsed = ref(false);
+
+    if (isMobile.value) {
+      sidebarCollapsed.value = true;
+    }
+
+    watch(isMobile, () => {
+      sidebarCollapsed.value = isMobile.value;
+    });
 
     return {
       sidebarCollapsed,
@@ -39,7 +49,7 @@ export default {
 
   @include mobile {
     grid-area: sidebar-start / sidebar-start / sidebar-end / overlap-end;
-    z-index: 100;
+    z-index: 10;
 
     &.collapsed {
       grid-area: sidebar;
