@@ -229,7 +229,7 @@ describe("Form functionality", () => {
         .should("exist")
         .click();
 
-      // Everything is disabled and have the previous value
+      // Everything is disabled and has the previous value
       cy.get('[model="age"]')
         .find("input")
         .should("exist")
