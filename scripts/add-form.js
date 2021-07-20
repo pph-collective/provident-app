@@ -51,10 +51,6 @@ const validateForm = form => {
           break;
         case "Select":
         case "Radio":
-          if (!question["options"]) {
-            warnAndExit(`question component requires options: ${key}`);
-          }
-          break;
         case "Checkbox":
           if (!question["options"]) {
             warnAndExit(`question component requires options: ${key}`);
