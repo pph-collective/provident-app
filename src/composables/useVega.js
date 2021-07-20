@@ -52,7 +52,6 @@ export function useVega({
   const resizeObserver = new ResizeObserver(() => {
     // If there's a timer, cancel it
     if (timeout) {
-      console.log("clearing timeout");
       window.clearTimeout(timeout);
     }
     timeout = window.setTimeout(() => {
@@ -87,6 +86,7 @@ export function useVega({
         view.value = res.view;
       })
       .catch((err) => {
+        // eslint disable-next-line no-console
         console.log(err);
       });
   };

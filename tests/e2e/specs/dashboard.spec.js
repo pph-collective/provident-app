@@ -10,9 +10,16 @@ describe("Dashboard viewed as a user", () => {
       .should("have.length", "2")
       .eq(0)
       .find("option")
+      .should("have.lengthOf.above", 3)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq(["Good Doers", "All of Rhode Island"]);
+        expect(actual).to.deep.eq([
+          "Good Doers",
+          "All of Rhode Island",
+          "Little Compton",
+          "Portsmouth",
+          "Tiverton",
+        ]);
       });
 
     cy.get('[data-cy="control-panel"]')
@@ -97,6 +104,20 @@ describe("Dashboard viewed as a user", () => {
         .find("i")
         .should("have.class", "fa-arrow-alt-circle-right");
     });
+
+    it("is Little Compton", () => {
+      cy.get("select#geography").select("Little Compton");
+
+      cy.get('.map-container [data-cy="Little Compton"] svg')
+        .trigger("mouseover", "center")
+        .trigger("mousemove", "center");
+
+      cy.get("#vg-tooltip-element")
+        .find("tbody tr")
+        .first()
+        .find("td.value")
+        .should("have.text", "Little Compton");
+    });
   });
 });
 
@@ -111,12 +132,16 @@ describe("Dashboard viewed as an admin", () => {
       .find("select")
       .eq(0)
       .find("option")
+      .should("have.lengthOf.above", 4)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
         expect(actual).to.deep.eq([
           "All of Rhode Island",
           "Good Doers",
           "RI 4 Us",
+          "Little Compton",
+          "Portsmouth",
+          "Tiverton",
         ]);
       });
   });
