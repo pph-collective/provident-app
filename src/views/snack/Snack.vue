@@ -17,15 +17,15 @@ import Sidebar from "@/components/Sidebar";
 
 export default {
   components: {
-    Sidebar
+    Sidebar,
   },
   setup() {
     const sidebarCollapsed = ref(false);
 
     return {
-      sidebarCollapsed
+      sidebarCollapsed,
     };
-  }
+  },
 };
 </script>
 

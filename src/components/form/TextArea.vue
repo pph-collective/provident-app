@@ -23,23 +23,23 @@ export default {
     modelValue: { required: true },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      required: true
+      required: true,
     },
     uuid: {
       type: Number,
-      default: 0
+      default: 0,
     },
     placeholder: {
-      default: ""
+      default: "",
     },
     validation: {
       type: Object,
-      default: () => ({})
-    }
-  }
+      default: () => ({}),
+    },
+  },
 };
 </script>

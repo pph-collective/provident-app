@@ -10,7 +10,13 @@
 
     <div class="hero-body">
       <div
-        class="desktop-container container has-background-light p-5 is-flex is-flex-direction-column is-align-items-stretch"
+        class="
+          desktop-container
+          container
+          has-background-light
+          p-5
+          is-flex is-flex-direction-column is-align-items-stretch
+        "
       >
         <nav class="columns">
           <BiteHeader
@@ -23,7 +29,9 @@
           />
         </nav>
         <div
-          class="is-flex is-flex-direction-row is-align-items-center is-flex-grow-5"
+          class="
+            is-flex is-flex-direction-row is-align-items-center is-flex-grow-5
+          "
         >
           <div class="is-clickable pr-2" @click="decrementBiteId">
             <i class="fas fa-2x my-5 fa-chevron-left" />
@@ -48,21 +56,21 @@ export default {
   name: "Bites",
   components: {
     BiteHeader,
-    BiteBody
+    BiteBody,
   },
   props: {
-    biteData: Array
+    biteData: Array,
   },
   computed: {
     activeBite() {
-      return this.biteData.find(el => el.id === this.activeBiteId);
-    }
+      return this.biteData.find((el) => el.id === this.activeBiteId);
+    },
   },
   setup() {
     const activeBiteId = ref(0);
 
     return {
-      activeBiteId
+      activeBiteId,
     };
   },
   methods: {
@@ -81,7 +89,7 @@ export default {
       } else {
         this.activeBiteId -= 1;
       }
-    }
-  }
+    },
+  },
 };
 </script>

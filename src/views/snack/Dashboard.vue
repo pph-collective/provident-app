@@ -55,7 +55,7 @@ export default {
     ControlPanel,
     Map,
     Card,
-    StatsTable
+    StatsTable,
   },
   setup() {
     const store = useStore();
@@ -69,14 +69,14 @@ export default {
       const ri = { name: "All of Rhode Island", municipalities: [] };
       const orgs = store.state.organizations;
       const towns = [];
-      dataset.value.forEach(d => {
+      dataset.value.forEach((d) => {
         if (
           d.municipality &&
-          !towns.some(town => d.municipality === town.name)
+          !towns.some((town) => d.municipality === town.name)
         ) {
           towns.push({
             name: d.municipality,
-            municipalities: [d.municipality]
+            municipalities: [d.municipality],
           });
         }
       });
@@ -85,9 +85,9 @@ export default {
         return [ri, ...orgs, ...towns];
       } else {
         return [
-          orgs.find(o => o.name === user.value.data.organization),
+          orgs.find((o) => o.name === user.value.data.organization),
           ri,
-          ...towns
+          ...towns,
         ];
       }
     });
@@ -101,18 +101,18 @@ export default {
       return {
         geography: {
           icon: "fas fa-globe",
-          values: filteredOrgs.value
+          values: filteredOrgs.value,
         },
         model_version: {
           icon: "fas fa-calendar-alt",
-          values: resultPeriods.value
-        }
+          values: resultPeriods.value,
+        },
       };
     });
 
     const controls = ref({});
 
-    const updateControls = newControls => {
+    const updateControls = (newControls) => {
       // if either drop down changes, clear out the selected block group
       activeMuni.value = "";
       activeGeoid.value = "";
@@ -120,14 +120,15 @@ export default {
       // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
         previousDataset.value = [];
-        fb.getResults(newControls.model_version).then(res => {
+        fb.getResults(newControls.model_version).then((res) => {
           dataset.value = res;
         });
         const prevPeriodIdx =
-          resultPeriods.value.findIndex(p => p === newControls.model_version) +
-          1;
+          resultPeriods.value.findIndex(
+            (p) => p === newControls.model_version
+          ) + 1;
         if (prevPeriodIdx < resultPeriods.value.length) {
-          fb.getResults(resultPeriods.value[prevPeriodIdx]).then(res => {
+          fb.getResults(resultPeriods.value[prevPeriodIdx]).then((res) => {
             previousDataset.value = res;
           });
         }
@@ -147,9 +148,9 @@ export default {
       previousDataset,
       updateControls,
       activeMuni,
-      activeGeoid
+      activeGeoid,
     };
-  }
+  },
 };
 </script>
 

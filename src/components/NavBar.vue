@@ -111,11 +111,11 @@ export default {
   name: "NavBar",
   data() {
     return {
-      hamburgerActive: false
+      hamburgerActive: false,
     };
   },
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user"]),
   },
   methods: {
     toggleBurgerMenu() {
@@ -124,8 +124,8 @@ export default {
     async logout() {
       await fb.logout();
       this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
 

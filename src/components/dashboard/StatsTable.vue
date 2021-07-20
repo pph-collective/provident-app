@@ -61,27 +61,27 @@ import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
 
 export default {
   components: {
-    StatsTableIcon
+    StatsTableIcon,
   },
   props: {
     dataset: {
       type: Array,
-      required: true
+      required: true,
     },
     previousDataset: {
       type: Array,
-      required: true
+      required: true,
     },
     municipality: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     geoid: {
       type: String,
       required: false,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   setup(props) {
@@ -89,7 +89,7 @@ export default {
 
     const metrics = {
       mean: ["pct_demographic_1", "pct_demographic_2"],
-      sum: ["flag_1"]
+      sum: ["flag_1"],
     };
 
     const metricsList = Object.values(metrics).flat();
@@ -112,7 +112,7 @@ export default {
       tertileFns,
       dataset,
       municipality,
-      geoid
+      geoid,
     });
 
     const { stats: previous } = useStats({
@@ -120,15 +120,15 @@ export default {
       tertileFns,
       dataset: previousDataset,
       municipality,
-      geoid
+      geoid,
     });
 
     return {
       current,
       previous,
-      metricsList
+      metricsList,
     };
-  }
+  },
 };
 </script>
 

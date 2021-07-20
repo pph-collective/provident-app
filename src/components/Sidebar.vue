@@ -7,9 +7,7 @@
       </button>
     </div>
     <div class="sidebar-body">
-      <p v-if="!collapsed" class="menu-label">
-        Provident
-      </p>
+      <p v-if="!collapsed" class="menu-label">Provident</p>
       <p v-else class="menu-label">
         <abbr title="Exploration Datasets">PRV</abbr>
       </p>
@@ -32,9 +30,7 @@
         </li>
       </ul>
 
-      <p v-if="!collapsed" class="menu-label">
-        Resources
-      </p>
+      <p v-if="!collapsed" class="menu-label">Resources</p>
       <p v-else class="menu-label">
         <abbr title="Resources">RSC</abbr>
       </p>
@@ -67,20 +63,20 @@ export default {
         {
           name: "Dashboard",
           route: "dashboard",
-          icon: "fa-chart-line"
+          icon: "fa-chart-line",
         },
         {
           name: "Forms",
           route: "forms",
-          icon: "fa-file-alt"
-        }
-      ]
+          icon: "fa-file-alt",
+        },
+      ],
     };
   },
   computed: {
     route() {
       return this.$route.path.split("/").slice(-1)[0];
-    }
+    },
   },
   methods: {
     toggle() {
@@ -91,10 +87,10 @@ export default {
     getInitials(str) {
       return str
         .split(" ")
-        .map(s => s[0].toUpperCase())
+        .map((s) => s[0].toUpperCase())
         .join("");
-    }
-  }
+    },
+  },
 };
 </script>
 

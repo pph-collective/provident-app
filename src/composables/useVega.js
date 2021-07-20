@@ -9,7 +9,7 @@ export function useVega({
   maxHeight = ref(4000),
   includeActions = ref(false),
   hasData = ref(true),
-  el
+  el,
 }) {
   const actionsWidth = computed(() => (includeActions.value ? 38 : 0));
 
@@ -43,11 +43,7 @@ export function useVega({
 
   const resizePlot = () => {
     if (view.value) {
-      view.value
-        .width(getWidth())
-        .height(getHeight())
-        .resize()
-        .run();
+      view.value.width(getWidth()).height(getHeight()).resize().run();
     }
   };
 
@@ -84,13 +80,13 @@ export function useVega({
         background: null,
         autosize: "fit",
         width: getWidth(),
-        height: getHeight()
-      }
+        height: getHeight(),
+      },
     })
-      .then(res => {
+      .then((res) => {
         view.value = res.view;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -111,6 +107,6 @@ export function useVega({
   onUnmounted(finalize);
 
   return {
-    view
+    view,
   };
 }

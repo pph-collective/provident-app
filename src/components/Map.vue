@@ -8,7 +8,7 @@ import { ref, toRefs, computed, watch } from "vue";
 import * as topology from "topojson-server";
 import * as tc from "topojson-client";
 import * as ts from "topojson-simplify";
-const topojson = Object.assign(ts, tc);
+const topojson = { ...ts, ...tc };
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
@@ -17,18 +17,18 @@ export default {
   props: {
     dataset: {
       type: Array,
-      required: true
+      required: true,
     },
     filterMunicipalities: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     flagProperty: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ["new-active-bg", "new-active-municipality"],
   setup(props, { emit }) {
@@ -40,18 +40,18 @@ export default {
     const filteredGeo = computed(() => {
       let filtered = geo;
       if (filterMunicipalities.value.length > 0) {
-        filtered = geo.filter(g =>
+        filtered = geo.filter((g) =>
           filterMunicipalities.value.includes(g.properties.name)
         );
       }
 
-      filtered.forEach(g => {
-        const datum = dataset.value.find(d => d.geoid === g.id) ?? {};
+      filtered.forEach((g) => {
+        const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
       });
 
       const collection = {
-        blocks: { type: "FeatureCollection", features: filtered }
+        blocks: { type: "FeatureCollection", features: filtered },
       };
 
       let topo = topology.topology(collection, 1e5);
@@ -72,12 +72,12 @@ export default {
       // merge block groups into town as well
       let target = (topo.objects["towns"] = {
         type: "GeometryCollection",
-        geometries: []
+        geometries: [],
       });
       let geometries = target.geometries;
 
       const geometriesByKey = {};
-      topo.objects["blocks"].geometries.forEach(geometry => {
+      topo.objects["blocks"].geometries.forEach((geometry) => {
         let k = geometry.properties.name;
         if (geometriesByKey[k]) geometriesByKey[k].push(geometry);
         else geometriesByKey[k] = [geometry];
@@ -102,26 +102,26 @@ export default {
           {
             name: "tileUrl",
             value:
-              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/static/"
+              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/static/",
           },
           {
             name: "mapboxToken",
             value:
-              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ"
+              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ",
           },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
             name: "resolution",
-            value: navigator?.connection?.downlink > 2 ? "@2x" : ""
+            value: navigator?.connection?.downlink > 2 ? "@2x" : "",
           },
           {
             name: "hovered",
             value: null,
             on: [
               { events: "@block_groups:mouseover", update: "datum" },
-              { events: "mouseout", update: "null" }
-            ]
+              { events: "mouseout", update: "null" },
+            ],
           },
           {
             name: "clicked",
@@ -129,34 +129,34 @@ export default {
             on: [
               {
                 events: "@block_groups:click",
-                update: "clicked === datum ? null : datum"
-              }
-            ]
+                update: "clicked === datum ? null : datum",
+              },
+            ],
           },
           {
             name: "activeGeography",
-            update: "clicked || hovered"
-          }
+            update: "clicked || hovered",
+          },
         ],
         data: [
           {
             name: "town_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", mesh: "towns" }
+            format: { type: "topojson", mesh: "towns" },
           },
           {
             name: "bg_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", feature: "blocks" }
-          }
+            format: { type: "topojson", feature: "blocks" },
+          },
         ],
         projections: [
           {
             name: "projection",
             type: "mercator",
             size: { signal: "[width, height]" },
-            fit: { signal: 'data("town_outlines")' }
-          }
+            fit: { signal: 'data("town_outlines")' },
+          },
         ],
         marks: [
           {
@@ -166,12 +166,12 @@ export default {
               update: {
                 url: {
                   signal:
-                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + resolution + mapboxToken"
+                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + resolution + mapboxToken",
                 },
                 width: { signal: "width" },
-                height: { signal: "height" }
-              }
-            }
+                height: { signal: "height" },
+              },
+            },
           },
           {
             type: "shape",
@@ -185,25 +185,25 @@ export default {
                 fill: [
                   { test: "datum.properties.flag === '1'", value: "#2A3465" },
                   { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
-                  { value: "white" }
-                ]
+                  { value: "white" },
+                ],
               },
               update: {
                 fillOpacity: [
                   { test: "datum === activeGeography", value: 0.7 },
-                  { value: 0.3 }
+                  { value: 0.3 },
                 ],
                 zindex: [
                   { test: "datum === activeGeography", value: 1 },
-                  { value: 0 }
+                  { value: 0 },
                 ],
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
-                }
-              }
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }",
+                },
+              },
             },
-            transform: [{ type: "geoshape", projection: "projection" }]
+            transform: [{ type: "geoshape", projection: "projection" }],
           },
           {
             type: "shape",
@@ -212,12 +212,12 @@ export default {
               enter: {
                 strokeWidth: { value: 2 },
                 stroke: { value: "#393939" },
-                fillOpacity: { value: 0 }
-              }
+                fillOpacity: { value: 0 },
+              },
             },
-            transform: [{ type: "geoshape", projection: "projection" }]
-          }
-        ]
+            transform: [{ type: "geoshape", projection: "projection" }],
+          },
+        ],
       };
     });
 
@@ -228,7 +228,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(false)
+      includeActions: ref(false),
     });
 
     let currentBg = "";
@@ -263,8 +263,8 @@ export default {
     });
 
     return {
-      el
+      el,
     };
-  }
+  },
 };
 </script>

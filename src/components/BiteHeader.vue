@@ -10,14 +10,14 @@
         'bite-column',
         isActive
           ? 'has-background-primary-dark'
-          : 'has-background-primary-light'
+          : 'has-background-primary-light',
       ]"
     >
       <i :class="['fas', 'fa-2x', `fa-${icon}`, 'p-2']" />
       <h3
         :class="[
           'is-size-3',
-          isActive ? 'has-text-primary-light' : 'has-text-primary-dark'
+          isActive ? 'has-text-primary-light' : 'has-text-primary-dark',
         ]"
       >
         {{ title }}
@@ -33,8 +33,8 @@ export default {
     title: String,
     icon: String,
     description: String,
-    isActive: Boolean
-  }
+    isActive: Boolean,
+  },
 };
 </script>
 
