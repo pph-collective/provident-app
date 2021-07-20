@@ -24,7 +24,7 @@
                 <input
                   type="radio"
                   :name="`${uuid}-statements-${i}`"
-                  :key="`statements-${i}`"
+                  :id="`statements-${i}`"
                   :value="option"
                   :checked="
                     modelValue
@@ -97,7 +97,8 @@ export default {
 
     const updateValue = (radioButton, modelValue) => {
       let result = modelValue ?? {};
-      result[radioButton.key] = radioButton.value;
+
+      result[radioButton.id] = radioButton.value;
       emit("update:modelValue", result);
     };
 
