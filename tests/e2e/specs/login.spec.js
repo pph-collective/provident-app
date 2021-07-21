@@ -10,9 +10,7 @@ describe("Log In View", () => {
   });
 
   it("Links to /register", () => {
-    cy.get("button")
-      .contains("Request Access")
-      .click();
+    cy.get("button").contains("Request Access").click();
     cy.url().should("eq", Cypress.config().baseUrl + "register");
   });
 
@@ -52,9 +50,7 @@ describe("Log In View", () => {
     cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get("a")
-      .contains("Log Out")
-      .should("exist");
+    cy.get("a").contains("Log Out").should("exist");
   });
 
   it("Logging in as a user that is still pending approval", () => {
@@ -80,7 +76,7 @@ describe("Log In View", () => {
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
-    cy.location().should(loc => {
+    cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/snack");
     });
   });

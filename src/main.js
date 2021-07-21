@@ -16,7 +16,7 @@ import FormSelect from "@/components/form/Select";
 import FormRadio from "@/components/form/Radio";
 
 // listen for changes to user
-fb.auth.onAuthStateChanged(async user => {
+fb.auth.onAuthStateChanged(async (user) => {
   if (user) {
     const { status, organization } = await fb.getUserRequest(user.email);
     if (status === "approved") {

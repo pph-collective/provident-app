@@ -19,9 +19,7 @@ describe("Register User", () => {
     cy.get('[data-cy="form-password"]').type("register-password");
     cy.get('[data-cy="form-confirm-password"]').type("register-password");
 
-    cy.get(".button")
-      .contains("Request Access")
-      .should("be.enabled");
+    cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should("not.exist");
     cy.get('[data-cy="success-message"]')

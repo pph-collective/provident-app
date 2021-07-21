@@ -5,9 +5,11 @@ export function useVega({
   spec,
   minWidth = ref(200),
   minHeight = ref(200),
+  maxWidth = ref(4000),
+  maxHeight = ref(4000),
   includeActions = ref(false),
   hasData = ref(true),
-  el
+  el,
 }) {
   const actionsWidth = computed(() => (includeActions.value ? 38 : 0));
 
@@ -15,7 +17,8 @@ export function useVega({
 
   const getWidth = () => {
     if (el.value) {
-      return (
+      return Math.min(
+        maxWidth.value,
         Math.max(
           minWidth.value,
           Math.min(el.value.parentElement.clientWidth, window.innerWidth)
@@ -27,9 +30,12 @@ export function useVega({
 
   const getHeight = () => {
     if (el.value) {
-      return Math.max(
-        minHeight.value,
-        Math.min(el.value.parentElement.clientHeight - 10, window.innerHeight)
+      return Math.min(
+        maxHeight.value,
+        Math.max(
+          minHeight.value,
+          Math.min(el.value.parentElement.clientHeight - 10, window.innerHeight)
+        )
       );
     }
     return minHeight.value;
@@ -37,11 +43,7 @@ export function useVega({
 
   const resizePlot = () => {
     if (view.value) {
-      view.value
-        .width(getWidth())
-        .height(getHeight())
-        .resize()
-        .run();
+      view.value.width(getWidth()).height(getHeight()).resize().run();
     }
   };
 
@@ -52,12 +54,10 @@ export function useVega({
     if (timeout) {
       window.clearTimeout(timeout);
     }
-
-    // Setup the new requestAnimationFrame()
     timeout = window.setTimeout(() => {
       // Run our resize functions
       resizePlot();
-    }, 50);
+    }, 100);
   });
 
   const updatePlot = () => {
@@ -79,13 +79,14 @@ export function useVega({
         background: null,
         autosize: "fit",
         width: getWidth(),
-        height: getHeight()
-      }
+        height: getHeight(),
+      },
     })
-      .then(res => {
+      .then((res) => {
         view.value = res.view;
       })
-      .catch(err => {
+      .catch((err) => {
+        // eslint disable-next-line no-console
         console.log(err);
       });
   };
@@ -106,6 +107,6 @@ export function useVega({
   onUnmounted(finalize);
 
   return {
-    view
+    view,
   };
 }

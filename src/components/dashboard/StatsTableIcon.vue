@@ -11,20 +11,20 @@ export default {
   props: {
     stats: {
       type: Object,
-      required: true
+      required: true,
     },
     previousStats: {
       type: Object,
-      required: true
+      required: true,
     },
     metric: {
       type: String,
-      required: true
+      required: true,
     },
     location: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const { stats, metric, location, previousStats } = toRefs(props);
@@ -75,9 +75,9 @@ export default {
     });
 
     return {
-      icon
+      icon,
     };
-  }
+  },
 };
 </script>
 

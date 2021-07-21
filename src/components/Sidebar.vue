@@ -7,9 +7,7 @@
       </button>
     </div>
     <div class="sidebar-body">
-      <p v-if="!collapsed" class="menu-label">
-        Provident
-      </p>
+      <p v-if="!collapsed" class="menu-label">Provident</p>
       <p v-else class="menu-label">
         <abbr title="Exploration Datasets">PRV</abbr>
       </p>
@@ -32,9 +30,7 @@
         </li>
       </ul>
 
-      <p v-if="!collapsed" class="menu-label">
-        Resources
-      </p>
+      <p v-if="!collapsed" class="menu-label">Resources</p>
       <p v-else class="menu-label">
         <abbr title="Resources">RSC</abbr>
       </p>
@@ -80,13 +76,13 @@ export default {
       {
         name: "Dashboard",
         route: "dashboard",
-        icon: "fa-chart-line"
+        icon: "fa-chart-line",
       },
       {
         name: "Forms",
         route: "forms",
-        icon: "fa-file-alt"
-      }
+        icon: "fa-file-alt",
+      },
     ];
 
     const route = useRoute();
@@ -96,10 +92,10 @@ export default {
       return emit("toggle", collapsed.value);
     };
 
-    const getInitials = str => {
+    const getInitials = (str) => {
       return str
         .split(" ")
-        .map(s => s[0].toUpperCase())
+        .map((s) => s[0].toUpperCase())
         .join("");
     };
 
@@ -108,9 +104,9 @@ export default {
       pages,
       route,
       toggle,
-      getInitials
+      getInitials,
     };
-  }
+  },
 };
 </script>
 

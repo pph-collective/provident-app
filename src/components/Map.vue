@@ -8,7 +8,7 @@ import { ref, toRefs, computed, watch } from "vue";
 import * as topology from "topojson-server";
 import * as tc from "topojson-client";
 import * as ts from "topojson-simplify";
-const topojson = Object.assign(ts, tc);
+const topojson = { ...ts, ...tc };
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
@@ -17,28 +17,22 @@ export default {
   props: {
     dataset: {
       type: Array,
-      required: true
-    },
-    minHeight: {
-      type: Number,
-      default: 720
+      required: true,
     },
     filterMunicipalities: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     flagProperty: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ["new-active-bg", "new-active-municipality"],
   setup(props, { emit }) {
-    const { minHeight, filterMunicipalities, dataset, flagProperty } = toRefs(
-      props
-    );
+    const { filterMunicipalities, dataset, flagProperty } = toRefs(props);
 
     const el = ref(null);
 
@@ -46,18 +40,18 @@ export default {
     const filteredGeo = computed(() => {
       let filtered = geo;
       if (filterMunicipalities.value.length > 0) {
-        filtered = geo.filter(g =>
+        filtered = geo.filter((g) =>
           filterMunicipalities.value.includes(g.properties.name)
         );
       }
 
-      filtered.forEach(g => {
-        const datum = dataset.value.find(d => d.geoid === g.id) ?? {};
+      filtered.forEach((g) => {
+        const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
       });
 
       const collection = {
-        blocks: { type: "FeatureCollection", features: filtered }
+        blocks: { type: "FeatureCollection", features: filtered },
       };
 
       let topo = topology.topology(collection, 1e5);
@@ -78,12 +72,12 @@ export default {
       // merge block groups into town as well
       let target = (topo.objects["towns"] = {
         type: "GeometryCollection",
-        geometries: []
+        geometries: [],
       });
       let geometries = target.geometries;
 
       const geometriesByKey = {};
-      topo.objects["blocks"].geometries.forEach(geometry => {
+      topo.objects["blocks"].geometries.forEach((geometry) => {
         let k = geometry.properties.name;
         if (geometriesByKey[k]) geometriesByKey[k].push(geometry);
         else geometriesByKey[k] = [geometry];
@@ -107,52 +101,27 @@ export default {
         signals: [
           {
             name: "tileUrl",
-            value: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/"
+            value:
+              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/static/",
           },
           {
             name: "mapboxToken",
             value:
-              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ"
+              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ",
           },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
-            name: "geoWidth",
-            update: "width / abs(basePoint[0] - maxPoint[0])"
-          },
-          {
-            name: "zoom",
-            update:
-              "geoWidth < 750 ? 9 : (geoWidth < 1500 ? 10 : (geoWidth < 3000 ? 11 : 12))"
-          },
-          { name: "tilesCount", update: "pow(2,zoom)" },
-          { name: "dii", update: "((basePoint[0]+180)/360*tilesCount)" },
-          { name: "di", update: "floor(dii)" },
-          {
-            name: "djj",
-            update:
-              "((1-log(tan(basePoint[1]*PI/180) + 1/cos(basePoint[1]*PI/180))/PI)/2 *tilesCount)"
-          },
-          { name: "dj", update: "floor(djj)" },
-          { name: "phi", update: "(1 - dj / tilesCount) * 2 * PI - PI" },
-          {
-            name: "tileSize",
-            update:
-              "scale('projection', [(di+1) * 360 / tilesCount + 180, 0])[0] - scale('projection', [(di) * 360 / tilesCount + 180, 0])[0]"
-          },
-          { name: "maxTiles", update: "ceil(max(height,width)/tileSize +1)" },
-          {
-            name: "offset",
-            update:
-              "scale('projection',[di * 360 / tilesCount + 180, atan((pow(E, phi) - pow(E, -1 * phi)) / 2) / PI * 180])"
+            name: "resolution",
+            value: navigator?.connection?.downlink > 2 ? "@2x" : "",
           },
           {
             name: "hovered",
             value: null,
             on: [
               { events: "@block_groups:mouseover", update: "datum" },
-              { events: "mouseout", update: "null" }
-            ]
+              { events: "mouseout", update: "null" },
+            ],
           },
           {
             name: "clicked",
@@ -160,72 +129,49 @@ export default {
             on: [
               {
                 events: "@block_groups:click",
-                update: "clicked === datum ? null : datum"
-              }
-            ]
+                update: "clicked === datum ? null : datum",
+              },
+            ],
           },
           {
             name: "activeGeography",
-            update: "clicked || hovered"
-          }
+            update: "clicked || hovered",
+          },
         ],
         data: [
           {
             name: "town_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", mesh: "towns" }
+            format: { type: "topojson", mesh: "towns" },
           },
           {
             name: "bg_outlines",
             values: filteredGeo.value,
-            format: { type: "topojson", feature: "blocks" }
+            format: { type: "topojson", feature: "blocks" },
           },
-          {
-            name: "tile_list",
-            transform: [
-              { type: "sequence", start: 0, stop: { signal: "maxTiles" } },
-              { type: "cross", filter: "(datum.a.data>=0)&(datum.b.data>=0)" },
-              {
-                type: "formula",
-                as: "url",
-                expr:
-                  "tileUrl+zoom+'/'+(datum.a.data+di+tilesCount)%tilesCount+ '/'+((datum.b.data+dj)) + mapboxToken"
-              },
-              {
-                type: "formula",
-                as: "x",
-                expr: "datum.a.data*tileSize + offset[0]"
-              },
-              {
-                type: "formula",
-                as: "y",
-                expr: "datum.b.data*tileSize + offset[1]"
-              }
-            ]
-          }
         ],
         projections: [
           {
             name: "projection",
             type: "mercator",
             size: { signal: "[width, height]" },
-            fit: { signal: 'data("town_outlines")' }
-          }
+            fit: { signal: 'data("town_outlines")' },
+          },
         ],
         marks: [
           {
             type: "image",
-            from: { data: "tile_list" },
             clip: true,
             encode: {
               update: {
-                url: { field: "url" },
-                x: { field: "x" },
-                y: { field: "y" },
-                width: { signal: "tileSize" },
-                height: { signal: "tileSize" }
-              }
-            }
+                url: {
+                  signal:
+                    "tileUrl + '[' + basePoint[0] + ',' +   maxPoint[1] + ',' + maxPoint[0] + ',' + basePoint[1] + ']/' + width + 'x' + height + resolution + mapboxToken",
+                },
+                width: { signal: "width" },
+                height: { signal: "height" },
+              },
+            },
           },
           {
             type: "shape",
@@ -237,49 +183,52 @@ export default {
                 strokeWidth: { value: 1 },
                 stroke: { value: "#d3d3d3" },
                 fill: [
-                  { test: "datum.properties.flag === '1'", value: "red" },
+                  { test: "datum.properties.flag === '1'", value: "#2A3465" },
                   { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
-                  { value: "white" }
-                ]
+                  { value: "white" },
+                ],
               },
               update: {
                 fillOpacity: [
-                  { test: "datum === activeGeography", value: 1 },
-                  { value: 0.5 }
+                  { test: "datum === activeGeography", value: 0.7 },
+                  { value: 0.3 },
                 ],
                 zindex: [
                   { test: "datum === activeGeography", value: 1 },
-                  { value: 0 }
+                  { value: 0 },
                 ],
                 tooltip: {
                   signal:
-                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }"
-                }
-              }
+                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }",
+                },
+              },
             },
-            transform: [{ type: "geoshape", projection: "projection" }]
+            transform: [{ type: "geoshape", projection: "projection" }],
           },
           {
             type: "shape",
             from: { data: "town_outlines" },
             encode: {
               enter: {
-                strokeWidth: { value: 3 },
-                stroke: { value: "#d3d3d3" },
-                fillOpacity: { value: 0 }
-              }
+                strokeWidth: { value: 2 },
+                stroke: { value: "#393939" },
+                fillOpacity: { value: 0 },
+              },
             },
-            transform: [{ type: "geoshape", projection: "projection" }]
-          }
-        ]
+            transform: [{ type: "geoshape", projection: "projection" }],
+          },
+        ],
       };
     });
 
+    // max width and height set due to mapbox static image limits
     const { view } = useVega({
       spec,
       el,
-      minHeight,
-      includeActions: ref(false)
+      minHeight: ref(400),
+      maxHeight: ref(1280),
+      maxWidth: ref(1280),
+      includeActions: ref(false),
     });
 
     let currentBg = "";
@@ -314,8 +263,8 @@ export default {
     });
 
     return {
-      el
+      el,
     };
-  }
+  },
 };
 </script>

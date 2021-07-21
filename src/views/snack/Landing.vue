@@ -30,16 +30,16 @@ export default {
         {
           name: "Dashboard",
           route: "dashboard",
-          icon: "fa-chart-line"
+          icon: "fa-chart-line",
         },
         {
           name: "Forms",
           route: "forms",
-          icon: "fa-file-alt"
-        }
-      ]
+          icon: "fa-file-alt",
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 
