@@ -20,13 +20,6 @@ const webpackConfig = require("@vue/cli-service/webpack.config.js");
 
 const SEED = require("../../fixtures/seed.json");
 
-// Edit the Seed
-// Set the unreleased form to release tomorrow
-let today = new Date();
-let tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
-SEED.forms.test3.release_date = tomorrow.toISOString().split("T")[0];
-
 module.exports = (on, config) => {
   on("dev-server:start", (options) =>
     startDevServer({
