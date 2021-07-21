@@ -18,7 +18,7 @@ import FormLikertScale from "@/components/form/LikertScale";
 import FormCheckbox from "@/components/form/Checkbox";
 
 // listen for changes to user
-fb.auth.onAuthStateChanged(async user => {
+fb.auth.onAuthStateChanged(async (user) => {
   if (user) {
     const { status, organization } = await fb.getUserRequest(user.email);
     if (status === "approved") {

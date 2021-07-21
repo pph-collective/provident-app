@@ -76,7 +76,7 @@ import FormCard from "@/components/FormCard";
 
 export default {
   components: {
-    FormCard
+    FormCard,
   },
   setup() {
     const form = reactive({ email: "", password: "" });
@@ -142,8 +142,8 @@ export default {
       dismissAlert,
       form,
       alert,
-      error
+      error,
     };
-  }
+  },
 };
 </script>

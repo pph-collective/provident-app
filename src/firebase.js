@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: "provident-ri",
   storageBucket: "provident-ri.appspot.com",
   messagingSenderId: "183954853797",
-  appId: "1:183954853797:web:4a15d9c7d56c2ffc9c624c"
+  appId: "1:183954853797:web:4a15d9c7d56c2ffc9c624c",
 };
 
 // Initialize Firebase
@@ -20,7 +20,7 @@ if (location.hostname === "localhost") {
   db.settings({
     experimentalForceLongPolling: true,
     host: "localhost:8088",
-    ssl: false
+    ssl: false,
   });
   db.useEmulator("localhost", 8088);
   auth.useEmulator("http://localhost:9099");
@@ -35,7 +35,7 @@ export default {
       await db.collection("activity_log").add({
         user: res.user.email,
         action: "login",
-        datetime: Date.now()
+        datetime: Date.now(),
       });
       return res.user.toJSON();
     } catch (e) {
@@ -48,10 +48,7 @@ export default {
   },
   async getUserRequest(email) {
     try {
-      const doc = await db
-        .collection("users")
-        .doc(email)
-        .get();
+      const doc = await db.collection("users").doc(email).get();
       if (doc.exists) {
         return doc.data();
       } else {
@@ -65,7 +62,7 @@ export default {
     const res = [];
     try {
       const docs = await db.collection("organizations").get();
-      docs.forEach(doc => res.push(doc.data()));
+      docs.forEach((doc) => res.push(doc.data()));
     } catch (err) {
       console.log(err);
     }
@@ -75,7 +72,7 @@ export default {
     const forms = [];
     try {
       const docs = await db.collection("forms").get();
-      docs.forEach(doc => {
+      docs.forEach((doc) => {
         forms.push({ _id: doc.id, ...doc.data() });
       });
     } catch (err) {
@@ -92,7 +89,7 @@ export default {
         .doc(email)
         .collection("form_responses")
         .get();
-      docs.forEach(doc => {
+      docs.forEach((doc) => {
         forms[doc.id] = { _id: doc.id, ...doc.data() };
       });
     } catch (err) {
@@ -119,7 +116,7 @@ export default {
     const res = [];
     try {
       const docs = await db.collection("results").get();
-      docs.forEach(doc => res.push(doc.id));
+      docs.forEach((doc) => res.push(doc.id));
     } catch (err) {
       console.log(err);
     }
@@ -127,10 +124,7 @@ export default {
   },
   async getResults(period) {
     try {
-      const doc = await db
-        .collection("results")
-        .doc(period)
-        .get();
+      const doc = await db.collection("results").doc(period).get();
       if (doc.exists) {
         return doc.data().data;
       } else {
@@ -140,5 +134,5 @@ export default {
       console.log(err);
       return [];
     }
-  }
+  },
 };

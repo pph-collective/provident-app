@@ -37,9 +37,7 @@ describe("Admin Views and Powers", () => {
     cy.get('[type="email"]').type(ACCOUNTS.pending.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.pending.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get("a")
-      .contains("Log Out")
-      .should("exist");
+    cy.get("a").contains("Log Out").should("exist");
   });
 
   it("Denying a user", () => {

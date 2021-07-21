@@ -136,9 +136,9 @@ export default {
       user,
       hamburgerActive,
       toggleBurgerMenu,
-      logout
+      logout,
     };
-  }
+  },
 };
 </script>
 

@@ -67,7 +67,7 @@ describe("Form functionality", () => {
   });
 
   it("Submitting a valid form, My Form", () => {
-    cy.wrap(["admin", "approved"]).each(permission_level => {
+    cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.visit("/snack/forms");
@@ -87,9 +87,7 @@ describe("Form functionality", () => {
       cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
 
       // Too young
-      cy.get('[model="age"]')
-        .find("input")
-        .type("10");
+      cy.get('[model="age"]').find("input").type("10");
 
       cy.get('[model="old"]').should("not.exist");
 
@@ -98,29 +96,18 @@ describe("Form functionality", () => {
         .should("contain", "this must be greater than or equal to 13");
 
       // Old
-      cy.get('[model="age"]')
-        .find("input")
-        .clear()
-        .type("103");
+      cy.get('[model="age"]').find("input").clear().type("103");
 
       // Select yes
-      cy.get('[model="old"]')
-        .should("exist")
-        .find("input")
-        .first()
-        .check();
+      cy.get('[model="old"]').should("exist").find("input").first().check();
 
       // What's your favorite color, dropdown menu
-      cy.get('[model="favorite_color"]')
-        .find("select")
-        .select("Green");
+      cy.get('[model="favorite_color"]').find("select").select("Green");
 
       cy.get('[model="other_favorite_color"]').should("not.exist");
 
       // Other Favorite Color
-      cy.get('[model="favorite_color"]')
-        .find("select")
-        .select("Other");
+      cy.get('[model="favorite_color"]').find("select").select("Other");
 
       cy.get('[model="other_favorite_color"]')
         .should("exist")
@@ -209,10 +196,7 @@ describe("Form functionality", () => {
 
       // Click All
       // panel-tabs, contains submitted
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("All")
-        .click();
+      cy.get('[data-cy="panel-tabs"]').find("a").contains("All").click();
 
       // Check form status
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
@@ -327,10 +311,7 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // Check submitted tab
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("Submitted")
-        .click();
+      cy.get('[data-cy="panel-tabs"]').find("a").contains("Submitted").click();
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
         .should("exist")
@@ -345,7 +326,7 @@ describe("Form functionality", () => {
   });
 
   it("Save form as a draft, then submitting", () => {
-    cy.wrap(["admin", "approved"]).each(permission_level => {
+    cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.visit("/snack/forms");
@@ -446,10 +427,7 @@ describe("Form functionality", () => {
 
       // Click All
       // panel-tabs, contains submitted
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("All")
-        .click();
+      cy.get('[data-cy="panel-tabs"]').find("a").contains("All").click();
 
       // Check form
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
@@ -473,10 +451,7 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // Check submitted tab
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("Submitted")
-        .click();
+      cy.get('[data-cy="panel-tabs"]').find("a").contains("Submitted").click();
 
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
         .should("exist")

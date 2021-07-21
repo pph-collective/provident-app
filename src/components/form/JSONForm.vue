@@ -8,9 +8,7 @@
             class="field is-grouped is-grouped-centered my-3"
           >
             <div class="control">
-              <button type="submit" class="button is-link">
-                Submit
-              </button>
+              <button type="submit" class="button is-link">Submit</button>
             </div>
             <div class="control">
               <button
@@ -46,20 +44,20 @@ export default {
   props: {
     initSchema: {
       type: Array,
-      required: true
+      required: true,
     },
     readOnly: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     initValue: {
       type: Object,
       required: false,
       default() {
         return {};
-      }
-    }
+      },
+    },
   },
   emits: ["save", "submitted"],
   setup(props) {
@@ -70,7 +68,7 @@ export default {
 
     // evaluate strings that are really methods
     const evalSchema = (s, yup) => {
-      s.forEach(q => {
+      s.forEach((q) => {
         for (const key in q) {
           if (["condition", "validations"].includes(key)) {
             q[key] = eval(q[key]);
@@ -88,8 +86,8 @@ export default {
     return {
       value,
       schema,
-      cloneDeep
+      cloneDeep,
     };
-  }
+  },
 };
 </script>

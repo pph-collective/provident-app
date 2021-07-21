@@ -6,7 +6,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
   },
   {
     path: "/login",
@@ -17,33 +17,33 @@ const routes = [
       }
     },
     component: () =>
-      import(/* webpackChunkName: "login" */ "../views/auth/Login.vue")
+      import(/* webpackChunkName: "login" */ "../views/auth/Login.vue"),
   },
   {
     path: "/register",
     name: "Register",
     component: () =>
-      import(/* webpackChunkName: "register" */ "../views/auth/Register.vue")
+      import(/* webpackChunkName: "register" */ "../views/auth/Register.vue"),
   },
   {
     path: "/auth",
-    redirect: to => {
+    redirect: (to) => {
       const { query } = to;
       if (query.mode === "resetPassword") {
         return { path: "/updatepassword", query: query };
       }
-    }
+    },
   },
   {
     path: "/updatepassword",
     name: "ResetPassword",
     component: () =>
-      import(/* webpackChunkName: "reset" */ "../views/auth/ResetPassword.vue")
+      import(/* webpackChunkName: "reset" */ "../views/auth/ResetPassword.vue"),
   },
   {
     path: "/snack",
     name: "Snack",
-    beforeEnter: to => {
+    beforeEnter: (to) => {
       console.log(store.state.user);
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
@@ -58,24 +58,26 @@ const routes = [
       {
         path: "",
         component: () =>
-          import(/* webpackChunkName: "snack" */ "../views/snack/Landing.vue")
+          import(/* webpackChunkName: "snack" */ "../views/snack/Landing.vue"),
       },
       {
         path: "forms",
         component: () =>
-          import(/* webpackChunkName: "snack" */ "../views/snack/Forms.vue")
+          import(/* webpackChunkName: "snack" */ "../views/snack/Forms.vue"),
       },
       {
         path: "dashboard",
         component: () =>
-          import(/* webpackChunkName: "snack" */ "../views/snack/Dashboard.vue")
-      }
-    ]
+          import(
+            /* webpackChunkName: "snack" */ "../views/snack/Dashboard.vue"
+          ),
+      },
+    ],
   },
   {
     path: "/admin",
     name: "Admin",
-    beforeEnter: to => {
+    beforeEnter: (to) => {
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       } else if (!store.state.user.admin) {
@@ -86,8 +88,8 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "admin" */ "../views/Admin.vue")
-  }
+      import(/* webpackChunkName: "admin" */ "../views/Admin.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -97,12 +99,12 @@ const router = createRouter({
     if (to.hash) {
       return {
         el: to.hash,
-        behavior: "smooth"
+        behavior: "smooth",
       };
     } else {
       return { top: 0, behavior: "smooth" };
     }
-  }
+  },
 });
 
 export default router;

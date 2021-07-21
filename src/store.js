@@ -7,9 +7,9 @@ const store = createStore({
       user: {
         authenticated: false,
         data: null,
-        admin: false
+        admin: false,
       },
-      organizations: []
+      organizations: [],
     };
   },
   mutations: {
@@ -18,14 +18,14 @@ const store = createStore({
     },
     mutateUser(state, payload) {
       state.user[payload.property] = payload.with;
-    }
+    },
   },
   actions: {
     async fetchUser({ commit }, user) {
       if (user) {
         commit("mutateUser", {
           property: "data",
-          with: user
+          with: user,
         });
       } else {
         commit("mutateUser", { property: "data", with: null });
@@ -38,8 +38,8 @@ const store = createStore({
     async fetchOrgs({ commit }) {
       const orgs = await fb.getOrgs();
       commit("mutate", { property: "organizations", with: orgs });
-    }
-  }
+    },
+  },
 });
 
 export default store;

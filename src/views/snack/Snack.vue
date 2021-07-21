@@ -18,7 +18,7 @@ import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {
   components: {
-    Sidebar
+    Sidebar,
   },
   setup() {
     const { isMobile } = useMobileListener();
@@ -33,9 +33,9 @@ export default {
     });
 
     return {
-      sidebarCollapsed
+      sidebarCollapsed,
     };
-  }
+  },
 };
 </script>
 
