@@ -49,15 +49,15 @@ export default {
     modelValue: { required: true },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      required: true
+      required: true,
     },
     uuid: {
       type: Number,
-      default: 0
+      default: 0,
     },
     options: {
       type: Array,
@@ -68,19 +68,19 @@ export default {
           "Neutral",
           "Agree",
           "Strongly Agree",
-          "N/A"
+          "N/A",
         ];
       },
-      required: false
+      required: false,
     },
     statements: {
       type: Array,
-      required: true
+      required: true,
     },
     validation: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   setup(_, { emit }) {
     const checkRadio = (event, modelValue) => {
@@ -102,9 +102,9 @@ export default {
 
     return {
       checkRadio,
-      updateValue
+      updateValue,
     };
-  }
+  },
 };
 </script>
 

@@ -29,24 +29,24 @@ export default {
     modelValue: { required: true },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      required: true
+      required: true,
     },
     uuid: {
       type: Number,
-      default: 0
+      default: 0,
     },
     options: {
       type: Array,
-      required: true
+      required: true,
     },
     validation: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   setup(_, { emit }) {
     const updateValue = (event, modelValue) => {
@@ -55,16 +55,16 @@ export default {
       if (event.target.checked) {
         selected.push(event.target.value);
       } else {
-        selected = selected.filter(v => v !== event.target.value);
+        selected = selected.filter((v) => v !== event.target.value);
       }
 
       emit("update:modelValue", selected);
     };
 
     return {
-      updateValue
+      updateValue,
     };
-  }
+  },
 };
 </script>
 
