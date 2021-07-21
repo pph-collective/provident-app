@@ -13,8 +13,9 @@
                 v-for="(option, index) in options.values"
                 :key="'option-' + index"
                 :value="option"
-                >{{ option.name || option }}</option
               >
+                {{ option.name || option }}
+              </option>
             </select>
           </span>
           <span class="icon is-small is-left pl-1">
@@ -33,20 +34,20 @@ import Card from "@/components/dashboard/Card.vue";
 
 export default {
   components: {
-    Card
+    Card,
   },
   props: {
     dropDowns: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ["selected"],
   setup(props, { emit }) {
     const { dropDowns } = toRefs(props);
 
     const res = {};
-    Object.keys(dropDowns.value).forEach(k => {
+    Object.keys(dropDowns.value).forEach((k) => {
       res[k] = dropDowns.value[k].values[0];
     });
 
@@ -62,9 +63,9 @@ export default {
     );
 
     return {
-      selected
+      selected,
     };
-  }
+  },
 };
 </script>
 

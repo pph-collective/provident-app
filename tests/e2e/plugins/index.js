@@ -28,10 +28,10 @@ tomorrow.setDate(today.getDate() + 1);
 SEED.forms.test3.release_date = tomorrow.toISOString().split("T")[0];
 
 module.exports = (on, config) => {
-  on("dev-server:start", options =>
+  on("dev-server:start", (options) =>
     startDevServer({
       options,
-      webpackConfig
+      webpackConfig,
     })
   );
 
@@ -41,10 +41,10 @@ module.exports = (on, config) => {
       // in the locally running Firestore instance
       return firebase
         .clearFirestoreData({
-          projectId: "provident-ri"
+          projectId: "provident-ri",
         })
         .then(() => true)
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
           return false;
         });
@@ -65,18 +65,18 @@ module.exports = (on, config) => {
         return "SKIPPING db:seed -- admin is not on localhost";
       }
     },
-    "auth:deleteUserByEmail": email => {
-      let auth_url_format = admin.auth().authRequestHandler
-        .tenantMgmtResourceBuilder.urlFormat;
+    "auth:deleteUserByEmail": (email) => {
+      let auth_url_format =
+        admin.auth().authRequestHandler.tenantMgmtResourceBuilder.urlFormat;
       if (auth_url_format.includes("localhost")) {
         return admin
           .auth()
           .getUserByEmail(email)
-          .then(userRecord => {
+          .then((userRecord) => {
             admin.auth().deleteUser(userRecord["uid"]);
             return userRecord;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(
               `User account associated with ${email} not found. Therefore no account was deleted.`
             );
@@ -87,17 +87,17 @@ module.exports = (on, config) => {
       }
     },
     "auth:updateUserByEmail": ({ email, userData }) => {
-      let auth_url_format = admin.auth().authRequestHandler
-        .tenantMgmtResourceBuilder.urlFormat;
+      let auth_url_format =
+        admin.auth().authRequestHandler.tenantMgmtResourceBuilder.urlFormat;
       if (auth_url_format.includes("localhost")) {
         return admin
           .auth()
           .getUserByEmail(email)
-          .then(userRecord => {
+          .then((userRecord) => {
             admin.auth().updateUser(userRecord.uid, userData);
             return true;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(
               `User account associated with ${email} not found. Therefore no account was updated.`
             );
@@ -106,7 +106,7 @@ module.exports = (on, config) => {
       } else {
         return "SKIPPING auth:updateUserByEmail -- admin is not on localhost";
       }
-    }
+    },
   });
 
   const extendedConfig = cypressFirebasePlugin(on, config, admin);
@@ -116,6 +116,6 @@ module.exports = (on, config) => {
     integrationFolder: "tests/e2e/specs",
     screenshotsFolder: "tests/e2e/screenshots",
     videosFolder: "tests/e2e/videos",
-    supportFile: "tests/e2e/support/index.js"
+    supportFile: "tests/e2e/support/index.js",
   });
 };

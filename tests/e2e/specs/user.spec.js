@@ -10,9 +10,7 @@ describe("User Views", () => {
   });
 
   it("navigation bar link to home should exist", () => {
-    cy.get('[data-cy="home"]')
-      .should("exist")
-      .should("have.attr", "href", "/");
+    cy.get('[data-cy="home"]').should("exist").should("have.attr", "href", "/");
   });
 
   it("navigation bar to /admin doesn't exist", () => {

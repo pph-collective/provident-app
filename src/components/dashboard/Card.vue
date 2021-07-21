@@ -9,7 +9,7 @@
         <slot name="subtitle"></slot>
       </h3>
     </header>
-    <section class="dashboard-card-content  is-family-secondary">
+    <section class="dashboard-card-content is-family-secondary">
       <slot name="content"></slot>
     </section>
   </div>
@@ -20,17 +20,17 @@ export default {
   props: {
     width: {
       type: String,
-      default: "full"
+      default: "full",
     },
     height: {
       type: Number,
-      default: 2
+      default: 2,
     },
     noHeader: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 

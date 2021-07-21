@@ -14,7 +14,7 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 const app = admin.initializeApp();
 const db = app.firestore();
 
-const TOWN_BG_FILE = "src/assets/RI_CBG_Town.csv";
+const TOWN_BG_FILE = "src/assets/Filtered_RI_CBG_Town.csv";
 
 function writeToFirestore(period, records) {
   const batchCommits = [];

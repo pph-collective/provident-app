@@ -15,21 +15,21 @@ import BiteHeader from "@/components/BiteHeader.vue";
 export default {
   name: "Bites",
   components: {
-    BiteHeader
+    BiteHeader,
   },
   props: {
-    biteData: Array
+    biteData: Array,
   },
   computed: {
     activeBite() {
-      return this.biteData.find(el => el.id === this.activeBiteId);
-    }
+      return this.biteData.find((el) => el.id === this.activeBiteId);
+    },
   },
   setup() {
     const activeBiteId = ref(0);
 
     return {
-      activeBiteId
+      activeBiteId,
     };
   },
   methods: {
@@ -48,7 +48,7 @@ export default {
       } else {
         this.activeBiteId -= 1;
       }
-    }
-  }
+    },
+  },
 };
 </script>

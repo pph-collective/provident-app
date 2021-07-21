@@ -73,7 +73,7 @@ import FormCard from "@/components/FormCard";
 
 export default {
   components: {
-    FormCard
+    FormCard,
   },
   setup() {
     const router = useRouter();
@@ -86,7 +86,7 @@ export default {
     const form = reactive({
       resetCode: route.query.oobCode ? route.query.oobCode : "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     });
     const error = ref(null);
 
@@ -100,7 +100,7 @@ export default {
       } else if (form.password !== form.confirmPassword) {
         return {
           status: false,
-          message: "password and confirmation do not match"
+          message: "password and confirmation do not match",
         };
       } else {
         return { status: true, message: "" };
@@ -121,8 +121,8 @@ export default {
       form,
       error,
       formValid,
-      submit
+      submit,
     };
-  }
+  },
 };
 </script>
