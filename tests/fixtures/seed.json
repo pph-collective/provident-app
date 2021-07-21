@@ -160,8 +160,8 @@
         {
           "model": "neighborhood_id",
           "component": "TextInput",
-          "type": "number",
           "label": "Neighborhood ID",
+          "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
           "required": true
         },
         {
