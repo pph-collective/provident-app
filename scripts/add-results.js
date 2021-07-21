@@ -43,14 +43,14 @@ async function importCsv(csvFileName) {
             try {
               let lookupDt = aq
                 .from(lookupRecords)
-                .derive({ municipality: d => aq.op.trim(d.NAME) })
+                .derive({ municipality: (d) => aq.op.trim(d.NAME) })
                 .select("GEOID", "NAMELSAD", "municipality");
               let dt = aq
                 .from(records)
                 .select(aq.not(""))
                 .derive({
-                  id: d => `${d.year}-${d.period}`,
-                  bg_id: d => aq.op.substring(d.geoid, 5)
+                  id: (d) => `${d.year}-${d.period}`,
+                  bg_id: (d) => aq.op.substring(d.geoid, 5),
                 })
                 .join(lookupDt, ["geoid", "GEOID"]);
               let periods = dt.select("id").dedupe();
@@ -72,4 +72,4 @@ async function importCsv(csvFileName) {
   });
 }
 
-importCsv(file).catch(e => console.error(e));
+importCsv(file).catch((e) => console.error(e));
