@@ -6,11 +6,12 @@ const admin = require("firebase-admin");
 const app = admin.initializeApp();
 
 const email = process.argv[2];
+process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 
 app
   .auth()
   .getUserByEmail(email)
-  .then(user => {
+  .then((user) => {
     app
       .auth()
       .setCustomUserClaims(user.uid, { admin: true })
