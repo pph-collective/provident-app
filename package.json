@@ -19,9 +19,8 @@
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^2.2.1",
     "arquero": "^4.8.4",
-    "bulma": "0.9.3",
+    "bulma": "^0.9.3",
     "bulma-responsive-tables": "^1.2.3",
-    "core-js": "^3.6.5",
     "firebase": "^8.2.6",
     "formvuelate": "^3.1.0",
     "lodash": "^4.17.21",
