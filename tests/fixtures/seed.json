@@ -278,7 +278,8 @@
           "model": "q5a_endorsed_sources_for_naloxone",
           "component": "TextInput",
           "type": "number",
-          "label": "[If 5 is endorsed] How many hours per week is this service available?"
+          "label": "[If 5 is endorsed] How many hours per week is this service available?",
+          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
         },
         {
           "model": "q6_sources_for_fentanyl_test_strips",
@@ -296,7 +297,8 @@
           "model": "q6_other_community_orgs",
           "component": "TextInput",
           "label": "Other community organization(s)",
-          "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')"
+          "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')",
+          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
         },
         {
           "model": "q6_other",
@@ -308,7 +310,8 @@
           "model": "q6a_endorsed_fentanyl_test_strips",
           "component": "TextInput",
           "type": "number",
-          "label": "[If 6 is endorsed] How many hours per week is this service available?"
+          "label": "[If 6 is endorsed] How many hours per week is this service available?",
+          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
         },
         {
           "model": "q7_sources_for_sterile_needles",
