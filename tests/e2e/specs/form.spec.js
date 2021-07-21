@@ -377,6 +377,25 @@ describe("Form functionality", () => {
       // Type into the textarea
       cy.get('[data-cy="active-form-modal"]')
         .find("textarea")
+        .type("Hello, world.");
+
+      // Save the form
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.enabled")
+        .click();
+
+      // Save button should be disabled
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.disabled");
+
+      // Type into the textarea
+      cy.get('[data-cy="active-form-modal"]')
+        .find("textarea")
+        .clear()
         .type("Hello, how are you?");
 
       // Save the form

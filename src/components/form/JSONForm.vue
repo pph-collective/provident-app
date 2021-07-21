@@ -17,7 +17,7 @@
                 type="button"
                 class="button is-info"
                 :disabled="JSON.stringify(initValue) === JSON.stringify(value)"
-                @click="$emit('save', value)"
+                @click="$emit('save', cloneDeep(value))"
               >
                 Save
               </button>
@@ -34,6 +34,7 @@ import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
 import { ref } from "vue";
+import { cloneDeep } from "lodash";
 
 // form components declared globally in main.js
 
@@ -86,7 +87,8 @@ export default {
 
     return {
       value,
-      schema
+      schema,
+      cloneDeep
     };
   }
 };
