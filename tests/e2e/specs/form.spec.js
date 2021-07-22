@@ -119,6 +119,70 @@ describe("Form functionality", () => {
         .find("textarea")
         .type("I can't decide on a single color.");
 
+      // Checkbox
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Cat")
+        .find('[type="checkbox"]')
+        .check();
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Elephant")
+        .find('[type="checkbox"]')
+        .check();
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Salmon")
+        .find('[type="checkbox"]')
+        .check();
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Salmon")
+        .find('[type="checkbox"]')
+        .uncheck();
+
+      // LikertScale test different clicks
+      cy.get('[model="likert_scale_food_debates"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Agree"]')
+        .click();
+
+      cy.get('[model="likert_scale_food_debates"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Neutral"] > input')
+        .click();
+
+      // LikertScale test changing answers
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Sometimes"]')
+        .click();
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Never"]')
+        .click();
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Sometimes"]')
+        .click();
+
+      // Change answer!
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Rarely"]')
+        .click();
+
       // Submit the form
       cy.get('[data-cy="active-form-modal"]')
         .find("button")
@@ -173,6 +237,77 @@ describe("Form functionality", () => {
         .should("be.disabled")
         .should("have.value", "all of them");
 
+      cy.get('[model="checkbox_mammals"]')
+        .should("exist")
+        .find("input")
+        .should("be.disabled");
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Cat")
+        .find('[type="checkbox"]')
+        .should("be.checked");
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Elephant")
+        .find('[type="checkbox"]')
+        .should("be.checked");
+
+      cy.get('[model="checkbox_mammals"]')
+        .find("li")
+        .contains("Salmon")
+        .find('[type="checkbox"]')
+        .should("not.be.checked");
+
+      cy.get('[model="likert_scale_food_debates"]')
+        .should("exist")
+        .find("input")
+        .should("be.disabled");
+
+      cy.get('[model="likert_scale_food_debates"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Agree"] > input')
+        .should("be.checked");
+
+      cy.get('[model="likert_scale_food_debates"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Neutral"] > input')
+        .should("be.checked");
+
+      cy.get('[model="likert_scale_activities"]')
+        .should("exist")
+        .find("input")
+        .should("be.disabled");
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Sometimes"] > input')
+        .should("not.be.checked");
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Never"] > input')
+        .should("be.checked");
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Sometimes"] > input')
+        .should("not.be.checked");
+
+      // Change answer!
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(2)
+        .find('[data-label="Rarely"] > input')
+        .should("be.checked");
+
+      // Close form
       cy.get('[data-cy="close-form"]').click();
 
       // Check submitted tab
@@ -223,6 +358,25 @@ describe("Form functionality", () => {
       // Type into the textarea
       cy.get('[data-cy="active-form-modal"]')
         .find("textarea")
+        .type("Hello, world.");
+
+      // Save the form
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.enabled")
+        .click();
+
+      // Save button should be disabled
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.disabled");
+
+      // Type into the textarea
+      cy.get('[data-cy="active-form-modal"]')
+        .find("textarea")
+        .clear()
         .type("Hello, how are you?");
 
       // Save the form
@@ -242,8 +396,7 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // Assert Status: Draft
-      cy.get('[data-cy="form-panel"]>[data-cy="forms-panel-block"]')
-        .eq(1)
+      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
         .find('[data-cy="status-tag"]')
         .should("contain", "Draft");
 

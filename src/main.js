@@ -14,6 +14,8 @@ import FormTextInput from "@/components/form/TextInput";
 import FormTextArea from "@/components/form/TextArea";
 import FormSelect from "@/components/form/Select";
 import FormRadio from "@/components/form/Radio";
+import FormLikertScale from "@/components/form/LikertScale";
+import FormCheckbox from "@/components/form/Checkbox";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
@@ -43,4 +45,6 @@ createApp(App)
   .component("FormTextArea", FormTextArea)
   .component("FormSelect", FormSelect)
   .component("FormRadio", FormRadio)
+  .component("FormLikertScale", FormLikertScale)
+  .component("FormCheckbox", FormCheckbox)
   .mount("#app");

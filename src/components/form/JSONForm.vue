@@ -15,7 +15,7 @@
                 type="button"
                 class="button is-info"
                 :disabled="JSON.stringify(initValue) === JSON.stringify(value)"
-                @click="$emit('save', value)"
+                @click="$emit('save', cloneDeep(value))"
               >
                 Save
               </button>
@@ -82,9 +82,12 @@ export default {
     };
     evalSchema(schema.value, yup);
 
+    const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
+
     return {
       value,
       schema,
+      cloneDeep,
     };
   },
 };
