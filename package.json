@@ -23,7 +23,6 @@
     "bulma-responsive-tables": "^1.2.3",
     "firebase": "^8.2.6",
     "formvuelate": "^3.1.0",
-    "lodash": "^4.17.21",
     "topojson-client": "^3.1.0",
     "topojson-server": "^3.0.1",
     "topojson-simplify": "^3.0.3",

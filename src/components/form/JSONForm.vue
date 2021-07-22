@@ -32,7 +32,6 @@ import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
 import { ref } from "vue";
-import { cloneDeep } from "lodash";
 
 // form components declared globally in main.js
 
@@ -82,6 +81,8 @@ export default {
       });
     };
     evalSchema(schema.value, yup);
+
+    const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
     return {
       value,
