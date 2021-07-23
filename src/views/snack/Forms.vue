@@ -86,7 +86,7 @@
       class="modal is-active"
       data-cy="active-form-modal"
     >
-      <div class="modal-background" @click="activeForm = {}"></div>
+      <div class="modal-background"></div>
       <div class="modal-content is-family-secondary">
         <header class="modal-card-head">
           <p class="modal-card-title" data-cy="active-form-title">
