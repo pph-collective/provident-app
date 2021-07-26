@@ -14,12 +14,37 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 const app = admin.initializeApp();
 const db = app.firestore();
 
-const TOWN_BG_FILE = "src/assets/Filtered_RI_CBG_Town.csv";
+const TOWN_BG_FILE = "src/assets/RI_CBG_Town.csv";
+const PREDICTION_COLUMNS = ["flag_1", "flag_2"];
+const INTERVENTION_TOWNS = [
+  "Barrington",
+  "Charlestown",
+  "Coventry",
+  "Cumberland",
+  "East Providence",
+  "Glocester",
+  "Little Compton",
+  "Middletown",
+  "Narragansett",
+  "New Shoreham",
+  "Newport",
+  "North Kingstown",
+  "North Providence",
+  "North Smithfield",
+  "Portsmouth",
+  "Scituate",
+  "Smithfield",
+  "Warren",
+  "West Warwick",
+  "Westerly",
+];
 
-function writeToFirestore(period, records) {
+aq.addFunction("isIntervention", (x) => INTERVENTION_TOWNS.includes(x));
+
+function writeToFirestore(collection, period, records) {
   const batchCommits = [];
   let batch = db.batch();
-  var docRef = db.collection("results").doc(period);
+  var docRef = db.collection(collection).doc(period);
   batch.set(docRef, { data: records });
   batchCommits.push(batch.commit());
   return Promise.all(batchCommits);
@@ -44,7 +69,15 @@ async function importCsv(csvFileName) {
               let lookupDt = aq
                 .from(lookupRecords)
                 .derive({ municipality: (d) => aq.op.trim(d.NAME) })
-                .select("GEOID", "NAMELSAD", "municipality");
+                .derive({
+                  intervention_arm: (d) => aq.op.isIntervention(d.municipality),
+                })
+                .select(
+                  "GEOID",
+                  "NAMELSAD",
+                  "municipality",
+                  "intervention_arm"
+                );
               let dt = aq
                 .from(records)
                 .select(aq.not(""))
@@ -57,8 +90,22 @@ async function importCsv(csvFileName) {
               for (const periodRow of periods) {
                 let period = periodRow.id;
                 console.log(`loading data for period ${period}`);
-                let periodRows = dt.filter(`d.id === '${period}'`).objects();
-                await writeToFirestore(period, periodRows);
+                let periodRows = dt.filter(`d.id === '${period}'`);
+                // remove predictions
+                let modelData = periodRows
+                  .select(aq.not(...PREDICTION_COLUMNS))
+                  .objects();
+                await writeToFirestore("model_data", period, modelData);
+                // write predictions separately and only for intervention towns
+                let modelPredictions = periodRows
+                  .filter((d) => d.intervention_arm)
+                  .select("bg_id", ...PREDICTION_COLUMNS)
+                  .objects();
+                await writeToFirestore(
+                  "model_predictions",
+                  period,
+                  modelPredictions
+                );
               }
             } catch (e) {
               console.error(e);

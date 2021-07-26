@@ -112,19 +112,32 @@ export default {
       return false;
     }
   },
-  async getResultPeriods() {
+  async getModelDataPeriods() {
     const res = [];
     try {
-      const docs = await db.collection("results").get();
+      const docs = await db.collection("model_data").get();
       docs.forEach((doc) => res.push(doc.id));
     } catch (err) {
       console.log(err);
     }
     return res.sort().reverse();
   },
-  async getResults(period) {
+  async getModelData(period) {
     try {
-      const doc = await db.collection("results").doc(period).get();
+      const doc = await db.collection("model_data").doc(period).get();
+      if (doc.exists) {
+        return doc.data().data;
+      } else {
+        return [];
+      }
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  },
+  async getModelPredictions(period) {
+    try {
+      const doc = await db.collection("model_predictions").doc(period).get();
       if (doc.exists) {
         return doc.data().data;
       } else {
