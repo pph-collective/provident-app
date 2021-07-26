@@ -11,18 +11,21 @@
       "email": "admin@admin.com",
       "name": "Admin",
       "organization": "RI 4 Us",
+      "role": "champion",
       "status": "approved"
     },
     "user1@user.com": {
       "email": "user1@user.com",
       "name": "First Last",
       "organization": "Good Doers",
+      "role": "user",
       "status": "pending"
     },
     "user@user.com": {
       "email": "user@user.com",
       "name": "User Name",
       "organization": "Good Doers",
+      "role": "user",
       "status": "approved"
     }
   },
@@ -46,6 +49,7 @@
   "forms": {
     "test": {
       "title": "My Form",
+      "type": "user",
       "release_date": "2021-05-21",
       "questions": [
         {
@@ -133,6 +137,7 @@
     },
     "test2": {
       "title": "Simple Form",
+      "type": "user",
       "release_date": "2021-05-21",
       "questions": [
         {
@@ -144,6 +149,7 @@
     },
     "test3": {
       "title": "Unreleased Form",
+      "type": "user",
       "release_date": "3000-01-01",
       "questions": [
         {
@@ -155,6 +161,7 @@
     },
     "neighborhood_rapid_assessment": {
       "title": "Neighborhood Rapid Assessment",
+      "type": "organization",
       "release_date": "2021-07-12",
       "questions": [
         {
@@ -389,6 +396,18 @@
             "Police are a barrier to service provision here",
             "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
           ]
+        }
+      ]
+    },
+    "sample_organization_form": {
+      "title": "Sample Organization Form",
+      "type": "organization",
+      "release_date": "2021-07-26",
+      "questions": [
+        {
+          "model": "resources",
+          "component": "TextArea",
+          "label": "What available resources does your organization provide for the community?"
         }
       ]
     }
