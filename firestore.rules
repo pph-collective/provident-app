@@ -1,6 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function userInOrg(organization) {
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.organization == organization;
+    }
+
     match /users/{user} {
       allow update, delete: if request.auth != null && request.auth.token.admin == true;
       allow read: if request.auth != null && (request.auth.token.email == resource.data.email || request.auth.token.admin == true);
@@ -20,6 +24,12 @@ service cloud.firestore {
 
     match /organizations/{organization} {
       allow read: if true;
+
+      match /form_responses/{form} {
+        allow create: if userInOrg(organization);
+        allow update: if userInOrg(organization) && resource.data.status != 'Submitted';
+        allow read: if userInOrg(organization);
+      }
     }
 
     match /forms/{document=**} {
