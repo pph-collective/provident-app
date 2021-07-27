@@ -29,10 +29,15 @@ export default {
       type: String,
       required: true,
     },
+    withPredictions: {
+      type: Boolean,
+      required: true,
+    },
   },
   emits: ["new-active-bg", "new-active-municipality"],
   setup(props, { emit }) {
-    const { filterMunicipalities, dataset, flagProperty } = toRefs(props);
+    const { filterMunicipalities, dataset, flagProperty, withPredictions } =
+      toRefs(props);
 
     const el = ref(null);
 
@@ -48,6 +53,7 @@ export default {
       filtered.forEach((g) => {
         const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
+        g.properties.intervention_arm = datum.intervention_arm ?? false;
       });
 
       const collection = {
@@ -93,6 +99,16 @@ export default {
       return topo;
     });
 
+    const tooltipSignal = computed(() => {
+      let signal =
+        "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No' ";
+      if (withPredictions.value) {
+        signal += ", 'Flag': datum.properties.flag";
+      }
+      signal += "}";
+      return signal;
+    });
+
     // TODO: pick a map
     const spec = computed(() => {
       return {
@@ -113,7 +129,7 @@ export default {
           { name: "maxPoint", update: "invert('projection', [width, height])" },
           {
             name: "resolution",
-            value: navigator?.connection?.downlink > 2 ? "@2x" : "",
+            value: navigator?.connection?.downlink > 1.5 ? "@2x" : "",
           },
           {
             name: "hovered",
@@ -181,25 +197,30 @@ export default {
               enter: {
                 cursor: { value: "pointer" },
                 strokeWidth: { value: 1 },
-                stroke: { value: "#d3d3d3" },
                 fill: [
                   { test: "datum.properties.flag === '1'", value: "#2A3465" },
-                  { test: "datum.properties.flag === '-1'", value: "#d3d3d3" },
+                  {
+                    test: `${withPredictions.value} && !datum.properties.intervention_arm`,
+                    value: "url(#diagonalHatch)",
+                  },
                   { value: "white" },
                 ],
               },
               update: {
+                stroke: [
+                  { test: "datum === activeGeography", value: "#990000" },
+                  { value: "#999999" },
+                ],
                 fillOpacity: [
-                  { test: "datum === activeGeography", value: 0.7 },
-                  { value: 0.3 },
+                  { test: "datum === activeGeography", value: 0.5 },
+                  { value: 0.2 },
                 ],
                 zindex: [
                   { test: "datum === activeGeography", value: 1 },
                   { value: 0 },
                 ],
                 tooltip: {
-                  signal:
-                    "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, Flag: datum.properties.flag }",
+                  signal: tooltipSignal.value,
                 },
               },
             },

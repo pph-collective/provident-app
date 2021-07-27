@@ -82,15 +82,22 @@ export default {
       required: false,
       default: "",
     },
+    withPredictions: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   setup(props) {
-    const { dataset, geoid, municipality, previousDataset } = toRefs(props);
+    const { dataset, geoid, municipality, previousDataset, withPredictions } =
+      toRefs(props);
 
     const metrics = {
       mean: ["pct_demographic_1", "pct_demographic_2"],
-      sum: ["flag_1"],
+      sum: [],
     };
+
+    if (withPredictions.value) metrics.sum.push("flag_1");
 
     const metricsList = Object.values(metrics).flat();
 

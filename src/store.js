@@ -12,6 +12,7 @@ const store = createStore({
       organizations: [],
     };
   },
+
   mutations: {
     mutate(state, payload) {
       state[payload.property] = payload.with;
@@ -20,6 +21,7 @@ const store = createStore({
       state.user[payload.property] = payload.with;
     },
   },
+
   actions: {
     async fetchUser({ commit }, user) {
       if (user) {
@@ -38,6 +40,22 @@ const store = createStore({
     async fetchOrgs({ commit }) {
       const orgs = await fb.getOrgs();
       commit("mutate", { property: "organizations", with: orgs });
+    },
+  },
+
+  getters: {
+    interventionArmUser(state) {
+      if (!state.user.authenticated || !state.user.data) {
+        return false;
+      }
+
+      if (state.organizations.length === 0) {
+        return false;
+      }
+
+      return state.organizations.find(
+        (org) => org.name === state.user.data.organization
+      ).intervention_arm;
     },
   },
 });

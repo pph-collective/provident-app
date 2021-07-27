@@ -10,5 +10,9 @@
   "pending": {
     "email": "user1@user.com",
     "password": "user-password"
+  },
+  "control": {
+    "email": "controluser@user.com",
+    "password": "user-password"
   }
 }
