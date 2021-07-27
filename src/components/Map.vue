@@ -200,7 +200,7 @@ export default {
                 fill: [
                   { test: "datum.properties.flag === '1'", value: "#2A3465" },
                   {
-                    test: "!datum.properties.intervention_arm",
+                    test: `${withPredictions.value} && !datum.properties.intervention_arm`,
                     value: "url(#diagonalHatch)",
                   },
                   { value: "white" },
@@ -212,8 +212,8 @@ export default {
                   { value: "#999999" },
                 ],
                 fillOpacity: [
-                  { test: "datum === activeGeography", value: 0.7 },
-                  { value: 0.3 },
+                  { test: "datum === activeGeography", value: 0.5 },
+                  { value: 0.2 },
                 ],
                 zindex: [
                   { test: "datum === activeGeography", value: 1 },

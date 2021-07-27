@@ -32,6 +32,7 @@ service cloud.firestore {
       allow read: if request.auth != null;
     }
 
+    // TODO: delete this rule once transitioned to model data and predictions
     match /results/{document=**} {
       allow read: if request.auth != null;
     }

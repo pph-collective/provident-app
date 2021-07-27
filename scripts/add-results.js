@@ -3,11 +3,18 @@ const fs = require("fs");
 const admin = require("firebase-admin");
 const aq = require("arquero");
 
+let createSeedData = false;
 const file = process.argv[2];
 if (process.argv.length > 3) {
   // assumes --emulator is the 4th arg
   console.log("using emulator");
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
+
+  // assume --seed is the 5th arg
+  if (process.argv.length > 4) {
+    console.log("generating seed data");
+    createSeedData = true;
+  }
 }
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 
@@ -39,9 +46,20 @@ const INTERVENTION_TOWNS = [
   "Westerly",
 ];
 
+const SEED_TOWNS = ["Little Compton", "Tiverton", "Portsmouth"];
+
 aq.addFunction("isIntervention", (x) => INTERVENTION_TOWNS.includes(x));
+aq.addFunction("isSeed", (x) => SEED_TOWNS.includes(x));
 
 function writeToFirestore(collection, period, records) {
+  if (createSeedData) {
+    fs.writeFileSync(
+      `data/${collection}_${period}.json`,
+      JSON.stringify(records)
+    );
+    return;
+  }
+
   const batchCommits = [];
   let batch = db.batch();
   var docRef = db.collection(collection).doc(period);
@@ -78,6 +96,10 @@ async function importCsv(csvFileName) {
                   "municipality",
                   "intervention_arm"
                 );
+
+              if (createSeedData) {
+                lookupDt = lookupDt.filter((d) => aq.op.isSeed(d.municipality));
+              }
               let dt = aq
                 .from(records)
                 .select(aq.not(""))
