@@ -34,6 +34,9 @@
         </div>
 
         <div class="level-right has-text-centered">
+          <span v-if="form.type === 'organization'" class="level-item tag">
+            <p><strong>Organization-level</strong></p>
+          </span>
           <span
             v-if="user.admin"
             class="level-item tag"
@@ -103,9 +106,9 @@
           <JSONForm
             :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
-            :init-value="userForms[activeForm._id].response"
-            @save="updateForm($event, 'Draft')"
-            @submitted="updateForm($event, 'Submitted')"
+            :init-value="formResponses[activeForm._id].response"
+            @save="updateFormResponse($event, 'Draft')"
+            @submitted="updateFormResponse($event, 'Submitted')"
           />
           <p
             v-if="formMessage"
@@ -133,7 +136,7 @@ export default {
   },
   setup() {
     const forms = ref([]);
-    const userForms = ref({});
+    const formResponses = ref({});
     const activeForm = ref({});
     const tabs = ref(["To Do", "All", "Submitted"]);
     const selectedTab = ref("To Do");
@@ -161,6 +164,9 @@ export default {
     const userEmail = computed(() =>
       user.value.data ? user.value.data.email : ""
     );
+    const organization = computed(() =>
+      user.value.data ? user.value.data.organization : ""
+    );
 
     let today = new Date(); // Local time
     today = today.toISOString().split("T")[0]; // Date to ISO string without time
@@ -172,29 +178,48 @@ export default {
           return f.release_date <= today;
         });
       }
-      userForms.value = await fb.getUserForms(userEmail.value);
+      formResponses.value = await fb.getFormResponses(
+        userEmail.value,
+        organization.value
+      );
 
       forms.value.forEach((value) => {
-        let userForm = userForms.value[value._id];
-        if (userForm) {
-          value.status = userForm.status;
+        let formResponse = formResponses.value[value._id];
+        if (formResponse) {
+          value.status = formResponse.status;
         } else {
           value.status = "Not Started";
-          userForms.value[value._id] = { status: "Not Started", response: {} };
+          formResponses.value[value._id] = {
+            status: "Not Started",
+            response: {},
+          };
         }
       });
     });
 
-    const updateForm = async (response, status) => {
-      const success = await fb.updateUserForm(
-        userEmail.value,
-        activeForm.value._id,
-        response,
-        status
-      );
+    const updateFormResponse = async (response, status) => {
+      const formType = activeForm.value.type;
+      let success = false;
+
+      if (formType === "user") {
+        success = await fb.updateUserFormResponse(
+          userEmail.value,
+          activeForm.value._id,
+          response,
+          status
+        );
+      } else if (formType === "organization") {
+        success = await fb.updateOrganizationFormResponse(
+          organization.value,
+          activeForm.value._id,
+          response,
+          status
+        );
+      }
+
       if (success) {
         formMessage.value = "Form successfully saved";
-        userForms.value[activeForm.value._id] = { status, response };
+        formResponses.value[activeForm.value._id] = { status, response };
         forms.value.find((f) => f._id === activeForm.value._id).status = status;
         if (status === "Submitted") {
           activeForm.value = {};
@@ -212,10 +237,10 @@ export default {
       activeForm,
       tabs,
       selectedTab,
-      updateForm,
+      updateFormResponse,
       formMessage,
       today,
-      userForms,
+      formResponses,
       user,
     };
   },

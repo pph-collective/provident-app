@@ -81,28 +81,53 @@ export default {
 
     return forms;
   },
-  async getUserForms(email) {
-    const forms = {};
+  async getFormResponses(email, organization) {
+    const formResponses = {};
     try {
-      const docs = await db
+      const userFormResponses = await db
         .collection("users")
         .doc(email)
         .collection("form_responses")
         .get();
-      docs.forEach((doc) => {
-        forms[doc.id] = { _id: doc.id, ...doc.data() };
+      userFormResponses.forEach((doc) => {
+        formResponses[doc.id] = { _id: doc.id, ...doc.data() };
       });
+
+      const organizationFormResponses = await db
+        .collection("organizations")
+        .doc(organization)
+        .collection("form_responses")
+        .get();
+      organizationFormResponses.forEach((doc) => {
+        formResponses[doc.id] = { _id: doc.id, ...doc.data() };
+      });
+
+      return formResponses;
     } catch (err) {
       console.log(err);
     }
 
-    return forms;
+    return formResponses;
   },
-  async updateUserForm(email, form, response, status) {
+  async updateUserFormResponse(email, form, response, status) {
     try {
       await db
         .collection("users")
         .doc(email)
+        .collection("form_responses")
+        .doc(form)
+        .set({ status, response, last_updated: Date.now() });
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  },
+  async updateOrganizationFormResponse(organization, form, response, status) {
+    try {
+      await db
+        .collection("organizations")
+        .doc(organization)
         .collection("form_responses")
         .doc(form)
         .set({ status, response, last_updated: Date.now() });
