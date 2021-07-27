@@ -26,7 +26,7 @@ yarn add-form <form id> <path to form>
 
 ## `add-results`
 
-The `add-results` script reads in a csv with results, and loads them to the firestore "results" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  It the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
+The `add-results` script reads in a csv with results, and loads them to the firestore "results" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
 
 ### Usage
 ```
