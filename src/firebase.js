@@ -114,13 +114,20 @@ export default {
     organization,
     formType,
     formId,
+    formUsersEdited,
     response,
     status
   ) {
+    let users_edited = formUsersEdited ?? [];
+    if (!users_edited.includes(email)) {
+      users_edited.push(email);
+    }
+
     const data = {
       status,
       response,
       user_submitted: status === "Submitted" ? email : "",
+      users_edited: users_edited,
       last_updated: Date.now(),
     };
 

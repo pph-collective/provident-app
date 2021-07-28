@@ -208,11 +208,17 @@ export default {
     });
 
     const updateFormResponse = async (response, status) => {
+      const oldFormResponse = formResponses.value[activeForm.value._id];
+      const oldUsersEdited = oldFormResponse
+        ? oldFormResponse.users_edited
+        : [];
+
       const success = await fb.updateFormResponse(
         userEmail.value,
         organization.value,
         activeForm.value.type,
         activeForm.value._id,
+        oldUsersEdited,
         response,
         status
       );
