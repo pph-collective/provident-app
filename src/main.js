@@ -20,9 +20,14 @@ import FormCheckbox from "@/components/form/Checkbox";
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
   if (user) {
-    const { status, organization } = await fb.getUserRequest(user.email);
+    const { status, organization, role } = await fb.getUserRequest(user.email);
     if (status === "approved") {
-      store.dispatch("fetchUser", { ...user.toJSON(), status, organization });
+      store.dispatch("fetchUser", {
+        ...user.toJSON(),
+        status,
+        organization,
+        role,
+      });
       let token = await user.getIdTokenResult();
       if (token.claims && token.claims.admin) {
         store.dispatch("fetchAdmin", true);

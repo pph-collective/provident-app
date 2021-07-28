@@ -32,6 +32,7 @@
       "email": "controluser@user.com",
       "name": "Control User",
       "organization": "RI 4 Us",
+      "role": "user",
       "status": "approved"
     }
   },

@@ -60,7 +60,11 @@
           </span>
           <div class="level-item">
             <button
-              v-if="form.status !== 'Submitted'"
+              v-if="
+                form.status !== 'Submitted' &&
+                (form.type === 'user' ||
+                  (form.type === 'organization' && userRole === 'champion'))
+              "
               class="button is-primary level-item"
               data-cy="launch-form-button"
               type="button"
@@ -105,7 +109,10 @@
         <section class="modal-card-body" data-cy="form-body">
           <JSONForm
             :init-schema="activeForm.questions"
-            :read-only="activeForm.status === 'Submitted'"
+            :read-only="
+              activeForm.status !== 'Submitted' ||
+              (activeForm.type === 'organization' && userRole !== 'champion')
+            "
             :init-value="formResponses[activeForm._id].response"
             @save="updateFormResponse($event, 'Draft')"
             @submitted="updateFormResponse($event, 'Submitted')"
@@ -166,6 +173,9 @@ export default {
     );
     const organization = computed(() =>
       user.value.data ? user.value.data.organization : ""
+    );
+    const userRole = computed(() =>
+      user.value.data ? user.value.data.role : ""
     );
 
     let today = new Date(); // Local time
@@ -242,6 +252,7 @@ export default {
       today,
       formResponses,
       user,
+      userRole,
     };
   },
 };
