@@ -109,29 +109,39 @@ export default {
 
     return formResponses;
   },
-  async updateUserFormResponse(email, form, response, status) {
+  async updateFormResponse(
+    email,
+    organization,
+    formType,
+    formId,
+    response,
+    status
+  ) {
+    const data = {
+      status,
+      response,
+      user_submitted: status === "Submitted" ? email : "",
+      last_updated: Date.now(),
+    };
+
     try {
-      await db
-        .collection("users")
-        .doc(email)
-        .collection("form_responses")
-        .doc(form)
-        .set({ status, response, last_updated: Date.now() });
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  },
-  async updateOrganizationFormResponse(organization, form, response, status) {
-    try {
-      await db
-        .collection("organizations")
-        .doc(organization)
-        .collection("form_responses")
-        .doc(form)
-        .set({ status, response, last_updated: Date.now() });
-      return true;
+      if (formType === "user") {
+        await db
+          .collection("users")
+          .doc(email)
+          .collection("form_responses")
+          .doc(formId)
+          .set(data);
+        return true;
+      } else if (formType === "organization") {
+        await db
+          .collection("organizations")
+          .doc(organization)
+          .collection("form_responses")
+          .doc(formId)
+          .set(data);
+        return true;
+      }
     } catch (e) {
       console.log(e);
       return false;

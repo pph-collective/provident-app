@@ -110,7 +110,7 @@
           <JSONForm
             :init-schema="activeForm.questions"
             :read-only="
-              activeForm.status !== 'Submitted' ||
+              activeForm.status === 'Submitted' ||
               (activeForm.type === 'organization' && userRole !== 'champion')
             "
             :init-value="formResponses[activeForm._id].response"
@@ -208,24 +208,14 @@ export default {
     });
 
     const updateFormResponse = async (response, status) => {
-      const formType = activeForm.value.type;
-      let success = false;
-
-      if (formType === "user") {
-        success = await fb.updateUserFormResponse(
-          userEmail.value,
-          activeForm.value._id,
-          response,
-          status
-        );
-      } else if (formType === "organization") {
-        success = await fb.updateOrganizationFormResponse(
-          organization.value,
-          activeForm.value._id,
-          response,
-          status
-        );
-      }
+      const success = await fb.updateFormResponse(
+        userEmail.value,
+        organization.value,
+        activeForm.value.type,
+        activeForm.value._id,
+        response,
+        status
+      );
 
       if (success) {
         formMessage.value = "Form successfully saved";
