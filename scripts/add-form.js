@@ -37,6 +37,18 @@ const validateForm = (form) => {
     warnAndExit("must provide title");
   }
 
+  // check type
+  const validFormTypes = ["user", "organization"];
+  if (!form["type"]) {
+    warnAndExit("must provide a 'type'");
+  } else if (!validFormTypes.includes(form["type"])) {
+    warnAndExit(
+      `invalid form type ${
+        form["type"]
+      }. valid form types: ${validFormTypes.join(", ")}`
+    );
+  }
+
   // check questions
   if (!form["questions"]) {
     warnAndExit("must provide questions");
