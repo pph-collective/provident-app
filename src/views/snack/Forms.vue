@@ -145,7 +145,7 @@ export default {
     const forms = ref([]);
     const formResponses = ref({});
     const activeForm = ref({});
-    const tabs = ref(["To Do", "All", "Submitted"]);
+    const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
     const formMessage = ref("");
 
@@ -153,11 +153,21 @@ export default {
       if (selectedTab.value === "All") return forms.value;
 
       return forms.value.filter((value) => {
-        if (selectedTab.value === "To Do" && value.status !== "Submitted") {
+        if (
+          selectedTab.value === "To Do" &&
+          value.status !== "Submitted" &&
+          (value.type === "user" ||
+            (value.type === "organization" && userRole.value === "champion"))
+        ) {
           return true;
         } else if (
           selectedTab.value === "Submitted" &&
           value.status === "Submitted"
+        ) {
+          return true;
+        } else if (
+          selectedTab.value === "Organization-level" &&
+          value.type === "organization"
         ) {
           return true;
         }
