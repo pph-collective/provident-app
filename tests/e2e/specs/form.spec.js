@@ -9,16 +9,6 @@ describe("Form functionality", () => {
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
   });
 
-  it("Release date is viewable as an admin", () => {
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-    cy.get('[data-cy="release-date-tag"]')
-      .should("exist")
-      .should("contain", "2021-05-21");
-  });
-
   it("Starting status of form", () => {
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
@@ -66,7 +56,7 @@ describe("Form functionality", () => {
       .should("contain", "Not Started");
   });
 
-  it("Submitting a valid form, My Form", () => {
+  it("Submitting a valid user form, My Form", () => {
     cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
@@ -464,6 +454,24 @@ describe("Form functionality", () => {
         .should("exist");
     });
   });
+});
+
+describe("Forms viewed as an admin", () => {
+  beforeEach(() => {
+    cy.login_by_permission("admin").then(() => {
+      cy.visit("/snack/forms");
+    });
+  });
+
+  it("Release date is viewable as an admin", () => {
+    cy.get('[data-cy="forms-panel-block"]').should(
+      "not.contain",
+      "No forms here"
+    );
+    cy.get('[data-cy="release-date-tag"]')
+      .should("exist")
+      .should("contain", "2021-05-21");
+  });
 
   it("Unreleased form is viewable as an admin", () => {
     // Confirm that the forms are loaded prior to continuing
@@ -520,5 +528,225 @@ describe("Forms viewed as a user", () => {
     cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form").should(
       "not.exist"
     );
+  });
+
+  it("Organization-level forms are not in user to dos", () => {
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("To Do")
+      .should("have.class", "is-active");
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Sample Organization Form"
+    ).should("not.exist");
+  });
+
+  it("Organization-level forms are in the organization-level tab and are read only", () => {
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("Organization-level")
+      .click();
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("exist")
+      .should("be.disabled");
+  });
+});
+
+describe("Forms viewed as a champion", () => {
+  beforeEach(() => {
+    cy.login_by_permission("champion").then(() => {
+      cy.visit("/snack/forms");
+    });
+  });
+
+  it("Organization-level forms are listed in to do", () => {
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("To Do")
+      .should("have.class", "is-active");
+
+    // wait for status tag to load before trying to launch the form
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="launch-form-button"]')
+      .should("exist");
+  });
+
+  it("Drafting a organization-level form is editable by champion and viewable by user", () => {
+    // wait for status tag to load before trying to launch the form
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("be.enabled")
+      .type("water");
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Save")
+      .click();
+
+    // Save button should be disabled
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Save")
+      .should("be.disabled");
+
+    // Form message
+    cy.get('[data-cy="form-message"]').should(
+      "contain",
+      "Form successfully saved"
+    );
+
+    // Close form
+    cy.get('[data-cy="close-form"]').click();
+
+    // Assert Status: Draft
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Draft");
+
+    // Reopen
+    // Click to launch the Sample Organization Form
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    // Check if textarea is saved and if editable
+    cy.get('[data-cy="active-form-modal"]')
+      .find("textarea")
+      .should("have.value", "water");
+
+    // Log out and log in as a user
+    cy.logout();
+    cy.login_by_permission("approved").then(() => {
+      cy.visit("/snack/forms");
+    });
+
+    // Find form in the organization-level area
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("Organization-level")
+      .click();
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Draft");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("exist")
+      .should("be.disabled")
+      .should("have.value", "water");
+  });
+
+  it("Submitting an organization-level form", () => {
+    // wait for status tag to load before trying to launch the form
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("be.enabled")
+      .type("water");
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Submit")
+      .click();
+
+    // Check no longer in to do
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Sample Organization Form"
+    ).should("not.exist");
+
+    // Navigate to organization tab
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("Organization-level")
+      .click();
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Submitted");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("exist")
+      .should("be.disabled")
+      .should("have.value", "water");
+
+    // Log out and log in as a user to view the form
+    cy.logout();
+    cy.login_by_permission("approved").then(() => {
+      cy.visit("/snack/forms");
+    });
+
+    // Navigate to organization tab
+    cy.get('[data-cy="panel-tabs"]')
+      .find("a")
+      .contains("Organization-level")
+      .click();
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .should("exist")
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Submitted");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("exist")
+      .should("be.disabled")
+      .should("have.value", "water");
   });
 });

@@ -1,6 +1,6 @@
 <template>
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-    <p class="panel-heading" data-cy="form-panel-heading">I am forms!</p>
+    <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
     <div class="panel-tabs" data-cy="panel-tabs">
       <a
@@ -34,7 +34,11 @@
         </div>
 
         <div class="level-right has-text-centered">
-          <span v-if="form.type === 'organization'" class="level-item tag">
+          <span
+            v-if="form.type === 'organization'"
+            class="level-item tag"
+            data-cy="organization-level-tag"
+          >
             <p><strong>Organization-level</strong></p>
           </span>
           <span
