@@ -34,6 +34,13 @@
       "organization": "RI 4 Us",
       "role": "user",
       "status": "approved"
+    },
+    "championuser@user.com": {
+      "email": "championuser@user.com",
+      "name": "Champion User",
+      "organization": "Good Doers",
+      "role": "champion",
+      "status": "approved"
     }
   },
   "organizations": {

@@ -14,5 +14,9 @@
   "control": {
     "email": "controluser@user.com",
     "password": "user-password"
+  },
+  "champion": {
+    "email": "championuser@user.com",
+    "password": "champion-password"
   }
 }
