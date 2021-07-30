@@ -168,16 +168,6 @@ export default {
       interventionArmUser,
     };
   },
-  beforeRouteLeave(to, from, next) {
-    const answer = window.confirm(
-      "Are you sure you want to leave the dashboard?"
-    );
-    if (answer) {
-      next();
-    } else {
-      next(false);
-    }
-  },
 };
 </script>
 
