@@ -7,6 +7,11 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/organizations/$(org)).data.intervention_arm || false;
     }
 
+    function isUserInOrgWithRole(organization, role) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.token.email)).data;
+      return userData.organization == organization && (userData.role == role || role == 'any');
+    }
+
     match /users/{user} {
       allow update, delete: if request.auth != null && request.auth.token.admin == true;
       allow read: if request.auth != null && (request.auth.token.email == resource.data.email || request.auth.token.admin == true);
@@ -26,6 +31,12 @@ service cloud.firestore {
 
     match /organizations/{organization} {
       allow read: if true;
+
+      match /form_responses/{form} {
+        allow create: if request.auth != null && isUserInOrgWithRole(organization, 'champion');
+        allow update: if request.auth != null && resource.data.status != 'Submitted' && isUserInOrgWithRole(organization, 'champion');
+        allow read: if request.auth != null && isUserInOrgWithRole(organization, 'any');
+      }
     }
 
     match /forms/{document=**} {

@@ -46,6 +46,7 @@ As part of this web app, forms can be specified using JSON and added to the fire
 The form has the following keys at the root level:
 
 * `title`: The title of the form (will display to the end user)
+* `type`: The type of the form which can be either `user` or `organization`
 * `release_date`: The date the form will become available to end users
 * `questions`: An object specifying the fields and logic (all below sections refer to questions)
 
@@ -53,6 +54,7 @@ A sample JSON:
 ```json
 {
   "title": "My Form",
+  "type": "user",
   "release_date": "2021-05-21",
   "questions": [
     {
