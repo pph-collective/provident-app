@@ -34,6 +34,7 @@ fb.auth.onAuthStateChanged(async (user) => {
       } else {
         store.dispatch("fetchAdmin", false);
       }
+      // purposefully not waiting for logging to complete
       fb.logActivity(user.email, "login");
       return;
     }
