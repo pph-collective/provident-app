@@ -14,7 +14,7 @@
               <button
                 type="button"
                 class="button is-info"
-                :disabled="JSON.stringify(initValue) === JSON.stringify(value)"
+                :disabled="saveDisabled()"
                 @click="$emit('save', cloneDeep(value))"
               >
                 Save
@@ -32,6 +32,7 @@ import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
 import { ref } from "vue";
+import { onBeforeRouteLeave } from "vue-router";
 
 // form components declared globally in main.js
 
@@ -84,10 +85,31 @@ export default {
 
     const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
+    const saveDisabled = () => {
+      return (
+        JSON.stringify({ ...props.initValue }) === JSON.stringify(value.value)
+      );
+    };
+
+    onBeforeRouteLeave((to, from, next) => {
+      if (!saveDisabled()) {
+        const answer = window.confirm(
+          "Are you sure you want to close the form? You have unsaved changes"
+        );
+
+        if (answer) {
+          next();
+        } else {
+          next(false);
+        }
+      }
+    });
+
     return {
       value,
       schema,
       cloneDeep,
+      saveDisabled,
     };
   },
 };
