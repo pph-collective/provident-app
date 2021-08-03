@@ -1,11 +1,4 @@
 {
-  "activity_log": {
-    "ZFyRETTHlHPpVb3g5gei": {
-      "action": "login",
-      "datetime": 1621344888683,
-      "user": "admin@admin.com"
-    }
-  },
   "users": {
     "admin@admin.com": {
       "email": "admin@admin.com",

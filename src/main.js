@@ -29,6 +29,7 @@ fb.auth.onAuthStateChanged(async (user) => {
       } else {
         store.dispatch("fetchAdmin", false);
       }
+      fb.logActivity(user.email, "login");
       return;
     }
   }

@@ -26,113 +26,137 @@ if (location.hostname === "localhost") {
   auth.useEmulator("http://localhost:9099");
 }
 
+const logActivity = async (user, action) => {
+  try {
+    await db.collection("users").doc(user).collection("activity_log").add({
+      user,
+      action,
+      datetime: Date.now(),
+    });
+  } catch (e) {
+    console.warn("Activity logging failed: ", e);
+  }
+};
+
+const login = async (email, password) => {
+  try {
+    const res = await auth.signInWithEmailAndPassword(email, password);
+    return res.user.toJSON();
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+const logout = async () => await auth.signOut();
+
+const getUserRequest = async (email) => {
+  try {
+    const doc = await db.collection("users").doc(email).get();
+    if (doc.exists) {
+      return doc.data();
+    } else {
+      return {};
+    }
+  } catch (err) {
+    return {};
+  }
+};
+
+const getOrgs = async () => {
+  const res = [];
+  try {
+    const docs = await db.collection("organizations").get();
+    docs.forEach((doc) => res.push(doc.data()));
+  } catch (err) {
+    console.log(err);
+  }
+  return res;
+};
+
+const getForms = async () => {
+  const forms = [];
+  try {
+    const docs = await db.collection("forms").get();
+    docs.forEach((doc) => {
+      forms.push({ _id: doc.id, ...doc.data() });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return forms;
+};
+
+const getUserForms = async (email) => {
+  const forms = {};
+  try {
+    const docs = await db
+      .collection("users")
+      .doc(email)
+      .collection("form_responses")
+      .get();
+    docs.forEach((doc) => {
+      forms[doc.id] = { _id: doc.id, ...doc.data() };
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return forms;
+};
+
+const updateUserForm = async (email, form, response, status) => {
+  try {
+    await db
+      .collection("users")
+      .doc(email)
+      .collection("form_responses")
+      .doc(form)
+      .set({ status, response, last_updated: Date.now() });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+const getResultPeriods = async () => {
+  const res = [];
+  try {
+    const docs = await db.collection("results").get();
+    docs.forEach((doc) => res.push(doc.id));
+  } catch (err) {
+    console.log(err);
+  }
+  return res.sort().reverse();
+};
+
+const getResults = async (period) => {
+  try {
+    const doc = await db.collection("results").doc(period).get();
+    if (doc.exists) {
+      return doc.data().data;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
 export default {
   auth,
   db,
-  async login(email, password) {
-    try {
-      const res = await auth.signInWithEmailAndPassword(email, password);
-      await db.collection("activity_log").add({
-        user: res.user.email,
-        action: "login",
-        datetime: Date.now(),
-      });
-      return res.user.toJSON();
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  },
-  async logout() {
-    await auth.signOut();
-  },
-  async getUserRequest(email) {
-    try {
-      const doc = await db.collection("users").doc(email).get();
-      if (doc.exists) {
-        return doc.data();
-      } else {
-        return {};
-      }
-    } catch (err) {
-      return {};
-    }
-  },
-  async getOrgs() {
-    const res = [];
-    try {
-      const docs = await db.collection("organizations").get();
-      docs.forEach((doc) => res.push(doc.data()));
-    } catch (err) {
-      console.log(err);
-    }
-    return res;
-  },
-  async getForms() {
-    const forms = [];
-    try {
-      const docs = await db.collection("forms").get();
-      docs.forEach((doc) => {
-        forms.push({ _id: doc.id, ...doc.data() });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    return forms;
-  },
-  async getUserForms(email) {
-    const forms = {};
-    try {
-      const docs = await db
-        .collection("users")
-        .doc(email)
-        .collection("form_responses")
-        .get();
-      docs.forEach((doc) => {
-        forms[doc.id] = { _id: doc.id, ...doc.data() };
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    return forms;
-  },
-  async updateUserForm(email, form, response, status) {
-    try {
-      await db
-        .collection("users")
-        .doc(email)
-        .collection("form_responses")
-        .doc(form)
-        .set({ status, response, last_updated: Date.now() });
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  },
-  async getResultPeriods() {
-    const res = [];
-    try {
-      const docs = await db.collection("results").get();
-      docs.forEach((doc) => res.push(doc.id));
-    } catch (err) {
-      console.log(err);
-    }
-    return res.sort().reverse();
-  },
-  async getResults(period) {
-    try {
-      const doc = await db.collection("results").doc(period).get();
-      if (doc.exists) {
-        return doc.data().data;
-      } else {
-        return [];
-      }
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-  },
+  logActivity,
+  login,
+  logout,
+  getUserRequest,
+  getOrgs,
+  getForms,
+  getUserForms,
+  updateUserForm,
+  getResultPeriods,
+  getResults,
 };
