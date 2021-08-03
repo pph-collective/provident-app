@@ -1,6 +1,6 @@
 <template>
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-    <p class="panel-heading" data-cy="form-panel-heading">I am forms!</p>
+    <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
     <div class="panel-tabs" data-cy="panel-tabs">
       <a
@@ -35,6 +35,13 @@
 
         <div class="level-right has-text-centered">
           <span
+            v-if="form.type === 'organization'"
+            class="level-item tag"
+            data-cy="organization-level-tag"
+          >
+            <p><strong>Organization-level</strong></p>
+          </span>
+          <span
             v-if="user.admin"
             class="level-item tag"
             :class="{
@@ -57,7 +64,11 @@
           </span>
           <div class="level-item">
             <button
-              v-if="form.status !== 'Submitted'"
+              v-if="
+                form.status !== 'Submitted' &&
+                (form.type === 'user' ||
+                  (form.type === 'organization' && userRole === 'champion'))
+              "
               class="button is-primary level-item"
               data-cy="launch-form-button"
               type="button"
@@ -86,8 +97,8 @@
       class="modal is-active"
       data-cy="active-form-modal"
     >
-      <div class="modal-background" @click="activeForm = {}"></div>
-      <div class="modal-content is-family-secondary">
+      <div class="modal-background"></div>
+      <div class="modal-card is-family-secondary">
         <header class="modal-card-head">
           <p class="modal-card-title" data-cy="active-form-title">
             {{ activeForm.title }}
@@ -102,10 +113,13 @@
         <section class="modal-card-body" data-cy="form-body">
           <JSONForm
             :init-schema="activeForm.questions"
-            :read-only="activeForm.status === 'Submitted'"
-            :init-value="userForms[activeForm._id].response"
-            @save="updateForm($event, 'Draft')"
-            @submitted="updateForm($event, 'Submitted')"
+            :read-only="
+              activeForm.status === 'Submitted' ||
+              (activeForm.type === 'organization' && userRole !== 'champion')
+            "
+            :init-value="formResponses[activeForm._id].response"
+            @save="updateFormResponse($event, 'Draft')"
+            @submitted="updateFormResponse($event, 'Submitted')"
           />
           <p
             v-if="formMessage"
@@ -133,9 +147,9 @@ export default {
   },
   setup() {
     const forms = ref([]);
-    const userForms = ref({});
+    const formResponses = ref({});
     const activeForm = ref({});
-    const tabs = ref(["To Do", "All", "Submitted"]);
+    const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
     const formMessage = ref("");
 
@@ -143,11 +157,21 @@ export default {
       if (selectedTab.value === "All") return forms.value;
 
       return forms.value.filter((value) => {
-        if (selectedTab.value === "To Do" && value.status !== "Submitted") {
+        if (
+          selectedTab.value === "To Do" &&
+          value.status !== "Submitted" &&
+          (value.type === "user" ||
+            (value.type === "organization" && userRole.value === "champion"))
+        ) {
           return true;
         } else if (
           selectedTab.value === "Submitted" &&
           value.status === "Submitted"
+        ) {
+          return true;
+        } else if (
+          selectedTab.value === "Organization-level" &&
+          value.type === "organization"
         ) {
           return true;
         }
@@ -161,6 +185,12 @@ export default {
     const userEmail = computed(() =>
       user.value.data ? user.value.data.email : ""
     );
+    const organization = computed(() =>
+      user.value.data ? user.value.data.organization : ""
+    );
+    const userRole = computed(() =>
+      user.value.data ? user.value.data.role : "user"
+    );
 
     let today = new Date(); // Local time
     today = today.toISOString().split("T")[0]; // Date to ISO string without time
@@ -172,29 +202,44 @@ export default {
           return f.release_date <= today;
         });
       }
-      userForms.value = await fb.getUserForms(userEmail.value);
+      formResponses.value = await fb.getFormResponses(
+        userEmail.value,
+        organization.value
+      );
 
       forms.value.forEach((value) => {
-        let userForm = userForms.value[value._id];
-        if (userForm) {
-          value.status = userForm.status;
+        let formResponse = formResponses.value[value._id];
+        if (formResponse) {
+          value.status = formResponse.status;
         } else {
           value.status = "Not Started";
-          userForms.value[value._id] = { status: "Not Started", response: {} };
+          formResponses.value[value._id] = {
+            status: "Not Started",
+            response: {},
+          };
         }
       });
     });
 
-    const updateForm = async (response, status) => {
-      const success = await fb.updateUserForm(
+    const updateFormResponse = async (response, status) => {
+      const oldFormResponse = formResponses.value[activeForm.value._id];
+      const oldUsersEdited = oldFormResponse
+        ? oldFormResponse.users_edited
+        : [];
+
+      const success = await fb.updateFormResponse(
         userEmail.value,
+        organization.value,
+        activeForm.value.type,
         activeForm.value._id,
+        oldUsersEdited,
         response,
         status
       );
+
       if (success) {
         formMessage.value = "Form successfully saved";
-        userForms.value[activeForm.value._id] = { status, response };
+        formResponses.value[activeForm.value._id] = { status, response };
         forms.value.find((f) => f._id === activeForm.value._id).status = status;
         if (status === "Submitted") {
           activeForm.value = {};
@@ -212,11 +257,12 @@ export default {
       activeForm,
       tabs,
       selectedTab,
-      updateForm,
+      updateFormResponse,
       formMessage,
       today,
-      userForms,
+      formResponses,
       user,
+      userRole,
     };
   },
 };
@@ -237,7 +283,7 @@ export default {
 }
 
 @include mobile {
-  .modal-content {
+  .modal-card {
     max-height: 100vh;
   }
 

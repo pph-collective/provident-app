@@ -118,6 +118,7 @@
 
 <script>
 import { reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 
 import fb from "@/firebase";
 import FormCard from "@/components/FormCard";
@@ -137,14 +138,11 @@ export default {
     });
     const requested = ref(false);
     const error = ref(null);
-    const organizations = ref([]);
 
-    fb.db
-      .collection("organizations")
-      .get()
-      .then((snapshot) => {
-        organizations.value = snapshot.docs.map((doc) => doc.data().name);
-      });
+    const store = useStore();
+    const organizations = computed(() =>
+      store.state.organizations.map((org) => org.name)
+    );
 
     const formValid = computed(() => {
       // all fields must be filled in
@@ -179,6 +177,7 @@ export default {
           email: form.email,
           name: form.name,
           organization: form.organization,
+          role: "user",
           status: "pending",
         });
 

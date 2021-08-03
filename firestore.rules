@@ -1,13 +1,28 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isInterventionUser() {
+      let org = get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.organization;
+      return get(/databases/$(database)/documents/organizations/$(org)).data.intervention_arm || false;
+    }
+
+    function isUserInOrgWithRole(organization, role) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.token.email)).data;
+      return userData.organization == organization && (userData.role == role || role == 'any');
+    }
+
     match /users/{user} {
       function isLoggedInUser() {
         return request.auth != null && request.auth.token.email == user;
       }
 
-      allow update, delete: if request.auth != null && request.auth.token.admin == true;
-      allow read: if request.auth != null && (request.auth.token.email == resource.data.email || request.auth.token.admin == true);
+      function isAdminUser() {
+        return request.auth != null && request.auth.token.admin == true;
+      }
+
+      allow update, delete: if isAdminUser();
+      allow read: if isLoggedInUser() || isAdminUser();
       allow create: if request.auth != null && request.auth.token.email == request.resource.data.email;
 
       match /form_responses/{form} {
@@ -16,7 +31,7 @@ service cloud.firestore {
       }
 
       match /activity_log/{document=**} {
-        allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+        allow read, update, delete: if isAdminUser();
         allow create: if isLoggedInUser();
       }
 
@@ -24,14 +39,24 @@ service cloud.firestore {
 
     match /organizations/{organization} {
       allow read: if true;
+
+      match /form_responses/{form} {
+        allow create: if request.auth != null && isUserInOrgWithRole(organization, 'champion');
+        allow update: if request.auth != null && resource.data.status != 'Submitted' && isUserInOrgWithRole(organization, 'champion');
+        allow read: if request.auth != null && isUserInOrgWithRole(organization, 'any');
+      }
     }
 
     match /forms/{document=**} {
       allow read: if request.auth != null;
     }
 
-    match /results/{document=**} {
+    match /model_data/{document=**} {
       allow read: if request.auth != null;
+    }
+
+    match /model_predictions/{document=**} {
+      allow read: if request.auth != null && isInterventionUser();
     }
   }
 }

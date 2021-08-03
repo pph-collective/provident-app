@@ -2,6 +2,21 @@
   <NavBar />
   <router-view />
   <Footer />
+
+  <!-- diagonal hash pattern for map -->
+  <svg height="0" width="0">
+    <defs>
+      <pattern
+        id="diagonalHatch"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(-45 4 4)"
+      >
+        <path d="M -1,2 l 10,0" stroke="#bbbbbb" stroke-width="3" />
+      </pattern>
+    </defs>
+  </svg>
 </template>
 
 <script>

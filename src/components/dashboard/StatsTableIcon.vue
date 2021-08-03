@@ -30,7 +30,9 @@ export default {
     const { stats, metric, location, previousStats } = toRefs(props);
 
     const getTertile = (s, m) => {
-      if (s[m] <= s[m + "_lower"]) {
+      if (s[m] === undefined) {
+        return 0;
+      } else if (s[m] <= s[m + "_lower"]) {
         return 1;
       } else if (s[m] <= s[m + "_upper"]) {
         return 2;

@@ -1,8 +1,8 @@
 <template>
-  <div class="dashboard p-4 container">
+  <div class="dashboard p-4 container is-fullhd">
     <ControlPanel
       v-if="resultPeriods.length > 0"
-      data-cy="control-panel"
+      id="dashboard-control-panel"
       :drop-downs="dropDowns"
       @selected="updateControls"
     />
@@ -17,6 +17,7 @@
             :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="flag_1"
+            :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             :data-cy="controls.geography.name"
@@ -33,6 +34,7 @@
           :previous-dataset="previousDataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
+          :with-predictions="interventionArmUser"
         />
       </template>
     </Card>
@@ -42,6 +44,7 @@
 <script>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
+import * as aq from "arquero";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
@@ -60,6 +63,9 @@ export default {
   setup() {
     const store = useStore();
     const user = computed(() => store.state.user);
+    const interventionArmUser = computed(
+      () => store.getters.interventionArmUser
+    );
     const dataset = ref([]);
     const previousDataset = ref([]);
     const activeGeoid = ref("");
@@ -94,7 +100,7 @@ export default {
 
     const resultPeriods = ref([]);
     onMounted(async () => {
-      resultPeriods.value = await fb.getResultPeriods();
+      resultPeriods.value = await fb.getModelDataPeriods();
     });
 
     const dropDowns = computed(() => {
@@ -112,6 +118,16 @@ export default {
 
     const controls = ref({});
 
+    const updateDataset = async (period) => {
+      const data = await fb.getModelData(period);
+      if (interventionArmUser.value) {
+        const preds = await fb.getModelPredictions(period);
+        return aq.from(data).join_left(aq.from(preds), "bg_id").objects();
+      } else {
+        return data;
+      }
+    };
+
     const updateControls = (newControls) => {
       // if either drop down changes, clear out the selected block group
       activeMuni.value = "";
@@ -120,7 +136,7 @@ export default {
       // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
         previousDataset.value = [];
-        fb.getResults(newControls.model_version).then((res) => {
+        updateDataset(newControls.model_version).then((res) => {
           dataset.value = res;
         });
         const prevPeriodIdx =
@@ -128,7 +144,7 @@ export default {
             (p) => p === newControls.model_version
           ) + 1;
         if (prevPeriodIdx < resultPeriods.value.length) {
-          fb.getResults(resultPeriods.value[prevPeriodIdx]).then((res) => {
+          updateDataset(resultPeriods.value[prevPeriodIdx]).then((res) => {
             previousDataset.value = res;
           });
         }
@@ -149,13 +165,13 @@ export default {
       updateControls,
       activeMuni,
       activeGeoid,
+      interventionArmUser,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-// TODO: center the dashboard in the space and add a max width to it at something like 2000 px?
 @import "bulma";
 
 .map-container {

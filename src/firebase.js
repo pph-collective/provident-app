@@ -88,43 +88,85 @@ const getForms = async () => {
   return forms;
 };
 
-const getUserForms = async (email) => {
-  const forms = {};
+const getFormResponses = async (email, organization) => {
+  const formResponses = {};
   try {
-    const docs = await db
+    const userFormResponses = await db
       .collection("users")
       .doc(email)
       .collection("form_responses")
       .get();
-    docs.forEach((doc) => {
-      forms[doc.id] = { _id: doc.id, ...doc.data() };
+    userFormResponses.forEach((doc) => {
+      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
     });
+
+    const organizationFormResponses = await db
+      .collection("organizations")
+      .doc(organization)
+      .collection("form_responses")
+      .get();
+    organizationFormResponses.forEach((doc) => {
+      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
+    });
+
+    return formResponses;
   } catch (err) {
     console.log(err);
   }
 
-  return forms;
+  return formResponses;
 };
 
-const updateUserForm = async (email, form, response, status) => {
+const updateFormResponse = async (
+  email,
+  organization,
+  formType,
+  formId,
+  formUsersEdited,
+  response,
+  status
+) => {
+  let users_edited = formUsersEdited ?? [];
+  if (!users_edited.includes(email)) {
+    users_edited.push(email);
+  }
+
+  const data = {
+    status,
+    response,
+    user_submitted: status === "Submitted" ? email : "",
+    users_edited: users_edited,
+    last_updated: Date.now(),
+  };
+
   try {
-    await db
-      .collection("users")
-      .doc(email)
-      .collection("form_responses")
-      .doc(form)
-      .set({ status, response, last_updated: Date.now() });
-    return true;
+    if (formType === "user") {
+      await db
+        .collection("users")
+        .doc(email)
+        .collection("form_responses")
+        .doc(formId)
+        .set(data);
+      return true;
+    } else if (formType === "organization") {
+      await db
+        .collection("organizations")
+        .doc(organization)
+        .collection("form_responses")
+        .doc(formId)
+        .set(data);
+      return true;
+    }
   } catch (e) {
     console.log(e);
     return false;
   }
 };
 
-const getResultPeriods = async () => {
+const getModelDataPeriods = async () => {
   const res = [];
   try {
-    const docs = await db.collection("results").get();
+    const docs = await db.collection("model_data").get();
     docs.forEach((doc) => res.push(doc.id));
   } catch (err) {
     console.log(err);
@@ -132,9 +174,23 @@ const getResultPeriods = async () => {
   return res.sort().reverse();
 };
 
-const getResults = async (period) => {
+const getModelData = async (period) => {
   try {
-    const doc = await db.collection("results").doc(period).get();
+    const doc = await db.collection("model_data").doc(period).get();
+    if (doc.exists) {
+      return doc.data().data;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+const getModelPredictions = async (period) => {
+  try {
+    const doc = await db.collection("model_predictions").doc(period).get();
     if (doc.exists) {
       return doc.data().data;
     } else {
@@ -155,8 +211,9 @@ export default {
   getUserRequest,
   getOrgs,
   getForms,
-  getUserForms,
-  updateUserForm,
-  getResultPeriods,
-  getResults,
+  getFormResponses,
+  updateFormResponse,
+  getModelDataPeriods,
+  getModelData,
+  getModelPredictions,
 };
