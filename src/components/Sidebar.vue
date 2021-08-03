@@ -36,10 +36,7 @@
       </p>
       <ul class="menu-list">
         <li>
-          <a
-            href="https://preventoverdoseri.org"
-            onclick="return confirm('Are you sure you want to leave Provident?')"
-          >
+          <a href="https://preventoverdoseri.org" target="_blank">
             <span v-if="!collapsed">
               <i class="fas fa-prescription-bottle mr-1" />
               Prevent Overdose RI</span
