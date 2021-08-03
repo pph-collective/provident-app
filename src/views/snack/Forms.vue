@@ -189,7 +189,7 @@ export default {
       user.value.data ? user.value.data.organization : ""
     );
     const userRole = computed(() =>
-      user.value.data ? user.value.data.role : ""
+      user.value.data ? user.value.data.role : "user"
     );
 
     let today = new Date(); // Local time

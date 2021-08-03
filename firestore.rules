@@ -8,7 +8,11 @@ service cloud.firestore {
     }
 
     function userInOrg(organization) {
-      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.organization == organization;
+      return get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.organization == organization;
+    }
+
+    function userHasRole(role) {
+      return get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.role == role;
     }
 
     match /users/{user} {
@@ -32,9 +36,9 @@ service cloud.firestore {
       allow read: if true;
 
       match /form_responses/{form} {
-        allow create: if userInOrg(organization);
-        allow update: if userInOrg(organization) && resource.data.status != 'Submitted';
-        allow read: if userInOrg(organization);
+        allow create: if request.auth != null && userInOrg(organization) && userHasRole('champion');
+        allow update: if request.auth != null && resource.data.status != 'Submitted' && userInOrg(organization) && userHasRole('champion');
+        allow read: if request.auth != null && userInOrg(organization);
       }
     }
 
