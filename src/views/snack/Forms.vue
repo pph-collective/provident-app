@@ -92,45 +92,47 @@
   </div>
 
   <teleport to="body">
-    <div
-      v-if="activeForm.questions"
-      class="modal is-active"
-      data-cy="active-form-modal"
-    >
-      <div class="modal-background"></div>
-      <div class="modal-card is-family-secondary">
-        <header class="modal-card-head">
-          <p class="modal-card-title" data-cy="active-form-title">
-            {{ activeForm.title }}
-          </p>
-          <button
-            class="delete"
-            data-cy="close-form"
-            aria-label="close"
-            @click="closeFormRequest = !closeFormRequest"
-          ></button>
-        </header>
-        <section class="modal-card-body" data-cy="form-body">
-          <JSONForm
-            :init-schema="activeForm.questions"
-            :read-only="
-              activeForm.status === 'Submitted' ||
-              (activeForm.type === 'organization' && userRole !== 'champion')
-            "
-            :init-value="formResponses[activeForm._id].response"
-            :close-request="closeFormRequest"
-            @save="updateFormResponse($event, 'Draft')"
-            @submitted="updateFormResponse($event, 'Submitted')"
-            @close="activeForm = {}"
-          />
-          <p
-            v-if="formMessage"
-            class="has-text-centered"
-            data-cy="form-message"
-          >
-            <small>{{ formMessage }}</small>
-          </p>
-        </section>
+    <div v-esc="() => (closeFormRequest += 1)">
+      <div
+        v-if="activeForm.questions"
+        class="modal is-active"
+        data-cy="active-form-modal"
+      >
+        <div class="modal-background"></div>
+        <div class="modal-card is-family-secondary">
+          <header class="modal-card-head">
+            <p class="modal-card-title" data-cy="active-form-title">
+              {{ activeForm.title }}
+            </p>
+            <button
+              class="delete"
+              data-cy="close-form"
+              aria-label="close"
+              @click="closeFormRequest += 1"
+            ></button>
+          </header>
+          <section class="modal-card-body" data-cy="form-body">
+            <JSONForm
+              :init-schema="activeForm.questions"
+              :read-only="
+                activeForm.status === 'Submitted' ||
+                (activeForm.type === 'organization' && userRole !== 'champion')
+              "
+              :init-value="formResponses[activeForm._id].response"
+              :close-request="closeFormRequest"
+              @save="updateFormResponse($event, 'Draft')"
+              @submitted="updateFormResponse($event, 'Submitted')"
+              @close="activeForm = {}"
+            />
+            <p
+              v-if="formMessage"
+              class="has-text-centered"
+              data-cy="form-message"
+            >
+              <small>{{ formMessage }}</small>
+            </p>
+          </section>
+        </div>
       </div>
     </div>
   </teleport>
@@ -141,11 +143,15 @@ import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
+import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 
 export default {
   components: {
     JSONForm,
+  },
+  directives: {
+    ...esc,
   },
   setup() {
     const forms = ref([]);
@@ -155,7 +161,7 @@ export default {
     const selectedTab = ref("To Do");
     const formMessage = ref("");
 
-    const closeFormRequest = ref(false);
+    const closeFormRequest = ref(0);
 
     const selectedForms = computed(() => {
       if (selectedTab.value === "All") return forms.value;
