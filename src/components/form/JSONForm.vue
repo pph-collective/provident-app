@@ -31,7 +31,7 @@
 import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 
 // form components declared globally in main.js
@@ -58,9 +58,14 @@ export default {
         return {};
       },
     },
+    closeRequest: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  emits: ["save", "submitted"],
-  setup(props) {
+  emits: ["save", "submitted", "close"],
+  setup(props, { emit }) {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
@@ -91,12 +96,26 @@ export default {
       );
     };
 
+    const closeDialog =
+      "Are you sure you want to close the form? You have unsaved changes.";
+
+    watch(
+      () => props.closeRequest,
+      () => {
+        if (!saveDisabled()) {
+          const answer = window.confirm(closeDialog);
+          if (answer) {
+            emit("close");
+          }
+        } else {
+          emit("close");
+        }
+      }
+    );
+
     onBeforeRouteLeave((to, from, next) => {
       if (!saveDisabled()) {
-        const answer = window.confirm(
-          "Are you sure you want to close the form? You have unsaved changes"
-        );
-
+        const answer = window.confirm(closeDialog);
         if (answer) {
           next();
         } else {

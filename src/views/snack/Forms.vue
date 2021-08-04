@@ -96,7 +96,7 @@
             class="delete"
             data-cy="close-form"
             aria-label="close"
-            @click="activeForm = {}"
+            @click="closeFormRequest = !closeFormRequest"
           ></button>
         </header>
         <section class="modal-card-body" data-cy="form-body">
@@ -104,8 +104,10 @@
             :init-schema="activeForm.questions"
             :read-only="activeForm.status === 'Submitted'"
             :init-value="userForms[activeForm._id].response"
+            :close-request="closeFormRequest"
             @save="updateForm($event, 'Draft')"
             @submitted="updateForm($event, 'Submitted')"
+            @close="activeForm = {}"
           />
           <p
             v-if="formMessage"
@@ -138,6 +140,8 @@ export default {
     const tabs = ref(["To Do", "All", "Submitted"]);
     const selectedTab = ref("To Do");
     const formMessage = ref("");
+
+    const closeFormRequest = ref(false);
 
     const selectedForms = computed(() => {
       if (selectedTab.value === "All") return forms.value;
@@ -217,6 +221,7 @@ export default {
       today,
       userForms,
       user,
+      closeFormRequest,
     };
   },
 };
