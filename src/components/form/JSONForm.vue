@@ -14,7 +14,7 @@
               <button
                 type="button"
                 class="button is-info"
-                :disabled="JSON.stringify(initValue) === JSON.stringify(value)"
+                :disabled="saveDisabled"
                 @click="$emit('save', cloneDeep(value))"
               >
                 Save
@@ -31,7 +31,8 @@
 import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { onBeforeRouteLeave } from "vue-router";
 
 // form components declared globally in main.js
 
@@ -57,9 +58,13 @@ export default {
         return {};
       },
     },
+    closeRequest: {
+      type: Boolean,
+      required: true,
+    },
   },
-  emits: ["save", "submitted"],
-  setup(props) {
+  emits: ["save", "submitted", "close"],
+  setup(props, { emit }) {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
 
@@ -84,10 +89,48 @@ export default {
 
     const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
+    const saveDisabled = computed(() => {
+      return (
+        JSON.stringify({ ...props.initValue }) === JSON.stringify(value.value)
+      );
+    });
+
+    const closeDialog =
+      "Are you sure you want to close the form? You have unsaved changes.";
+
+    // watches for changes in the closeRequest prop treating a change as an event trigger
+    // alerts the user if they have unsaved changes before continuing to close
+    // emits a close event to close the form
+    watch(
+      () => props.closeRequest,
+      () => {
+        if (!saveDisabled.value) {
+          const answer = window.confirm(closeDialog);
+          if (answer) {
+            emit("close");
+          }
+        } else {
+          emit("close");
+        }
+      }
+    );
+
+    onBeforeRouteLeave((to, from, next) => {
+      if (!saveDisabled.value) {
+        const answer = window.confirm(closeDialog);
+        if (answer) {
+          next();
+        } else {
+          next(false);
+        }
+      }
+    });
+
     return {
       value,
       schema,
       cloneDeep,
+      saveDisabled,
     };
   },
 };
