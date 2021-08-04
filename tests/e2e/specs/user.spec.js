@@ -5,7 +5,6 @@ describe("User Views", () => {
   });
 
   it("log out button exists", () => {
-    cy.get('[data-cy="navbar-burger"]').click();
     cy.get('[data-cy="logout-button"]').should("exist");
   });
 

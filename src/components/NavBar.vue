@@ -70,7 +70,13 @@
             <div class="navbar-item is-hidden-touch">
               <span class="icon-text has-text-primary">
                 <span class="icon">
-                  <i class="fas fa-user-circle"></i>
+                  <i
+                    class="fas"
+                    :class="{
+                      'fa-user-circle': user.data.role === 'user',
+                      'fa-crown': user.data.role === 'champion',
+                    }"
+                  ></i>
                 </span>
                 <span>{{ user.data.displayName }}</span>
               </span>

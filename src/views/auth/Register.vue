@@ -177,6 +177,7 @@ export default {
           email: form.email,
           name: form.name,
           organization: form.organization,
+          role: "user",
           status: "pending",
         });
 
