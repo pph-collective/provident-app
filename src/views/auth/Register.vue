@@ -78,6 +78,15 @@
           </span>
         </p>
       </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" v-model="form.terms" />
+            I agree to the
+            <a @click.prevent="showTerms = true">terms and conditions</a>
+          </label>
+        </div>
+      </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button
@@ -114,6 +123,27 @@
       </button>
     </div>
   </FormCard>
+
+  <teleport to="body">
+    <div v-if="showTerms" class="modal is-active">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Terms &amp; Conditions</p>
+          <button
+            autofocus
+            class="delete"
+            aria-label="close"
+            @click="showTerms = false"
+            v-esc="() => (showTerms = false)"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Lorem ipsum...</p>
+        </section>
+      </div>
+    </div>
+  </teleport>
 </template>
 
 <script>
@@ -121,11 +151,15 @@ import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
+import { esc } from "@/directives/escape";
 import FormCard from "@/components/FormCard";
 
 export default {
   components: {
     FormCard,
+  },
+  directives: {
+    ...esc,
   },
   setup() {
     // TODO: terms and conditions
@@ -135,9 +169,11 @@ export default {
       organization: "",
       password: "",
       confirmPassword: "",
+      terms: false,
     });
     const requested = ref(false);
     const error = ref(null);
+    const showTerms = ref(false);
 
     const store = useStore();
     const organizations = computed(() =>
@@ -146,12 +182,7 @@ export default {
 
     const formValid = computed(() => {
       // all fields must be filled in
-      if (
-        Object.values(form).reduce(
-          (acc, curr) => acc || curr.length === 0,
-          false
-        )
-      ) {
+      if (Object.values(form).reduce((acc, curr) => acc || !curr, false)) {
         return { status: false, message: "" };
       } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
         return { status: false, message: "" };
@@ -159,6 +190,11 @@ export default {
         return {
           status: false,
           message: "password and confirmation do not match",
+        };
+      } else if (!form.terms) {
+        return {
+          status: false,
+          message: "",
         };
       } else {
         return { status: true, message: "" };
@@ -196,6 +232,7 @@ export default {
       error,
       organizations,
       register,
+      showTerms,
     };
   },
 };
