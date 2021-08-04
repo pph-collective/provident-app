@@ -14,7 +14,7 @@
               <button
                 type="button"
                 class="button is-info"
-                :disabled="saveDisabled()"
+                :disabled="saveDisabled"
                 @click="$emit('save', cloneDeep(value))"
               >
                 Save
@@ -31,7 +31,7 @@
 import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 
 // form components declared globally in main.js
@@ -61,7 +61,6 @@ export default {
     closeRequest: {
       type: Boolean,
       required: true,
-      default: false,
     },
   },
   emits: ["save", "submitted", "close"],
@@ -90,11 +89,11 @@ export default {
 
     const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
-    const saveDisabled = () => {
+    const saveDisabled = computed(() => {
       return (
         JSON.stringify({ ...props.initValue }) === JSON.stringify(value.value)
       );
-    };
+    });
 
     const closeDialog =
       "Are you sure you want to close the form? You have unsaved changes.";
@@ -105,7 +104,7 @@ export default {
     watch(
       () => props.closeRequest,
       () => {
-        if (!saveDisabled()) {
+        if (!saveDisabled.value) {
           const answer = window.confirm(closeDialog);
           if (answer) {
             emit("close");
@@ -117,7 +116,7 @@ export default {
     );
 
     onBeforeRouteLeave((to, from, next) => {
-      if (!saveDisabled()) {
+      if (!saveDisabled.value) {
         const answer = window.confirm(closeDialog);
         if (answer) {
           next();
