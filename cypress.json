@@ -5,5 +5,7 @@
   "retries": {
     "runMode": 2
   },
-  "video": false
+  "video": false,
+  "viewportWidth": 1200,
+  "viewportHeight": 800
 }

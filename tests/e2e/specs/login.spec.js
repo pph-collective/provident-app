@@ -21,7 +21,6 @@ describe("Log In View", () => {
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
     cy.visit("/");
-    cy.get('[data-cy="navbar-burger"]').click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -33,7 +32,6 @@ describe("Log In View", () => {
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
     cy.visit("/");
-    cy.get('[data-cy="navbar-burger"]').click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -63,7 +61,6 @@ describe("Log In View", () => {
 
   it("Log in and out to check the auth Listener", () => {
     cy.login_by_permission("admin");
-    cy.get('[data-cy="navbar-burger"]').click();
     cy.get('[data-cy="logout-button"]').should("exist");
 
     cy.logout();

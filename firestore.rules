@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function interventionUser() {
+    function isInterventionUser() {
       let org = get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.organization;
       return get(/databases/$(database)/documents/organizations/$(org)).data.intervention_arm || false;
     }
@@ -13,20 +13,28 @@ service cloud.firestore {
     }
 
     match /users/{user} {
-      allow update, delete: if request.auth != null && request.auth.token.admin == true;
-      allow read: if request.auth != null && (request.auth.token.email == resource.data.email || request.auth.token.admin == true);
+      function isLoggedInUser() {
+        return request.auth != null && request.auth.token.email == user;
+      }
+
+      function isAdminUser() {
+        return request.auth != null && request.auth.token.admin == true;
+      }
+
+      allow update, delete: if isAdminUser();
+      allow read: if isLoggedInUser() || isAdminUser();
       allow create: if request.auth != null && request.auth.token.email == request.resource.data.email;
 
       match /form_responses/{form} {
-        allow create: if request.auth != null && request.auth.token.email == user;
-        allow update: if request.auth != null && request.auth.token.email == user && resource.data.status != 'Submitted';
-        allow read: if request.auth != null && request.auth.token.email == user;
+        allow create, read: if isLoggedInUser();
+        allow update: if isLoggedInUser() && resource.data.status != 'Submitted';
       }
-    }
 
-    match /activity_log/{document=**} {
-      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
-      allow create: if true;
+      match /activity_log/{document=**} {
+        allow read, update, delete: if isAdminUser();
+        allow create: if isLoggedInUser();
+      }
+
     }
 
     match /organizations/{organization} {
@@ -43,17 +51,12 @@ service cloud.firestore {
       allow read: if request.auth != null;
     }
 
-    // TODO: delete this rule once transitioned to model data and predictions
-    match /results/{document=**} {
-      allow read: if request.auth != null;
-    }
-
     match /model_data/{document=**} {
       allow read: if request.auth != null;
     }
 
     match /model_predictions/{document=**} {
-      allow read: if request.auth != null && interventionUser();
+      allow read: if request.auth != null && isInterventionUser();
     }
   }
 }
