@@ -350,6 +350,25 @@ describe("Form functionality", () => {
         .find("textarea")
         .type("Hello, world.");
 
+      // try to close without saving
+      let alerted = false;
+      cy.on("window:confirm", (str) => {
+        expect(str).to.equal(
+          "Are you sure you want to close the form? You have unsaved changes."
+        );
+        alerted = true;
+        return false;
+      });
+
+      cy.get("body")
+        .type("{esc}")
+        .then(() => expect(alerted).to.be.true);
+
+      alerted = false;
+      cy.get("button.delete")
+        .click()
+        .then(() => expect(alerted).to.be.true);
+
       // Save the form
       cy.get('[data-cy="active-form-modal"]')
         .find("button")

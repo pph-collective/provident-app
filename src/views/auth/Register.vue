@@ -81,7 +81,7 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input type="checkbox" v-model="form.terms" />
+            <input type="checkbox" v-model="form.terms" data-cy="form-terms" />
             I agree to the
             <a @click.prevent="showTerms = true">terms and conditions</a>
           </label>
