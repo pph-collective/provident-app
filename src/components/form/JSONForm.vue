@@ -99,6 +99,9 @@ export default {
     const closeDialog =
       "Are you sure you want to close the form? You have unsaved changes.";
 
+    // watches for changes in the closeRequest prop treating a change as an event trigger
+    // alerts the user if they have unsaved changes before continuing to close
+    // emits a close event to close the form
     watch(
       () => props.closeRequest,
       () => {
