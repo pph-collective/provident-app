@@ -75,7 +75,7 @@
               class="button is-primary level-item"
               data-cy="launch-form-button"
               type="button"
-              @click="activeForm = formResponse"
+              @click="activeFormResponse = formResponse"
             >
               Launch Form
             </button>
@@ -84,7 +84,7 @@
               class="button is-primary is-light level-item"
               data-cy="review-form-button"
               type="button"
-              @click="activeForm = formResponse"
+              @click="activeFormResponse = formResponse"
             >
               Review Form
             </button>
@@ -97,7 +97,7 @@
   <teleport to="body">
     <div v-esc="() => (closeFormRequest += 1)">
       <div
-        v-if="activeForm.questions"
+        v-if="'response' in activeFormResponse"
         class="modal is-active"
         data-cy="active-form-modal"
       >
@@ -105,7 +105,7 @@
         <div class="modal-card is-family-secondary">
           <header class="modal-card-head">
             <p class="modal-card-title" data-cy="active-form-title">
-              {{ activeForm.title }}
+              {{ activeFormResponse.title }}
             </p>
             <button
               class="delete"
@@ -116,16 +116,17 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <JSONForm
-              :init-schema="activeForm.questions"
+              :init-schema="getFormQuestions(activeFormResponse.form_id)"
               :read-only="
-                activeForm.status === 'Submitted' ||
-                (activeForm.type === 'organization' && userRole !== 'champion')
+                activeFormResponse.status === 'Submitted' ||
+                (activeFormResponse.type === 'organization' &&
+                  userRole !== 'champion')
               "
-              :init-value="formResponses[activeForm._id].response"
+              :init-value="activeFormResponse.response"
               :close-request="closeFormRequest"
               @save="updateFormResponse($event, 'Draft')"
               @submitted="updateFormResponse($event, 'Submitted')"
-              @close="activeForm = {}"
+              @close="activeFormResponse = {}"
             />
             <p
               v-if="formMessage"
@@ -157,9 +158,9 @@ export default {
     ...esc,
   },
   setup() {
-    const forms = ref([]);
+    const forms = ref({});
     const formResponses = ref([]);
-    const activeForm = ref({});
+    const activeFormResponse = ref({});
     const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
     const formMessage = ref("");
@@ -222,8 +223,20 @@ export default {
       );
     });
 
+    const getFormQuestions = (formId) => {
+      if (formId) {
+        const form = forms.value[formId];
+
+        if (form) {
+          return form.questions;
+        }
+      }
+
+      return [];
+    };
+
     const updateFormResponse = async (response, status) => {
-      const oldFormResponse = formResponses.value[activeForm.value._id];
+      const oldFormResponse = formResponses.value[activeFormResponse.value._id];
       const oldUsersEdited = oldFormResponse
         ? oldFormResponse.users_edited
         : [];
@@ -231,8 +244,8 @@ export default {
       const success = await fb.updateFormResponse(
         userEmail.value,
         organization.value,
-        activeForm.value.type,
-        activeForm.value._id,
+        activeFormResponse.value.type,
+        activeFormResponse.value._id,
         oldUsersEdited,
         response,
         status
@@ -240,10 +253,14 @@ export default {
 
       if (success) {
         formMessage.value = "Form successfully saved";
-        formResponses.value[activeForm.value._id] = { status, response };
-        forms.value.find((f) => f._id === activeForm.value._id).status = status;
+        formResponses.value[activeFormResponse.value._id] = {
+          status,
+          response,
+        };
+        forms.value.find((f) => f._id === activeFormResponse.value._id).status =
+          status;
         if (status === "Submitted") {
-          activeForm.value = {};
+          activeFormResponse.value = {};
         }
       } else {
         formMessage.value = "Error saving form";
@@ -255,9 +272,10 @@ export default {
 
     return {
       selectedFormResponses,
-      activeForm,
+      activeFormResponse,
       tabs,
       selectedTab,
+      getFormQuestions,
       updateFormResponse,
       formMessage,
       today,

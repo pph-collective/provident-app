@@ -75,11 +75,11 @@ const getOrgs = async () => {
 };
 
 const getForms = async () => {
-  const forms = [];
+  const forms = {};
   try {
     const docs = await db.collection("forms").get();
     docs.forEach((doc) => {
-      forms.push({ _id: doc.id, ...doc.data() });
+      forms[doc.id] = { _id: doc.id, ...doc.data() };
     });
   } catch (err) {
     console.log(err);
