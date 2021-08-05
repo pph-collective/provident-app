@@ -119,43 +119,23 @@ const getFormResponses = async (email, organization) => {
   return formResponses;
 };
 
-const updateFormResponse = async (
-  email,
-  organization,
-  formType,
-  formId,
-  formUsersEdited,
-  response,
-  status
-) => {
-  let users_edited = formUsersEdited ?? [];
-  if (!users_edited.includes(email)) {
-    users_edited.push(email);
-  }
-
-  const data = {
-    form_id: formId,
-    status,
-    response,
-    user_submitted: status === "Submitted" ? email : "",
-    users_edited: users_edited,
-    last_updated: Date.now(),
-  };
-
+const updateFormResponse = async (email, organization, formResponse) => {
   try {
-    if (formType === "user") {
+    if (formResponse.type === "user") {
       await db
         .collection("users")
         .doc(email)
         .collection("form_responses")
-        .add(data);
+        .doc(formResponse._id)
+        .set(formResponse);
       return true;
-    } else if (formType === "organization") {
+    } else if (formResponse.type === "organization") {
       await db
         .collection("organizations")
         .doc(organization)
         .collection("form_responses")
-        .add(data);
+        .doc(formResponse._id)
+        .set(formResponse);
       return true;
     }
   } catch (e) {

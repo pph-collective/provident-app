@@ -236,31 +236,47 @@ export default {
     };
 
     const updateFormResponse = async (response, status) => {
-      const oldFormResponse = formResponses.value[activeFormResponse.value._id];
-      const oldUsersEdited = oldFormResponse
-        ? oldFormResponse.users_edited
-        : [];
+      let users_edited = activeFormResponse.value.users_edited ?? [];
+      if (!users_edited.includes(userEmail.value)) {
+        users_edited.push(userEmail.value);
+      }
+
+      const updateData = {
+        response: response,
+        users_edited: users_edited,
+        user_submitted: status === "Submitted" ? userEmail.value : "",
+        last_updated: Date.now(),
+        status: status,
+      };
+
+      const updatedFormResponse = {
+        ...activeFormResponse.value,
+        ...updateData,
+      };
 
       const success = await fb.updateFormResponse(
         userEmail.value,
         organization.value,
-        activeFormResponse.value.type,
-        activeFormResponse.value._id,
-        oldUsersEdited,
-        response,
-        status
+        updatedFormResponse
       );
 
       if (success) {
         formMessage.value = "Form successfully saved";
-        formResponses.value[activeFormResponse.value._id] = {
-          status,
-          response,
-        };
-        forms.value.find((f) => f._id === activeFormResponse.value._id).status =
-          status;
+
+        // update formResponses
+        const formResponseIndex = formResponses.value.findIndex(
+          (formResponse) =>
+            formResponse._id === activeFormResponse.value._id &&
+            formResponse.type === activeFormResponse.value.type
+        );
+
+        formResponses.value[formResponseIndex] = updatedFormResponse;
+
+        // update activeFormResponse
         if (status === "Submitted") {
           activeFormResponse.value = {};
+        } else {
+          activeFormResponse.value = updatedFormResponse;
         }
       } else {
         formMessage.value = "Error saving form";
