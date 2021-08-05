@@ -59,7 +59,7 @@ export default {
       },
     },
     closeRequest: {
-      type: Boolean,
+      type: Number,
       required: true,
     },
   },
@@ -89,11 +89,10 @@ export default {
 
     const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
-    const saveDisabled = computed(() => {
-      return (
+    const saveDisabled = computed(
+      () =>
         JSON.stringify({ ...props.initValue }) === JSON.stringify(value.value)
-      );
-    });
+    );
 
     const closeDialog =
       "Are you sure you want to close the form? You have unsaved changes.";

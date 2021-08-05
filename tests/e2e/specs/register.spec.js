@@ -18,6 +18,7 @@ describe("Register User", () => {
     cy.get('[data-cy="form-organization"]').select("Good Doers");
     cy.get('[data-cy="form-password"]').type("register-password");
     cy.get('[data-cy="form-confirm-password"]').type("register-password");
+    cy.get('[data-cy="form-terms"]').click();
 
     cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();
@@ -41,6 +42,7 @@ describe("Register User", () => {
     cy.get('[data-cy="form-organization"]').select("Good Doers");
     cy.get('[data-cy="form-password"]').type("register-password");
     cy.get('[data-cy="form-confirm-password"]').type("register-password");
+    cy.get('[data-cy="form-terms"]').click();
 
     cy.get('[data-cy="request-access-button"]').should("be.enabled");
     cy.get("form").submit();
