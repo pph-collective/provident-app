@@ -63,7 +63,7 @@ export default {
       required: true,
     },
   },
-  emits: ["save", "submitted", "close", "keep-open"],
+  emits: ["save", "submitted", "close"],
   setup(props, { emit }) {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
