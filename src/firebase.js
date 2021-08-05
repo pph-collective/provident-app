@@ -89,24 +89,26 @@ const getForms = async () => {
 };
 
 const getFormResponses = async (email, organization) => {
-  const formResponses = {};
+  let formResponses = [];
   try {
     const userFormResponses = await db
       .collection("users")
       .doc(email)
       .collection("form_responses")
       .get();
-    userFormResponses.forEach((doc) => {
-      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
-    });
 
     const organizationFormResponses = await db
       .collection("organizations")
       .doc(organization)
       .collection("form_responses")
       .get();
-    organizationFormResponses.forEach((doc) => {
-      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
+
+    formResponses = [
+      ...userFormResponses.docs,
+      ...organizationFormResponses.docs,
+    ];
+    formResponses = formResponses.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
     });
 
     return formResponses;
@@ -132,6 +134,7 @@ const updateFormResponse = async (
   }
 
   const data = {
+    form_id: formId,
     status,
     response,
     user_submitted: status === "Submitted" ? email : "",
@@ -145,16 +148,14 @@ const updateFormResponse = async (
         .collection("users")
         .doc(email)
         .collection("form_responses")
-        .doc(formId)
-        .set(data);
+        .add(data);
       return true;
     } else if (formType === "organization") {
       await db
         .collection("organizations")
         .doc(organization)
         .collection("form_responses")
-        .doc(formId)
-        .set(data);
+        .add(data);
       return true;
     }
   } catch (e) {
