@@ -13,7 +13,7 @@
     </div>
 
     <div
-      v-if="selectedForms.length === 0"
+      v-if="selectedFormResponses.length === 0"
       data-cy="forms-panel-block"
       class="panel-block is-justify-content-center"
     >
@@ -22,20 +22,20 @@
     <div
       v-else
       data-cy="forms-panel-block"
-      v-for="(form, idx) in selectedForms"
-      :key="'form-' + idx"
+      v-for="(formResponse, idx) in selectedFormResponses"
+      :key="'formResponse-' + idx"
       class="panel-block"
     >
       <div class="level form-row" data-cy="form-row">
         <div class="level-left">
           <p class="level-item is-size-5" data-cy="form-title">
-            {{ form.title }}
+            {{ formResponse.title }}
           </p>
         </div>
 
         <div class="level-right has-text-centered">
           <span
-            v-if="form.type === 'organization'"
+            v-if="formResponse.type === 'organization'"
             class="level-item tag"
             data-cy="organization-level-tag"
           >
@@ -45,34 +45,37 @@
             v-if="user.admin"
             class="level-item tag"
             :class="{
-              'is-success is-light': form.release_date <= today,
+              'is-success is-light': formResponse.release_date <= today,
             }"
             data-cy="release-date-tag"
           >
-            <p><strong>RELEASE DATE:</strong> {{ form.release_date }}</p>
+            <p>
+              <strong>RELEASE DATE:</strong> {{ formResponse.release_date }}
+            </p>
           </span>
           <span
             class="level-item tag is-light"
             :class="{
-              'is-warning': form.status === 'Not Started',
-              'is-info': form.status === 'Draft',
-              'is-success': form.status === 'Submitted',
+              'is-warning': formResponse.status === 'Not Started',
+              'is-info': formResponse.status === 'Draft',
+              'is-success': formResponse.status === 'Submitted',
             }"
             data-cy="status-tag"
           >
-            <p><strong>STATUS:</strong> {{ form.status }}</p>
+            <p><strong>STATUS:</strong> {{ formResponse.status }}</p>
           </span>
           <div class="level-item">
             <button
               v-if="
-                form.status !== 'Submitted' &&
-                (form.type === 'user' ||
-                  (form.type === 'organization' && userRole === 'champion'))
+                formResponse.status !== 'Submitted' &&
+                (formResponse.type === 'user' ||
+                  (formResponse.type === 'organization' &&
+                    userRole === 'champion'))
               "
               class="button is-primary level-item"
               data-cy="launch-form-button"
               type="button"
-              @click="activeForm = form"
+              @click="activeForm = formResponse"
             >
               Launch Form
             </button>
@@ -81,7 +84,7 @@
               class="button is-primary is-light level-item"
               data-cy="review-form-button"
               type="button"
-              @click="activeForm = form"
+              @click="activeForm = formResponse"
             >
               Review Form
             </button>
@@ -155,7 +158,7 @@ export default {
   },
   setup() {
     const forms = ref([]);
-    const formResponses = ref({});
+    const formResponses = ref([]);
     const activeForm = ref({});
     const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
@@ -163,25 +166,26 @@ export default {
 
     const closeFormRequest = ref(0);
 
-    const selectedForms = computed(() => {
-      if (selectedTab.value === "All") return forms.value;
+    const selectedFormResponses = computed(() => {
+      if (selectedTab.value === "All") return formResponses.value;
 
-      return forms.value.filter((value) => {
+      return formResponses.value.filter((formResponse) => {
         if (
           selectedTab.value === "To Do" &&
-          value.status !== "Submitted" &&
-          (value.type === "user" ||
-            (value.type === "organization" && userRole.value === "champion"))
+          formResponse.status !== "Submitted" &&
+          (formResponse.type === "user" ||
+            (formResponse.type === "organization" &&
+              userRole.value === "champion"))
         ) {
           return true;
         } else if (
           selectedTab.value === "Submitted" &&
-          value.status === "Submitted"
+          formResponse.status === "Submitted"
         ) {
           return true;
         } else if (
           selectedTab.value === "Organization-level" &&
-          value.type === "organization"
+          formResponse.type === "organization"
         ) {
           return true;
         }
@@ -216,19 +220,6 @@ export default {
         userEmail.value,
         organization.value
       );
-
-      forms.value.forEach((value) => {
-        let formResponse = formResponses.value[value._id];
-        if (formResponse) {
-          value.status = formResponse.status;
-        } else {
-          value.status = "Not Started";
-          formResponses.value[value._id] = {
-            status: "Not Started",
-            response: {},
-          };
-        }
-      });
     });
 
     const updateFormResponse = async (response, status) => {
@@ -263,7 +254,7 @@ export default {
     };
 
     return {
-      selectedForms,
+      selectedFormResponses,
       activeForm,
       tabs,
       selectedTab,
