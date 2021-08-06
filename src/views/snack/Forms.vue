@@ -97,7 +97,7 @@
   <teleport to="body">
     <div v-esc="() => (closeFormRequest += 1)">
       <div
-        v-if="'response' in activeFormResponse"
+        v-if="'form_id' in activeFormResponse"
         class="modal is-active"
         data-cy="active-form-modal"
       >
