@@ -36,6 +36,7 @@
       <template #content>
         <div class="map-container">
           <Map
+            id="main-map"
             v-if="dataset.length > 0"
             class="is-absolute"
             :dataset="dataset"
@@ -47,6 +48,7 @@
             :data-cy="controls.geography.name"
           />
           <BGMap
+            id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
             :block-group="activeGeoid"
             class="is-absolute"
