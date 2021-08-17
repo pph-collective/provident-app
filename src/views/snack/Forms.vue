@@ -116,7 +116,7 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <JSONForm
-              :init-schema="getFormQuestions(activeFormResponse.form_id)"
+              :init-schema="activeFormQuestions"
               :read-only="
                 activeFormResponse.status === 'Submitted' ||
                 (activeFormResponse.type === 'organization' &&
@@ -223,7 +223,9 @@ export default {
       );
     });
 
-    const getFormQuestions = (formId) => {
+    const activeFormQuestions = computed(() => {
+      const formId = activeFormResponse.value.form_id;
+
       if (formId) {
         const form = forms.value[formId];
 
@@ -233,7 +235,7 @@ export default {
       }
 
       return [];
-    };
+    });
 
     const updateFormResponse = async (response, status) => {
       let users_edited = activeFormResponse.value.users_edited ?? [];
@@ -242,11 +244,11 @@ export default {
       }
 
       const updateData = {
-        response: response,
-        users_edited: users_edited,
+        response,
+        users_edited,
         user_submitted: status === "Submitted" ? userEmail.value : "",
         last_updated: Date.now(),
-        status: status,
+        status,
       };
 
       const updatedFormResponse = {
@@ -291,7 +293,7 @@ export default {
       activeFormResponse,
       tabs,
       selectedTab,
-      getFormQuestions,
+      activeFormQuestions,
       updateFormResponse,
       formMessage,
       today,
