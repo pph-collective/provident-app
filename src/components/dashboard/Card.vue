@@ -6,7 +6,10 @@
     <header v-if="!noHeader" class="dashboard-card-header">
       <div
         class="
-          is-flex is-flex-direction-row is-justify-content-space-between
+          is-flex
+          is-flex-direction-row
+          is-justify-content-space-between
+          is-flex-wrap-wrap
           fullwidth
         "
       >
@@ -61,6 +64,9 @@ export default {
   @extend .px-4;
   @extend .py-4;
   width: 100%;
+}
+.title {
+  min-width: 200px;
 }
 .dashboard-card-content {
   padding: 0;

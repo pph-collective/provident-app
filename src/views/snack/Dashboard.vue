@@ -13,13 +13,23 @@
         <button
           v-if="!zoomed"
           :disabled="!activeGeoid"
-          class="button"
+          class="zoom-button button is-family-secondary is-info is-light"
           @click="zoomed = true"
         >
-          Zoom to Block Group
+          <span class="icon">
+            <i class="fas fa-search-plus"></i>
+          </span>
+          <span>Zoom to Block Group</span>
         </button>
-        <button v-else class="button" @click="zoomed = false">
-          Zoom back out
+        <button
+          v-else
+          class="zoom-button button is-family-secondary is-info is-light"
+          @click="zoomed = false"
+        >
+          <span class="icon">
+            <i class="fas fa-search-minus"></i>
+          </span>
+          <span>Zoom Back Out</span>
         </button>
       </template>
       <template #subtitle>Some really great insights</template>
@@ -229,5 +239,9 @@ export default {
     padding-left: 0px;
     padding-right: 0px;
   }
+}
+
+.zoom-button {
+  min-width: 220px;
 }
 </style>
