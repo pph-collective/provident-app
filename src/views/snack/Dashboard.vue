@@ -12,7 +12,7 @@
       <template #top-right>
         <button
           v-if="!zoomed"
-          :disabled="!activeGeoid"
+          :disabled="!activeGeoid || !activeClickedStatus"
           class="zoom-button button is-family-secondary is-info is-light"
           @click="zoomed = true"
         >
@@ -45,6 +45,7 @@
             :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
+            @active-clicked-status="activeClickedStatus = $event"
             :data-cy="controls.geography.name"
           />
           <BGMap
@@ -103,6 +104,7 @@ export default {
     const previousDataset = ref([]);
     const activeGeoid = ref("");
     const activeMuni = ref("");
+    const activeClickedStatus = ref(false);
     const zoomed = ref(false);
 
     const filteredOrgs = computed(() => {
@@ -200,6 +202,7 @@ export default {
       updateControls,
       activeMuni,
       activeGeoid,
+      activeClickedStatus,
       interventionArmUser,
       zoomed,
     };
