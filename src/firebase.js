@@ -75,11 +75,11 @@ const getOrgs = async () => {
 };
 
 const getForms = async () => {
-  const forms = [];
+  const forms = {};
   try {
     const docs = await db.collection("forms").get();
     docs.forEach((doc) => {
-      forms.push({ _id: doc.id, ...doc.data() });
+      forms[doc.id] = { _id: doc.id, ...doc.data() };
     });
   } catch (err) {
     console.log(err);
@@ -89,24 +89,26 @@ const getForms = async () => {
 };
 
 const getFormResponses = async (email, organization) => {
-  const formResponses = {};
+  let formResponses = [];
   try {
     const userFormResponses = await db
       .collection("users")
       .doc(email)
       .collection("form_responses")
       .get();
-    userFormResponses.forEach((doc) => {
-      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
-    });
 
     const organizationFormResponses = await db
       .collection("organizations")
       .doc(organization)
       .collection("form_responses")
       .get();
-    organizationFormResponses.forEach((doc) => {
-      formResponses[doc.id] = { _id: doc.id, ...doc.data() };
+
+    formResponses = [
+      ...userFormResponses.docs,
+      ...organizationFormResponses.docs,
+    ];
+    formResponses = formResponses.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
     });
 
     return formResponses;
@@ -117,44 +119,23 @@ const getFormResponses = async (email, organization) => {
   return formResponses;
 };
 
-const updateFormResponse = async (
-  email,
-  organization,
-  formType,
-  formId,
-  formUsersEdited,
-  response,
-  status
-) => {
-  let users_edited = formUsersEdited ?? [];
-  if (!users_edited.includes(email)) {
-    users_edited.push(email);
-  }
-
-  const data = {
-    status,
-    response,
-    user_submitted: status === "Submitted" ? email : "",
-    users_edited: users_edited,
-    last_updated: Date.now(),
-  };
-
+const updateFormResponse = async (email, organization, formResponse) => {
   try {
-    if (formType === "user") {
+    if (formResponse.type === "user") {
       await db
         .collection("users")
         .doc(email)
         .collection("form_responses")
-        .doc(formId)
-        .set(data);
+        .doc(formResponse._id)
+        .set(formResponse);
       return true;
-    } else if (formType === "organization") {
+    } else if (formResponse.type === "organization") {
       await db
         .collection("organizations")
         .doc(organization)
         .collection("form_responses")
-        .doc(formId)
-        .set(data);
+        .doc(formResponse._id)
+        .set(formResponse);
       return true;
     }
   } catch (e) {
