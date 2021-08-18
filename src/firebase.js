@@ -103,16 +103,6 @@ const getFormAssignments = async () => {
   }
 };
 
-const createFormAssignment = async (doc) => {
-  try {
-    await db.collection("form_assignments").add(doc);
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 const getFormResponses = async (email, organization) => {
   const formTypes = { users: email, organizations: organization };
 
@@ -196,7 +186,6 @@ export default {
   getOrgs,
   getForms,
   getFormAssignments,
-  createFormAssignment,
   getFormResponses,
   updateFormResponse,
   getModelDataPeriods,

@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <div
+      v-if="alert.message"
+      :class="['notification', 'mt-4', 'is-' + alert.color]"
+    >
+      <button class="delete" @click="dismissAlert"></button>
+      {{ alert.message }}
+    </div>
     <section>
       <div class="panel is-primary m-4 had-background-white">
         <p class="panel-heading">Form Assignments</p>
@@ -60,7 +67,7 @@
             <div class="level">
               <div class="level-left">
                 <span class="level-item">
-                  <p><b>Assigned To:</b></p>
+                  <p class="px-4"><b>Assigned To:</b></p>
                 </span>
                 <div
                   v-for="(target_list, category) in assignment.target"
@@ -90,7 +97,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 import fb from "@/firebase";
 
@@ -99,6 +106,11 @@ export default {
     const forms = ref({});
     // const formResponses = ref([]);
     const formAssignments = ref([]);
+    const alert = reactive({ color: "", message: "" });
+
+    const dismissAlert = () => {
+      alert.message = "";
+    };
 
     onMounted(async () => {
       forms.value = await fb.getForms();
@@ -113,20 +125,30 @@ export default {
         release_date: "2021-05-31",
         expire_date: "2021-09-09",
         target: {
-          users: "admin@admin.com",
-          organizations: "Good Doers",
-          groups: "Intervention",
+          users: ["admin@admin.com"],
+          organizations: ["Good Doers"],
+          groups: ["Intervention"],
         },
       };
 
-      const success = await fb.createFormAssignment(data);
-      console.log(success);
+      try {
+        await fb.db.collection("form_assignments").add(data);
+
+        alert.color = "success";
+        alert.message = "form assignment added";
+      } catch (e) {
+        console.log(e);
+        alert.color = "danger";
+        alert.message = e.message;
+      }
     };
 
     return {
+      alert,
       forms,
       formAssignments,
       createFormAssignment,
+      dismissAlert,
     };
   },
 };
