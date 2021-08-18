@@ -34,7 +34,7 @@ export default {
       required: true,
     },
   },
-  emits: ["new-active-bg", "new-active-municipality", "active-clicked-status"],
+  emits: ["new-active-bg", "new-active-municipality"],
   setup(props, { emit }) {
     const { filterMunicipalities, dataset, flagProperty, withPredictions } =
       toRefs(props);
@@ -279,11 +279,6 @@ export default {
               emit("new-active-municipality", currentMuni);
             }
           }
-        });
-
-        view.value.addSignalListener("clicked", (name, value) => {
-          const clicked = value !== null;
-          emit("active-clicked-status", clicked);
         });
       }
     });

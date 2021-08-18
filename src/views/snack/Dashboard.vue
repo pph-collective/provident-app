@@ -9,50 +9,18 @@
 
     <Card v-if="controls.geography" width="two-thirds" id="map">
       <template #title>Map: {{ controls.geography.name }}</template>
-      <template #top-right>
-        <button
-          v-if="!zoomed"
-          :disabled="!activeGeoid || !activeClickedStatus"
-          class="zoom-button button is-family-secondary is-info is-light"
-          @click="zoomed = true"
-        >
-          <span class="icon">
-            <i class="fas fa-search-plus"></i>
-          </span>
-          <span>Zoom to Block Group</span>
-        </button>
-        <button
-          v-else
-          class="zoom-button button is-family-secondary is-info is-light"
-          @click="zoomed = false"
-        >
-          <span class="icon">
-            <i class="fas fa-search-minus"></i>
-          </span>
-          <span>Zoom Back Out</span>
-        </button>
-      </template>
       <template #subtitle>Some really great insights</template>
       <template #content>
         <div class="map-container">
           <Map
-            id="main-map"
             v-if="dataset.length > 0"
-            class="is-absolute"
             :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="flag_1"
             :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
-            @active-clicked-status="activeClickedStatus = $event"
             :data-cy="controls.geography.name"
-          />
-          <BGMap
-            id="bg-zoom-map"
-            v-if="activeGeoid && zoomed"
-            :block-group="activeGeoid"
-            class="is-absolute"
           />
         </div>
       </template>
@@ -80,8 +48,7 @@ import * as aq from "arquero";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
-import Map from "@/components/dashboard/Map.vue";
-import BGMap from "@/components/dashboard/BGMap.vue";
+import Map from "@/components/Map.vue";
 import StatsTable from "@/components/dashboard/StatsTable.vue";
 
 import fb from "@/firebase.js";
@@ -90,7 +57,6 @@ export default {
   components: {
     ControlPanel,
     Map,
-    BGMap,
     Card,
     StatsTable,
   },
@@ -104,8 +70,6 @@ export default {
     const previousDataset = ref([]);
     const activeGeoid = ref("");
     const activeMuni = ref("");
-    const activeClickedStatus = ref(false);
-    const zoomed = ref(false);
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -168,7 +132,6 @@ export default {
       // if either drop down changes, clear out the selected block group
       activeMuni.value = "";
       activeGeoid.value = "";
-      zoomed.value = false;
 
       // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
@@ -202,9 +165,7 @@ export default {
       updateControls,
       activeMuni,
       activeGeoid,
-      activeClickedStatus,
       interventionArmUser,
-      zoomed,
     };
   },
 };
@@ -217,11 +178,6 @@ export default {
   max-width: 90vw;
   height: 80vh;
   max-height: 1280px;
-  position: relative;
-}
-
-.is-absolute {
-  position: absolute;
 }
 
 .dashboard {
@@ -244,9 +200,5 @@ export default {
     padding-left: 0px;
     padding-right: 0px;
   }
-}
-
-.zoom-button {
-  min-width: 220px;
 }
 </style>
