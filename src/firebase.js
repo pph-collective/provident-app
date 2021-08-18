@@ -88,6 +88,31 @@ const getForms = async () => {
   return forms;
 };
 
+const getFormAssignments = async () => {
+  let formAssignments = [];
+  try {
+    const docs = await db.collection("form_assignments").get();
+
+    formAssignments = docs.docs.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
+    });
+
+    return formAssignments;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const createFormAssignment = async (doc) => {
+  try {
+    await db.collection("form_assignments").add(doc);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const getFormResponses = async (email, organization) => {
   let formResponses = [];
   try {
@@ -192,6 +217,8 @@ export default {
   getUserRequest,
   getOrgs,
   getForms,
+  getFormAssignments,
+  createFormAssignment,
   getFormResponses,
   updateFormResponse,
   getModelDataPeriods,
