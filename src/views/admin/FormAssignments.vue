@@ -62,9 +62,24 @@
                 <span class="level-item">
                   <p><b>Assigned To:</b></p>
                 </span>
-                <span class="level-item">
-                  {{ assignment.target }}
-                </span>
+                <div
+                  v-for="(target_list, category) in assignment.target"
+                  :key="category"
+                  class="level-item"
+                >
+                  <div v-if="target_list.length > 0" class="tags has-addons">
+                    <span class="tag is-primary is-rounded">
+                      <b>{{ category }}</b>
+                    </span>
+                    <span
+                      v-for="(target, idx) in target_list"
+                      :key="idx"
+                      class="tag is-info is-rounded is-light"
+                    >
+                      {{ target }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
