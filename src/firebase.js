@@ -114,59 +114,37 @@ const createFormAssignment = async (doc) => {
 };
 
 const getFormResponses = async (email, organization) => {
-  let formResponses = [];
+  const formTypes = { users: email, organizations: organization };
+
   try {
-    const userFormResponses = await db
-      .collection("users")
-      .doc(email)
-      .collection("form_responses")
-      .get();
+    const formResponses = await Promise.all(
+      Object.entries(formTypes).map(async ([collectionId, docId]) => {
+        const response = await db
+          .collection(collectionId)
+          .doc(docId)
+          .collection("form_responses")
+          .get();
+        return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
+      })
+    );
 
-    const organizationFormResponses = await db
-      .collection("organizations")
-      .doc(organization)
-      .collection("form_responses")
-      .get();
-
-    formResponses = [
-      ...userFormResponses.docs,
-      ...organizationFormResponses.docs,
-    ];
-    formResponses = formResponses.map((doc) => {
-      return { _id: doc.id, ...doc.data() };
-    });
-
-    return formResponses;
+    return formResponses.reduce((acc, cur) => [...acc, ...cur], []);
   } catch (err) {
     console.log(err);
+    return [];
   }
-
-  return formResponses;
 };
 
 const updateFormResponse = async (email, organization, formResponse) => {
-  try {
-    if (formResponse.type === "user") {
-      await db
-        .collection("users")
-        .doc(email)
-        .collection("form_responses")
-        .doc(formResponse._id)
-        .set(formResponse);
-      return true;
-    } else if (formResponse.type === "organization") {
-      await db
-        .collection("organizations")
-        .doc(organization)
-        .collection("form_responses")
-        .doc(formResponse._id)
-        .set(formResponse);
-      return true;
-    }
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
+  const { type, _id } = formResponse;
+  const typeMap = { user: email, organization };
+
+  await db
+    .collection(`${type}s`)
+    .doc(typeMap[type])
+    .collection("form_responses")
+    .doc(_id)
+    .set(formResponse);
 };
 
 const getModelDataPeriods = async () => {

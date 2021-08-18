@@ -175,6 +175,8 @@ describe("Dashboard viewed as a control arm user", () => {
 
     cy.get("select#geography").select("RI 4 Us");
 
+    cy.get(".zoom-button").should("be.disabled");
+
     cy.get('.map-container [data-cy="RI 4 Us"] svg')
       .trigger("mouseover", "center")
       .trigger("mousemove", "center")
@@ -212,6 +214,33 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("not.have.class", "has-text-light")
       .find("i")
       .should("have.class", "fa-arrow-alt-circle-right");
+
+    // move mouse out of the way
+    cy.get('.map-container [data-cy="RI 4 Us"] svg').trigger(
+      "mouseout",
+      "center"
+    );
+
+    // zoom button enabled, zoom in!
+    cy.get(".zoom-button").should("not.be.disabled").click();
+
+    // try to trigger tooltip
+    cy.get(".map-container #bg-zoom-map svg")
+      .trigger("mouseover", "center")
+      .trigger("mousemove", "center");
+
+    // no tooltip should be visible (zoomed map is not interactive)
+    cy.get("#vg-tooltip-element").should("not.have.class", "visible");
+
+    // zoom back out
+    cy.get(".zoom-button").should("not.be.disabled").click();
+
+    // should get a tooltip again
+    cy.get('.map-container [data-cy="RI 4 Us"] svg')
+      .trigger("mouseover", "center")
+      .trigger("mousemove", "center");
+
+    cy.get("#vg-tooltip-element").should("have.class", "visible");
   });
 });
 

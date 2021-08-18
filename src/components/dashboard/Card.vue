@@ -4,7 +4,18 @@
     :class="['is-' + width, 'is-height-' + height]"
   >
     <header v-if="!noHeader" class="dashboard-card-header">
-      <h2 class="title"><slot name="title"></slot></h2>
+      <div
+        class="
+          is-flex
+          is-flex-direction-row
+          is-justify-content-space-between
+          is-flex-wrap-wrap
+          fullwidth
+        "
+      >
+        <h2 class="title"><slot name="title"></slot></h2>
+        <div><slot name="top-right"></slot></div>
+      </div>
       <h3 class="subtitle is-family-secondary">
         <slot name="subtitle"></slot>
       </h3>
@@ -52,9 +63,16 @@ export default {
   align-items: flex-start;
   @extend .px-4;
   @extend .py-4;
+  width: 100%;
+}
+.title {
+  min-width: 200px;
 }
 .dashboard-card-content {
   padding: 0;
+  width: 100%;
+}
+.fullwidth {
   width: 100%;
 }
 .is-one-third {
