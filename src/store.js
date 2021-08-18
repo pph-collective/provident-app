@@ -53,7 +53,6 @@ const store = createStore({
       commit("mutate", { property: "organizations", with: orgs });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
-      console.log(updatedFormResponse);
       await fb.updateFormResponse(
         state.user.data.email,
         state.user.data.organization,
