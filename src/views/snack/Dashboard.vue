@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard p-4 container is-fullhd">
+  <div class="dashboard container is-fullhd">
     <ControlPanel
       v-if="resultPeriods.length > 0"
       id="dashboard-control-panel"
@@ -7,7 +7,7 @@
       @selected="updateControls"
     />
 
-    <Card v-if="controls.geography" width="two-thirds" id="map">
+    <Card v-if="controls.geography" width="two-thirds" :height="4" id="map">
       <template #title>Map: {{ controls.geography.name }}</template>
       <template #top-right>
         <button
@@ -58,7 +58,7 @@
       </template>
     </Card>
 
-    <Card v-if="dataset.length > 0" width="one-third" id="stats">
+    <Card v-if="dataset.length > 0" width="one-third" :height="3" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
@@ -68,6 +68,13 @@
           :geoid="activeGeoid"
           :with-predictions="interventionArmUser"
         />
+      </template>
+    </Card>
+
+    <Card v-if="dataset.length > 0" width="one-third" :height="1">
+      <template #title>Neighborhood Rapid Assessment</template>
+      <template #content>
+        <AssessmentWidget :active-geoid="activeGeoid" />
       </template>
     </Card>
   </div>
@@ -83,6 +90,7 @@ import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/dashboard/Map.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsTable from "@/components/dashboard/StatsTable.vue";
+import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 
 import fb from "@/firebase.js";
 
@@ -93,6 +101,7 @@ export default {
     BGMap,
     Card,
     StatsTable,
+    AssessmentWidget,
   },
   setup() {
     const store = useStore();
@@ -225,9 +234,8 @@ export default {
 }
 
 .dashboard {
-  @extend .px-4;
-  @extend .py-4;
-  z-index: 20;
+  padding: 1rem;
+  z-index: 5;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
@@ -239,10 +247,10 @@ export default {
   align-content: start;
   grid-auto-flow: row;
   @include mobile {
-    grid-template-columns: 100vw;
+    grid-template-columns: 100%;
     column-gap: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 5px;
+    row-gap: 5px;
   }
 }
 

@@ -13,7 +13,7 @@
           fullwidth
         "
       >
-        <h2 class="title"><slot name="title"></slot></h2>
+        <h2 class="title mb-3"><slot name="title"></slot></h2>
         <div><slot name="top-right"></slot></div>
       </div>
       <h3 class="subtitle is-family-secondary">

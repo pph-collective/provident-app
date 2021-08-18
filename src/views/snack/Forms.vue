@@ -77,7 +77,7 @@
               type="button"
               @click="activeFormResponse = formResponse"
             >
-              Launch Form
+              {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
             </button>
             <button
               v-else
