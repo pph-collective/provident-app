@@ -14,10 +14,7 @@
         <div class="panel-block is-block">
           <div class="columns">
             <span class="column has-text-centered">
-              <button
-                class="button is-link is-outlined"
-                @click="createFormAssignment({})"
-              >
+              <button class="button is-primary" @click="showModal = true">
                 + Create
               </button>
             </span>
@@ -91,6 +88,31 @@
             </div>
           </div>
         </div>
+
+        <div class="modal" :class="{ 'is-active': showModal }">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Create New Form Assignment</p>
+              <button
+                class="delete"
+                aria-label="close"
+                @click="showModal = false"
+              ></button>
+            </header>
+            <section class="modal-card-body">
+              <!--              TODO: Save, Submitted, Close functions-->
+              <JSONForm
+                :init-schema="formQuestions"
+                :init-value="{}"
+                :read-only="false"
+                @save="dismissAlert()"
+                @submitted="dismissAlert()"
+                @close="dismissAlert()"
+              />
+            </section>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -100,13 +122,60 @@
 import { onMounted, reactive, ref } from "vue";
 
 import fb from "@/firebase";
+import JSONForm from "@/components/form/JSONForm.vue";
 
 export default {
+  components: {
+    JSONForm,
+  },
   setup() {
     const forms = ref({});
     // const formResponses = ref([]);
     const formAssignments = ref([]);
     const alert = reactive({ color: "", message: "" });
+    const showModal = ref(false);
+
+    // TODO: Validations on dates, add list of forms, users, organizations
+    const formQuestions = ref([
+      {
+        component: "Select",
+        label: "Form",
+        model: "form",
+        options: ["My Form", "Sample Organization Form"],
+        required: true,
+      },
+      {
+        component: "Select",
+        label: "Assign to users",
+        model: "users",
+        options: ["admin@admin.com", "user@user.com"],
+      },
+      {
+        component: "Select",
+        label: "Assign to organizations",
+        model: "orgs",
+        options: ["Good Doers", "RI 4 Us"],
+      },
+      {
+        component: "Select",
+        label: "Assign to groups",
+        model: "groups",
+        options: ["all", "intervention"],
+      },
+      {
+        component: "TextInput",
+        label: "Release Date (when the forms will be released)",
+        model: "release_date",
+        required: true,
+      },
+      {
+        component: "TextInput",
+        label:
+          "Expire Date (when the forms are due and when the form assignment expires)",
+        model: "expire_date",
+        required: true,
+      },
+    ]);
 
     const dismissAlert = () => {
       alert.message = "";
@@ -146,9 +215,11 @@ export default {
     return {
       alert,
       forms,
+      formQuestions,
       formAssignments,
       createFormAssignment,
       dismissAlert,
+      showModal,
     };
   },
 };
