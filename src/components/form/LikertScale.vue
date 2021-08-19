@@ -21,10 +21,18 @@
                 :data-label="option"
                 @click.self="checkRadio($event, modelValue)"
               >
+                <!--
+                Radio Button
+                name: All radio buttons that share the same name and are controls in the same form are part of a group
+                id: The id of each radio button is unique
+                data-key: statement key for the modelValue
+                value: statement value for the modelValue
+                -->
                 <input
                   type="radio"
                   :name="`${uuid}-statements-${i}`"
-                  :id="`statements-${i}`"
+                  :id="`statements-${i}-${j}`"
+                  :data-key="`statements-${i}`"
                   :value="option"
                   :checked="
                     modelValue
@@ -95,8 +103,7 @@ export default {
 
     const updateValue = (radioButton, modelValue) => {
       let result = modelValue ?? {};
-
-      result[radioButton.id] = radioButton.value;
+      result[radioButton.getAttribute("data-key")] = radioButton.value;
       emit("update:modelValue", result);
     };
 
