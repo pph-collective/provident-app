@@ -31,7 +31,7 @@
                 <input
                   type="radio"
                   :name="`${uuid}-statements-${i}`"
-                  :id="`statements-${i}-${j}`"
+                  :id="`${uuid}-statements-${i}-${j}`"
                   :data-key="`statements-${i}`"
                   :value="option"
                   :checked="
