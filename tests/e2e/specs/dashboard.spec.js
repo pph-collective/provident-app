@@ -144,7 +144,7 @@ describe("Dashboard viewed as a user", () => {
       .trigger("click", "center");
 
     cy.get("#nra-widget .form-response-container p").should(
-      "have.text",
+      "contain",
       "No Assessments Found for 0401021"
     );
 
@@ -189,15 +189,18 @@ describe("Dashboard viewed as a user", () => {
     cy.get("#nra-widget .form-response-container table tbody tr")
       .should("have.length", 2)
       .find("button")
+      .first()
       .should("have.text", "Continue")
       .click();
 
     // fill out form completely, row switches to review
     cy.get("button").contains("Submit").click();
+    cy.get("[data-cy='active-form-title']").should("not.exist");
 
     cy.get("#nra-widget .form-response-container table tbody tr")
       .should("have.length", 2)
       .find("button")
+      .first()
       .should("have.text", "Review");
   });
 });
