@@ -12,6 +12,7 @@
             </div>
             <div class="control">
               <button
+                v-show="showSaveButton"
                 type="button"
                 class="button is-info"
                 :disabled="saveDisabled"
@@ -61,6 +62,12 @@ export default {
     closeRequest: {
       type: Number,
       required: true,
+    },
+    showSaveButton: {
+      type: Boolean,
+      default() {
+        return true;
+      },
     },
   },
   emits: ["save", "submitted", "close"],

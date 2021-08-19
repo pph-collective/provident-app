@@ -106,7 +106,8 @@
                 :init-schema="formQuestions"
                 :init-value="{}"
                 :read-only="false"
-                @save="dismissAlert()"
+                :showSaveButton="false"
+                :close-request="0"
                 @submitted="dismissAlert()"
                 @close="dismissAlert()"
               />
