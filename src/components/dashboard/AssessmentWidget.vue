@@ -38,8 +38,8 @@
   <div class="is-flex is-justify-content-center">
     <button
       v-if="userRole === 'champion'"
+      id="new-assessment"
       class="button is-primary mt-4"
-      data-cy="launch-form-button"
       type="button"
       :disabled="!activeGeoid"
       @click="createNewAssessment"

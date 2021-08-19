@@ -1,7 +1,9 @@
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
-    cy.login_by_permission("approved");
+    cy.login_by_permission("champion");
     cy.visit("/snack/dashboard");
+    cy.get(".dashboard").should("exist");
+    cy.get(".loading-icon").should("not.exist");
   });
 
   it("Has a control panel with limited dropdowns", () => {
@@ -125,12 +127,87 @@ describe("Dashboard viewed as a user", () => {
         .should("have.text", "Little Compton");
     });
   });
+
+  it("has a neighborhood rapid assessment widget", () => {
+    // when nothing is selected, the correct message is shown, no table
+    cy.get("#nra-widget .form-response-container p").should(
+      "contain",
+      "Select a block group on the map to see its completed assessments or start a new one"
+    );
+
+    // when something is selected with no assessments, correct message is shown, no table
+    cy.get("select#geography").select("Good Doers");
+
+    cy.get(".map-container [data-cy='Good Doers'] svg")
+      .trigger("mouseover", "center")
+      .trigger("mousemove", "center")
+      .trigger("click", "center");
+
+    cy.get("#nra-widget .form-response-container p").should(
+      "have.text",
+      "No Assessments Found for 0401021"
+    );
+
+    // fill out a form partially, save, table shown
+    cy.get("#nra-widget button#new-assessment").click();
+
+    cy.get("[data-cy='active-form-title']").should(
+      "contain",
+      "Neighborhood Rapid Assessment"
+    );
+
+    cy.get("[model='q2_other_related_services']")
+      .find("textarea")
+      .type("Lots of resources");
+
+    cy.get("button").contains("Save").click();
+
+    cy.get('[data-cy="close-form"]').click();
+
+    cy.get("#nra-widget .form-response-container table tbody tr")
+      .should("have.length", 1)
+      .find("button")
+      .should("have.text", "Continue");
+
+    // fill out another form partially, save, two rows
+
+    cy.get("#nra-widget button#new-assessment").click();
+
+    cy.get("[data-cy='active-form-title']").should(
+      "contain",
+      "Neighborhood Rapid Assessment"
+    );
+
+    cy.get("[model='q2_other_related_services']")
+      .find("textarea")
+      .type("Lots of resources");
+
+    cy.get("button").contains("Save").click();
+
+    cy.get('[data-cy="close-form"]').click();
+
+    cy.get("#nra-widget .form-response-container table tbody tr")
+      .should("have.length", 2)
+      .find("button")
+      .should("have.text", "Continue")
+      .click();
+
+    // fill out form completely, row switches to review
+    cy.get("button").contains("Submit").click();
+
+    cy.get("#nra-widget .form-response-container table tbody tr")
+      .should("have.length", 2)
+      .find("button")
+      .should("have.text", "Review");
+  });
 });
 
 describe("Dashboard viewed as a control arm user", () => {
   beforeEach(() => {
     cy.login_by_permission("control");
     cy.visit("/snack/dashboard");
+    cy.get(".dashboard").should("exist");
+    cy.get(".loading-icon").should("not.exist");
   });
 
   it("Has a control panel with all dropdowns", () => {
@@ -242,12 +319,18 @@ describe("Dashboard viewed as a control arm user", () => {
 
     cy.get("#vg-tooltip-element").should("have.class", "visible");
   });
+
+  it("has an assessment widget without start button", () => {
+    cy.get("#nra-widget button").should("not.exist");
+  });
 });
 
 describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
     cy.visit("/snack/dashboard");
+    cy.get(".dashboard").should("exist");
+    cy.get(".loading-icon").should("not.exist");
   });
 
   it("Has a control panel with all dropdowns", () => {

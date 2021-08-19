@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
       v-if="resultPeriods.length > 0"
@@ -7,8 +8,8 @@
       @selected="updateControls"
     />
 
-    <Card v-if="controls.geography" width="two-thirds" :height="4" id="map">
-      <template #title>Map: {{ controls.geography.name }}</template>
+    <Card width="two-thirds" :height="4" id="map">
+      <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
       <template #top-right>
         <button
           v-if="!zoomed"
@@ -34,7 +35,7 @@
       </template>
       <template #subtitle>Some really great insights</template>
       <template #content>
-        <div class="map-container">
+        <div v-if="controls.geography" class="map-container">
           <Map
             id="main-map"
             v-if="dataset.length > 0"
@@ -58,10 +59,11 @@
       </template>
     </Card>
 
-    <Card v-if="dataset.length > 0" width="one-third" :height="3" id="stats">
+    <Card width="one-third" :height="3" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
+          v-if="dataset.length > 0"
           :dataset="dataset"
           :previous-dataset="previousDataset"
           :municipality="activeMuni"
@@ -71,7 +73,7 @@
       </template>
     </Card>
 
-    <Card v-if="dataset.length > 0" width="one-third" :height="1">
+    <Card width="one-third" :height="1" id="nra-widget">
       <template #title>Neighborhood Rapid Assessment</template>
       <template #content>
         <AssessmentWidget :active-geoid="activeGeoid" />
@@ -91,6 +93,7 @@ import Map from "@/components/dashboard/Map.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsTable from "@/components/dashboard/StatsTable.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
+import Loading from "@/components/Loading.vue";
 
 import fb from "@/firebase.js";
 
@@ -102,6 +105,7 @@ export default {
     Card,
     StatsTable,
     AssessmentWidget,
+    Loading,
   },
   setup() {
     const store = useStore();
@@ -202,6 +206,10 @@ export default {
       }
     };
 
+    const loading = computed(() => {
+      return dataset.value.length === 0 || resultPeriods.value.length === 0;
+    });
+
     return {
       dropDowns,
       controls,
@@ -214,6 +222,7 @@ export default {
       activeClickedStatus,
       interventionArmUser,
       zoomed,
+      loading,
     };
   },
 };
