@@ -63,6 +63,7 @@ import fb from "@/firebase";
 import FormModal from "@/components/form/Modal.vue";
 
 const FORM_ID = "neighborhood_rapid_assessment";
+const GEOID_QUESTION_MODEL = "neighborhood_id";
 
 export default {
   components: {
@@ -86,7 +87,12 @@ export default {
 
     const assessmentForm = ref({});
     onMounted(async () => {
-      assessmentForm.value = await fb.getForm(FORM_ID);
+      const form = await fb.getForm(FORM_ID);
+      const geoidQuestion = form.questions.find(
+        (question) => question.model === GEOID_QUESTION_MODEL
+      );
+      geoidQuestion.readOnly = true;
+      assessmentForm.value = form;
     });
 
     const assessmentQuestions = computed(

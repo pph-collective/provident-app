@@ -156,6 +156,11 @@ describe("Dashboard viewed as a user", () => {
       "Neighborhood Rapid Assessment"
     );
 
+    cy.get("[model='neighborhood_id']")
+      .find("input")
+      .should("be.disabled")
+      .should("have.value", "0401021");
+
     cy.get("[model='q2_other_related_services']")
       .find("textarea")
       .type("Lots of resources");
@@ -192,6 +197,12 @@ describe("Dashboard viewed as a user", () => {
       .first()
       .should("have.text", "Continue")
       .click();
+
+    // still has correct id and still disabled
+    cy.get("[model='neighborhood_id']")
+      .find("input")
+      .should("be.disabled")
+      .should("have.value", "0401021");
 
     // fill out form completely, row switches to review
     cy.get("button").contains("Submit").click();
