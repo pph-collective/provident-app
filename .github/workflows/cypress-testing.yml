@@ -48,7 +48,7 @@ jobs:
              yarn firebase:dev
           wait-on: "http://localhost:5000/"
           wait-on-timeout: 120
-          config: baseUrl=http://localhost:5000
+          config: baseUrl=http://localhost:5000/
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}
