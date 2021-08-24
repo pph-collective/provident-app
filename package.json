@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "start": "serve -s dist -p 8080",
     "build": "vue-cli-service build",
     "test:e2e": "cypress open",
     "lint": "vue-cli-service lint",
