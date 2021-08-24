@@ -1,5 +1,6 @@
 <template>
-  <div class="dashboard p-4 container is-fullhd">
+  <Loading :loading="loading" />
+  <div class="dashboard container is-fullhd">
     <ControlPanel
       v-if="resultPeriods.length > 0"
       id="dashboard-control-panel"
@@ -7,8 +8,8 @@
       @selected="updateControls"
     />
 
-    <Card v-if="controls.geography" width="two-thirds" id="map">
-      <template #title>Map: {{ controls.geography.name }}</template>
+    <Card width="two-thirds" :height="4" id="map">
+      <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
       <template #top-right>
         <button
           v-if="!zoomed"
@@ -34,7 +35,7 @@
       </template>
       <template #subtitle>Some really great insights</template>
       <template #content>
-        <div class="map-container">
+        <div v-if="controls.geography" class="map-container">
           <Map
             id="main-map"
             v-if="dataset.length > 0"
@@ -58,16 +59,24 @@
       </template>
     </Card>
 
-    <Card v-if="dataset.length > 0" width="one-third" id="stats">
+    <Card width="one-third" :height="3" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
+          v-if="dataset.length > 0"
           :dataset="dataset"
           :previous-dataset="previousDataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
           :with-predictions="interventionArmUser"
         />
+      </template>
+    </Card>
+
+    <Card width="one-third" :height="1" id="nra-widget">
+      <template #title>Neighborhood Rapid Assessment</template>
+      <template #content>
+        <AssessmentWidget :active-geoid="activeGeoid" />
       </template>
     </Card>
   </div>
@@ -83,6 +92,8 @@ import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/dashboard/Map.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsTable from "@/components/dashboard/StatsTable.vue";
+import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
+import Loading from "@/components/Loading.vue";
 
 import fb from "@/firebase.js";
 
@@ -93,6 +104,8 @@ export default {
     BGMap,
     Card,
     StatsTable,
+    AssessmentWidget,
+    Loading,
   },
   setup() {
     const store = useStore();
@@ -193,6 +206,10 @@ export default {
       }
     };
 
+    const loading = computed(() => {
+      return dataset.value.length === 0 || resultPeriods.value.length === 0;
+    });
+
     return {
       dropDowns,
       controls,
@@ -205,6 +222,7 @@ export default {
       activeClickedStatus,
       interventionArmUser,
       zoomed,
+      loading,
     };
   },
 };
@@ -225,9 +243,8 @@ export default {
 }
 
 .dashboard {
-  @extend .px-4;
-  @extend .py-4;
-  z-index: 20;
+  padding: 1rem;
+  z-index: 5;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
@@ -239,10 +256,10 @@ export default {
   align-content: start;
   grid-auto-flow: row;
   @include mobile {
-    grid-template-columns: 100vw;
+    grid-template-columns: 100%;
     column-gap: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 5px;
+    row-gap: 5px;
   }
 }
 

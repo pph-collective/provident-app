@@ -153,6 +153,7 @@ export default {
 @include mobile {
   .modal-card {
     max-height: 100vh;
+    max-width: 100vw;
   }
 
   /* Reduce the padding when on mobile */

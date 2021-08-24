@@ -6,4 +6,5 @@ module.exports = {
       },
     },
   },
+  transpileDependencies: ["formvuelate", "vega-lite"],
 };

@@ -99,6 +99,16 @@ const getForms = async () => {
   return forms;
 };
 
+const getForm = async (formId) => {
+  try {
+    const doc = await db.collection("forms").doc(formId).get();
+    return { _id: doc.id, ...doc.data() };
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+
 const getFormAssignments = async () => {
   let formAssignments = [];
   try {
@@ -140,12 +150,24 @@ const updateFormResponse = async (email, organization, formResponse) => {
   const { type, _id } = formResponse;
   const typeMap = { user: email, organization };
 
-  await db
-    .collection(`${type}s`)
-    .doc(typeMap[type])
-    .collection("form_responses")
-    .doc(_id)
-    .set(formResponse);
+  if (_id === undefined) {
+    const res = await db
+      .collection(`${type}s`)
+      .doc(typeMap[type])
+      .collection("form_responses")
+      .add(formResponse);
+
+    return res.id;
+  } else {
+    await db
+      .collection(`${type}s`)
+      .doc(typeMap[type])
+      .collection("form_responses")
+      .doc(_id)
+      .set(formResponse);
+
+    return _id;
+  }
 };
 
 const getModelDataPeriods = async () => {
@@ -196,6 +218,7 @@ export default {
   getUserRequest,
   getUsers,
   getOrgs,
+  getForm,
   getForms,
   getFormAssignments,
   getFormResponses,
