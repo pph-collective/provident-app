@@ -141,3 +141,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.schema-row {
+  margin-bottom: 10px;
+}
+.help {
+  margin-bottom: 5px;
+}
+</style>

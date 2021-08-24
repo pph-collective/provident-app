@@ -63,6 +63,17 @@ const getUserRequest = async (email) => {
   }
 };
 
+const getUsers = async () => {
+  const res = [];
+  try {
+    const docs = await db.collection("users").get();
+    docs.forEach((doc) => res.push(doc.data()));
+  } catch (err) {
+    console.log(err);
+  }
+  return res;
+};
+
 const getOrgs = async () => {
   const res = [];
   try {
@@ -183,6 +194,7 @@ export default {
   login,
   logout,
   getUserRequest,
+  getUsers,
   getOrgs,
   getForms,
   getFormAssignments,

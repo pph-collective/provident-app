@@ -1,6 +1,7 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
+    <p class="help">{{ helpText }}</p>
     <div class="control">
       <input
         class="input"
@@ -29,6 +30,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    helpText: {
+      type: String,
+      default: "",
     },
     type: {
       type: String,

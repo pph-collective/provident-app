@@ -101,8 +101,9 @@
               ></button>
             </header>
             <section class="modal-card-body">
-              <!--              TODO: Save, Submitted, Close functions-->
+              <!-- TODO: Save, Submitted, Close functions-->
               <JSONForm
+                v-if="formQuestions.length > 0"
                 :init-schema="formQuestions"
                 :init-value="{}"
                 :read-only="false"
@@ -124,12 +125,14 @@ import { onMounted, reactive, ref } from "vue";
 
 import fb from "@/firebase";
 import JSONForm from "@/components/form/JSONForm.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
     JSONForm,
   },
   setup() {
+    const store = useStore();
     const forms = ref({});
     const formAssignments = ref([]);
     const alert = reactive({ color: "", message: "" });
@@ -144,79 +147,55 @@ export default {
       forms.value = await fb.getForms();
       formAssignments.value = await fb.getFormAssignments();
 
-      // const formIds = Object.keys(forms.value)
+      const formIds = Object.keys(forms.value);
+      const users = await fb.getUsers();
+      const emails = users.map((u) => u.email);
+      const orgs = store.state.organizations.map((o) => o.name);
+      const groups = ["all", "intervention", "control"];
 
       formQuestions.value = [
         {
           component: "Select",
           label: "Form ID",
           model: "formId",
-          options: ["hello"],
+          options: formIds,
           required: true,
         },
         {
           component: "Select",
           label: "Assign to users",
           model: "users",
-          options: ["admin@admin.com", "user@user.com"],
+          options: emails,
         },
-        // {
-        //   component: "Select",
-        //   label: "Assign to organizations",
-        //   model: "orgs",
-        //   options: ["Good Doers", "RI 4 Us"],
-        // },
-        // {
-        //   component: "Select",
-        //   label: "Assign to groups",
-        //   model: "groups",
-        //   options: ["all", "intervention"],
-        // },
-        // {
-        //   component: "TextInput",
-        //   label: "Release Date (when the forms will be released)",
-        //   model: "release_date",
-        //   required: true,
-        // },
-        // {
-        //   component: "TextInput",
-        //   label:
-        //     "Expire Date (when the forms are due and when the form assignment expires)",
-        //   model: "expire_date",
-        //   required: true,
-        // },
+        {
+          component: "Select",
+          label: "Assign to organizations",
+          model: "orgs",
+          options: orgs,
+        },
+        {
+          component: "Select",
+          label: "Assign to groups",
+          model: "groups",
+          options: groups,
+        },
+        {
+          component: "TextInput",
+          label: "Release Date",
+          helpText: "The date when the form will be released to users.",
+          model: "release_date",
+          required: true,
+        },
+        {
+          component: "TextInput",
+          label: "Expire Date",
+          helpText:
+            "The due date of the form and the expire date of the form assignment. The form won't be assigned to anyone new after this date.",
+          model: "expire_date",
+          required: true,
+        },
       ];
-
-      console.log("FORM QUESTIONS");
-      console.log(formQuestions.value);
     });
-
-    // const formQuestions = computed(() => {
-    //
-    //   console.log("HERE");
-    //   console.log(forms.value);
-    //   console.log(Object.keys(forms.value));
-    //
-    //   const f = forms.value;
-    //   const formIds = Object.keys(f);
-    //
-    //   return [
-    //     {
-    //       component: "Select",
-    //       label: "Form",
-    //       model: "form",
-    //       options: formIds,
-    //       required: true,
-    //     },
-    //     {
-    //       component: "Select",
-    //       label: "Form",
-    //       model: "formsdsdsds",
-    //       options: ["what"],
-    //       required: true,
-    //     }
-    //   ];
-    // });
 
     const createFormAssignment = async (response) => {
       console.log(response);
