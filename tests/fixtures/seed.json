@@ -391,7 +391,6 @@
           "model": "q10_rate_likert_scale",
           "component": "LikertScale",
           "label": "Please rate how much you Disagree or Agree with each of these statements",
-          "required": true,
           "statements": [
             "It is easy to get sterile needles",
             "It is easy to get new works (like cookers, cottons, sterile water)",

@@ -141,7 +141,7 @@ export default {
 
 <style lang="scss" scoped>
 .data-column {
-  width: 45px;
+  max-width: 45px;
   padding-left: 5px;
   padding-right: 5px;
   text-align: center !important;

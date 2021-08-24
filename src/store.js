@@ -53,7 +53,7 @@ const store = createStore({
       commit("mutate", { property: "organizations", with: orgs });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
-      await fb.updateFormResponse(
+      const _id = await fb.updateFormResponse(
         state.user.data.email,
         state.user.data.organization,
         updatedFormResponse
@@ -61,11 +61,15 @@ const store = createStore({
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
-          formResponse._id === updatedFormResponse._id &&
+          formResponse._id === _id &&
           formResponse.type === updatedFormResponse.type
       );
 
-      formResponses[formResponseIndex] = updatedFormResponse;
+      if (formResponseIndex >= 0) {
+        formResponses[formResponseIndex] = updatedFormResponse;
+      } else {
+        formResponses.push({ _id, ...updatedFormResponse });
+      }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
     },
