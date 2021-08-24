@@ -88,6 +88,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
+      // TODO: Make the admin page like the snack page
       import(/* webpackChunkName: "snack" */ "../views/snack/Snack.vue"),
     children: [
       {

@@ -53,5 +53,9 @@ export default {
       default: () => ({}),
     },
   },
+  setup(props) {
+    console.log("IN THE SELECT COMPOENNET");
+    console.log(props.options);
+  },
 };
 </script>

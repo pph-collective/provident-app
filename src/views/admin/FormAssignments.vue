@@ -109,7 +109,7 @@
                 :showSaveButton="false"
                 :close-request="0"
                 @submitted="dismissAlert()"
-                @close="dismissAlert()"
+                @close="showModal = false"
               />
             </section>
           </div>
@@ -131,52 +131,10 @@ export default {
   },
   setup() {
     const forms = ref({});
-    // const formResponses = ref([]);
     const formAssignments = ref([]);
     const alert = reactive({ color: "", message: "" });
     const showModal = ref(false);
-
-    // TODO: Validations on dates, add list of forms, users, organizations
-    const formQuestions = ref([
-      {
-        component: "Select",
-        label: "Form",
-        model: "form",
-        options: ["My Form", "Sample Organization Form"],
-        required: true,
-      },
-      {
-        component: "Select",
-        label: "Assign to users",
-        model: "users",
-        options: ["admin@admin.com", "user@user.com"],
-      },
-      {
-        component: "Select",
-        label: "Assign to organizations",
-        model: "orgs",
-        options: ["Good Doers", "RI 4 Us"],
-      },
-      {
-        component: "Select",
-        label: "Assign to groups",
-        model: "groups",
-        options: ["all", "intervention"],
-      },
-      {
-        component: "TextInput",
-        label: "Release Date (when the forms will be released)",
-        model: "release_date",
-        required: true,
-      },
-      {
-        component: "TextInput",
-        label:
-          "Expire Date (when the forms are due and when the form assignment expires)",
-        model: "expire_date",
-        required: true,
-      },
-    ]);
+    const formQuestions = ref([]);
 
     const dismissAlert = () => {
       alert.message = "";
@@ -185,7 +143,80 @@ export default {
     onMounted(async () => {
       forms.value = await fb.getForms();
       formAssignments.value = await fb.getFormAssignments();
+
+      // const formIds = Object.keys(forms.value)
+
+      formQuestions.value = [
+        {
+          component: "Select",
+          label: "Form ID",
+          model: "formId",
+          options: ["hello"],
+          required: true,
+        },
+        {
+          component: "Select",
+          label: "Assign to users",
+          model: "users",
+          options: ["admin@admin.com", "user@user.com"],
+        },
+        // {
+        //   component: "Select",
+        //   label: "Assign to organizations",
+        //   model: "orgs",
+        //   options: ["Good Doers", "RI 4 Us"],
+        // },
+        // {
+        //   component: "Select",
+        //   label: "Assign to groups",
+        //   model: "groups",
+        //   options: ["all", "intervention"],
+        // },
+        // {
+        //   component: "TextInput",
+        //   label: "Release Date (when the forms will be released)",
+        //   model: "release_date",
+        //   required: true,
+        // },
+        // {
+        //   component: "TextInput",
+        //   label:
+        //     "Expire Date (when the forms are due and when the form assignment expires)",
+        //   model: "expire_date",
+        //   required: true,
+        // },
+      ];
+
+      console.log("FORM QUESTIONS");
+      console.log(formQuestions.value);
     });
+
+    // const formQuestions = computed(() => {
+    //
+    //   console.log("HERE");
+    //   console.log(forms.value);
+    //   console.log(Object.keys(forms.value));
+    //
+    //   const f = forms.value;
+    //   const formIds = Object.keys(f);
+    //
+    //   return [
+    //     {
+    //       component: "Select",
+    //       label: "Form",
+    //       model: "form",
+    //       options: formIds,
+    //       required: true,
+    //     },
+    //     {
+    //       component: "Select",
+    //       label: "Form",
+    //       model: "formsdsdsds",
+    //       options: ["what"],
+    //       required: true,
+    //     }
+    //   ];
+    // });
 
     const createFormAssignment = async (response) => {
       console.log(response);
