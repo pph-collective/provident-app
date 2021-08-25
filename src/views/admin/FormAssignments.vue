@@ -155,6 +155,15 @@ export default {
     const forms = ref({});
     const showModal = ref(false);
     const store = useStore();
+    const organizations = store.state.organizations;
+    const allOrgs = organizations.map((org) => org.name);
+    const interventionOrgs = organizations
+      .filter((org) => org.intervention_arm)
+      .map((org) => org.name);
+    const controlOrgs = organizations
+      .filter((org) => !org.intervention_arm)
+      .map((org) => org.name);
+    const users = ref([]);
 
     const dismissAlert = () => {
       alert.message = "";
@@ -163,14 +172,15 @@ export default {
     onMounted(async () => {
       forms.value = await fb.getForms();
       formAssignments.value = await fb.getFormAssignments();
+      users.value = await fb.getUsers();
 
       const formIds = Object.keys(forms.value);
-      const users = await fb.getUsers();
-      const emails = users.map((u) => u.email);
-      const orgs = store.state.organizations.map((o) => o.name);
+      const emails = users.value.map((u) => u.email);
       const groups = ["all", "intervention", "control"];
 
       // TODO: Use multi-select and datepicker components
+      // TODO: Show the form type to the user
+      // TODO: & update the single/multi select to allow different values than what is displayed to the user
       formQuestions.value = [
         {
           component: "Select",
@@ -188,8 +198,8 @@ export default {
         {
           component: "Select",
           label: "Assign to organizations",
-          model: "orgs",
-          options: orgs,
+          model: "organizations",
+          options: allOrgs,
         },
         {
           component: "Select",
@@ -217,6 +227,7 @@ export default {
 
     const createFormAssignment = async (response) => {
       const formAssignmentData = {
+        created_date: new Date(),
         form_id: response.form_id,
         release_date: response.release_date,
         expire_date: response.expire_date,
@@ -228,26 +239,67 @@ export default {
       };
 
       try {
-        await fb.db.collection("form_assignments").add(formAssignmentData);
+        const formAssignment = await fb.db
+          .collection("form_assignments")
+          .add(formAssignmentData);
+        formAssignmentData._id = formAssignment.id;
+        createFormResponses(formAssignmentData);
+
         showModal.value = false;
         alert.color = "success";
         alert.message = "form assignment added";
+
+        // show the message only for 6 seconds
+        setTimeout(() => (alert.message = ""), 6000);
       } catch (e) {
         console.log(e);
         formMessage.value = "Error adding form assignment";
+
+        // show the message only for 6 seconds
+        setTimeout(() => (formMessage.value = ""), 6000);
       }
     };
 
     const createFormResponses = (formAssignment) => {
-      console.log(formAssignment);
-      // const formResponseData = {
-      //   form_id: response.form_id,
-      //   type: forms[form_id].type,
-      //   release_date: response.release_date,
-      //   due_date: response.expire_date,
-      //   response: []
-      //   status: "Not Started"
-      // }
+      const form_id = formAssignment.form_id;
+      const form = forms.value[form_id];
+      const form_type = form.type;
+
+      const formResponseData = {
+        form_id,
+        title: form.title,
+        type: form_type,
+        form_assignment_id: formAssignment._id,
+        release_date: formAssignment.release_date,
+        expire_date: formAssignment.expire_date,
+        response: [],
+        status: "Not Started",
+        last_updated: new Date(),
+      };
+
+      const assignedGroups = [...formAssignment.target.groups];
+      const assignedOrgs = new Set([
+        ...formAssignment.target.organizations,
+        ...("all" in assignedGroups ? allOrgs : []),
+        ...("intervention" in assignedGroups ? interventionOrgs : []),
+        ...("control" in assignedGroups ? controlOrgs : []),
+      ]);
+
+      if (form_type === "organization") {
+        assignedOrgs.forEach((org) => {
+          fb.updateFormResponse(undefined, org, formResponseData);
+        });
+      } else if (form_type === "user") {
+        const assignedUsers = new Set([
+          ...formAssignment.target.users,
+          ...users.value
+            .filter((u) => u.organization in assignedOrgs)
+            .map((u) => u.email),
+        ]);
+        assignedUsers.forEach((email) => {
+          fb.updateFormResponse(email, undefined, formResponseData);
+        });
+      }
     };
 
     return {

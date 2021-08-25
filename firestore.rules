@@ -41,7 +41,7 @@ service cloud.firestore {
       allow read: if true;
 
       match /form_responses/{form} {
-        allow create: if request.auth != null && isUserInOrgWithRole(organization, 'champion');
+        allow create: if request.auth != null && isUserInOrgWithRole(organization, 'champion') || isAdminUser();
         allow update: if request.auth != null && resource.data.status != 'Submitted' && isUserInOrgWithRole(organization, 'champion');
         allow read: if request.auth != null && isUserInOrgWithRole(organization, 'any');
       }

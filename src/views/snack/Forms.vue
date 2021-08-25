@@ -118,7 +118,15 @@ export default {
     const userRole = computed(() =>
       user.value.data ? user.value.data.role : "user"
     );
-    const formResponses = computed(() => user.value.formResponses);
+    const formResponses = computed(() => {
+      if (!user.value.admin) {
+        return user.value.formResponses.filter((f) => {
+          return f.release_date <= today;
+        });
+      }
+
+      return user.value.formResponses;
+    });
 
     const forms = ref({});
     const activeFormResponse = ref({});
@@ -157,11 +165,6 @@ export default {
 
     onMounted(async () => {
       forms.value = await fb.getForms();
-      if (!user.value.admin) {
-        forms.value = forms.value.filter((f) => {
-          return f.release_date <= today;
-        });
-      }
     });
 
     const activeFormQuestions = computed(() => {
