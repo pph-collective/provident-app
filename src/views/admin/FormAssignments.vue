@@ -105,7 +105,6 @@
               ></button>
             </header>
             <section class="modal-card-body">
-              <!-- TODO: Save, Submitted, Close functions-->
               <JSONForm
                 v-if="showModal"
                 :init-schema="formQuestions"
@@ -154,6 +153,7 @@ export default {
     const formQuestions = ref([]);
     const forms = ref({});
     const showModal = ref(false);
+
     const store = useStore();
     const organizations = store.state.organizations;
     const allOrgs = organizations.map((org) => org.name);
@@ -164,6 +164,8 @@ export default {
       .filter((org) => !org.intervention_arm)
       .map((org) => org.name);
     const users = ref([]);
+
+    const dateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
 
     const dismissAlert = () => {
       alert.message = "";
@@ -209,18 +211,20 @@ export default {
         },
         {
           component: "TextInput",
-          label: "Release Date",
+          label: "Release Date (yyyy-mm-dd)",
           helpText: "The date when the form will be released to users.",
           model: "release_date",
           required: true,
+          validations: `yup.string().matches(${dateRegex}, 'Must be in yyyy-mm-dd format')`,
         },
         {
           component: "TextInput",
-          label: "Expire Date",
+          label: "Expire Date (yyyy-mm-dd)",
           helpText:
             "The due date of the form and the expire date of the form assignment. The form won't be assigned to anyone new after this date.",
           model: "expire_date",
           required: true,
+          validations: `yup.string().matches(${dateRegex}, 'Must be in yyyy-mm-dd format')`,
         },
       ];
     });
@@ -239,11 +243,17 @@ export default {
       };
 
       try {
+        // Create the form assignment on the db
         const formAssignment = await fb.db
           .collection("form_assignments")
           .add(formAssignmentData);
         formAssignmentData._id = formAssignment.id;
-        createFormResponses(formAssignmentData);
+
+        // Create the form responses
+        await createFormResponses(formAssignmentData);
+
+        // Update the page
+        formAssignments.value.push(formAssignmentData);
 
         showModal.value = false;
         alert.color = "success";
@@ -260,7 +270,7 @@ export default {
       }
     };
 
-    const createFormResponses = (formAssignment) => {
+    const createFormResponses = async (formAssignment) => {
       const form_id = formAssignment.form_id;
       const form = forms.value[form_id];
       const form_type = form.type;
@@ -272,7 +282,7 @@ export default {
         form_assignment_id: formAssignment._id,
         release_date: formAssignment.release_date,
         expire_date: formAssignment.expire_date,
-        response: [],
+        response: {},
         status: "Not Started",
         last_updated: new Date(),
       };
@@ -280,25 +290,31 @@ export default {
       const assignedGroups = [...formAssignment.target.groups];
       const assignedOrgs = new Set([
         ...formAssignment.target.organizations,
-        ...("all" in assignedGroups ? allOrgs : []),
-        ...("intervention" in assignedGroups ? interventionOrgs : []),
-        ...("control" in assignedGroups ? controlOrgs : []),
+        ...(assignedGroups.includes("all") ? allOrgs : []),
+        ...(assignedGroups.includes("intervention") ? interventionOrgs : []),
+        ...(assignedGroups.includes("control") ? controlOrgs : []),
       ]);
 
-      if (form_type === "organization") {
-        assignedOrgs.forEach((org) => {
-          fb.updateFormResponse(undefined, org, formResponseData);
-        });
-      } else if (form_type === "user") {
-        const assignedUsers = new Set([
-          ...formAssignment.target.users,
-          ...users.value
-            .filter((u) => u.organization in assignedOrgs)
-            .map((u) => u.email),
-        ]);
-        assignedUsers.forEach((email) => {
-          fb.updateFormResponse(email, undefined, formResponseData);
-        });
+      try {
+        if (form_type === "organization") {
+          for (const org of assignedOrgs) {
+            await fb.updateFormResponse(undefined, org, formResponseData);
+          }
+        } else if (form_type === "user") {
+          const assignedUsers = new Set([
+            ...formAssignment.target.users,
+            ...users.value
+              .filter((u) => assignedOrgs.has(u.organization))
+              .map((u) => u.email),
+          ]);
+
+          for (const email of assignedUsers) {
+            await fb.updateFormResponse(email, undefined, formResponseData);
+          }
+        }
+      } catch (e) {
+        alert.color = "danger";
+        alert.message = "Error creating forms";
       }
     };
 
