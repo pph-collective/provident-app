@@ -89,7 +89,11 @@
           </div>
         </div>
 
-        <div class="modal" :class="{ 'is-active': showModal }">
+        <div
+          class="modal"
+          :class="{ 'is-active': showModal }"
+          v-esc="() => (closeFormRequest += 1)"
+        >
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
@@ -97,21 +101,28 @@
               <button
                 class="delete"
                 aria-label="close"
-                @click="showModal = false"
+                @click="closeFormRequest += 1"
               ></button>
             </header>
             <section class="modal-card-body">
               <!-- TODO: Save, Submitted, Close functions-->
               <JSONForm
-                v-if="formQuestions.length > 0"
+                v-if="showModal"
                 :init-schema="formQuestions"
                 :init-value="{}"
                 :read-only="false"
                 :showSaveButton="false"
-                :close-request="0"
-                @submitted="dismissAlert()"
+                :close-request="closeFormRequest"
+                @submitted="createFormAssignment($event)"
                 @close="showModal = false"
               />
+              <p
+                v-if="formMessage"
+                class="has-text-centered"
+                data-cy="form-message"
+              >
+                <small>{{ formMessage }}</small>
+              </p>
             </section>
           </div>
         </div>
@@ -122,22 +133,28 @@
 
 <script>
 import { onMounted, reactive, ref } from "vue";
+import { useStore } from "vuex";
 
 import fb from "@/firebase";
+import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
-import { useStore } from "vuex";
 
 export default {
   components: {
     JSONForm,
   },
+  directives: {
+    ...esc,
+  },
   setup() {
-    const store = useStore();
-    const forms = ref({});
-    const formAssignments = ref([]);
     const alert = reactive({ color: "", message: "" });
-    const showModal = ref(false);
+    const closeFormRequest = ref(0);
+    const formAssignments = ref([]);
+    const formMessage = ref("");
     const formQuestions = ref([]);
+    const forms = ref({});
+    const showModal = ref(false);
+    const store = useStore();
 
     const dismissAlert = () => {
       alert.message = "";
@@ -153,11 +170,12 @@ export default {
       const orgs = store.state.organizations.map((o) => o.name);
       const groups = ["all", "intervention", "control"];
 
+      // TODO: Use multi-select and datepicker components
       formQuestions.value = [
         {
           component: "Select",
           label: "Form ID",
-          model: "formId",
+          model: "form_id",
           options: formIds,
           required: true,
         },
@@ -198,38 +216,50 @@ export default {
     });
 
     const createFormAssignment = async (response) => {
-      console.log(response);
-
-      const data = {
-        form_id: "test",
-        release_date: "2021-05-31",
-        expire_date: "2021-09-09",
+      const formAssignmentData = {
+        form_id: response.form_id,
+        release_date: response.release_date,
+        expire_date: response.expire_date,
         target: {
-          users: ["admin@admin.com"],
-          organizations: ["Good Doers"],
-          groups: ["Intervention"],
+          users: response.users ? [response.users] : [],
+          organizations: response.organizations ? [response.organizations] : [],
+          groups: response.groups ? [response.groups] : [],
         },
       };
 
       try {
-        await fb.db.collection("form_assignments").add(data);
-
+        await fb.db.collection("form_assignments").add(formAssignmentData);
+        showModal.value = false;
         alert.color = "success";
         alert.message = "form assignment added";
       } catch (e) {
         console.log(e);
-        alert.color = "danger";
-        alert.message = e.message;
+        formMessage.value = "Error adding form assignment";
       }
+    };
+
+    const createFormResponses = (formAssignment) => {
+      console.log(formAssignment);
+      // const formResponseData = {
+      //   form_id: response.form_id,
+      //   type: forms[form_id].type,
+      //   release_date: response.release_date,
+      //   due_date: response.expire_date,
+      //   response: []
+      //   status: "Not Started"
+      // }
     };
 
     return {
       alert,
-      forms,
-      formQuestions,
-      formAssignments,
+      closeFormRequest,
       createFormAssignment,
+      createFormResponses,
       dismissAlert,
+      formAssignments,
+      formMessage,
+      formQuestions,
+      forms,
       showModal,
     };
   },
