@@ -193,18 +193,21 @@ export default {
         },
         {
           component: "Select",
+          multiple: true,
           label: "Assign to users",
           model: "users",
           options: emails,
         },
         {
           component: "Select",
+          multiple: true,
           label: "Assign to organizations",
           model: "organizations",
           options: allOrgs,
         },
         {
           component: "Select",
+          multiple: true,
           label: "Assign to groups",
           model: "groups",
           options: groups,
@@ -236,9 +239,9 @@ export default {
         release_date: response.release_date,
         expire_date: response.expire_date,
         target: {
-          users: response.users ? [response.users] : [],
-          organizations: response.organizations ? [response.organizations] : [],
-          groups: response.groups ? [response.groups] : [],
+          users: response.users ?? [],
+          organizations: response.organizations ?? [],
+          groups: response.groups ?? [],
         },
       };
 

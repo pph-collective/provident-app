@@ -2,17 +2,22 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <div class="select">
+      <div class="select" :class="multiple ? 'is-multiple' : ''">
         <select
-          :value="modelValue"
+          :multiple="multiple"
           :required="required"
           :id="uuid"
-          @input="$emit('update:modelValue', $event.target.value)"
+          @input="updateValue($event.target)"
         >
-          <option v-for="(option, i) in options" :key="'option-' + i">
+          <option
+            v-for="(option, i) in options"
+            :key="'option-' + i"
+            :selected="isSelected(option, modelValue)"
+          >
             {{ option }}
           </option>
         </select>
+        <span>Selected: {{ modelValue }}</span>
       </div>
       <span class="has-text-danger is-size-7">{{
         validation.errorMessage
@@ -22,6 +27,8 @@
 </template>
 
 <script>
+import { toRefs } from "vue";
+
 export default {
   props: {
     modelValue: { required: true },
@@ -44,6 +51,10 @@ export default {
     placeholder: {
       default: "",
     },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
     options: {
       type: Array,
       required: true,
@@ -52,6 +63,31 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  setup(props, { emit }) {
+    const { multiple } = toRefs(props);
+
+    const updateValue = (target) => {
+      if (multiple.value) {
+        const result = [...target.selectedOptions].map((o) => o.value);
+        emit("update:modelValue", result);
+      } else {
+        emit("update:modelValue", target.value);
+      }
+    };
+
+    const isSelected = (option, modelValue) => {
+      if (multiple.value) {
+        return modelValue === undefined ? false : modelValue.includes(option);
+      } else {
+        return option === modelValue;
+      }
+    };
+
+    return {
+      updateValue,
+      isSelected,
+    };
   },
 };
 </script>
