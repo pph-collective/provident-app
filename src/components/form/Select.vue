@@ -1,6 +1,7 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
+    <p v-if="helpText" class="help">{{ helpText }}</p>
     <div class="control">
       <div class="is-fullwidth is-family-secondary">
         <Multiselect
@@ -39,6 +40,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    helpText: {
+      type: String,
+      default: "",
     },
     type: {
       type: String,
@@ -82,6 +87,8 @@ export default {
 
 :root {
   --ms-tag-bg: #{$primary};
+  --ms-tag-radius: #{$radius};
+
   --ms-ring-color: #{$primary};
   --ms-ring-width: 1px;
 

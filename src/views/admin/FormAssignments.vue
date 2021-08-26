@@ -176,27 +176,31 @@ export default {
       formAssignments.value = await fb.getFormAssignments();
       users.value = await fb.getUsers();
 
-      const formIds = Object.keys(forms.value);
-      const emails = users.value.map((u) => u.email);
+      const formOptions = Object.values(forms.value).map((f) => {
+        return { value: f._id, label: `${f.title} (type: ${f.type})` };
+      });
+      const userOptions = users.value.map((u) => {
+        return { value: u.email, label: `${u.name} (${u.email})` };
+      });
       const groups = ["all", "intervention", "control"];
 
-      // TODO: Use multi-select and datepicker components
-      // TODO: Show the form type to the user
-      // TODO: & update the single/multi select to allow different values than what is displayed to the user
+      // TODO: Datepicker components
+      // TODO: Enforce only user forms can assign to users
       formQuestions.value = [
         {
           component: "Select",
           label: "Form ID",
           model: "form_id",
-          options: formIds,
+          options: formOptions,
           required: true,
         },
         {
           component: "Select",
           multiple: true,
           label: "Assign to users",
+          helpText: "Only user forms can be directly assigned to users.",
           model: "users",
-          options: emails,
+          options: userOptions,
         },
         {
           component: "Select",

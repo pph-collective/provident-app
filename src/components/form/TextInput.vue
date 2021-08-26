@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p class="help">{{ helpText }}</p>
+    <p v-if="helpText" class="help">{{ helpText }}</p>
     <div class="control">
       <input
         class="input"
