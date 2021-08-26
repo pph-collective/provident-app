@@ -2,22 +2,17 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <div class="select is-fullwidth" :class="multiple ? 'is-multiple' : ''">
-        <select
-          :multiple="multiple"
+      <div class="is-fullwidth">
+        <Multiselect
+          :mode="multiple ? 'tags' : 'single'"
+          :modelValue="modelValue"
           :required="required"
           :id="uuid"
-          @input="updateValue($event.target)"
+          :options="options"
+          :searchable="true"
+          @change="$emit('update:modelValue', $event)"
         >
-          <option v-if="!multiple" :disabled="required" selected></option>
-          <option
-            v-for="(option, i) in options"
-            :key="'option-' + i"
-            :selected="isSelected(option, modelValue)"
-          >
-            {{ option }}
-          </option>
-        </select>
+        </Multiselect>
         <span>Selected: {{ modelValue }}</span>
       </div>
       <span class="has-text-danger is-size-7">{{
@@ -29,8 +24,12 @@
 
 <script>
 import { onMounted, toRefs } from "vue";
+import Multiselect from "@vueform/multiselect";
 
 export default {
+  components: {
+    Multiselect,
+  },
   props: {
     modelValue: { required: true },
     required: {
@@ -66,33 +65,16 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const { multiple } = toRefs(props);
+    const { multiple, modelValue } = toRefs(props);
 
     onMounted(() => {
-      emit("update:modelValue", multiple.value ? [] : "");
+      // Initialize modelValue
+      if (modelValue.value === undefined) {
+        emit("update:modelValue", multiple.value ? [] : "");
+      }
     });
-
-    const updateValue = (target) => {
-      if (multiple.value) {
-        const result = [...target.selectedOptions].map((o) => o.value);
-        emit("update:modelValue", result);
-      } else {
-        emit("update:modelValue", target.value);
-      }
-    };
-
-    const isSelected = (option, modelValue) => {
-      if (multiple.value) {
-        return modelValue === undefined ? false : modelValue.includes(option);
-      } else {
-        return option === modelValue;
-      }
-    };
-
-    return {
-      updateValue,
-      isSelected,
-    };
   },
 };
 </script>
+
+<style src="@vueform/multiselect/themes/default.css"></style>
