@@ -2,7 +2,7 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <div class="is-fullwidth">
+      <div class="is-fullwidth is-family-secondary">
         <Multiselect
           :mode="multiple ? 'tags' : 'single'"
           :modelValue="modelValue"
@@ -77,4 +77,15 @@ export default {
 };
 </script>
 
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style lang="scss">
+@import "@vueform/multiselect/themes/default.scss";
+
+:root {
+  --ms-tag-bg: #{$primary};
+  --ms-ring-color: #{$primary};
+  --ms-ring-width: 1px;
+
+  --ms-option-bg-selected: #{$primary};
+  --ms-option-bg-selected-pointed: #{$link};
+}
+</style>
