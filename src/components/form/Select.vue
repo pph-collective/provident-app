@@ -2,13 +2,14 @@
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
     <div class="control">
-      <div class="select" :class="multiple ? 'is-multiple' : ''">
+      <div class="select is-fullwidth" :class="multiple ? 'is-multiple' : ''">
         <select
           :multiple="multiple"
           :required="required"
           :id="uuid"
           @input="updateValue($event.target)"
         >
+          <option v-if="!multiple" :disabled="required" selected></option>
           <option
             v-for="(option, i) in options"
             :key="'option-' + i"
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-import { toRefs } from "vue";
+import { onMounted, toRefs } from "vue";
 
 export default {
   props: {
@@ -66,6 +67,10 @@ export default {
   },
   setup(props, { emit }) {
     const { multiple } = toRefs(props);
+
+    onMounted(() => {
+      emit("update:modelValue", multiple.value ? [] : "");
+    });
 
     const updateValue = (target) => {
       if (multiple.value) {

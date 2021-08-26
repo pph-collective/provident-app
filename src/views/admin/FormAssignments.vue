@@ -239,9 +239,9 @@ export default {
         release_date: response.release_date,
         expire_date: response.expire_date,
         target: {
-          users: response.users ?? [],
-          organizations: response.organizations ?? [],
-          groups: response.groups ?? [],
+          users: response.users,
+          organizations: response.organizations,
+          groups: response.groups,
         },
       };
 
