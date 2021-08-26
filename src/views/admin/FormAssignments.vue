@@ -165,8 +165,6 @@ export default {
       .map((org) => org.name);
     const users = ref([]);
 
-    const dateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
-
     const dismissAlert = () => {
       alert.message = "";
     };
@@ -184,7 +182,6 @@ export default {
       });
       const groups = ["all", "intervention", "control"];
 
-      // TODO: Datepicker components
       // TODO: Enforce only user forms can assign to users
       formQuestions.value = [
         {
@@ -217,21 +214,21 @@ export default {
           options: groups,
         },
         {
-          component: "TextInput",
-          label: "Release Date (yyyy-mm-dd)",
+          component: "Date",
+          label: "Release Date",
           helpText: "The date when the form will be released to users.",
           model: "release_date",
           required: true,
-          validations: `yup.string().matches(${dateRegex}, 'Must be in yyyy-mm-dd format')`,
+          minDate: "today",
         },
         {
-          component: "TextInput",
-          label: "Expire Date (yyyy-mm-dd)",
+          component: "Date",
+          label: "Expire Date",
           helpText:
             "The due date of the form and the expire date of the form assignment. The form won't be assigned to anyone new after this date.",
           model: "expire_date",
           required: true,
-          validations: `yup.string().matches(${dateRegex}, 'Must be in yyyy-mm-dd format')`,
+          minDate: "today",
         },
       ];
     });

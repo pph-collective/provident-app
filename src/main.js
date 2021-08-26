@@ -10,12 +10,13 @@ import fb from "@/firebase";
 require("@/assets/styles/main.scss");
 
 // form components - needed globally
-import FormTextInput from "@/components/form/TextInput";
-import FormTextArea from "@/components/form/TextArea";
-import FormSelect from "@/components/form/Select";
-import FormRadio from "@/components/form/Radio";
-import FormLikertScale from "@/components/form/LikertScale";
 import FormCheckbox from "@/components/form/Checkbox";
+import FormDate from "@/components/form/Date";
+import FormLikertScale from "@/components/form/LikertScale";
+import FormRadio from "@/components/form/Radio";
+import FormSelect from "@/components/form/Select";
+import FormTextArea from "@/components/form/TextArea";
+import FormTextInput from "@/components/form/TextInput";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
@@ -48,10 +49,11 @@ fb.auth.onAuthStateChanged(async (user) => {
 createApp(App)
   .use(router)
   .use(store)
-  .component("FormTextInput", FormTextInput)
-  .component("FormTextArea", FormTextArea)
-  .component("FormSelect", FormSelect)
-  .component("FormRadio", FormRadio)
-  .component("FormLikertScale", FormLikertScale)
   .component("FormCheckbox", FormCheckbox)
+  .component("FormDate", FormDate)
+  .component("FormLikertScale", FormLikertScale)
+  .component("FormRadio", FormRadio)
+  .component("FormSelect", FormSelect)
+  .component("FormTextArea", FormTextArea)
+  .component("FormTextInput", FormTextInput)
   .mount("#app");
