@@ -1,6 +1,8 @@
 <template>
   <div :class="['snack-area', sidebarCollapsed ? 'collapsed' : '']">
     <Sidebar
+      :pages="pages"
+      :parentRoute="parentRoute"
       :class="['sidebar', sidebarCollapsed ? 'collapsed' : '']"
       @toggle="sidebarCollapsed = !sidebarCollapsed"
     />
@@ -19,6 +21,18 @@ import { useMobileListener } from "@/composables/useMobileListener";
 export default {
   components: {
     Sidebar,
+  },
+  props: {
+    parentRoute: {
+      type: String,
+      required: true,
+    },
+    pages: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
   },
   setup() {
     const { isMobile } = useMobileListener();

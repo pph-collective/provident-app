@@ -145,8 +145,9 @@ export default {
 <style lang="scss">
 .schema-row {
   margin-bottom: 2%;
-}
-.help {
-  margin-bottom: 0.5%;
+
+  .help {
+    margin-bottom: 0.5%;
+  }
 }
 </style>

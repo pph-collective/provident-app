@@ -15,7 +15,7 @@
         <li v-for="item in pages" :key="item.route">
           <router-link
             :class="{ 'is-active': route === item.route }"
-            :to="`/snack/${item.route}`"
+            :to="`/${parentRoute}/${item.route}`"
           >
             <span v-if="!collapsed">
               <i :class="['fas', item.icon, 'mr-1']" />{{ item.name }}</span
@@ -61,6 +61,18 @@ import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {
   emits: ["toggle"],
+  props: {
+    parentRoute: {
+      type: String,
+      required: true,
+    },
+    pages: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
   setup(_, { emit }) {
     const { isMobile } = useMobileListener();
     const collapsed = ref(false);
@@ -71,19 +83,6 @@ export default {
     watch(isMobile, () => {
       collapsed.value = isMobile.value;
     });
-
-    const pages = [
-      {
-        name: "Dashboard",
-        route: "dashboard",
-        icon: "fa-chart-line",
-      },
-      {
-        name: "Forms",
-        route: "forms",
-        icon: "fa-file-alt",
-      },
-    ];
 
     const route = useRoute();
 
@@ -101,7 +100,6 @@ export default {
 
     return {
       collapsed,
-      pages,
       route,
       toggle,
       getInitials,

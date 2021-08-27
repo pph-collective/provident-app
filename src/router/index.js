@@ -53,7 +53,22 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/snack/Snack.vue"),
+      import(/* webpackChunkName: "snack" */ "../views/Snack.vue"),
+    props: {
+      parentRoute: "snack",
+      pages: [
+        {
+          name: "Dashboard",
+          route: "dashboard",
+          icon: "fa-chart-line",
+        },
+        {
+          name: "Forms",
+          route: "forms",
+          icon: "fa-file-alt",
+        },
+      ],
+    },
     children: [
       {
         path: "",
@@ -88,13 +103,33 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      // TODO: Make the admin page like the snack page
-      import(/* webpackChunkName: "snack" */ "../views/snack/Snack.vue"),
+      import(/* webpackChunkName: "admin" */ "../views/Snack.vue"),
+    props: {
+      parentRoute: "admin",
+      pages: [
+        {
+          name: "Review Access Requests",
+          route: "review_access_requests",
+          icon: "fa-universal-access",
+        },
+        {
+          name: "Form Assignments",
+          route: "form_assignments",
+          icon: "fa-file-import",
+        },
+      ],
+    },
     children: [
       {
         path: "",
+        redirect: "/admin/review_access_requests",
+      },
+      {
+        path: "review_access_requests",
         component: () =>
-          import(/* webpackChunkName: "admin" */ "../views/admin/Admin.vue"),
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/ReviewAccessRequests.vue"
+          ),
       },
       {
         path: "form_assignments",
