@@ -1,6 +1,7 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
+    <p v-if="helpText" class="help">{{ helpText }}</p>
     <div class="control" :id="uuid">
       <label v-for="(option, i) in options" :key="'option-' + i" class="radio">
         <input
@@ -31,6 +32,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    helpText: {
+      type: String,
+      default: "",
     },
     uuid: {
       type: Number,

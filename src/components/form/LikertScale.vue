@@ -1,6 +1,7 @@
 <template>
   <div class="field">
     <label class="label">{{ label }}</label>
+    <p v-if="helpText" class="help">{{ helpText }}</p>
     <div class="b-table">
       <div class="table-wrapper has-mobile-cards">
         <table class="table is-fullwidth is-striped is-fullwidth">
@@ -62,6 +63,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    helpText: {
+      type: String,
+      default: "",
     },
     uuid: {
       type: Number,
