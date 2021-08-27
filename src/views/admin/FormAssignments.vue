@@ -22,20 +22,24 @@
         </div>
 
         <div class="panel-tabs">
-          <a>All</a>
-          <a>Active</a>
-          <a>Expired</a>
+          <a
+            v-for="tab in tabs"
+            :key="tab"
+            :class="selectedTab == tab ? 'is-active' : ''"
+            @click="selectedTab = tab"
+            >{{ tab }}</a
+          >
         </div>
 
         <div
-          v-if="formAssignments.length === 0"
+          v-if="selectedFormAssignments.length === 0"
           class="panel-block is-justify-content-center"
         >
           <span>No forms assignments here</span>
         </div>
         <div
           v-else
-          v-for="(assignment, idx) in formAssignments"
+          v-for="(assignment, idx) in selectedFormAssignments"
           :key="'assignment-' + idx"
           class="panel-block"
         >
@@ -131,7 +135,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -164,6 +168,37 @@ export default {
       .filter((org) => !org.intervention_arm)
       .map((org) => org.name);
     const users = ref([]);
+
+    let today = new Date(); // Local time
+    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+
+    const tabs = ref(["Active (Not Expired)", "Released", "Expired", "All"]);
+    const selectedTab = ref("Active (Not Expired)");
+    const selectedFormAssignments = computed(() => {
+      if (selectedTab.value === "All") return formAssignments.value;
+
+      return formAssignments.value.filter((formAssignment) => {
+        if (
+          selectedTab.value === "Active (Not Expired)" &&
+          today < formAssignment.expire_date
+        ) {
+          return true;
+        } else if (
+          selectedTab.value === "Released" &&
+          formAssignment.release_date <= today &&
+          today < formAssignment.expire_date
+        ) {
+          return true;
+        } else if (
+          selectedTab.value === "Expired" &&
+          today >= formAssignment.expire_date
+        ) {
+          return true;
+        }
+
+        return false;
+      });
+    });
 
     const dismissAlert = () => {
       alert.message = "";
@@ -332,7 +367,10 @@ export default {
       formMessage,
       formQuestions,
       forms,
+      selectedFormAssignments,
+      selectedTab,
       showModal,
+      tabs,
     };
   },
 };
