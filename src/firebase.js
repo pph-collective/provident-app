@@ -146,6 +146,88 @@ const getFormResponses = async (email, organization) => {
   }
 };
 
+/**
+ * Returns a set of organization names filtered by the target
+ *
+ * @param {Object} target
+ * @param {Object[]} organizations - array of all of the organizations
+ * @returns {Set<String>}
+ */
+const getAssignedOrgs = (target, organizations) => {
+  const assignedGroups = [...target.groups];
+
+  const allOrgs = organizations.map((org) => org.name);
+  const interventionOrgs = organizations
+    .filter((org) => org.intervention_arm)
+    .map((org) => org.name);
+  const controlOrgs = organizations
+    .filter((org) => !org.intervention_arm)
+    .map((org) => org.name);
+
+  return new Set([
+    ...target.organizations,
+    ...(assignedGroups.includes("all") ? allOrgs : []),
+    ...(assignedGroups.includes("intervention") ? interventionOrgs : []),
+    ...(assignedGroups.includes("control") ? controlOrgs : []),
+  ]);
+};
+
+/**
+ * Returns a set of user emails filtered by the target
+ *
+ * @param {Object} target
+ * @param {Object[]} organizations - array of all the organizations
+ * @param {Object[]} users - array of all the users
+ * @returns {Set<String>}
+ */
+const getAssignedUsers = (target, organizations, users) => {
+  const assignedOrgs = getAssignedOrgs(target, organizations);
+  return new Set([
+    ...target.users,
+    ...users
+      .filter((u) => assignedOrgs.has(u.organization))
+      .map((u) => u.email),
+  ]);
+};
+
+const getBlankFormResponse = (formAssignment) => {
+  return {
+    form_id: formAssignment.form_id,
+    type: formAssignment.form_type,
+    form_assignment_id: formAssignment._id,
+    release_date: formAssignment.release_date,
+    expire_date: formAssignment.expire_date,
+    response: {},
+    status: "Not Started",
+    last_updated: new Date(),
+  };
+};
+
+const createFormResponses = async (blankFormResponse, assigned) => {
+  let formResponseIds = [];
+
+  try {
+    if (blankFormResponse.type === "organization") {
+      for (const org of assigned) {
+        formResponseIds.push(
+          await updateFormResponse(undefined, org, blankFormResponse)
+        );
+      }
+    } else if (blankFormResponse.type === "user") {
+      for (const email of assigned) {
+        formResponseIds.push(
+          await updateFormResponse(email, undefined, blankFormResponse)
+        );
+      }
+    }
+
+    return formResponseIds;
+  } catch (err) {
+    console.log(err);
+    return formResponseIds;
+  }
+};
+
 const updateFormResponse = async (email, organization, formResponse) => {
   const { type, _id } = formResponse;
   const typeMap = { user: email, organization };
@@ -222,6 +304,10 @@ export default {
   getForms,
   getFormAssignments,
   getFormResponses,
+  getBlankFormResponse,
+  getAssignedOrgs,
+  getAssignedUsers,
+  createFormResponses,
   updateFormResponse,
   getModelDataPeriods,
   getModelData,

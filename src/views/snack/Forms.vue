@@ -29,7 +29,7 @@
       <div class="level form-row" data-cy="form-row">
         <div class="level-left">
           <p class="level-item is-size-5" data-cy="form-title">
-            {{ formResponse.title }}
+            {{ forms[formResponse.form_id].title }}
           </p>
         </div>
 
@@ -96,16 +96,14 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form-questions="activeFormQuestions"
+    :form="activeForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
 
 <script>
-import { onMounted, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-
-import fb from "@/firebase";
 import FormModal from "@/components/form/Modal.vue";
 
 export default {
@@ -128,7 +126,7 @@ export default {
       return user.value.formResponses;
     });
 
-    const forms = ref({});
+    const forms = store.state.forms;
     const activeFormResponse = ref({});
     const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
@@ -163,22 +161,14 @@ export default {
     let today = new Date(); // Local time
     today = today.toISOString().split("T")[0]; // Date to ISO string without time
 
-    onMounted(async () => {
-      forms.value = await fb.getForms();
-    });
-
-    const activeFormQuestions = computed(() => {
+    const activeForm = computed(() => {
       const formId = activeFormResponse.value.form_id;
 
       if (formId) {
-        const form = forms.value[formId];
-
-        if (form) {
-          return form.questions;
-        }
+        return forms[formId];
       }
 
-      return [];
+      return {};
     });
 
     return {
@@ -186,8 +176,9 @@ export default {
       activeFormResponse,
       tabs,
       selectedTab,
-      activeFormQuestions,
+      activeForm,
       today,
+      forms,
       formResponses,
       user,
       userRole,

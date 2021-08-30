@@ -50,7 +50,7 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form-questions="assessmentQuestions"
+    :form="assessmentForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -95,10 +95,6 @@ export default {
       assessmentForm.value = form;
     });
 
-    const assessmentQuestions = computed(
-      () => assessmentForm.value.questions ?? []
-    );
-
     const completedAssessments = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
@@ -133,7 +129,7 @@ export default {
       userRole,
       bgAssessments,
       activeFormResponse,
-      assessmentQuestions,
+      assessmentForm,
       createNewAssessment,
       formatDate,
     };

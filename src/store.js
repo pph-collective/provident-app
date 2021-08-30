@@ -11,6 +11,7 @@ const store = createStore({
         formResponses: [],
       },
       organizations: [],
+      forms: {},
     };
   },
 
@@ -51,6 +52,10 @@ const store = createStore({
     async fetchOrgs({ commit }) {
       const orgs = await fb.getOrgs();
       commit("mutate", { property: "organizations", with: orgs });
+    },
+    async fetchForms({ commit }) {
+      const forms = await fb.getForms();
+      commit("mutate", { property: "forms", with: forms });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
       const _id = await fb.updateFormResponse(

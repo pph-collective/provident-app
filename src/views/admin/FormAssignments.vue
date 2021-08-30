@@ -161,12 +161,6 @@ export default {
     const store = useStore();
     const organizations = store.state.organizations;
     const allOrgs = organizations.map((org) => org.name);
-    const interventionOrgs = organizations
-      .filter((org) => org.intervention_arm)
-      .map((org) => org.name);
-    const controlOrgs = organizations
-      .filter((org) => !org.intervention_arm)
-      .map((org) => org.name);
     const users = ref([]);
 
     let today = new Date(); // Local time
@@ -272,6 +266,7 @@ export default {
       const formAssignmentData = {
         created_date: new Date(),
         form_id: response.form_id,
+        form_type: forms.value[response.form_id].type,
         release_date: response.release_date,
         expire_date: response.expire_date,
         target: {
@@ -289,72 +284,43 @@ export default {
         formAssignmentData._id = formAssignment.id;
 
         // Create the form responses
-        await createFormResponses(formAssignmentData);
+        const formResponses = await createFormResponses(formAssignmentData);
 
-        // Update the page
-        formAssignments.value.push(formAssignmentData);
+        if (formResponses) {
+          // Update the page
+          formAssignments.value.push(formAssignmentData);
 
-        showModal.value = false;
-        alert.color = "success";
-        alert.message = "form assignment added";
+          showModal.value = false;
+          alert.color = "success";
+          alert.message = "form assignment added";
+        } else {
+          // TODO: Delete the form assignment
+
+          formMessage.value =
+            "Error creating form responses for form assignments.";
+        }
 
         // show the message only for 6 seconds
         setTimeout(() => (alert.message = ""), 6000);
       } catch (e) {
         console.log(e);
         formMessage.value = "Error adding form assignment";
-
-        // show the message only for 6 seconds
-        setTimeout(() => (formMessage.value = ""), 6000);
       }
     };
 
     const createFormResponses = async (formAssignment) => {
-      const form_id = formAssignment.form_id;
-      const form = forms.value[form_id];
-      const form_type = form.type;
+      const formResponseData = fb.getBlankFormResponse(formAssignment);
 
-      const formResponseData = {
-        form_id,
-        title: form.title,
-        type: form_type,
-        form_assignment_id: formAssignment._id,
-        release_date: formAssignment.release_date,
-        expire_date: formAssignment.expire_date,
-        response: {},
-        status: "Not Started",
-        last_updated: new Date(),
-      };
+      const assigned =
+        formAssignment.type === "organization"
+          ? fb.getAssignedOrgs(formAssignment.target, organizations)
+          : fb.getAssignedUsers(
+              formAssignment.target,
+              organizations,
+              users.value
+            );
 
-      const assignedGroups = [...formAssignment.target.groups];
-      const assignedOrgs = new Set([
-        ...formAssignment.target.organizations,
-        ...(assignedGroups.includes("all") ? allOrgs : []),
-        ...(assignedGroups.includes("intervention") ? interventionOrgs : []),
-        ...(assignedGroups.includes("control") ? controlOrgs : []),
-      ]);
-
-      try {
-        if (form_type === "organization") {
-          for (const org of assignedOrgs) {
-            await fb.updateFormResponse(undefined, org, formResponseData);
-          }
-        } else if (form_type === "user") {
-          const assignedUsers = new Set([
-            ...formAssignment.target.users,
-            ...users.value
-              .filter((u) => assignedOrgs.has(u.organization))
-              .map((u) => u.email),
-          ]);
-
-          for (const email of assignedUsers) {
-            await fb.updateFormResponse(email, undefined, formResponseData);
-          }
-        }
-      } catch (e) {
-        alert.color = "danger";
-        alert.message = "Error creating forms";
-      }
+      return await fb.createFormResponses(formResponseData, assigned);
     };
 
     return {

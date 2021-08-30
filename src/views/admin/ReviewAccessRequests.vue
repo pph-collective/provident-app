@@ -55,14 +55,19 @@
 </template>
 
 <script>
-import { ref, reactive, onUnmounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
 
 import fb from "@/firebase";
+import { useStore } from "vuex";
 
 export default {
   setup() {
     const userRequests = ref([]);
     const alert = reactive({ color: "", message: "" });
+    const formAssignments = ref([]);
+
+    const store = useStore();
+    const organizations = store.state.organizations;
 
     const dismissAlert = () => {
       alert.message = "";
@@ -78,6 +83,16 @@ export default {
         });
       });
 
+    let today = new Date(); // Local time
+    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+
+    onMounted(async () => {
+      formAssignments.value = await fb.getFormAssignments();
+      formAssignments.value = formAssignments.value.filter(
+        (f) => f.type === "user" && today <= f.expire_date
+      );
+    });
+
     // unsubscribe when leaving this page
     onUnmounted(unsubUserRequests);
 
@@ -89,6 +104,8 @@ export default {
           .collection("users")
           .doc(user.id)
           .update({ status: "approved" });
+
+        await createFormResponses(formAssignments.value, user.email);
 
         alert.color = "success";
         alert.message = `Success! ${user.email} was approved.`;
@@ -107,6 +124,22 @@ export default {
 
       alert.color = "info";
       alert.message = `${userRequest.email} was denied.`;
+    };
+
+    const createFormResponses = async (formAssignments, approvedUserEmail) => {
+      for (const formAssignment of formAssignments) {
+        const assignedOrganizations = await fb.getAssignedOrgs(
+          formAssignment.target,
+          organizations
+        );
+
+        if (assignedOrganizations.has(approvedUserEmail)) {
+          const blankFormResponse = await fb.getBlankFormResponse(
+            formAssignment
+          );
+          await fb.createFormResponses(blankFormResponse, [approvedUserEmail]);
+        }
+      }
     };
 
     return { userRequests, approve, deny, alert, dismissAlert };
