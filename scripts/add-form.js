@@ -19,19 +19,12 @@ const db = app.firestore();
 const rawdata = fs.readFileSync(formPath);
 let form = JSON.parse(rawdata);
 
-const dateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
-
 const warnAndExit = (warning) => {
   console.warn(warning);
   process.exit(1);
 };
 
 const validateForm = (form) => {
-  // check release date
-  if (!form["release_date"] || !dateRegex.test(form["release_date"])) {
-    warnAndExit("release_date key missing or not formatted as yyyy-mm-dd");
-  }
-
   // check title
   if (!form["title"]) {
     warnAndExit("must provide title");
@@ -65,6 +58,7 @@ const validateForm = (form) => {
       warnAndExit(`question missing component: ${key}`);
     } else {
       switch (question["component"]) {
+        case "Date":
         case "TextArea":
         case "TextInput":
           break;
