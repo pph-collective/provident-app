@@ -38,7 +38,7 @@ jobs:
           project_id: provident-ri
           service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}
           export_default_credentials: true
-          credentials_file_path: ${{ env.GITHUB_WORKSPACE }}/email_service/credentials
+          credentials_file_path: email_service/credentials
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
