@@ -44,16 +44,36 @@ module.exports = (on, config) => {
     },
     "db:seed": () => {
       if (admin.firestore()._settings.servicePath === "localhost") {
-        const promises = [];
+        const writeBatch = admin.firestore().batch();
         if (SEED) {
           for (const [collectionName, documents] of Object.entries(SEED)) {
             let collection = admin.firestore().collection(collectionName);
-            for (const [documentPath, data] of Object.entries(documents)) {
-              promises.push(collection.doc(documentPath).set(data));
+            for (const [documentPath, subCollections] of Object.entries(
+              documents
+            )) {
+              for (const [subCollectionPath, subDocuments] of Object.entries(
+                subCollections
+              )) {
+                if (subCollectionPath === "data") {
+                  writeBatch.set(collection.doc(documentPath), subDocuments);
+                } else {
+                  for (const [subDocumentPath, data] of Object.entries(
+                    subDocuments
+                  )) {
+                    writeBatch.set(
+                      collection
+                        .doc(documentPath)
+                        .collection(subCollectionPath)
+                        .doc(subDocumentPath),
+                      data
+                    );
+                  }
+                }
+              }
             }
           }
         }
-        return Promise.all(promises);
+        return writeBatch.commit();
       } else {
         return "SKIPPING db:seed -- admin is not on localhost";
       }

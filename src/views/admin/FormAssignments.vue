@@ -206,16 +206,18 @@ export default {
       const formOptions = Object.values(forms.value).map((f) => {
         return { value: f._id, label: `${f.title} (type: ${f.type})` };
       });
+      const userTypeForms = Object.values(forms.value)
+        .filter((f) => f.type === "user")
+        .map((f) => f._id);
       const userOptions = users.value.map((u) => {
         return { value: u.email, label: `${u.name} (${u.email})` };
       });
       const groups = ["all", "intervention", "control"];
 
-      // TODO: Enforce only user forms can assign to users
       formQuestions.value = [
         {
           component: "Select",
-          label: "Form ID",
+          label: "Form",
           model: "form_id",
           options: formOptions,
           required: true,
@@ -223,10 +225,9 @@ export default {
         {
           component: "Select",
           multiple: true,
-          label: "Assign to users",
-          helpText: "Only user forms can be directly assigned to users.",
-          model: "users",
-          options: userOptions,
+          label: "Assign to groups",
+          model: "groups",
+          options: groups,
         },
         {
           component: "Select",
@@ -238,9 +239,13 @@ export default {
         {
           component: "Select",
           multiple: true,
-          label: "Assign to groups",
-          model: "groups",
-          options: groups,
+          label: "Assign to users",
+          helpText: "Only user forms can be directly assigned to users.",
+          model: "users",
+          options: userOptions,
+          condition: `(model) => model.form_id && ${JSON.stringify(
+            userTypeForms
+          )}.includes(model.form_id)`,
         },
         {
           component: "Date",
@@ -264,7 +269,7 @@ export default {
 
     const createFormAssignment = async (response) => {
       const formAssignmentData = {
-        created_date: new Date(),
+        created_date: Date.now(),
         form_id: response.form_id,
         form_type: forms.value[response.form_id].type,
         release_date: response.release_date,

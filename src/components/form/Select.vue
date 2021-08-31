@@ -95,4 +95,14 @@ export default {
   --ms-option-bg-selected: #{$primary};
   --ms-option-bg-selected-pointed: #{$link};
 }
+
+fieldset[disabled] {
+  .multiselect {
+    pointer-events: none;
+  }
+
+  .control {
+    cursor: not-allowed;
+  }
+}
 </style>

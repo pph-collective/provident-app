@@ -199,7 +199,7 @@ const getBlankFormResponse = (formAssignment) => {
     expire_date: formAssignment.expire_date,
     response: {},
     status: "Not Started",
-    last_updated: new Date(),
+    last_updated: Date.now(),
   };
 };
 

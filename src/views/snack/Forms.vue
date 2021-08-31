@@ -126,7 +126,7 @@ export default {
       return user.value.formResponses;
     });
 
-    const forms = store.state.forms;
+    const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
     const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
@@ -165,7 +165,7 @@ export default {
       const formId = activeFormResponse.value.form_id;
 
       if (formId) {
-        return forms[formId];
+        return forms.value[formId];
       }
 
       return {};
