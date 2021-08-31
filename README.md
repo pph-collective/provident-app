@@ -109,8 +109,8 @@ See [scripts](scripts/README.md) for info on how to upload a JSON form to fireba
 ### Field Types
 
 The fields currently supported (component in `src/components/forms`) are:
-* `Date`: A calendar date picker
 * `Checkbox`: A list of checkboxes to check
+* `Date`: A calendar date picker
 * `LikertScale`: A table of radio buttons to rate statements
 * `Radio`: Radio button group
 * `Select`: Drop down menu
@@ -128,19 +128,20 @@ Optional keys supported on all fields:
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
 
-#### Date
-
-Optional keys: 
-
-- `min`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disabled dates on the date picker before this date.
-
-If `min` is set to `today` then, whenever the form is viewed any date before today is disabled.
-
 #### Checkbox
 
 Required additional keys:
 
 - `options`: an array of strings which the user can select.
+
+#### Date
+
+Optional keys:
+
+- `maxDate`: a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker after this date.
+- `minDate`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker before this date.
+
+If `min` is set to `today` then, whenever the form is viewed any date before today is disabled.
 
 #### `LikertScale`
 

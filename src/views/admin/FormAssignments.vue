@@ -226,7 +226,6 @@ export default {
           multiple: true,
           label: "Assign to groups",
           model: "groups",
-          default: [],
           options: groups,
         },
         {
@@ -234,7 +233,6 @@ export default {
           multiple: true,
           label: "Assign to organizations",
           model: "organizations",
-          default: [],
           options: allOrgs,
         },
         {

@@ -83,9 +83,12 @@ export default {
 </script>
 
 <style lang="scss">
+// This style element isn't scoped because the following styles affects those within the Multiselect component which
+// would be out of scope.
+
 @import "@vueform/multiselect/themes/default.scss";
 
-:root {
+.multiselect {
   --ms-tag-bg: #{$primary};
   --ms-tag-radius: #{$radius};
 

@@ -141,11 +141,12 @@ export default {
 </script>
 
 <style lang="scss">
-.schema-row {
-  margin-bottom: 2%;
+// This style element isn't scoped because the following styles affects those within the SchemaForm component which
+// would be out of scope.
 
-  .help {
-    margin-bottom: 0.5%;
-  }
+@import "bulma";
+
+.schema-row {
+  margin-bottom: #{$block-spacing};
 }
 </style>

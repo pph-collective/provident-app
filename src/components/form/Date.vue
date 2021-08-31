@@ -7,6 +7,7 @@
         class="input"
         type="date"
         :min="minDate === 'today' ? today : minDate"
+        :max="maxDate"
         :value="modelValue"
         :required="required"
         :id="uuid"
@@ -50,6 +51,10 @@ export default {
     },
     minDate: {
       // "today" or an ISO date string like "2020-08-26"
+      type: String,
+      default: "",
+    },
+    maxDate: {
       type: String,
       default: "",
     },
