@@ -106,14 +106,17 @@ export default {
       };
 
       try {
-        await store.dispatch("updateFormResponse", updatedFormResponse);
+        const _id = await store.dispatch(
+          "updateFormResponse",
+          updatedFormResponse
+        );
         formMessage.value = "Form successfully saved";
 
         // update activeFormResponse
         if (status === "Submitted") {
           emit("update-form-response", {});
         } else {
-          emit("update-form-response", updatedFormResponse);
+          emit("update-form-response", { _id, ...updatedFormResponse });
         }
       } catch (e) {
         console.log(e);

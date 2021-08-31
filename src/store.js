@@ -72,6 +72,8 @@ const store = createStore({
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
+
+      return _id;
     },
   },
 
