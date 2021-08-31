@@ -1,9 +1,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: provident-email-sync
+  name: provident-email-service
   labels:
-    app: provident-email-sync
+    app: provident-email-service
 spec:
   schedule: "*/15 * * * *"
   jobTemplate:
@@ -11,7 +11,7 @@ spec:
       template:
         spec:
           containers:
-          - name: verily-sync
+          - name: provident-email-service
             image: ghcr.io/pph-collective/provident-email-service:latest
             imagePullPolicy: Always
           imagePullSecrets:
