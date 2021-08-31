@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - email_service/**
+      - .github/workflows/email-service-merge.yml
     branches:
       - main
       - feat-email
