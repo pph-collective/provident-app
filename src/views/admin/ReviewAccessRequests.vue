@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 
 import fb from "@/firebase";
 import { useStore } from "vuex";
@@ -67,7 +67,7 @@ export default {
     const formAssignments = ref([]);
 
     const store = useStore();
-    const organizations = store.state.organizations;
+    const organizations = computed(() => store.state.organizations);
 
     const dismissAlert = () => {
       alert.message = "";
@@ -89,7 +89,7 @@ export default {
     onMounted(async () => {
       formAssignments.value = await fb.getFormAssignments();
       formAssignments.value = formAssignments.value.filter(
-        (f) => f.type === "user" && today <= f.expire_date
+        (f) => f.form_type === "user" && today <= f.expire_date
       );
     });
 
@@ -105,7 +105,7 @@ export default {
           .doc(user.id)
           .update({ status: "approved" });
 
-        await createFormResponses(formAssignments.value, user.email);
+        await createFormResponses(formAssignments.value, user);
 
         alert.color = "success";
         alert.message = `Success! ${user.email} was approved.`;
@@ -126,18 +126,18 @@ export default {
       alert.message = `${userRequest.email} was denied.`;
     };
 
-    const createFormResponses = async (formAssignments, approvedUserEmail) => {
+    const createFormResponses = async (formAssignments, user) => {
       for (const formAssignment of formAssignments) {
         const assignedOrganizations = await fb.getAssignedOrgs(
           formAssignment.target,
-          organizations
+          organizations.value
         );
 
-        if (assignedOrganizations.has(approvedUserEmail)) {
+        if (assignedOrganizations.has(user.organization)) {
           const blankFormResponse = await fb.getBlankFormResponse(
             formAssignment
           );
-          await fb.createFormResponses(blankFormResponse, [approvedUserEmail]);
+          await fb.createFormResponses(blankFormResponse, [user.email]);
         }
       }
     };

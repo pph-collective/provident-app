@@ -65,9 +65,7 @@ export default {
     },
     showSaveButton: {
       type: Boolean,
-      default() {
-        return true;
-      },
+      default: true,
     },
   },
   emits: ["save", "submitted", "close"],

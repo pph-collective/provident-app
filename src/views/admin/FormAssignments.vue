@@ -155,12 +155,12 @@ export default {
     const formAssignments = ref([]);
     const formMessage = ref("");
     const formQuestions = ref([]);
-    const forms = ref({});
     const showModal = ref(false);
 
     const store = useStore();
-    const organizations = store.state.organizations;
-    const allOrgs = organizations.map((org) => org.name);
+    const forms = computed(() => store.state.forms);
+    const organizations = computed(() => store.state.organizations);
+    const allOrgs = organizations.value.map((org) => org.name);
     const users = ref([]);
 
     let today = new Date(); // Local time
@@ -199,7 +199,6 @@ export default {
     };
 
     onMounted(async () => {
-      forms.value = await fb.getForms();
       formAssignments.value = await fb.getFormAssignments();
       users.value = await fb.getUsers();
 
@@ -227,6 +226,7 @@ export default {
           multiple: true,
           label: "Assign to groups",
           model: "groups",
+          default: [],
           options: groups,
         },
         {
@@ -234,6 +234,7 @@ export default {
           multiple: true,
           label: "Assign to organizations",
           model: "organizations",
+          default: [],
           options: allOrgs,
         },
         {
@@ -242,6 +243,7 @@ export default {
           label: "Assign to users",
           helpText: "Only user forms can be directly assigned to users.",
           model: "users",
+          default: [],
           options: userOptions,
           condition: `(model) => model.form_id && ${JSON.stringify(
             userTypeForms
@@ -268,16 +270,25 @@ export default {
     });
 
     const createFormAssignment = async (response) => {
+      const {
+        form_id,
+        release_date,
+        expire_date,
+        users,
+        organizations,
+        groups,
+      } = response;
+
       const formAssignmentData = {
         created_date: Date.now(),
-        form_id: response.form_id,
-        form_type: forms.value[response.form_id].type,
-        release_date: response.release_date,
-        expire_date: response.expire_date,
+        form_id,
+        form_type: forms.value[form_id].type,
+        release_date,
+        expire_date,
         target: {
-          users: response.users,
-          organizations: response.organizations,
-          groups: response.groups,
+          users: users,
+          organizations: organizations,
+          groups: groups,
         },
       };
 
@@ -299,7 +310,10 @@ export default {
           alert.color = "success";
           alert.message = "form assignment added";
         } else {
-          // TODO: Delete the form assignment
+          await fb.db
+            .collection("form_assignments")
+            .doc(formAssignment.id)
+            .delete();
 
           formMessage.value =
             "Error creating form responses for form assignments.";
@@ -318,10 +332,10 @@ export default {
 
       const assigned =
         formAssignment.type === "organization"
-          ? fb.getAssignedOrgs(formAssignment.target, organizations)
+          ? fb.getAssignedOrgs(formAssignment.target, organizations.value)
           : fb.getAssignedUsers(
               formAssignment.target,
-              organizations,
+              organizations.value,
               users.value
             );
 

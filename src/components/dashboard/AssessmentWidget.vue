@@ -56,10 +56,9 @@
 </template>
 
 <script>
-import { ref, toRefs, computed, onMounted } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
 import FormModal from "@/components/form/Modal.vue";
 
 const FORM_ID = "neighborhood_rapid_assessment";
@@ -85,14 +84,15 @@ export default {
 
     const activeFormResponse = ref({});
 
-    const assessmentForm = ref({});
-    onMounted(async () => {
-      const form = await fb.getForm(FORM_ID);
+    const assessmentForm = computed(() => {
+      const form = store.state.forms[FORM_ID];
+
       const geoidQuestion = form.questions.find(
         (question) => question.model === GEOID_QUESTION_MODEL
       );
       geoidQuestion.readOnly = true;
-      assessmentForm.value = form;
+
+      return form;
     });
 
     const completedAssessments = computed(() => {
