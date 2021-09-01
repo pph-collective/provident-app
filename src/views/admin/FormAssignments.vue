@@ -34,6 +34,7 @@
         <div
           v-if="selectedFormAssignments.length === 0"
           class="panel-block is-justify-content-center"
+          data-cy="form-assignment-panel-block"
         >
           <span>No forms assignments here</span>
         </div>
@@ -42,23 +43,28 @@
           v-for="(assignment, idx) in selectedFormAssignments"
           :key="'assignment-' + idx"
           class="panel-block"
+          data-cy="form-assignment-panel-block"
         >
-          <div class="form-assignment-row">
+          <div class="form-assignment-row" data-cy="form-assignment-row">
             <div class="level">
               <div class="level-left">
                 <p class="level-item is-size-5">
-                  <b>
+                  <b v-if="assignment.form_id in forms">
                     {{ forms[assignment.form_id].title }}
                   </b>
                 </p>
               </div>
               <div class="level-right has-text-centered">
-                <span class="level-item tag is-success is-light"
+                <span
+                  class="level-item tag is-success is-light"
+                  data-cy="release-date-tag"
                   ><p>
                     <strong>RELEASE DATE:</strong> {{ assignment.release_date }}
                   </p></span
                 >
-                <span class="level-item tag is-danger is-light"
+                <span
+                  class="level-item tag is-danger is-light"
+                  data-cy="expire-date-tag"
                   ><p>
                     <strong>EXPIRE DATE:</strong> {{ assignment.expire_date }}
                   </p></span
@@ -75,7 +81,11 @@
                   :key="category"
                   class="level-item"
                 >
-                  <div v-if="target_list.length > 0" class="tags has-addons">
+                  <div
+                    v-if="target_list.length > 0"
+                    class="tags has-addons"
+                    data-cy="target-tags"
+                  >
                     <span class="tag is-primary is-rounded">
                       <b>{{ category }}</b>
                     </span>

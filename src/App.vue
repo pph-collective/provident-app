@@ -37,7 +37,6 @@ export default {
     const store = useStore();
     onMounted(async () => {
       await store.dispatch("fetchOrgs");
-      await store.dispatch("fetchForms");
     });
   },
 };

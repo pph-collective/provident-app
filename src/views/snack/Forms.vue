@@ -28,7 +28,11 @@
     >
       <div class="level form-row" data-cy="form-row">
         <div class="level-left">
-          <p class="level-item is-size-5" data-cy="form-title">
+          <p
+            v-if="formResponse.form_id in forms"
+            class="level-item is-size-5"
+            data-cy="form-title"
+          >
             {{ forms[formResponse.form_id].title }}
           </p>
         </div>
