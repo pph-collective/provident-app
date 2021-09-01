@@ -87,7 +87,7 @@ export default {
     today = today.toISOString().split("T")[0]; // Date to ISO string without time
 
     onMounted(async () => {
-      formAssignments.value = await fb.getFormAssignments();
+      formAssignments.value = await fb.getCollection("form_assignments");
       formAssignments.value = formAssignments.value.filter(
         (f) => f.form_type === "user" && today <= f.expire_date
       );

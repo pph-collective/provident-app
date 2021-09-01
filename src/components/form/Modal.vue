@@ -2,7 +2,7 @@
   <teleport to="body">
     <div v-esc="() => (closeFormRequest += 1)">
       <div
-        v-if="'form_id' in formResponse"
+        v-if="'form_id' in formResponse && 'title' in form"
         class="modal is-active"
         data-cy="active-form-modal"
       >

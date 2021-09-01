@@ -25,7 +25,7 @@
           <a
             v-for="tab in tabs"
             :key="tab"
-            :class="selectedTab == tab ? 'is-active' : ''"
+            :class="selectedTab === tab ? 'is-active' : ''"
             @click="selectedTab = tab"
             >{{ tab }}</a
           >
@@ -154,7 +154,6 @@ export default {
     const closeFormRequest = ref(0);
     const formAssignments = ref([]);
     const formMessage = ref("");
-    const formQuestions = ref([]);
     const showModal = ref(false);
 
     const store = useStore();
@@ -198,10 +197,7 @@ export default {
       alert.message = "";
     };
 
-    onMounted(async () => {
-      formAssignments.value = await fb.getFormAssignments();
-      users.value = await fb.getUsers();
-
+    const formQuestions = computed(() => {
       const formOptions = Object.values(forms.value).map((f) => {
         return { value: f._id, label: `${f.title} (type: ${f.type})` };
       });
@@ -213,7 +209,7 @@ export default {
       });
       const groups = ["all", "intervention", "control"];
 
-      formQuestions.value = [
+      return [
         {
           component: "Select",
           label: "Form",
@@ -265,6 +261,11 @@ export default {
           minDate: "today",
         },
       ];
+    });
+
+    onMounted(async () => {
+      formAssignments.value = await fb.getCollection("form_assignments");
+      users.value = await fb.getCollection("users");
     });
 
     const createFormAssignment = async (response) => {

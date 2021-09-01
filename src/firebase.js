@@ -63,25 +63,17 @@ const getUserRequest = async (email) => {
   }
 };
 
-const getUsers = async () => {
-  const res = [];
+const getCollection = async (collection) => {
+  let res = [];
   try {
-    const docs = await db.collection("users").get();
-    docs.forEach((doc) => res.push(doc.data()));
+    const docs = await db.collection(collection).get();
+    res = docs.docs.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
+    });
   } catch (err) {
     console.log(err);
   }
-  return res;
-};
 
-const getOrgs = async () => {
-  const res = [];
-  try {
-    const docs = await db.collection("organizations").get();
-    docs.forEach((doc) => res.push(doc.data()));
-  } catch (err) {
-    console.log(err);
-  }
   return res;
 };
 
@@ -89,9 +81,9 @@ const getForms = async () => {
   const forms = {};
   try {
     const docs = await db.collection("forms").get();
-    docs.forEach((doc) => {
+    for (const doc of docs.docs) {
       forms[doc.id] = { _id: doc.id, ...doc.data() };
-    });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -106,21 +98,6 @@ const getForm = async (formId) => {
   } catch (err) {
     console.log(err);
     return {};
-  }
-};
-
-const getFormAssignments = async () => {
-  let formAssignments = [];
-  try {
-    const docs = await db.collection("form_assignments").get();
-
-    formAssignments = docs.docs.map((doc) => {
-      return { _id: doc.id, ...doc.data() };
-    });
-
-    return formAssignments;
-  } catch (err) {
-    console.log(err);
   }
 };
 
@@ -210,26 +187,26 @@ const createFormResponses = async (blankFormResponse, assigned) => {
     if (blankFormResponse.type === "organization") {
       for (const org of assigned) {
         formResponseIds.push(
-          await updateFormResponse(undefined, org, blankFormResponse)
+          await updateFormResponse(blankFormResponse, { organization: org })
         );
       }
     } else if (blankFormResponse.type === "user") {
       for (const email of assigned) {
         formResponseIds.push(
-          await updateFormResponse(email, undefined, blankFormResponse)
+          await updateFormResponse(blankFormResponse, { email })
         );
       }
     }
-
-    return formResponseIds;
   } catch (err) {
     console.log(err);
-    return formResponseIds;
   }
+
+  return formResponseIds;
 };
 
-const updateFormResponse = async (email, organization, formResponse) => {
+const updateFormResponse = async (formResponse, options) => {
   const { type, _id } = formResponse;
+  const { email, organization } = options;
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
@@ -297,12 +274,10 @@ export default {
   logActivity,
   login,
   logout,
+  getCollection,
   getUserRequest,
-  getUsers,
-  getOrgs,
   getForm,
   getForms,
-  getFormAssignments,
   getFormResponses,
   getBlankFormResponse,
   getAssignedOrgs,

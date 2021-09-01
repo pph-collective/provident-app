@@ -53,7 +53,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/Snack.vue"),
+      import(/* webpackChunkName: "snack" */ "../views/ContentWithSidebar.vue"),
     props: {
       parentRoute: "snack",
       pages: [
@@ -103,7 +103,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "admin" */ "../views/Snack.vue"),
+      import(/* webpackChunkName: "admin" */ "../views/ContentWithSidebar.vue"),
     props: {
       parentRoute: "admin",
       pages: [
