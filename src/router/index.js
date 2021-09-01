@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import ContentWithSidebar from "../views/ContentWithSidebar";
 import store from "@/store";
 
 const routes = [
@@ -49,11 +50,7 @@ const routes = [
         return { name: "Login", query: { redirect: to.path } };
       }
     },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/ContentWithSidebar.vue"),
+    component: ContentWithSidebar,
     props: {
       parentRoute: "snack",
       pages: [
@@ -102,8 +99,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "admin" */ "../views/ContentWithSidebar.vue"),
+    component: ContentWithSidebar,
     props: {
       parentRoute: "admin",
       pages: [
@@ -111,6 +107,11 @@ const routes = [
           name: "Review Access Requests",
           route: "review_access_requests",
           icon: "fa-universal-access",
+        },
+        {
+          name: "User Management",
+          route: "user_management",
+          icon: "fa-crown",
         },
         {
           name: "Form Assignments",
@@ -129,6 +130,13 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "admin" */ "../views/admin/ReviewAccessRequests.vue"
+          ),
+      },
+      {
+        path: "user_management",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/UserManagement.vue"
           ),
       },
       {
