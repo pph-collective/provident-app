@@ -551,6 +551,34 @@
           }
         ]
       }
+    },
+    "User Assigned Form": {
+      "data": {
+        "title": "User Assigned Form",
+        "type": "user",
+        "release_date": "2021-07-26",
+        "questions": [
+          {
+            "model": "q1",
+            "component": "TextArea",
+            "label": "How are you?"
+          }
+        ]
+      }
+    },
+    "Organization Assigned Form": {
+      "data": {
+        "title": "Organization Assigned Form",
+        "type": "organization",
+        "release_date": "2021-07-26",
+        "questions": [
+          {
+            "model": "q1",
+            "component": "TextArea",
+            "label": "How's the organization?"
+          }
+        ]
+      }
     }
   },
   "form_assignments": {

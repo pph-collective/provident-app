@@ -3,6 +3,7 @@
     <div
       v-if="alert.message"
       :class="['notification', 'mt-4', 'is-' + alert.color]"
+      data-cy="alert-message"
     >
       <button class="delete" @click="dismissAlert"></button>
       {{ alert.message }}
@@ -14,7 +15,11 @@
         <div class="panel-block is-block">
           <div class="columns">
             <span class="column has-text-centered">
-              <button class="button is-primary" @click="showModal = true">
+              <button
+                class="button is-primary"
+                data-cy="create-button"
+                @click="showModal = true"
+              >
                 + Create
               </button>
             </span>
@@ -104,8 +109,10 @@
         </div>
 
         <div
+          v-if="showModal && formQuestions.length > 0"
           class="modal"
           :class="{ 'is-active': showModal }"
+          data-cy="form-assignment-modal"
           v-esc="() => (closeFormRequest += 1)"
         >
           <div class="modal-background"></div>
@@ -169,7 +176,7 @@ export default {
     const store = useStore();
     const forms = computed(() => store.state.forms);
     const organizations = computed(() => store.state.organizations);
-    const allOrgs = organizations.value.map((org) => org.name);
+    const allOrgs = computed(() => organizations.value.map((org) => org.name));
     const users = ref([]);
 
     let today = new Date(); // Local time
@@ -208,15 +215,28 @@ export default {
     };
 
     const formQuestions = computed(() => {
+      if (
+        Object.keys(forms.value).length === 0 ||
+        users.value.length === 0 ||
+        allOrgs.value.length === 0
+      ) {
+        return [];
+      }
+
       const formOptions = Object.values(forms.value).map((f) => {
         return { value: f._id, label: `${f.title} (type: ${f.type})` };
       });
+      formOptions.sort((a, b) => (a.label > b.label ? 1 : -1));
+
       const userTypeForms = Object.values(forms.value)
         .filter((f) => f.type === "user")
         .map((f) => f._id);
+
       const userOptions = users.value.map((u) => {
         return { value: u.email, label: `${u.name} (${u.email})` };
       });
+      userOptions.sort((a, b) => (a.label > b.label ? 1 : -1));
+
       const groups = ["all", "intervention", "control"];
 
       return [
@@ -239,7 +259,7 @@ export default {
           multiple: true,
           label: "Assign to organizations",
           model: "organizations",
-          options: allOrgs,
+          options: allOrgs.value,
         },
         {
           component: "Select",
@@ -340,7 +360,7 @@ export default {
       const formResponseData = fb.getBlankFormResponse(formAssignment);
 
       const assigned =
-        formAssignment.type === "organization"
+        formAssignment.form_type === "organization"
           ? fb.getAssignedOrgs(formAssignment.target, organizations.value)
           : fb.getAssignedUsers(
               formAssignment.target,
