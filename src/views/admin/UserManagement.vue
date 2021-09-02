@@ -6,23 +6,80 @@
       <table class="table" data-cy="user-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Organization</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th
+              v-for="field in fields"
+              class="is-clickable"
+              :key="field"
+              @click="updateSort(field)"
+            >
+              <span class="icon-text">
+                <span>{{ field }}</span>
+                <span
+                  :class="{ 'is-invisible': field.toLowerCase() !== sortField }"
+                  class="icon mx-0 has-text-grey"
+                >
+                  <i
+                    class="fas"
+                    :class="[
+                      'fa-arrow-' + (sortDirection === 1 ? 'up' : 'down'),
+                    ]"
+                  />
+                </span>
+              </span>
+            </th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              <input
+                type="text"
+                class="input is-small"
+                v-model="filters.name"
+              />
+            </th>
+            <th>
+              <div class="select is-small">
+                <select v-model="filters.organization">
+                  <option></option>
+                  <option v-for="org in organizations" :key="org.name">
+                    {{ org.name }}
+                  </option>
+                </select>
+              </div>
+            </th>
+            <th>
+              <input
+                type="text"
+                class="input is-small"
+                v-model="filters.email"
+              />
+            </th>
+            <th>
+              <div class="select is-small">
+                <select v-model="filters.role">
+                  <option></option>
+                  <option v-for="role in roles" :key="role">{{ role }}</option>
+                </select>
+              </div>
+            </th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.email" data-cy="user-request">
+          <tr
+            v-for="user in filteredUsers"
+            :key="user.email"
+            data-cy="user-request"
+          >
             <td data-cy="name">{{ user.name }}</td>
             <td data-cy="organization">{{ user.organization }}</td>
             <td data-cy="email">{{ user.email }}</td>
             <td v-if="user.edit">
-              <select v-model="user.role">
-                <option>user</option>
-                <option>champion</option>
-              </select>
+              <div class="select is-small">
+                <select v-model="user.role">
+                  <option v-for="role in roles" :key="role">{{ role }}</option>
+                </select>
+              </div>
             </td>
             <td v-else>{{ user.role }}</td>
             <td v-if="user.edit">
@@ -44,18 +101,58 @@
         </tbody>
       </table>
     </section>
-    {{ users }}
   </div>
 </template>
 
 <script>
-import { ref, onUnmounted } from "vue";
+import { computed, reactive, ref, onUnmounted } from "vue";
+import { useStore } from "vuex";
 
 import fb from "@/firebase.js";
 
 export default {
   setup() {
+    const store = useStore();
+    const organizations = computed(() => store.state.organizations);
+    const roles = ["champion", "user"];
+    const fields = ["Name", "Organization", "Email", "Role"];
+    const sortField = ref("name");
+    const sortDirection = ref(1); // ascending
+
     const users = ref([]);
+
+    const filters = reactive({
+      name: "",
+      organization: "",
+      email: "",
+      role: "",
+    });
+
+    const filteredUsers = computed(() => {
+      let filtered = users.value;
+      for (const [filter, value] of Object.entries(filters)) {
+        if (value) {
+          filtered = filtered.filter((user) =>
+            user[filter].toLowerCase().includes(value.toLowerCase())
+          );
+        }
+      }
+      filtered.sort((a, b) => {
+        const valA = a[sortField.value].toUpperCase(); // ignore upper and lowercase
+        const valB = b[sortField.value].toUpperCase(); // ignore upper and lowercase
+        if (valA < valB) {
+          return -1 * sortDirection.value;
+        }
+        if (valA > valB) {
+          return 1 * sortDirection.value;
+        }
+
+        // values must be equal
+        return 0;
+      });
+
+      return filtered;
+    });
 
     let unsubUsers = fb.db
       .collection("users")
@@ -78,9 +175,26 @@ export default {
       }
     };
 
+    const updateSort = (fieldTitle) => {
+      const field = fieldTitle.toLowerCase();
+      if (field === sortField.value) {
+        sortDirection.value *= -1; // flip sort order
+      } else {
+        sortField.value = field;
+        sortDirection.value = 1;
+      }
+    };
+
     return {
-      users,
+      organizations,
+      roles,
+      fields,
+      filteredUsers,
+      filters,
       saveUser,
+      sortField,
+      sortDirection,
+      updateSort,
     };
   },
 };
