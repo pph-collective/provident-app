@@ -96,6 +96,8 @@ describe("Form Assignment functionality", () => {
       .should("exist")
       .should("contain", "form assignment added");
 
+    cy.wait(4000);
+
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
       "Organization Assigned Form"
@@ -159,6 +161,8 @@ describe("Form Assignment functionality", () => {
     cy.get('[data-cy="form-message"]').should("not.exist");
 
     cy.get('[data-cy="form-assignment-modal"]').should("not.exist");
+
+    cy.wait(4000);
 
     cy.get('[data-cy="alert-message"]')
       .should("exist")

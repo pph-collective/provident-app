@@ -60,6 +60,8 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import fb from "@/firebase";
 import { useStore } from "vuex";
 
+import formAssignmentUtils from "@/utils/formAssignmentUtils";
+
 export default {
   setup() {
     const userRequests = ref([]);
@@ -128,7 +130,7 @@ export default {
 
     const createFormResponses = async (formAssignments, user) => {
       for (const formAssignment of formAssignments) {
-        const assignedOrganizations = await fb.getAssignedOrgs(
+        const assignedOrganizations = await formAssignmentUtils.getAssignedOrgs(
           formAssignment.target,
           organizations.value
         );

@@ -159,6 +159,8 @@ import fb from "@/firebase";
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 
+import formAssignmentUtils from "@/utils/formAssignmentUtils";
+
 export default {
   components: {
     JSONForm,
@@ -323,10 +325,7 @@ export default {
 
       try {
         // Create the form assignment on the db
-        const formAssignment = await fb.db
-          .collection("form_assignments")
-          .add(formAssignmentData);
-        formAssignmentData._id = formAssignment.id;
+        formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
 
         // Create the form responses
         const formResponses = await createFormResponses(formAssignmentData);
@@ -341,15 +340,12 @@ export default {
         } else {
           await fb.db
             .collection("form_assignments")
-            .doc(formAssignment.id)
+            .doc(formAssignmentData._id)
             .delete();
 
           formMessage.value =
             "Error creating form responses for form assignments.";
         }
-
-        // show the message only for 6 seconds
-        setTimeout(() => (alert.message = ""), 6000);
       } catch (e) {
         console.log(e);
         formMessage.value = "Error adding form assignment";
@@ -361,8 +357,11 @@ export default {
 
       const assigned =
         formAssignment.form_type === "organization"
-          ? fb.getAssignedOrgs(formAssignment.target, organizations.value)
-          : fb.getAssignedUsers(
+          ? formAssignmentUtils.getAssignedOrgs(
+              formAssignment.target,
+              organizations.value
+            )
+          : formAssignmentUtils.getAssignedUsers(
               formAssignment.target,
               organizations.value,
               users.value
