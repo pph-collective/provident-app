@@ -1,3 +1,5 @@
+import fb from "@/firebase";
+
 /**
  * Returns a set of organization names filtered by the target
  *
@@ -42,7 +44,36 @@ const getAssignedUsers = (target, organizations, users) => {
   ]);
 };
 
+const getFormResponseData = (formAssignment) => {
+  const { _id, form_id, form_type, release_date, expire_date } = formAssignment;
+
+  return {
+    form_id,
+    type: form_type,
+    form_assignment_id: _id,
+    release_date,
+    expire_date,
+    response: {},
+    status: "Not Started",
+    last_updated: Date.now(),
+  };
+};
+
+const addFormResponses = async (formAssignment, organizations, users) => {
+  const { form_type, target } = formAssignment;
+  const formResponseData = getFormResponseData(formAssignment);
+
+  const assigned =
+    form_type === "organization"
+      ? getAssignedOrgs(target, organizations)
+      : getAssignedUsers(target, organizations, users);
+
+  return await fb.createFormResponses(formResponseData, assigned);
+};
+
 export default {
-  getAssignedUsers,
+  addFormResponses,
   getAssignedOrgs,
+  getAssignedUsers,
+  getFormResponseData,
 };

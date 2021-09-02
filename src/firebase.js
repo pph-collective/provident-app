@@ -123,19 +123,6 @@ const getFormResponses = async (email, organization) => {
   }
 };
 
-const getBlankFormResponse = (formAssignment) => {
-  return {
-    form_id: formAssignment.form_id,
-    type: formAssignment.form_type,
-    form_assignment_id: formAssignment._id,
-    release_date: formAssignment.release_date,
-    expire_date: formAssignment.expire_date,
-    response: {},
-    status: "Not Started",
-    last_updated: Date.now(),
-  };
-};
-
 const createFormResponses = async (blankFormResponse, assigned) => {
   let formResponseIds = [];
 
@@ -240,7 +227,6 @@ export default {
   getForm,
   getForms,
   getFormResponses,
-  getBlankFormResponse,
   createFormResponses,
   updateFormResponse,
   getModelDataPeriods,

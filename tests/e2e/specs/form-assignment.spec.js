@@ -71,9 +71,9 @@ describe("Form Assignment functionality", () => {
       .click();
 
     // Cannot be assigned to users
-    cy.get('[model="users"]').should("not.exist");
+    cy.get('[model="target_users"]').should("not.exist");
 
-    cy.get('[model="groups"]')
+    cy.get('[model="target_groups"]')
       .find(".multiselect")
       .click()
       .contains(".multiselect-option", "control")
@@ -96,7 +96,7 @@ describe("Form Assignment functionality", () => {
       .should("exist")
       .should("contain", "form assignment added");
 
-    cy.wait(4000);
+    cy.wait(6000);
 
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
@@ -135,15 +135,15 @@ describe("Form Assignment functionality", () => {
       .click();
 
     // Can be assigned to users
-    cy.get('[model="users"]').should("exist");
+    cy.get('[model="target_users"]').should("exist");
 
-    cy.get('[model="users"]')
+    cy.get('[model="target_users"]')
       .find(".multiselect")
       .click()
       .contains(".multiselect-option", "(user@user.com)")
       .click();
 
-    cy.get('[model="organizations"]')
+    cy.get('[model="target_organizations"]')
       .find(".multiselect")
       .click()
       .contains(".multiselect-option", "RI 4 Us")
@@ -162,7 +162,7 @@ describe("Form Assignment functionality", () => {
 
     cy.get('[data-cy="form-assignment-modal"]').should("not.exist");
 
-    cy.wait(4000);
+    cy.wait(6000);
 
     cy.get('[data-cy="alert-message"]')
       .should("exist")

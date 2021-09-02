@@ -136,9 +136,8 @@ export default {
         );
 
         if (assignedOrganizations.has(user.organization)) {
-          const blankFormResponse = await fb.getBlankFormResponse(
-            formAssignment
-          );
+          const blankFormResponse =
+            formAssignmentUtils.getFormResponseData(formAssignment);
           await fb.createFormResponses(blankFormResponse, [user.email]);
         }
       }

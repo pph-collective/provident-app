@@ -178,7 +178,6 @@ export default {
     const store = useStore();
     const forms = computed(() => store.state.forms);
     const organizations = computed(() => store.state.organizations);
-    const allOrgs = computed(() => organizations.value.map((org) => org.name));
     const users = ref([]);
 
     let today = new Date(); // Local time
@@ -216,11 +215,12 @@ export default {
       alert.message = "";
     };
 
+    const sortByLabel = (a, b) => (a.label > b.label ? 1 : -1);
     const formQuestions = computed(() => {
       if (
         Object.keys(forms.value).length === 0 ||
         users.value.length === 0 ||
-        allOrgs.value.length === 0
+        organizations.value.length === 0
       ) {
         return [];
       }
@@ -228,7 +228,7 @@ export default {
       const formOptions = Object.values(forms.value).map((f) => {
         return { value: f._id, label: `${f.title} (type: ${f.type})` };
       });
-      formOptions.sort((a, b) => (a.label > b.label ? 1 : -1));
+      formOptions.sort(sortByLabel);
 
       const userTypeForms = Object.values(forms.value)
         .filter((f) => f.type === "user")
@@ -237,7 +237,10 @@ export default {
       const userOptions = users.value.map((u) => {
         return { value: u.email, label: `${u.name} (${u.email})` };
       });
-      userOptions.sort((a, b) => (a.label > b.label ? 1 : -1));
+      userOptions.sort(sortByLabel);
+
+      const organizationOptions = organizations.value.map((org) => org.name);
+      organizationOptions.sort(sortByLabel);
 
       const groups = ["all", "intervention", "control"];
 
@@ -253,22 +256,22 @@ export default {
           component: "Select",
           multiple: true,
           label: "Assign to groups",
-          model: "groups",
+          model: "target_groups",
           options: groups,
         },
         {
           component: "Select",
           multiple: true,
           label: "Assign to organizations",
-          model: "organizations",
-          options: allOrgs.value,
+          model: "target_organizations",
+          options: organizationOptions,
         },
         {
           component: "Select",
           multiple: true,
           label: "Assign to users",
           helpText: "Only user forms can be directly assigned to users.",
-          model: "users",
+          model: "target_users",
           default: [],
           options: userOptions,
           condition: `(model) => model.form_id && ${JSON.stringify(
@@ -305,9 +308,9 @@ export default {
         form_id,
         release_date,
         expire_date,
-        users,
-        organizations,
-        groups,
+        target_users,
+        target_organizations,
+        target_groups,
       } = response;
 
       const formAssignmentData = {
@@ -317,9 +320,9 @@ export default {
         release_date,
         expire_date,
         target: {
-          users: users,
-          organizations: organizations,
-          groups: groups,
+          users: target_users,
+          organizations: target_organizations,
+          groups: target_groups,
         },
       };
 
@@ -328,7 +331,11 @@ export default {
         formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
 
         // Create the form responses
-        const formResponses = await createFormResponses(formAssignmentData);
+        const formResponses = await formAssignmentUtils.addFormResponses(
+          formAssignmentData,
+          organizations.value,
+          users.value
+        );
 
         if (formResponses) {
           // Update the page
@@ -352,29 +359,10 @@ export default {
       }
     };
 
-    const createFormResponses = async (formAssignment) => {
-      const formResponseData = fb.getBlankFormResponse(formAssignment);
-
-      const assigned =
-        formAssignment.form_type === "organization"
-          ? formAssignmentUtils.getAssignedOrgs(
-              formAssignment.target,
-              organizations.value
-            )
-          : formAssignmentUtils.getAssignedUsers(
-              formAssignment.target,
-              organizations.value,
-              users.value
-            );
-
-      return await fb.createFormResponses(formResponseData, assigned);
-    };
-
     return {
       alert,
       closeFormRequest,
       createFormAssignment,
-      createFormResponses,
       dismissAlert,
       formAssignments,
       formMessage,
