@@ -91,16 +91,6 @@ const getForms = async () => {
   return forms;
 };
 
-const getForm = async (formId) => {
-  try {
-    const doc = await db.collection("forms").doc(formId).get();
-    return { _id: doc.id, ...doc.data() };
-  } catch (err) {
-    console.log(err);
-    return {};
-  }
-};
-
 const getFormResponses = async (email, organization) => {
   const formTypes = { users: email, organizations: organization };
 
@@ -221,7 +211,6 @@ export default {
   addFormAssignment,
   batchAddFormResponses,
   getCollection,
-  getForm,
   getFormResponses,
   getForms,
   getModelData,

@@ -58,7 +58,7 @@ describe("Form Assignment functionality", () => {
     );
   });
 
-  it("Assign Organization Form to Intervention Groups", () => {
+  it("Assign Organization Form to the control group", () => {
     cy.get('[data-cy="create-button"]').click();
 
     cy.get('[model="form_id"]')

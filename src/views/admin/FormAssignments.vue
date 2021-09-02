@@ -342,6 +342,9 @@ export default {
         showModal.value = false;
         alert.color = "success";
         alert.message = "form assignment added";
+
+        // show the message only for 6 seconds
+        setTimeout(() => (alert.message = ""), 6000);
       } catch (err) {
         await fb.db
           .collection("form_assignments")

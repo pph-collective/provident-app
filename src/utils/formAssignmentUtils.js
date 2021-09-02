@@ -44,6 +44,12 @@ const getAssignedUsers = (target, organizations, users) => {
   ]);
 };
 
+/**
+ * Returns the form response data for a blank form response
+ *
+ * @param {Object} formAssignment
+ * @returns {Object} formResponseData
+ */
 const getFormResponseData = (formAssignment) => {
   const { _id, form_id, form_type, release_date, expire_date } = formAssignment;
 
@@ -59,6 +65,15 @@ const getFormResponseData = (formAssignment) => {
   };
 };
 
+/**
+ * Adds form responses to the db for the target audience in the form assignment.
+ *
+ * To minimize calls to firebase, we pass in the full list of organizations and users
+ * @param {Object} formAssignment
+ * @param {Object[]} organizations
+ * @param {Object[]} users
+ * @returns {Promise<void>}
+ */
 const addFormResponses = async (formAssignment, organizations, users) => {
   const { form_type, target } = formAssignment;
   const formResponseData = getFormResponseData(formAssignment);
@@ -75,6 +90,15 @@ const addFormResponses = async (formAssignment, organizations, users) => {
   );
 };
 
+/**
+ * Adds form responses to the db for the user based on the existing form assignments
+ *
+ * @param {Object} user - needs the email and organization fields
+ * @param {Object[]} formAssignments
+ * @param {Object[]} organizations
+ * @param {String} today - in ISO format. For example - "2021-01-01".
+ * @returns {Promise<void>}
+ */
 const addFormResponsesForUser = async (
   user,
   formAssignments,
@@ -105,7 +129,4 @@ const addFormResponsesForUser = async (
 export default {
   addFormResponses,
   addFormResponsesForUser,
-  getAssignedOrgs,
-  getAssignedUsers,
-  getFormResponseData,
 };
