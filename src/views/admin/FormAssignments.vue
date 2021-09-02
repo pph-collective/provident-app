@@ -326,36 +326,30 @@ export default {
         },
       };
 
-      try {
-        // Create the form assignment on the db
-        formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
+      // Create the form assignment on the db
+      formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
 
-        // Create the form responses
-        const formResponses = await formAssignmentUtils.addFormResponses(
+      try {
+        await formAssignmentUtils.addFormResponses(
           formAssignmentData,
           organizations.value,
           users.value
         );
 
-        if (formResponses) {
-          // Update the page
-          formAssignments.value.push(formAssignmentData);
+        // Update the page
+        formAssignments.value.push(formAssignmentData);
 
-          showModal.value = false;
-          alert.color = "success";
-          alert.message = "form assignment added";
-        } else {
-          await fb.db
-            .collection("form_assignments")
-            .doc(formAssignmentData._id)
-            .delete();
+        showModal.value = false;
+        alert.color = "success";
+        alert.message = "form assignment added";
+      } catch (err) {
+        await fb.db
+          .collection("form_assignments")
+          .doc(formAssignmentData._id)
+          .delete();
 
-          formMessage.value =
-            "Error creating form responses for form assignments.";
-        }
-      } catch (e) {
-        console.log(e);
-        formMessage.value = "Error adding form assignment";
+        formMessage.value =
+          "Error creating form responses for form assignments.";
       }
     };
 

@@ -68,11 +68,43 @@ const addFormResponses = async (formAssignment, organizations, users) => {
       ? getAssignedOrgs(target, organizations)
       : getAssignedUsers(target, organizations, users);
 
-  return await fb.createFormResponses(formResponseData, assigned);
+  return await fb.batchAddFormResponses(
+    form_type,
+    [formResponseData],
+    assigned
+  );
+};
+
+const addFormResponsesForUser = async (
+  user,
+  formAssignments,
+  organizations,
+  today
+) => {
+  const activeUserFormAssignments = formAssignments.filter(
+    (f) => f.form_type === "user" && today <= f.expire_date
+  );
+
+  let formResponses = [];
+  for (const formAssignment of activeUserFormAssignments) {
+    const { target } = formAssignment;
+    const assignedOrgs = getAssignedOrgs(target, organizations);
+
+    if (assignedOrgs.has(user.organization)) {
+      formResponses.push(getFormResponseData(formAssignment));
+    }
+  }
+
+  return await fb.batchAddFormResponses(
+    "user",
+    formResponses,
+    new Set([user.email])
+  );
 };
 
 export default {
   addFormResponses,
+  addFormResponsesForUser,
   getAssignedOrgs,
   getAssignedUsers,
   getFormResponseData,

@@ -123,38 +123,37 @@ const getFormResponses = async (email, organization) => {
   }
 };
 
-const createFormResponses = async (blankFormResponse, assigned) => {
-  let formResponseIds = [];
-
-  try {
-    if (blankFormResponse.type === "organization") {
-      for (const org of assigned) {
-        formResponseIds.push(
-          await updateFormResponse(blankFormResponse, { organization: org })
-        );
-      }
-    } else if (blankFormResponse.type === "user") {
-      for (const email of assigned) {
-        formResponseIds.push(
-          await updateFormResponse(blankFormResponse, { email })
-        );
-      }
-    }
-  } catch (err) {
-    console.log(err);
-  }
-
-  return formResponseIds;
-};
-
 const addFormAssignment = async (formAssignmentData) => {
   const res = await db.collection("form_assignments").add(formAssignmentData);
   return res.id;
 };
 
-const updateFormResponse = async (formResponse, options) => {
+/**
+ * @param {String} form_type - "user" | "organization"
+ * @param {Object[]} formResponses - list of form response objects
+ * @param {Set<String>} assigned - set of emails or organization names
+ * @returns {Promise<void>}
+ */
+const batchAddFormResponses = async (form_type, formResponses, assigned) => {
+  const writeBatch = db.batch();
+
+  for (const formResponse of formResponses) {
+    for (const assignee of assigned) {
+      const doc = db
+        .collection(`${form_type}s`)
+        .doc(assignee)
+        .collection("form_responses")
+        .doc();
+      writeBatch.set(doc, formResponse);
+    }
+  }
+
+  return writeBatch.commit();
+};
+
+const updateFormResponse = async (formResponse, assignee) => {
   const { type, _id } = formResponse;
-  const { email, organization } = options;
+  const { email, organization } = assignee;
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
@@ -219,18 +218,18 @@ const getModelPredictions = async (period) => {
 export default {
   auth,
   db,
+  addFormAssignment,
+  batchAddFormResponses,
+  getCollection,
+  getForm,
+  getFormResponses,
+  getForms,
+  getModelData,
+  getModelDataPeriods,
+  getModelPredictions,
+  getUserRequest,
   logActivity,
   login,
   logout,
-  getCollection,
-  getUserRequest,
-  getForm,
-  getForms,
-  getFormResponses,
-  createFormResponses,
   updateFormResponse,
-  getModelDataPeriods,
-  getModelData,
-  getModelPredictions,
-  addFormAssignment,
 };
