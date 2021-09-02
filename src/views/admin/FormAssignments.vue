@@ -337,7 +337,7 @@ export default {
         );
 
         // Update the page
-        formAssignments.value.push(formAssignmentData);
+        formAssignments.value.unshift(formAssignmentData);
 
         showModal.value = false;
         alert.color = "success";
