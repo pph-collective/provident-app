@@ -24,9 +24,9 @@ if (emulator) {
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
 }
 
-let EMAIL_SMTP = undefined;
+let EMAIL_SMTP = "smtp://mail-relay.brown.edu:25";
 if (test) {
-  EMAIL_SMTP = "smtp://mail-relay.brown.edu:25";
+  EMAIL_SMTP = undefined;
 }
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "credentials/serviceAccount.json";
@@ -90,8 +90,8 @@ const main = async () => {
 
   let transport;
   if (EMAIL_SMTP !== undefined) {
-    transport = nodemailer.createTransport(process.env.EMAIL_SMTP);
-    console.debug("initialized smtp server: %s", process.env.EMAIL_SMTP);
+    transport = nodemailer.createTransport(EMAIL_SMTP);
+    console.debug("initialized smtp server: %s", EMAIL_SMTP);
   } else {
     const { user, pass } = await nodemailer.createTestAccount();
     transport = nodemailer.createTransport({
