@@ -8,7 +8,6 @@ on:
       - .github/workflows/email-service-merge.yml
     branches:
       - main
-      - feat-email
 
 env:
   REGISTRY: ghcr.io

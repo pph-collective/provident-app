@@ -191,7 +191,6 @@ const createEmail = async ({
   body,
   sendDate = new Date().toISOString(),
 }) => {
-  console.log(to);
   try {
     const doc = {
       subject: emailSubjectPrefix + subject,
@@ -200,7 +199,6 @@ const createEmail = async ({
       sendDate,
       sent: false,
     };
-    console.log(doc);
     await db.collection("emails").add(doc);
   } catch (err) {
     console.log(err);
@@ -210,6 +208,7 @@ const createEmail = async ({
 export default {
   auth,
   db,
+  createEmail,
   logActivity,
   login,
   logout,
@@ -222,5 +221,4 @@ export default {
   getModelDataPeriods,
   getModelData,
   getModelPredictions,
-  createEmail,
 };
