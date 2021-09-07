@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="users.length === 0" />
   <div class="container">
     <section class="section">
       <h1 class="title">User Management</h1>
@@ -74,14 +75,14 @@
             <td data-cy="name">{{ user.name }}</td>
             <td data-cy="organization">{{ user.organization }}</td>
             <td data-cy="email">{{ user.email }}</td>
-            <td v-if="user.edit">
+            <td v-if="user.edit" data-cy="role">
               <div class="select is-small">
                 <select v-model="user.role">
                   <option v-for="role in roles" :key="role">{{ role }}</option>
                 </select>
               </div>
             </td>
-            <td v-else>{{ user.role }}</td>
+            <td v-else data-cy="role">{{ user.role }}</td>
             <td v-if="user.edit">
               <span
                 data-cy="save"
@@ -98,6 +99,13 @@
               <i class="fas fa-pencil-alt is-clickable" alt="edit" />
             </td>
           </tr>
+          <tr v-if="filteredUsers.length === 0">
+            <td colspan="5">
+              <div class="is-flex is-justify-content-center">
+                <p>No users found</p>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -108,9 +116,14 @@
 import { computed, reactive, ref, onUnmounted } from "vue";
 import { useStore } from "vuex";
 
+import Loading from "@/components/Loading.vue";
+
 import fb from "@/firebase.js";
 
 export default {
+  components: {
+    Loading,
+  },
   setup() {
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
@@ -189,6 +202,7 @@ export default {
       organizations,
       roles,
       fields,
+      users,
       filteredUsers,
       filters,
       saveUser,

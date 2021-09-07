@@ -79,4 +79,32 @@ describe("Admin Views and Powers", () => {
       .should("exist")
       .contains("User account not approved: denied");
   });
+
+  it("User management", () => {
+    cy.get('a[href="/admin/user_management"]').click();
+    cy.get(".loading-icon").should("not.exist");
+    cy.get("table tbody tr").should("have.length", 4).first().find("i").click();
+    cy.get("table tbody tr").find("select").should("have.value", "champion");
+    cy.get("table tbody tr").find("select").select("user");
+    cy.get("table tbody tr").first().find("i.fa-save").click();
+    cy.get("table tbody tr")
+      .first()
+      .find('td[data-cy="role"]')
+      .should("contain", "user");
+
+    // still there after hard refresh
+    cy.visit("/admin/user_management");
+    cy.get("h1.title").should("contain", "User Management");
+    cy.get(".loading-icon").should("not.exist");
+    cy.get("table tbody tr")
+      .first()
+      .find('td[data-cy="role"]')
+      .should("contain", "user");
+
+    cy.get("table thead input").first().type("asdf");
+    cy.get("table tbody tr")
+      .should("have.length", 1)
+      .find("td")
+      .should("contain", "No users found");
+  });
 });
