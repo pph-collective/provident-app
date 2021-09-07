@@ -13,7 +13,6 @@
         :id="uuid"
         @input="$emit('update:modelValue', $event.target.value)"
       />
-      <span>Model Value: {{ modelValue }}</span>
       <span class="has-text-danger is-size-7">{{
         validation.errorMessage
       }}</span>

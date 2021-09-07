@@ -60,6 +60,8 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import fb from "@/firebase";
 import { useStore } from "vuex";
 
+import formAssignmentUtils from "@/utils/formAssignmentUtils";
+
 export default {
   setup() {
     const userRequests = ref([]);
@@ -88,9 +90,6 @@ export default {
 
     onMounted(async () => {
       formAssignments.value = await fb.getCollection("form_assignments");
-      formAssignments.value = formAssignments.value.filter(
-        (f) => f.form_type === "user" && today <= f.expire_date
-      );
     });
 
     // unsubscribe when leaving this page
@@ -105,7 +104,12 @@ export default {
           .doc(user.id)
           .update({ status: "approved" });
 
-        await createFormResponses(formAssignments.value, user);
+        await formAssignmentUtils.addFormResponsesForUser(
+          user,
+          formAssignments.value,
+          organizations.value,
+          today
+        );
 
         alert.color = "success";
         alert.message = `Success! ${user.email} was approved.`;
@@ -124,22 +128,6 @@ export default {
 
       alert.color = "info";
       alert.message = `${userRequest.email} was denied.`;
-    };
-
-    const createFormResponses = async (formAssignments, user) => {
-      for (const formAssignment of formAssignments) {
-        const assignedOrganizations = await fb.getAssignedOrgs(
-          formAssignment.target,
-          organizations.value
-        );
-
-        if (assignedOrganizations.has(user.organization)) {
-          const blankFormResponse = await fb.getBlankFormResponse(
-            formAssignment
-          );
-          await fb.createFormResponses(blankFormResponse, [user.email]);
-        }
-      }
     };
 
     return { userRequests, approve, deny, alert, dismissAlert };

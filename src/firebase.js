@@ -95,16 +95,6 @@ const getForms = async () => {
   return forms;
 };
 
-const getForm = async (formId) => {
-  try {
-    const doc = await db.collection("forms").doc(formId).get();
-    return { _id: doc.id, ...doc.data() };
-  } catch (err) {
-    console.log(err);
-    return {};
-  }
-};
-
 const getFormResponses = async (email, organization) => {
   const formTypes = { users: email, organizations: organization };
 
@@ -127,90 +117,37 @@ const getFormResponses = async (email, organization) => {
   }
 };
 
-/**
- * Returns a set of organization names filtered by the target
- *
- * @param {Object} target
- * @param {Object[]} organizations - array of all of the organizations
- * @returns {Set<String>}
- */
-const getAssignedOrgs = (target, organizations) => {
-  const assignedGroups = [...target.groups];
-
-  const allOrgs = organizations.map((org) => org.name);
-  const interventionOrgs = organizations
-    .filter((org) => org.intervention_arm)
-    .map((org) => org.name);
-  const controlOrgs = organizations
-    .filter((org) => !org.intervention_arm)
-    .map((org) => org.name);
-
-  return new Set([
-    ...target.organizations,
-    ...(assignedGroups.includes("all") ? allOrgs : []),
-    ...(assignedGroups.includes("intervention") ? interventionOrgs : []),
-    ...(assignedGroups.includes("control") ? controlOrgs : []),
-  ]);
+const addFormAssignment = async (formAssignmentData) => {
+  const res = await db.collection("form_assignments").add(formAssignmentData);
+  return res.id;
 };
 
 /**
- * Returns a set of user emails filtered by the target
- *
- * @param {Object} target
- * @param {Object[]} organizations - array of all the organizations
- * @param {Object[]} users - array of all the users
- * @returns {Set<String>}
+ * @param {String} form_type - "user" | "organization"
+ * @param {Object[]} formResponses - list of form response objects
+ * @param {Set<String>} assigned - set of emails or organization names
+ * @returns {Promise<void>}
  */
-const getAssignedUsers = (target, organizations, users) => {
-  const assignedOrgs = getAssignedOrgs(target, organizations);
-  return new Set([
-    ...target.users,
-    ...users
-      .filter((u) => assignedOrgs.has(u.organization))
-      .map((u) => u.email),
-  ]);
-};
+const batchAddFormResponses = async (form_type, formResponses, assigned) => {
+  const writeBatch = db.batch();
 
-const getBlankFormResponse = (formAssignment) => {
-  return {
-    form_id: formAssignment.form_id,
-    type: formAssignment.form_type,
-    form_assignment_id: formAssignment._id,
-    release_date: formAssignment.release_date,
-    expire_date: formAssignment.expire_date,
-    response: {},
-    status: "Not Started",
-    last_updated: Date.now(),
-  };
-};
-
-const createFormResponses = async (blankFormResponse, assigned) => {
-  let formResponseIds = [];
-
-  try {
-    if (blankFormResponse.type === "organization") {
-      for (const org of assigned) {
-        formResponseIds.push(
-          await updateFormResponse(blankFormResponse, { organization: org })
-        );
-      }
-    } else if (blankFormResponse.type === "user") {
-      for (const email of assigned) {
-        formResponseIds.push(
-          await updateFormResponse(blankFormResponse, { email })
-        );
-      }
+  for (const formResponse of formResponses) {
+    for (const assignee of assigned) {
+      const doc = db
+        .collection(`${form_type}s`)
+        .doc(assignee)
+        .collection("form_responses")
+        .doc();
+      writeBatch.set(doc, formResponse);
     }
-  } catch (err) {
-    console.log(err);
   }
 
-  return formResponseIds;
+  return writeBatch.commit();
 };
 
-const updateFormResponse = async (formResponse, options) => {
+const updateFormResponse = async (formResponse, assignee) => {
   const { type, _id } = formResponse;
-  const { email, organization } = options;
+  const { email, organization } = assignee;
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
@@ -275,21 +212,18 @@ const getModelPredictions = async (period) => {
 export default {
   auth,
   db,
+  addFormAssignment,
+  batchAddFormResponses,
+  getCollection,
+  getFormResponses,
+  getForms,
+  getModelData,
+  getModelDataPeriods,
+  getModelPredictions,
+  getUserRequest,
   logActivity,
   login,
   logout,
-  getCollection,
-  getUserRequest,
-  updateUser,
-  getForm,
-  getForms,
-  getFormResponses,
-  getBlankFormResponse,
-  getAssignedOrgs,
-  getAssignedUsers,
-  createFormResponses,
   updateFormResponse,
-  getModelDataPeriods,
-  getModelData,
-  getModelPredictions,
+  updateUser,
 };

@@ -14,7 +14,6 @@
           @change="$emit('update:modelValue', $event)"
         >
         </Multiselect>
-        <span>Selected: {{ modelValue }}</span>
       </div>
       <span class="has-text-danger is-size-7">{{
         validation.errorMessage

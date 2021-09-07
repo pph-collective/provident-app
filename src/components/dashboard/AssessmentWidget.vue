@@ -87,10 +87,12 @@ export default {
     const assessmentForm = computed(() => {
       const form = store.state.forms[FORM_ID];
 
-      const geoidQuestion = form.questions.find(
-        (question) => question.model === GEOID_QUESTION_MODEL
-      );
-      geoidQuestion.readOnly = true;
+      if (form) {
+        const geoidQuestion = form.questions.find(
+          (question) => question.model === GEOID_QUESTION_MODEL
+        );
+        geoidQuestion.readOnly = true;
+      }
 
       return form;
     });
