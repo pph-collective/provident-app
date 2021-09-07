@@ -27,6 +27,9 @@ describe("Admin Views and Powers", () => {
       .get('[data-cy="approve"]')
       .should("exist")
       .click();
+
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="alert-message"]')
       .should("exist")
       .should("contain", `Success! ${ACCOUNTS.pending.email} was approved`);

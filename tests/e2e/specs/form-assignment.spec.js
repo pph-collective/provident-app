@@ -6,6 +6,8 @@ describe("Form Assignment functionality", () => {
   });
 
   it("Form Assignments Page Loads", () => {
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get(".panel-heading").should("contain", "Form Assignments");
     cy.get('[data-cy="create-button"]').should("exist");
 
@@ -40,6 +42,8 @@ describe("Form Assignment functionality", () => {
   });
 
   it("Launch Form Assignment Form", () => {
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="create-button"]').click();
     cy.get('[data-cy="form-assignment-modal"]').should(
       "have.class",
@@ -59,6 +63,8 @@ describe("Form Assignment functionality", () => {
   });
 
   it("Assign Organization Form to the control group", () => {
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="create-button"]').click();
 
     cy.get('[model="form_id"]')
@@ -89,6 +95,8 @@ describe("Form Assignment functionality", () => {
       .click();
 
     cy.get('[data-cy="form-message"]').should("not.exist");
+
+    cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-assignment-modal"]').should("not.exist");
 
@@ -124,6 +132,8 @@ describe("Form Assignment functionality", () => {
   });
 
   it("Assign User Form - assign to user and RI 4 Us", () => {
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="create-button"]').should("exist").click();
 
     cy.get('[model="form_id"]')
@@ -157,6 +167,8 @@ describe("Form Assignment functionality", () => {
       .click();
 
     cy.get('[data-cy="form-message"]').should("not.exist");
+
+    cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-assignment-modal"]').should("not.exist");
 

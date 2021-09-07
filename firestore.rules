@@ -26,7 +26,8 @@ service cloud.firestore {
       allow create: if request.auth != null && request.auth.token.email == request.resource.data.email;
 
       match /form_responses/{form} {
-        allow create, read: if isLoggedInUser() || isAdminUser();
+        allow create: if isLoggedInUser() && resource.data.type == 'organization' || isAdminUser();
+        allow read: if isLoggedInUser();
         allow update: if isLoggedInUser() && resource.data.status != 'Submitted';
       }
 

@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="loading" />
   <div class="container">
     <div
       v-if="alert.message"
@@ -158,17 +159,21 @@ import { useStore } from "vuex";
 import fb from "@/firebase";
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
+import Loading from "@/components/Loading.vue";
 
 import formAssignmentUtils from "@/utils/formAssignmentUtils";
 
 export default {
   components: {
     JSONForm,
+    Loading,
   },
   directives: {
     ...esc,
   },
   setup() {
+    const loading = ref(false);
+
     const alert = reactive({ color: "", message: "" });
     const closeFormRequest = ref(0);
     const formAssignments = ref([]);
@@ -299,11 +304,17 @@ export default {
     });
 
     onMounted(async () => {
+      loading.value = true;
+
       formAssignments.value = await fb.getCollection("form_assignments");
       users.value = await fb.getCollection("users");
+
+      loading.value = false;
     });
 
     const createFormAssignment = async (response) => {
+      loading.value = true;
+
       const {
         form_id,
         release_date,
@@ -354,6 +365,8 @@ export default {
         formMessage.value =
           "Error creating form responses for form assignments.";
       }
+
+      loading.value = false;
     };
 
     return {
@@ -365,6 +378,7 @@ export default {
       formMessage,
       formQuestions,
       forms,
+      loading,
       selectedFormAssignments,
       selectedTab,
       showModal,

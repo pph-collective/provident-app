@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="loading" />
   <div class="container">
     <div
       v-if="alert.message"
@@ -60,10 +61,16 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import fb from "@/firebase";
 import { useStore } from "vuex";
 
+import Loading from "@/components/Loading.vue";
 import formAssignmentUtils from "@/utils/formAssignmentUtils";
 
 export default {
+  components: {
+    Loading,
+  },
   setup() {
+    const loading = ref(false);
+
     const userRequests = ref([]);
     const alert = reactive({ color: "", message: "" });
     const formAssignments = ref([]);
@@ -96,6 +103,8 @@ export default {
     onUnmounted(unsubUserRequests);
 
     const approve = async (user) => {
+      loading.value = true;
+
       try {
         // update request status
         // TODO: emails on approval/denial
@@ -118,6 +127,8 @@ export default {
         alert.color = "danger";
         alert.message = err.message;
       }
+
+      loading.value = false;
     };
 
     const deny = (userRequest) => {
@@ -130,7 +141,7 @@ export default {
       alert.message = `${userRequest.email} was denied.`;
     };
 
-    return { userRequests, approve, deny, alert, dismissAlert };
+    return { userRequests, approve, deny, alert, dismissAlert, loading };
   },
 };
 </script>
