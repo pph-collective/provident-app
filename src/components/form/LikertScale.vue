@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <label class="label">{{ label }}</label>
-    <p v-if="helpText" class="help">{{ helpText }}</p>
+    <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="b-table">
       <div class="table-wrapper has-mobile-cards">
         <table class="table is-fullwidth is-striped is-fullwidth">
@@ -64,7 +64,7 @@ export default {
       type: String,
       required: true,
     },
-    helpText: {
+    help_text: {
       type: String,
       default: "",
     },

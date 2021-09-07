@@ -62,7 +62,7 @@ import fb from "@/firebase";
 import { useStore } from "vuex";
 
 import Loading from "@/components/Loading.vue";
-import formAssignmentUtils from "@/utils/formAssignmentUtils";
+import formAssignmentUtils from "@/utils/formAssignment";
 
 export default {
   components: {

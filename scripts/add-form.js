@@ -19,6 +19,8 @@ const db = app.firestore();
 const rawdata = fs.readFileSync(formPath);
 let form = JSON.parse(rawdata);
 
+const dateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
+
 const warnAndExit = (warning) => {
   console.warn(warning);
   process.exit(1);
@@ -59,6 +61,26 @@ const validateForm = (form) => {
     } else {
       switch (question["component"]) {
         case "Date":
+          if (
+            question["max_date"] &&
+            question["max_date"] !== "today" &&
+            !dateRegex.test(question["max_date"])
+          ) {
+            warnAndExit(
+              "max_date key should either be 'today' or in yyyy-mm-dd format"
+            );
+          }
+
+          if (
+            question["min_date"] &&
+            question["min_date"] !== "today" &&
+            !dateRegex.test(question["min_date"])
+          ) {
+            warnAndExit(
+              "min_date key should either be 'today' or in yyyy-mm-dd format"
+            );
+          }
+          break;
         case "TextArea":
         case "TextInput":
           break;

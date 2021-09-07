@@ -287,7 +287,6 @@
       "data": {
         "title": "Unreleased Form",
         "type": "user",
-        "release_date": "3000-01-01",
         "questions": [
           {
             "model": "anything",
@@ -301,7 +300,6 @@
       "data": {
         "title": "Neighborhood Rapid Assessment",
         "type": "organization",
-        "release_date": "2021-07-12",
         "questions": [
           {
             "model": "neighborhood_id",
@@ -542,7 +540,6 @@
       "data": {
         "title": "Sample Organization Form",
         "type": "organization",
-        "release_date": "2021-07-26",
         "questions": [
           {
             "model": "resources",
@@ -556,7 +553,6 @@
       "data": {
         "title": "User Assigned Form",
         "type": "user",
-        "release_date": "2021-07-26",
         "questions": [
           {
             "model": "q1",
@@ -570,7 +566,6 @@
       "data": {
         "title": "Organization Assigned Form",
         "type": "organization",
-        "release_date": "2021-07-26",
         "questions": [
           {
             "model": "q1",

@@ -161,7 +161,7 @@ import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
 
-import formAssignmentUtils from "@/utils/formAssignmentUtils";
+import formAssignmentUtils from "@/utils/formAssignment";
 
 export default {
   components: {
@@ -275,7 +275,7 @@ export default {
           component: "Select",
           multiple: true,
           label: "Assign to users",
-          helpText: "Only user forms can be directly assigned to users.",
+          help_text: "Only user forms can be directly assigned to users.",
           model: "target_users",
           default: [],
           options: userOptions,
@@ -286,19 +286,19 @@ export default {
         {
           component: "Date",
           label: "Release Date",
-          helpText: "The date when the form will be released to users.",
+          help_text: "The date when the form will be released to users.",
           model: "release_date",
           required: true,
-          minDate: "today",
+          min_date: "today",
         },
         {
           component: "Date",
           label: "Expire Date",
-          helpText:
+          help_text:
             "The due date of the form and the expire date of the form assignment. The form won't be assigned to anyone new after this date.",
           model: "expire_date",
           required: true,
-          minDate: "today",
+          min_date: "today",
         },
       ];
     });
@@ -312,17 +312,15 @@ export default {
       loading.value = false;
     });
 
-    const createFormAssignment = async (response) => {
+    const createFormAssignment = async ({
+      form_id,
+      release_date,
+      expire_date,
+      target_users,
+      target_organizations,
+      target_groups,
+    }) => {
       loading.value = true;
-
-      const {
-        form_id,
-        release_date,
-        expire_date,
-        target_users,
-        target_organizations,
-        target_groups,
-      } = response;
 
       const formAssignmentData = {
         created_date: Date.now(),

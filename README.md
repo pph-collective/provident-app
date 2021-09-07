@@ -124,7 +124,7 @@ Required keys for all fields:
 
 Optional keys supported on all fields:
 * `required`: A boolean (true/false) indicating if the field is required
-* `helpText` : A string containing help text displayed for the user to see. 
+* `help_text` : A string containing help text displayed for the user to see. 
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
 
@@ -138,8 +138,8 @@ Required additional keys:
 
 Optional keys:
 
-- `maxDate`: a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker after this date.
-- `minDate`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker before this date.
+- `max_date`: a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker after this date.
+- `min_date`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker before this date.
 
 If `min` is set to `today` then, whenever the form is viewed any date before today is disabled.
 

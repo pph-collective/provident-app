@@ -1,13 +1,13 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="helpText" class="help">{{ helpText }}</p>
+    <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control">
       <input
         class="input"
         type="date"
-        :min="minDate === 'today' ? today : minDate"
-        :max="maxDate"
+        :min="min_date === 'today' ? today : minDate"
+        :max="max_date"
         :value="modelValue"
         :required="required"
         :id="uuid"
@@ -32,7 +32,7 @@ export default {
       type: String,
       required: true,
     },
-    helpText: {
+    help_text: {
       type: String,
       default: "",
     },
@@ -44,16 +44,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    minToday: {
-      type: Boolean,
-      default: false,
-    },
-    minDate: {
+    min_date: {
       // "today" or an ISO date string like "2020-08-26"
       type: String,
       default: "",
     },
-    maxDate: {
+    max_date: {
       type: String,
       default: "",
     },

@@ -12,7 +12,7 @@
             </div>
             <div class="control">
               <button
-                v-show="showSaveButton"
+                v-if="showSaveButton"
                 type="button"
                 class="button is-info"
                 :disabled="saveDisabled"
