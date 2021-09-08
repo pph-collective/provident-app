@@ -8,22 +8,19 @@ import fb from "@/firebase";
  * @returns {Set<String>}
  */
 const getAssignedOrgs = (target, organizations) => {
-  const assignedGroups = [...target.groups];
+  const filters = {
+    all: () => true,
+    intervention: (org) => org.intervention_arm,
+    control: (org) => !org.intervention_arm,
+  };
 
-  const allOrgs = organizations.map((org) => org.name);
-  const interventionOrgs = organizations
-    .filter((org) => org.intervention_arm)
-    .map((org) => org.name);
-  const controlOrgs = organizations
-    .filter((org) => !org.intervention_arm)
-    .map((org) => org.name);
+  const targetGroupOrgs = organizations
+    .filter((org) =>
+      target.groups.map((group) => filters[group](org)).includes(true)
+    )
+    .map((o) => o.name);
 
-  return new Set([
-    ...target.organizations,
-    ...(assignedGroups.includes("all") ? allOrgs : []),
-    ...(assignedGroups.includes("intervention") ? interventionOrgs : []),
-    ...(assignedGroups.includes("control") ? controlOrgs : []),
-  ]);
+  return new Set([...target.organizations, ...targetGroupOrgs]);
 };
 
 /**
@@ -36,6 +33,7 @@ const getAssignedOrgs = (target, organizations) => {
  */
 const getAssignedUsers = (target, organizations, users) => {
   const assignedOrgs = getAssignedOrgs(target, organizations);
+
   return new Set([
     ...target.users,
     ...users

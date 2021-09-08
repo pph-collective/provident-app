@@ -80,31 +80,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-// This style element isn't scoped because the following styles affects those within the Multiselect component which
-// would be out of scope.
-
-@import "@vueform/multiselect/themes/default.scss";
-
-.multiselect {
-  --ms-tag-bg: #{$primary};
-  --ms-tag-radius: #{$radius};
-
-  --ms-ring-color: #{$primary};
-  --ms-ring-width: 1px;
-
-  --ms-option-bg-selected: #{$primary};
-  --ms-option-bg-selected-pointed: #{$link};
-}
-
-fieldset[disabled] {
-  .multiselect {
-    pointer-events: none;
-  }
-
-  .control {
-    cursor: not-allowed;
-  }
-}
-</style>
