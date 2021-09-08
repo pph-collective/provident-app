@@ -61,6 +61,8 @@ import { useStore } from "vuex";
 
 import FormModal from "@/components/form/Modal.vue";
 
+import utils from "@/utils/utils";
+
 const FORM_ID = "neighborhood_rapid_assessment";
 const GEOID_QUESTION_MODEL = "neighborhood_id";
 
@@ -101,7 +103,7 @@ export default {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) => response.form_id === FORM_ID)
-        .sort((a, b) => b.last_updated - a.last_updated);
+        .sort(utils.sortByProperty("last_updated"));
     });
 
     const bgAssessments = computed(() => {

@@ -111,7 +111,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
-import dateUtils from "@/utils/date";
+import utils from "@/utils/utils";
 
 export default {
   components: {
@@ -166,7 +166,7 @@ export default {
       });
     });
 
-    const today = dateUtils.today();
+    const today = utils.today();
 
     const activeForm = computed(() => {
       const formId = activeFormResponse.value.form_id;

@@ -95,6 +95,8 @@ import StatsTable from "@/components/dashboard/StatsTable.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
 
+import utils from "@/utils/utils";
+
 import fb from "@/firebase.js";
 
 export default {
@@ -135,7 +137,7 @@ export default {
           });
         }
       });
-      towns.sort((a, b) => (a.name < b.name ? -1 : 1));
+      towns.sort(utils.sortByProperty("name"));
       if (user.value.admin) {
         return [ri, ...orgs, ...towns];
       } else {

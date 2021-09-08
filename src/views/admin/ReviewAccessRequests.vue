@@ -62,7 +62,7 @@ import fb from "@/firebase";
 import { useStore } from "vuex";
 
 import Loading from "@/components/Loading.vue";
-import dateUtils from "@/utils/date";
+import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 export default {
@@ -93,7 +93,7 @@ export default {
         });
       });
 
-    const today = dateUtils.today();
+    const today = utils.today();
 
     onMounted(async () => {
       formAssignments.value = await fb.getCollection("form_assignments");

@@ -161,7 +161,7 @@ import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
 
-import dateUtils from "@/utils/date";
+import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 export default {
@@ -186,7 +186,7 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const users = ref([]);
 
-    const today = dateUtils.today();
+    const today = utils.today();
 
     const tabs = ref(["Active (Not Expired)", "Released", "Expired", "All"]);
     const selectedTab = ref("Active (Not Expired)");
@@ -210,7 +210,6 @@ export default {
       alert.message = "";
     };
 
-    const sortByLabel = (a, b) => (a.label > b.label ? 1 : -1);
     const formQuestions = computed(() => {
       if (
         Object.keys(forms.value).length === 0 ||
@@ -223,7 +222,7 @@ export default {
       const formOptions = Object.values(forms.value).map((f) => {
         return { value: f._id, label: `${f.title} (type: ${f.type})` };
       });
-      formOptions.sort(sortByLabel);
+      formOptions.sort(utils.sortByProperty("label"));
 
       const userTypeForms = Object.values(forms.value)
         .filter((f) => f.type === "user")
@@ -232,10 +231,11 @@ export default {
       const userOptions = users.value.map((u) => {
         return { value: u.email, label: `${u.name} (${u.email})` };
       });
-      userOptions.sort(sortByLabel);
+      userOptions.sort(utils.sortByProperty("label"));
 
-      const organizationOptions = organizations.value.map((org) => org.name);
-      organizationOptions.sort(sortByLabel);
+      const organizationOptions = organizations.value
+        .map((org) => org.name)
+        .sort();
 
       const groups = ["all", "intervention", "control"];
 

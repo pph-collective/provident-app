@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import dateUtils from "@/utils/date";
+import utils from "@/utils/utils";
 
 export default {
   props: {
@@ -57,7 +57,7 @@ export default {
     },
   },
   setup() {
-    const today = dateUtils.today(); // Date to ISO string without time
+    const today = utils.today(); // Date to ISO string without time
 
     return {
       today,
