@@ -6,8 +6,8 @@
       <input
         class="input"
         type="date"
-        :min="min_date === 'today' ? today : minDate"
-        :max="max_date"
+        :min="min_date === 'today' ? today : min_date"
+        :max="max_date === 'today' ? today : max_date"
         :value="modelValue"
         :required="required"
         :id="uuid"

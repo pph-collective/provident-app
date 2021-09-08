@@ -191,29 +191,19 @@ export default {
     const tabs = ref(["Active (Not Expired)", "Released", "Expired", "All"]);
     const selectedTab = ref("Active (Not Expired)");
     const selectedFormAssignments = computed(() => {
-      if (selectedTab.value === "All") return formAssignments.value;
-
-      return formAssignments.value.filter((formAssignment) => {
-        if (
-          selectedTab.value === "Active (Not Expired)" &&
-          today < formAssignment.expire_date
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Released" &&
+      const filters = {
+        "Active (Not Expired)": (formAssignment) =>
+          today <= formAssignment.expire_date,
+        Released: (formAssignment) =>
           formAssignment.release_date <= today &&
-          today < formAssignment.expire_date
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Expired" &&
-          today >= formAssignment.expire_date
-        ) {
-          return true;
-        }
+          today <= formAssignment.expire_date,
+        Expired: (formAssignment) => today > formAssignment.expire_date,
+        All: () => true,
+      };
 
-        return false;
-      });
+      return formAssignments.value.filter((formAssignment) =>
+        filters[selectedTab.value](formAssignment)
+      );
     });
 
     const dismissAlert = () => {

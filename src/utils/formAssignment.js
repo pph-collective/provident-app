@@ -15,9 +15,7 @@ const getAssignedOrgs = (target, organizations) => {
   };
 
   const targetGroupOrgs = organizations
-    .filter((org) =>
-      target.groups.map((group) => filters[group](org)).includes(true)
-    )
+    .filter((org) => target.groups.some((group) => filters[group](org)))
     .map((o) => o.name);
 
   return new Set([...target.organizations, ...targetGroupOrgs]);
