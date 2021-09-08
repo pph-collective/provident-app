@@ -219,19 +219,21 @@ export default {
         return [];
       }
 
-      const formOptions = Object.values(forms.value).map((f) => {
-        return { value: f._id, label: `${f.title} (type: ${f.type})` };
-      });
-      formOptions.sort(utils.sortByProperty("label"));
+      const formOptions = Object.values(forms.value)
+        .map((f) => {
+          return { value: f._id, label: `${f.title} (type: ${f.type})` };
+        })
+        .sort(utils.sortByProperty("label"));
 
       const userTypeForms = Object.values(forms.value)
         .filter((f) => f.type === "user")
         .map((f) => f._id);
 
-      const userOptions = users.value.map((u) => {
-        return { value: u.email, label: `${u.name} (${u.email})` };
-      });
-      userOptions.sort(utils.sortByProperty("label"));
+      const userOptions = users.value
+        .map((u) => {
+          return { value: u.email, label: `${u.name} (${u.email})` };
+        })
+        .sort(utils.sortByProperty("label"));
 
       const organizationOptions = organizations.value
         .map((org) => org.name)
