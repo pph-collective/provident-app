@@ -85,8 +85,7 @@ describe("Form Assignment functionality", () => {
       .contains(".multiselect-option", "control")
       .click();
 
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = new Date().toISOString().split("T")[0]; // Date to ISO string without time
     cy.get('[model="release_date"]').find("input").type(today);
     cy.get('[model="expire_date"]').find("input").type("3000-01-01");
 
@@ -157,8 +156,7 @@ describe("Form Assignment functionality", () => {
       .contains(".multiselect-option", "RI 4 Us")
       .click();
 
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = new Date().toISOString().split("T")[0]; // Date to ISO string without time
     cy.get('[model="release_date"]').find("input").type(today);
     cy.get('[model="expire_date"]').find("input").type("3000-01-01");
 

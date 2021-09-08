@@ -161,6 +161,7 @@ import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
 
+import dateUtils from "@/utils/date";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 export default {
@@ -185,8 +186,7 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const users = ref([]);
 
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = dateUtils.today();
 
     const tabs = ref(["Active (Not Expired)", "Released", "Expired", "All"]);
     const selectedTab = ref("Active (Not Expired)");

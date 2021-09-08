@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import dateUtils from "@/utils/date";
+
 export default {
   props: {
     modelValue: { required: true },
@@ -55,8 +57,7 @@ export default {
     },
   },
   setup() {
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = dateUtils.today(); // Date to ISO string without time
 
     return {
       today,

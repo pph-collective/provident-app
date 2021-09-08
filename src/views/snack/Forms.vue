@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="!user && forms.length === 0" />
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
     <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
@@ -109,10 +110,13 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import FormModal from "@/components/form/Modal.vue";
+import Loading from "@/components/Loading.vue";
+import dateUtils from "@/utils/date";
 
 export default {
   components: {
     FormModal,
+    Loading,
   },
   setup() {
     const store = useStore();
@@ -162,8 +166,7 @@ export default {
       });
     });
 
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = dateUtils.today();
 
     const activeForm = computed(() => {
       const formId = activeFormResponse.value.form_id;

@@ -47,6 +47,7 @@ describe("Admin Views and Powers", () => {
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
 
     // Confirm that forms are loaded prior to continuing
+    cy.get(".loading-icon").should("not.exist");
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
