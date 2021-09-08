@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: provident-email-service
+  labels:
+    app: provident-email-service
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: provident-email-service
+            image: ghcr.io/pph-collective/provident-email-service:latest
+            imagePullPolicy: Always
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          nodeSelector:
+            node-role.kubernetes.io/worker: "true"
+            prodint: "true"
+          tolerations:
+          - key: "env"
+            operator: "Equal"
+            value: "prod"
+            effect: "NoSchedule"
+          - key: "location"
+            operator: "Equal"
+            value: "int"
+            effect: "NoSchedule"
+      backoffLimit: 5

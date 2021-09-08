@@ -16,6 +16,7 @@ firebase.initializeApp(firebaseConfig);
 
 let db = firebase.firestore();
 let auth = firebase.auth();
+let emailSubjectPrefix = "";
 if (location.hostname === "localhost") {
   db.settings({
     experimentalForceLongPolling: true,
@@ -24,6 +25,7 @@ if (location.hostname === "localhost") {
   });
   db.useEmulator("localhost", 8088);
   auth.useEmulator("http://localhost:9099");
+  emailSubjectPrefix = "TEST: ";
 }
 
 const logActivity = async (user, action) => {
@@ -183,9 +185,30 @@ const getModelPredictions = async (period) => {
   }
 };
 
+const createEmail = async ({
+  subject,
+  to,
+  body,
+  sendDate = new Date().toISOString(),
+}) => {
+  try {
+    const doc = {
+      subject: emailSubjectPrefix + subject,
+      to,
+      body,
+      sendDate,
+      sent: false,
+    };
+    await db.collection("emails").add(doc);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export default {
   auth,
   db,
+  createEmail,
   logActivity,
   login,
   logout,

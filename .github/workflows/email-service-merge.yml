@@ -1,0 +1,56 @@
+# from https://docs.github.com/en/actions/guides/publishing-docker-images
+
+name: Build and Push Email Service Container
+on:
+  push:
+    paths:
+      - email_service/**
+      - .github/workflows/email-service-merge.yml
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: pph-collective/provident-email-service
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Firebase Credentials
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: provident-ri
+          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}
+          export_default_credentials: true
+          credentials_file_path: email_service/credentials/serviceAccount.json
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./email_service
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
