@@ -83,13 +83,9 @@ const getCollection = async (collection) => {
 
 const getForms = async () => {
   const forms = {};
-  try {
-    const docs = await db.collection("forms").get();
-    for (const doc of docs.docs) {
-      forms[doc.id] = { _id: doc.id, ...doc.data() };
-    }
-  } catch (err) {
-    console.log(err);
+
+  for (const form of await getCollection("forms")) {
+    forms[form._id] = form;
   }
 
   return forms;

@@ -2,6 +2,7 @@ describe("Form functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
   });
 
@@ -61,6 +62,7 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
         .find('[data-cy="status-tag"]')
@@ -329,6 +331,7 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
 
       // Confirm that the forms are loaded prior to continuing
       cy.get('[data-cy="forms-panel-block"]').should(
@@ -488,6 +491,7 @@ describe("Forms viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
   });
 
@@ -529,6 +533,7 @@ describe("Forms viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("approved").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
   });
 
@@ -596,6 +601,7 @@ describe("Forms viewed as a champion", () => {
   beforeEach(() => {
     cy.login_by_permission("champion").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
   });
 
@@ -674,6 +680,7 @@ describe("Forms viewed as a champion", () => {
     cy.logout();
     cy.login_by_permission("approved").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
 
     // Find form in the organization-level area
@@ -753,6 +760,7 @@ describe("Forms viewed as a champion", () => {
     cy.logout();
     cy.login_by_permission("approved").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
 
     // Navigate to organization tab

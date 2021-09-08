@@ -111,6 +111,8 @@ describe("Form Assignment functionality", () => {
       .should("contain", "3000-01-01");
 
     cy.visit("/snack/forms");
+    cy.get(".loading-icon").should("not.exist");
+
     it("Form title heading", () => {
       cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
     });
@@ -175,6 +177,8 @@ describe("Form Assignment functionality", () => {
       .should("contain", "form assignment added");
 
     cy.visit("/snack/forms");
+    cy.get(".loading-icon").should("not.exist");
+
     it("Form title heading", () => {
       cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
     });
@@ -186,6 +190,7 @@ describe("Form Assignment functionality", () => {
     cy.logout();
     cy.login_by_permission("approved").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
 
     cy.get('[data-cy="forms-panel-block"]').should(
@@ -200,6 +205,7 @@ describe("Form Assignment functionality", () => {
     cy.logout();
     cy.login_by_permission("control").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
 
     cy.get('[data-cy="forms-panel-block"]').should(
@@ -214,6 +220,7 @@ describe("Form Assignment functionality", () => {
     cy.logout();
     cy.login_by_permission("champion").then(() => {
       cy.visit("/snack/forms");
+      cy.get(".loading-icon").should("not.exist");
     });
 
     cy.get('[data-cy="forms-panel-block"]').should(

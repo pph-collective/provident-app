@@ -44,6 +44,8 @@ describe("Admin Views and Powers", () => {
 
     // Navigate to forms, there should be an assigned form
     cy.visit("/snack/forms");
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
 
     // Confirm that forms are loaded prior to continuing

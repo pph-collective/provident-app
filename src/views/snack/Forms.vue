@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="!user && forms.length === 0" />
+  <Loading :loading="user !== undefined && Object.keys(forms).length === 0" />
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
     <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
