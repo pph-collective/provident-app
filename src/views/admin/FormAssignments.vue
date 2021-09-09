@@ -31,7 +31,7 @@
           <a
             v-for="tab in Object.keys(tabs)"
             :key="tab"
-            :class="selectedTab === tab ? 'is-active' : ''"
+            :class="{ 'is-active': selectedTab === tab }"
             @click="selectedTab = tab"
             >{{ tab }}</a
           >
@@ -197,7 +197,7 @@ export default {
       Expired: (formAssignment) => today > formAssignment.expire_date,
       All: () => true,
     };
-    const selectedTab = ref("Active (Not Expired)");
+    const selectedTab = ref(Object.keys(tabs)[0]);
     const selectedFormAssignments = computed(() => {
       return formAssignments.value.filter((formAssignment) =>
         tabs[selectedTab.value](formAssignment)
