@@ -29,7 +29,7 @@
 
         <div class="panel-tabs">
           <a
-            v-for="tab in tabs"
+            v-for="tab in Object.keys(tabs)"
             :key="tab"
             :class="selectedTab === tab ? 'is-active' : ''"
             @click="selectedTab = tab"
@@ -188,21 +188,19 @@ export default {
 
     const today = utils.today();
 
-    const tabs = ref(["Active (Not Expired)", "Released", "Expired", "All"]);
+    const tabs = {
+      "Active (Not Expired)": (formAssignment) =>
+        today <= formAssignment.expire_date,
+      Released: (formAssignment) =>
+        formAssignment.release_date <= today &&
+        today <= formAssignment.expire_date,
+      Expired: (formAssignment) => today > formAssignment.expire_date,
+      All: () => true,
+    };
     const selectedTab = ref("Active (Not Expired)");
     const selectedFormAssignments = computed(() => {
-      const filters = {
-        "Active (Not Expired)": (formAssignment) =>
-          today <= formAssignment.expire_date,
-        Released: (formAssignment) =>
-          formAssignment.release_date <= today &&
-          today <= formAssignment.expire_date,
-        Expired: (formAssignment) => today > formAssignment.expire_date,
-        All: () => true,
-      };
-
       return formAssignments.value.filter((formAssignment) =>
-        filters[selectedTab.value](formAssignment)
+        tabs[selectedTab.value](formAssignment)
       );
     });
 
