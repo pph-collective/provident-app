@@ -55,7 +55,7 @@
             <div class="level">
               <div class="level-left">
                 <p class="level-item is-size-5">
-                  <b v-if="assignment.form_id in forms">
+                  <b v-if="assignment.form_id in forms" data-cy="form-title">
                     {{ forms[assignment.form_id].title }}
                   </b>
                 </p>
