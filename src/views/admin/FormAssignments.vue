@@ -299,7 +299,9 @@ export default {
       loading.value = true;
 
       formAssignments.value = await fb.getCollection("form_assignments");
-      users.value = await fb.getCollection("users");
+      users.value = (await fb.getCollection("users")).filter(
+        (u) => u.status === "approved"
+      );
 
       loading.value = false;
     });

@@ -35,7 +35,9 @@ const getAssignedUsers = (target, organizations, users) => {
   return new Set([
     ...target.users,
     ...users
-      .filter((u) => assignedOrgs.has(u.organization))
+      .filter(
+        (u) => u.status === "approved" && assignedOrgs.has(u.organization)
+      )
       .map((u) => u.email),
   ]);
 };

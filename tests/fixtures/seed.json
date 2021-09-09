@@ -41,10 +41,10 @@
         }
       }
     },
-    "user1@user.com": {
+    "pendinguser@user.com": {
       "data": {
-        "email": "user1@user.com",
-        "name": "First Last",
+        "email": "pendinguser@user.com",
+        "name": "Pending User",
         "organization": "Good Doers",
         "role": "user",
         "status": "pending"

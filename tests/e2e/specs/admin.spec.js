@@ -55,7 +55,8 @@ describe("Admin Views and Powers", () => {
       "No forms here"
     );
 
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+    cy.get('[data-cy="forms-panel-block"]:contains("Simple Form")')
+      .should("have.length", 1)
       .find('[data-cy="status-tag"]')
       .should("contain", "Not Started");
 
