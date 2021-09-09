@@ -87,6 +87,9 @@ import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import * as aq from "arquero";
 
+import fb from "@/firebase.js";
+import utils from "@/utils/utils";
+
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/dashboard/Map.vue";
@@ -94,8 +97,6 @@ import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsTable from "@/components/dashboard/StatsTable.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
-
-import fb from "@/firebase.js";
 
 export default {
   components: {
@@ -135,7 +136,7 @@ export default {
           });
         }
       });
-      towns.sort((a, b) => (a.name < b.name ? -1 : 1));
+      towns.sort(utils.sortByProperty("name"));
       if (user.value.admin) {
         return [ri, ...orgs, ...towns];
       } else {

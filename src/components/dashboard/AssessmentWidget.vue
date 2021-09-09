@@ -50,16 +50,17 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form-questions="assessmentQuestions"
+    :form="assessmentForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
 
 <script>
-import { ref, toRefs, computed, onMounted } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
+import utils from "@/utils/utils";
+
 import FormModal from "@/components/form/Modal.vue";
 
 const FORM_ID = "neighborhood_rapid_assessment";
@@ -85,25 +86,25 @@ export default {
 
     const activeFormResponse = ref({});
 
-    const assessmentForm = ref({});
-    onMounted(async () => {
-      const form = await fb.getForm(FORM_ID);
-      const geoidQuestion = form.questions.find(
-        (question) => question.model === GEOID_QUESTION_MODEL
-      );
-      geoidQuestion.readOnly = true;
-      assessmentForm.value = form;
-    });
+    const assessmentForm = computed(() => {
+      const form = store.state.forms[FORM_ID];
 
-    const assessmentQuestions = computed(
-      () => assessmentForm.value.questions ?? []
-    );
+      if (form) {
+        const geoidQuestion = form.questions.find(
+          (question) => question.model === GEOID_QUESTION_MODEL
+        );
+        geoidQuestion.readOnly = true;
+      }
+
+      return form;
+    });
 
     const completedAssessments = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) => response.form_id === FORM_ID)
-        .sort((a, b) => b.last_updated - a.last_updated);
+        .sort(utils.sortByProperty("last_updated"))
+        .reverse();
     });
 
     const bgAssessments = computed(() => {
@@ -133,7 +134,7 @@ export default {
       userRole,
       bgAssessments,
       activeFormResponse,
-      assessmentQuestions,
+      assessmentForm,
       createNewAssessment,
       formatDate,
     };

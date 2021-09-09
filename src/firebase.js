@@ -65,11 +65,17 @@ const getUserRequest = async (email) => {
   }
 };
 
-const getOrgs = async () => {
-  const res = [];
+const updateUser = async (user) => {
+  db.collection("users").doc(user.email).update(user);
+};
+
+const getCollection = async (collection) => {
+  let res = [];
   try {
-    const docs = await db.collection("organizations").get();
-    docs.forEach((doc) => res.push(doc.data()));
+    const docs = await db.collection(collection).get();
+    res = docs.docs.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
+    });
   } catch (err) {
     console.log(err);
   }
@@ -78,26 +84,12 @@ const getOrgs = async () => {
 
 const getForms = async () => {
   const forms = {};
-  try {
-    const docs = await db.collection("forms").get();
-    docs.forEach((doc) => {
-      forms[doc.id] = { _id: doc.id, ...doc.data() };
-    });
-  } catch (err) {
-    console.log(err);
+
+  for (const form of await getCollection("forms")) {
+    forms[form._id] = form;
   }
 
   return forms;
-};
-
-const getForm = async (formId) => {
-  try {
-    const doc = await db.collection("forms").doc(formId).get();
-    return { _id: doc.id, ...doc.data() };
-  } catch (err) {
-    console.log(err);
-    return {};
-  }
 };
 
 const getFormResponses = async (email, organization) => {
@@ -122,7 +114,35 @@ const getFormResponses = async (email, organization) => {
   }
 };
 
-const updateFormResponse = async (email, organization, formResponse) => {
+const addFormAssignment = async (formAssignmentData) => {
+  const res = await db.collection("form_assignments").add(formAssignmentData);
+  return res.id;
+};
+
+/**
+ * @param {String} form_type - "user" | "organization"
+ * @param {Object[]} formResponses - list of form response objects
+ * @param {Set<String>} assigned - set of emails or organization names
+ * @returns {Promise<void>}
+ */
+const batchAddFormResponses = async (form_type, formResponses, assigned) => {
+  const writeBatch = db.batch();
+
+  for (const formResponse of formResponses) {
+    for (const assignee of assigned) {
+      const doc = db
+        .collection(`${form_type}s`)
+        .doc(assignee)
+        .collection("form_responses")
+        .doc();
+      writeBatch.set(doc, formResponse);
+    }
+  }
+
+  return writeBatch.commit();
+};
+
+const updateFormResponse = async (formResponse, { email, organization }) => {
   const { type, _id } = formResponse;
   const typeMap = { user: email, organization };
 
@@ -208,17 +228,19 @@ const createEmail = async ({
 export default {
   auth,
   db,
+  addFormAssignment,
+  batchAddFormResponses,
   createEmail,
+  getCollection,
+  getFormResponses,
+  getForms,
+  getModelData,
+  getModelDataPeriods,
+  getModelPredictions,
+  getUserRequest,
   logActivity,
   login,
   logout,
-  getUserRequest,
-  getOrgs,
-  getForm,
-  getForms,
-  getFormResponses,
   updateFormResponse,
-  getModelDataPeriods,
-  getModelData,
-  getModelPredictions,
+  updateUser,
 };

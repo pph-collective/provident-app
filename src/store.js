@@ -11,6 +11,7 @@ const store = createStore({
         formResponses: [],
       },
       organizations: [],
+      forms: {},
     };
   },
 
@@ -40,24 +41,26 @@ const store = createStore({
           property: "formResponses",
           with: formResponses,
         });
+        const forms = await fb.getForms();
+        commit("mutate", { property: "forms", with: forms });
       } else {
         commit("mutateUser", { property: "data", with: null });
         commit("mutateUser", { property: "formResponses", with: [] });
+        commit("mutate", { property: "form", with: {} });
       }
     },
     fetchAdmin({ commit }, admin) {
       commit("mutateUser", { property: "admin", with: admin });
     },
     async fetchOrgs({ commit }) {
-      const orgs = await fb.getOrgs();
+      const orgs = await fb.getCollection("organizations");
       commit("mutate", { property: "organizations", with: orgs });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
-      const _id = await fb.updateFormResponse(
-        state.user.data.email,
-        state.user.data.organization,
-        updatedFormResponse
-      );
+      const _id = await fb.updateFormResponse(updatedFormResponse, {
+        email: state.user.data.email,
+        organization: state.user.data.organization,
+      });
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>

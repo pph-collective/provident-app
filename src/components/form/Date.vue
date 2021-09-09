@@ -3,12 +3,14 @@
     <label class="label" :for="uuid">{{ label }}</label>
     <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control">
-      <textarea
-        class="textarea"
+      <input
+        class="input"
+        type="date"
+        :min="min_date === 'today' ? today : min_date"
+        :max="max_date === 'today' ? today : max_date"
         :value="modelValue"
         :required="required"
         :id="uuid"
-        :placeholder="placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
       />
       <span class="has-text-danger is-size-7">{{
@@ -19,6 +21,8 @@
 </template>
 
 <script>
+import utils from "@/utils/utils";
+
 export default {
   props: {
     modelValue: { required: true },
@@ -38,13 +42,26 @@ export default {
       type: Number,
       default: 0,
     },
-    placeholder: {
-      default: "",
-    },
     validation: {
       type: Object,
       default: () => ({}),
     },
+    min_date: {
+      // "today" or an ISO date string like "2020-08-26"
+      type: String,
+      default: "",
+    },
+    max_date: {
+      type: String,
+      default: "",
+    },
+  },
+  setup() {
+    const today = utils.today(); // Date to ISO string without time
+
+    return {
+      today,
+    };
   },
 };
 </script>

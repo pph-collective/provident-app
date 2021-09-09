@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="user !== undefined && Object.keys(forms).length === 0" />
   <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
     <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
@@ -28,8 +29,12 @@
     >
       <div class="level form-row" data-cy="form-row">
         <div class="level-left">
-          <p class="level-item is-size-5" data-cy="form-title">
-            {{ formResponse.title }}
+          <p
+            v-if="formResponse.form_id in forms"
+            class="level-item is-size-5"
+            data-cy="form-title"
+          >
+            {{ forms[formResponse.form_id].title }}
           </p>
         </div>
 
@@ -96,21 +101,24 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form-questions="activeFormQuestions"
+    :form="activeForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
 
 <script>
-import { onMounted, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
+import utils from "@/utils/utils";
+
 import FormModal from "@/components/form/Modal.vue";
+import Loading from "@/components/Loading.vue";
 
 export default {
   components: {
     FormModal,
+    Loading,
   },
   setup() {
     const store = useStore();
@@ -118,9 +126,17 @@ export default {
     const userRole = computed(() =>
       user.value.data ? user.value.data.role : "user"
     );
-    const formResponses = computed(() => user.value.formResponses);
+    const formResponses = computed(() => {
+      if (!user.value.admin) {
+        return user.value.formResponses.filter((f) => {
+          return f.release_date <= today;
+        });
+      }
 
-    const forms = ref({});
+      return user.value.formResponses;
+    });
+
+    const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
     const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
     const selectedTab = ref("To Do");
@@ -152,30 +168,16 @@ export default {
       });
     });
 
-    let today = new Date(); // Local time
-    today = today.toISOString().split("T")[0]; // Date to ISO string without time
+    const today = utils.today();
 
-    onMounted(async () => {
-      forms.value = await fb.getForms();
-      if (!user.value.admin) {
-        forms.value = forms.value.filter((f) => {
-          return f.release_date <= today;
-        });
-      }
-    });
-
-    const activeFormQuestions = computed(() => {
+    const activeForm = computed(() => {
       const formId = activeFormResponse.value.form_id;
 
       if (formId) {
-        const form = forms.value[formId];
-
-        if (form) {
-          return form.questions;
-        }
+        return forms.value[formId];
       }
 
-      return [];
+      return {};
     });
 
     return {
@@ -183,8 +185,9 @@ export default {
       activeFormResponse,
       tabs,
       selectedTab,
-      activeFormQuestions,
+      activeForm,
       today,
+      forms,
       formResponses,
       user,
       userRole,

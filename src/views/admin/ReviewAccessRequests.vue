@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="loading" />
   <div class="container">
     <div
       v-if="alert.message"
@@ -55,14 +56,28 @@
 </template>
 
 <script>
-import { ref, reactive, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
+import { useStore } from "vuex";
 
 import fb from "@/firebase";
+import utils from "@/utils/utils";
+import formAssignmentUtils from "@/utils/formAssignment";
+
+import Loading from "@/components/Loading.vue";
 
 export default {
+  components: {
+    Loading,
+  },
   setup() {
+    const loading = ref(false);
+
     const userRequests = ref([]);
     const alert = reactive({ color: "", message: "" });
+    const formAssignments = ref([]);
+
+    const store = useStore();
+    const organizations = computed(() => store.state.organizations);
 
     const dismissAlert = () => {
       alert.message = "";
@@ -78,10 +93,18 @@ export default {
         });
       });
 
+    const today = utils.today();
+
+    onMounted(async () => {
+      formAssignments.value = await fb.getCollection("form_assignments");
+    });
+
     // unsubscribe when leaving this page
     onUnmounted(unsubUserRequests);
 
     const approve = async (user) => {
+      loading.value = true;
+
       try {
         // update request status
         // TODO: emails on approval/denial
@@ -90,6 +113,13 @@ export default {
           .doc(user.id)
           .update({ status: "approved" });
 
+        await formAssignmentUtils.addFormResponsesForUser(
+          user,
+          formAssignments.value,
+          organizations.value,
+          today
+        );
+
         alert.color = "success";
         alert.message = `Success! ${user.email} was approved.`;
       } catch (err) {
@@ -97,6 +127,8 @@ export default {
         alert.color = "danger";
         alert.message = err.message;
       }
+
+      loading.value = false;
     };
 
     const deny = (userRequest) => {
@@ -109,7 +141,7 @@ export default {
       alert.message = `${userRequest.email} was denied.`;
     };
 
-    return { userRequests, approve, deny, alert, dismissAlert };
+    return { userRequests, approve, deny, alert, dismissAlert, loading };
   },
 };
 </script>

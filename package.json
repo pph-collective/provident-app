@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
+    "@vueform/multiselect": "^2.1.2",
     "arquero": "^4.8.4",
     "bulma": "^0.9.3",
     "bulma-responsive-tables": "^1.2.3",
@@ -46,7 +47,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
     "csv-parse": "^4.16.0",
-    "cypress": "8.3.0",
+    "cypress": "8.3.1",
     "cypress-firebase": "^2.0.0",
     "d3-dsv": "^3.0.1",
     "eslint": "^7.32.0",

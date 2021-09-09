@@ -47,7 +47,6 @@ The form has the following keys at the root level:
 
 * `title`: The title of the form (will display to the end user)
 * `type`: The type of the form which can be either `user` or `organization`
-* `release_date`: The date the form will become available to end users
 * `questions`: An object specifying the fields and logic (all below sections refer to questions)
 
 A sample JSON:
@@ -55,7 +54,6 @@ A sample JSON:
 {
   "title": "My Form",
   "type": "user",
-  "release_date": "2021-05-21",
   "questions": [
     {
       "model": "age",
@@ -111,59 +109,45 @@ See [scripts](scripts/README.md) for info on how to upload a JSON form to fireba
 ### Field Types
 
 The fields currently supported (component in `src/components/forms`) are:
-* `TextInput`: A one line text input
-* `TextArea`: A multi-line text input
+* `Checkbox`: A list of checkboxes to check
+* `Date`: A calendar date picker
+* `LikertScale`: A table of radio buttons to rate statements
 * `Radio`: Radio button group
 * `Select`: Drop down menu
-* `Checkbox`: A list of checkboxes to check
-* `LikertScale`: A table of radio buttons to rate statements
+* `TextArea`: A multi-line text input
+* `TextInput`: A one line text input
 
-All of these fields require the following keys:
+Required keys for all fields:
 * `model`: The identifier for the question result (e.g. `"age"`)
 * `component`: Which field to use (e.g. `TextInput`)
 * `label`: The question to display with the input (e.g. `"How old are you?"`)
 
-All of these fields support the following keys:
+Optional keys supported on all fields:
 * `required`: A boolean (true/false) indicating if the field is required
+* `help_text` : A string containing help text displayed for the user to see. 
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
 
-#### `TextInput`
+#### Checkbox
 
-The `TextInput` field also accepts the `type` key.  The default is `text`.  Other values include can be found [on the MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types)
+Required additional keys:
 
-Not all of these will work out of the box, common ones that will are:
-* `text`
-* `color`
-* `date`
-* `email`
-* `month`
-* `number`
-* `password` (though probably not a good reason to use this in a form...)
-* `tel`
-* `time`
-* `url`
-* `week`
+- `options`: an array of strings which the user can select.
 
-#### `TextArea`
+#### Date
 
-The `TextArea` field only uses the standard keys.
+Optional keys:
 
-#### `Radio`
+- `max_date`: a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker after this date.
+- `min_date`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker before this date.
 
-The `Radio` field requires the `options` key, which is an array of strings which the user can select.
-
-#### `Select`
-
-The `Select` field requires the `options` key, which is an array of strings which the user can select.
-
-#### `Checkbox`
-
-The `Checkbox` field requires the `options` key, which is an array of strings which the user can select.
+If `min` is set to `today` then, whenever the form is viewed any date before today is disabled.
 
 #### `LikertScale`
 
-Requires the `statements` key, which is a list of strings to rate. For example,
+Required additional keys:
+
+- `statements`: a list of strings to rate. For example,
 ```
 statements: [
     "It is easy to get sterile needles in this census tract",
@@ -172,7 +156,9 @@ statements: [
 ]
 ```
 
-The `options` key is optional. It is a list of strings on a rating scale and defaults to the following:
+Optional keys:
+
+`options`: a list of strings on a rating scale and defaults to the following.
 ```
 options: [
     "Strongly Disagree",
@@ -183,6 +169,40 @@ options: [
     "N/A"
 ]
 ```
+
+#### Radio
+
+Required additional keys:
+
+`options`: an array of strings which the user can select
+
+#### Select
+
+Required additional keys:
+
+- `options`: an array of strings which the user can select.
+
+#### TextArea
+
+The `TextArea` field only uses the standard keys.
+
+#### TextInput
+
+Optional keys:
+- `type`: Different input types. The default is `"text"`. Other values include can be found [on the MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types)
+
+Not all of these will work out of the box, common ones that will are:
+* `text`
+* `color`
+* `date` (we have a more specific date field as well)
+* `email`
+* `month`
+* `number`
+* `password` (though probably not a good reason to use this in a form...)
+* `tel`
+* `time`
+* `url`
+* `week`
 
 ## Authentication
 

@@ -1,1638 +1,1864 @@
 {
   "users": {
     "admin@admin.com": {
-      "email": "admin@admin.com",
-      "name": "Admin",
-      "organization": "RI 4 Us",
-      "role": "champion",
-      "status": "approved"
+      "data": {
+        "email": "admin@admin.com",
+        "name": "Admin",
+        "organization": "RI 4 Us",
+        "role": "champion",
+        "status": "approved"
+      },
+      "form_responses": {
+        "6wH42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "6g3Y77kqxr5se1Cf6rno",
+          "form_id": "test",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        },
+        "7wH42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "user_form_assigned_to_all",
+          "form_id": "test2",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        },
+        "12342VY3e5u8KT19VQ6r": {
+          "expire_date": "4000-09-09",
+          "form_assignment_id": "unreleased_user_form",
+          "form_id": "test3",
+          "last_updated": 1630413971991,
+          "release_date": "3000-01-01",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        }
+      }
     },
-    "user1@user.com": {
-      "email": "user1@user.com",
-      "name": "First Last",
-      "organization": "Good Doers",
-      "role": "user",
-      "status": "pending"
+    "pendinguser@user.com": {
+      "data": {
+        "email": "pendinguser@user.com",
+        "name": "Pending User",
+        "organization": "Good Doers",
+        "role": "user",
+        "status": "pending"
+      }
     },
     "user@user.com": {
-      "email": "user@user.com",
-      "name": "User Name",
-      "organization": "Good Doers",
-      "role": "user",
-      "status": "approved"
+      "data": {
+        "email": "user@user.com",
+        "name": "User Name",
+        "organization": "Good Doers",
+        "role": "user",
+        "status": "approved"
+      },
+      "form_responses": {
+        "user_form_to_admin_approved": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "6g3Y77kqxr5se1Cf6rno",
+          "form_id": "test",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        },
+        "8wH42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "user_form_assigned_to_all",
+          "form_id": "test2",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        },
+        "32142VY3e5u8KT19VQ6r": {
+          "expire_date": "4000-09-09",
+          "form_assignment_id": "unreleased_user_form",
+          "form_id": "test3",
+          "last_updated": 1630413971991,
+          "release_date": "3000-01-01",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        }
+      }
     },
     "controluser@user.com": {
-      "email": "controluser@user.com",
-      "name": "Control User",
-      "organization": "RI 4 Us",
-      "role": "user",
-      "status": "approved"
+      "data": {
+        "email": "controluser@user.com",
+        "name": "Control User",
+        "organization": "RI 4 Us",
+        "role": "user",
+        "status": "approved"
+      },
+      "form_responses": {
+        "10wH42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "user_form_assigned_to_all",
+          "form_id": "test2",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        }
+      }
     },
     "championuser@user.com": {
-      "email": "championuser@user.com",
-      "name": "Champion User",
-      "organization": "Good Doers",
-      "role": "champion",
-      "status": "approved"
+      "data": {
+        "email": "championuser@user.com",
+        "name": "Champion User",
+        "organization": "Good Doers",
+        "role": "champion",
+        "status": "approved"
+      },
+      "form_responses": {
+        "80wH42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "user_form_assigned_to_all",
+          "form_id": "test2",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "user"
+        }
+      }
     }
   },
   "organizations": {
     "Good Doers": {
-      "name": "Good Doers",
-      "intervention_arm": true,
-      "municipalities": [
-        "Little Compton",
-        "Tiverton",
-        "Portsmouth"
-      ]
+      "data": {
+        "name": "Good Doers",
+        "intervention_arm": true,
+        "municipalities": [
+          "Little Compton",
+          "Tiverton",
+          "Portsmouth"
+        ]
+      },
+      "form_responses": {
+        "a42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "org_form_assigned_to_orgs",
+          "form_id": "sample_organization_form",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "organization"
+        }
+      }
     },
     "RI 4 Us": {
-      "name": "RI 4 Us",
-      "intervention_arm": false,
-      "municipalities": [
-        "Tiverton"
-      ]
+      "data": {
+        "name": "RI 4 Us",
+        "intervention_arm": false,
+        "municipalities": [
+          "Tiverton"
+        ]
+      },
+      "form_responses": {
+        "b42VY3e5u8KT19VQ6r": {
+          "expire_date": "3000-09-09",
+          "form_assignment_id": "org_form_assigned_to_orgs",
+          "form_id": "sample_organization_form",
+          "last_updated": 1630413971991,
+          "release_date": "2021-05-21",
+          "response": {},
+          "status": "Not Started",
+          "type": "organization"
+        }
+      }
     }
   },
   "forms": {
     "test": {
-      "title": "My Form",
-      "type": "user",
-      "release_date": "2021-05-21",
-      "questions": [
-        {
-          "model": "age",
-          "component": "TextInput",
-          "type": "number",
-          "label": "What is your age?",
-          "validations": "yup.number().min(13).max(110).required()",
-          "required": true
-        },
-        {
-          "model": "old",
-          "component": "Radio",
-          "label": "Do you feel old?",
-          "condition": "(model) => model.age > 100",
-          "options": [
-            "Yes",
-            "No",
-            "Get off my lawn"
-          ]
-        },
-        {
-          "model": "favorite_color",
-          "component": "Select",
-          "label": "What is your favorite color?",
-          "required": true,
-          "options": [
-            "Green",
-            "Rainbow",
-            "Sparkles",
-            "Other"
-          ]
-        },
-        {
-          "model": "other_favorite_color",
-          "component": "TextInput",
-          "label": "Favorite Color",
-          "required": true,
-          "condition": "(model) => model.favorite_color === 'Other'"
-        },
-        {
-          "model": "color_essay",
-          "component": "TextArea",
-          "label": "Please write an essay about your favorite color."
-        },
-        {
-          "model": "checkbox_mammals",
-          "component": "Checkbox",
-          "label": "Which of the following are mammals?",
-          "options": [
-            "Cat",
-            "Elephant",
-            "Salmon",
-            "Hummingbird"
-          ]
-        },
-        {
-          "model": "likert_scale_food_debates",
-          "component": "LikertScale",
-          "label": "Please rate how much you Disagree or Agree with the following statements",
-          "statements": [
-            "Waffles are better than pancakes",
-            "Pineapple belongs on pizza"
-          ],
-          "required": true
-        },
-        {
-          "model": "likert_scale_activities",
-          "component": "LikertScale",
-          "label": "How often do you the following?",
-          "statements": [
-            "Exercise",
-            "Watch a movie"
-          ],
-          "options": [
-            "Always",
-            "Often",
-            "Sometimes",
-            "Rarely",
-            "Never"
-          ],
-          "required": true
-        }
-      ]
+      "data": {
+        "title": "My Form",
+        "type": "user",
+        "questions": [
+          {
+            "model": "age",
+            "component": "TextInput",
+            "type": "number",
+            "label": "What is your age?",
+            "validations": "yup.number().min(13).max(110).required()",
+            "required": true
+          },
+          {
+            "model": "old",
+            "component": "Radio",
+            "label": "Do you feel old?",
+            "condition": "(model) => model.age > 100",
+            "options": [
+              "Yes",
+              "No",
+              "Get off my lawn"
+            ]
+          },
+          {
+            "model": "favorite_color",
+            "component": "Select",
+            "label": "What is your favorite color?",
+            "required": true,
+            "options": [
+              "Green",
+              "Rainbow",
+              "Sparkles",
+              "Other"
+            ]
+          },
+          {
+            "model": "other_favorite_color",
+            "component": "TextInput",
+            "label": "Favorite Color",
+            "required": true,
+            "condition": "(model) => model.favorite_color === 'Other'"
+          },
+          {
+            "model": "color_essay",
+            "component": "TextArea",
+            "label": "Please write an essay about your favorite color."
+          },
+          {
+            "model": "checkbox_mammals",
+            "component": "Checkbox",
+            "label": "Which of the following are mammals?",
+            "options": [
+              "Cat",
+              "Elephant",
+              "Salmon",
+              "Hummingbird"
+            ]
+          },
+          {
+            "model": "likert_scale_food_debates",
+            "component": "LikertScale",
+            "label": "Please rate how much you Disagree or Agree with the following statements",
+            "statements": [
+              "Waffles are better than pancakes",
+              "Pineapple belongs on pizza"
+            ],
+            "required": true
+          },
+          {
+            "model": "likert_scale_activities",
+            "component": "LikertScale",
+            "label": "How often do you the following?",
+            "statements": [
+              "Exercise",
+              "Watch a movie"
+            ],
+            "options": [
+              "Always",
+              "Often",
+              "Sometimes",
+              "Rarely",
+              "Never"
+            ],
+            "required": true
+          }
+        ]
+      }
     },
     "test2": {
-      "title": "Simple Form",
-      "type": "user",
-      "release_date": "2021-05-21",
-      "questions": [
-        {
-          "model": "anything",
-          "component": "TextArea",
-          "label": "Type anything"
-        }
-      ]
+      "data": {
+        "title": "Simple Form",
+        "type": "user",
+        "questions": [
+          {
+            "model": "anything",
+            "component": "TextArea",
+            "label": "Type anything"
+          }
+        ]
+      }
     },
     "test3": {
-      "title": "Unreleased Form",
-      "type": "user",
-      "release_date": "3000-01-01",
-      "questions": [
-        {
-          "model": "anything",
-          "component": "TextArea",
-          "label": "Type anything"
-        }
-      ]
+      "data": {
+        "title": "Unreleased Form",
+        "type": "user",
+        "questions": [
+          {
+            "model": "anything",
+            "component": "TextArea",
+            "label": "Type anything"
+          }
+        ]
+      }
     },
     "neighborhood_rapid_assessment": {
-      "title": "Neighborhood Rapid Assessment",
-      "type": "organization",
-      "release_date": "2021-07-12",
-      "questions": [
-        {
-          "model": "neighborhood_id",
-          "component": "TextInput",
-          "label": "Neighborhood ID",
-          "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
-          "required": true
-        },
-        {
-          "model": "q1_available_services",
-          "component": "Checkbox",
-          "label": "Which of these services (from any source) are currently available in this Neighborhood/Town: (Check all that apply)",
-          "options": [
-            "Office-based needle exchange",
-            "Mobile needle exchange",
-            "Rapid HIV test",
-            "Rapid HCV test",
-            "Fentanyl test strips",
-            "Safer drug use equipment",
-            "Access to a health clinic",
-            "Access to mental health care",
-            "Harm reduction vending machine",
-            "Emergency housing or financial assistance",
-            "Food pantry/Free meals",
-            "Community-based support groups for recovery from substance use (like AA, NA)",
-            "Access to in-patient treatment for substance use",
-            "Access to Medications for Opioid use Disorder (MOUD), like buprenorphine or methadone",
-            "Linkage to care and/or case management for HIV or HCV",
-            "Other"
-          ]
-        },
-        {
-          "model": "q1_other_available_services",
-          "component": "TextInput",
-          "label": "Other",
-          "required": true,
-          "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')"
-        },
-        {
-          "model": "q2_other_related_services",
-          "component": "TextArea",
-          "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)"
-        },
-        {
-          "model": "q3_reason_for_focus",
-          "component": "Checkbox",
-          "label": "What made you choose to focus on these services in this Neighborhood/Town (check all that apply)",
-          "options": [
-            "Our organization has historically worked here",
-            "Community discussion or individual stories suggesting services are needed here",
-            "Grant funding was tied to working in this location",
-            "It is close to our main office / easily accessible",
-            "A hotspot map from RIDOH",
-            "A ROARR report from RIDOH",
-            "Prior Relationships with organizations in this Census Tract",
-            "Other"
-          ]
-        },
-        {
-          "model": "q3_other",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q3_reason_for_focus && model.q3_reason_for_focus.includes('Other')"
-        },
-        {
-          "model": "q4_outreach_services",
-          "component": "Checkbox",
-          "label": "What types of outreach services are available in this Neighborhood/Town (Check all that apply)",
-          "options": [
-            "Basic needs",
-            "Office-based needle exchange and harm reduction services",
-            "Street-based needle exchange and harm reduction services",
-            "Naloxone kit training and distribution",
-            "Harm reduction vending machine",
-            "Recovery coaching services",
-            "Faith based outreach services",
-            "Other community organizations(s)",
-            "Emergency department",
-            "Other"
-          ]
-        },
-        {
-          "model": "q4_other_community_orgs",
-          "component": "TextInput",
-          "label": "Other community organizations(s)",
-          "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other community organizations(s)')"
-        },
-        {
-          "model": "q4_other",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other')"
-        },
-        {
-          "model": "q5_sources_for_naloxone",
-          "component": "Checkbox",
-          "label": "What are the known sources for naloxone available in this Neighborhood/Town? (Check all that apply)",
-          "options": [
-            "Pharmacy location(s)",
-            "Office-based needle exchange",
-            "Street-based needle exchange (walking route w/ backpack)",
-            "Harm reduction vending machine",
-            "Other community organization(s)",
-            "Other"
-          ]
-        },
-        {
-          "model": "q5_other_community_orgs",
-          "component": "TextInput",
-          "label": "Other community organization(s)",
-          "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other community organization(s)')"
-        },
-        {
-          "model": "q5_other",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other')"
-        },
-        {
-          "model": "q5a_endorsed_sources_for_naloxone",
-          "component": "TextInput",
-          "type": "number",
-          "label": "[If 5 is endorsed] How many hours per week is this service available?",
-          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
-        },
-        {
-          "model": "q6_sources_for_fentanyl_test_strips",
-          "component": "Checkbox",
-          "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
-          "options": [
-            "Office-based needle exchange",
-            "Street-based needle exchange (walking route w/ backpack",
-            "Harm reduction vending machine",
-            "Other community organization(s)",
-            "Other"
-          ]
-        },
-        {
-          "model": "q6_other_community_orgs",
-          "component": "TextInput",
-          "label": "Other community organization(s)",
-          "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')"
-        },
-        {
-          "model": "q6_other",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other')"
-        },
-        {
-          "model": "q6a_endorsed_fentanyl_test_strips",
-          "component": "TextInput",
-          "type": "number",
-          "label": "[If 6 is endorsed] How many hours per week is this service available?",
-          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
-        },
-        {
-          "model": "q7_sources_for_sterile_needles",
-          "component": "Checkbox",
-          "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
-          "options": [
-            "Pharmacy locations(s) (syringes only)",
-            "Office-based needle exchange",
-            "Street-based needle exchange (walking route w/ backpack)",
-            "Harm reduction vending machine",
-            "Other community organization(s)",
-            "Other"
-          ]
-        },
-        {
-          "model": "q7_other_community_orgs",
-          "component": "TextInput",
-          "label": "Other community organization(s)",
-          "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other community organization(s)')"
-        },
-        {
-          "model": "q7_other",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other')"
-        },
-        {
-          "model": "q7a_endorsed_sterile_needles",
-          "component": "TextInput",
-          "type": "number",
-          "label": "[If 7 is endorsed] How many hours per week is this service available?",
-          "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
-        },
-        {
-          "model": "q8_barriers_to_outreach",
-          "component": "Checkbox",
-          "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
-          "options": [
-            "Limited public transportation",
-            "I don't know anyone who is familiar with this neighborhood",
-            "Limited community service organizations for partnerships",
-            "I don't know where there is a good place to distribute services",
-            "I do not have funding to distribute here",
-            "I do not have the time to go to these places",
-            "Fear of police harassment",
-            "I don't think there are people here who would benefit from our services",
-            "I do not see many barriers",
-            "Other"
-          ]
-        },
-        {
-          "model": "q8_other_barriers_to_outreach",
-          "component": "TextInput",
-          "label": "Other",
-          "condition": "(model) => model.q8_barriers_to_outreach && model.q8_barriers_to_outreach.includes('Other')"
-        },
-        {
-          "model": "q9_strengths_or_opportunities",
-          "component": "TextArea",
-          "label": "What do you see as strengths or opportunities for outreach and services in this Neighborhood/Town?"
-        },
-        {
-          "model": "q10_rate_likert_scale",
-          "component": "LikertScale",
-          "label": "Please rate how much you Disagree or Agree with each of these statements",
-          "statements": [
-            "It is easy to get sterile needles",
-            "It is easy to get new works (like cookers, cottons, sterile water)",
-            "It is easy to get fentanyl test strips",
-            "It is easy to get naloxone",
-            "It is easy to get access to healthcare services (low cost clinic, ED, free clinic)",
-            "It is easy to get to a licensed clinic/provider for methadone",
-            "It is easy to get to a licensed clinic/provider for buprenorphine",
-            "Police are visible or active here",
-            "Police are a barrier to service provision here",
-            "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
-          ]
-        }
-      ]
+      "data": {
+        "title": "Neighborhood Rapid Assessment",
+        "type": "organization",
+        "questions": [
+          {
+            "model": "neighborhood_id",
+            "component": "TextInput",
+            "label": "Neighborhood ID",
+            "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+            "required": true
+          },
+          {
+            "model": "q1_available_services",
+            "component": "Checkbox",
+            "label": "Which of these services (from any source) are currently available in this Neighborhood/Town: (Check all that apply)",
+            "options": [
+              "Office-based needle exchange",
+              "Mobile needle exchange",
+              "Rapid HIV test",
+              "Rapid HCV test",
+              "Fentanyl test strips",
+              "Safer drug use equipment",
+              "Access to a health clinic",
+              "Access to mental health care",
+              "Harm reduction vending machine",
+              "Emergency housing or financial assistance",
+              "Food pantry/Free meals",
+              "Community-based support groups for recovery from substance use (like AA, NA)",
+              "Access to in-patient treatment for substance use",
+              "Access to Medications for Opioid use Disorder (MOUD), like buprenorphine or methadone",
+              "Linkage to care and/or case management for HIV or HCV",
+              "Other"
+            ]
+          },
+          {
+            "model": "q1_other_available_services",
+            "component": "TextInput",
+            "label": "Other",
+            "required": true,
+            "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')"
+          },
+          {
+            "model": "q2_other_related_services",
+            "component": "TextArea",
+            "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)"
+          },
+          {
+            "model": "q3_reason_for_focus",
+            "component": "Checkbox",
+            "label": "What made you choose to focus on these services in this Neighborhood/Town (check all that apply)",
+            "options": [
+              "Our organization has historically worked here",
+              "Community discussion or individual stories suggesting services are needed here",
+              "Grant funding was tied to working in this location",
+              "It is close to our main office / easily accessible",
+              "A hotspot map from RIDOH",
+              "A ROARR report from RIDOH",
+              "Prior Relationships with organizations in this Census Tract",
+              "Other"
+            ]
+          },
+          {
+            "model": "q3_other",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q3_reason_for_focus && model.q3_reason_for_focus.includes('Other')"
+          },
+          {
+            "model": "q4_outreach_services",
+            "component": "Checkbox",
+            "label": "What types of outreach services are available in this Neighborhood/Town (Check all that apply)",
+            "options": [
+              "Basic needs",
+              "Office-based needle exchange and harm reduction services",
+              "Street-based needle exchange and harm reduction services",
+              "Naloxone kit training and distribution",
+              "Harm reduction vending machine",
+              "Recovery coaching services",
+              "Faith based outreach services",
+              "Other community organizations(s)",
+              "Emergency department",
+              "Other"
+            ]
+          },
+          {
+            "model": "q4_other_community_orgs",
+            "component": "TextInput",
+            "label": "Other community organizations(s)",
+            "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other community organizations(s)')"
+          },
+          {
+            "model": "q4_other",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other')"
+          },
+          {
+            "model": "q5_sources_for_naloxone",
+            "component": "Checkbox",
+            "label": "What are the known sources for naloxone available in this Neighborhood/Town? (Check all that apply)",
+            "options": [
+              "Pharmacy location(s)",
+              "Office-based needle exchange",
+              "Street-based needle exchange (walking route w/ backpack)",
+              "Harm reduction vending machine",
+              "Other community organization(s)",
+              "Other"
+            ]
+          },
+          {
+            "model": "q5_other_community_orgs",
+            "component": "TextInput",
+            "label": "Other community organization(s)",
+            "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other community organization(s)')"
+          },
+          {
+            "model": "q5_other",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other')"
+          },
+          {
+            "model": "q5a_endorsed_sources_for_naloxone",
+            "component": "TextInput",
+            "type": "number",
+            "label": "[If 5 is endorsed] How many hours per week is this service available?",
+            "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+          },
+          {
+            "model": "q6_sources_for_fentanyl_test_strips",
+            "component": "Checkbox",
+            "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
+            "options": [
+              "Office-based needle exchange",
+              "Street-based needle exchange (walking route w/ backpack",
+              "Harm reduction vending machine",
+              "Other community organization(s)",
+              "Other"
+            ]
+          },
+          {
+            "model": "q6_other_community_orgs",
+            "component": "TextInput",
+            "label": "Other community organization(s)",
+            "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')"
+          },
+          {
+            "model": "q6_other",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other')"
+          },
+          {
+            "model": "q6a_endorsed_fentanyl_test_strips",
+            "component": "TextInput",
+            "type": "number",
+            "label": "[If 6 is endorsed] How many hours per week is this service available?",
+            "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+          },
+          {
+            "model": "q7_sources_for_sterile_needles",
+            "component": "Checkbox",
+            "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
+            "options": [
+              "Pharmacy locations(s) (syringes only)",
+              "Office-based needle exchange",
+              "Street-based needle exchange (walking route w/ backpack)",
+              "Harm reduction vending machine",
+              "Other community organization(s)",
+              "Other"
+            ]
+          },
+          {
+            "model": "q7_other_community_orgs",
+            "component": "TextInput",
+            "label": "Other community organization(s)",
+            "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other community organization(s)')"
+          },
+          {
+            "model": "q7_other",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other')"
+          },
+          {
+            "model": "q7a_endorsed_sterile_needles",
+            "component": "TextInput",
+            "type": "number",
+            "label": "[If 7 is endorsed] How many hours per week is this service available?",
+            "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+          },
+          {
+            "model": "q8_barriers_to_outreach",
+            "component": "Checkbox",
+            "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
+            "options": [
+              "Limited public transportation",
+              "I don't know anyone who is familiar with this neighborhood",
+              "Limited community service organizations for partnerships",
+              "I don't know where there is a good place to distribute services",
+              "I do not have funding to distribute here",
+              "I do not have the time to go to these places",
+              "Fear of police harassment",
+              "I don't think there are people here who would benefit from our services",
+              "I do not see many barriers",
+              "Other"
+            ]
+          },
+          {
+            "model": "q8_other_barriers_to_outreach",
+            "component": "TextInput",
+            "label": "Other",
+            "condition": "(model) => model.q8_barriers_to_outreach && model.q8_barriers_to_outreach.includes('Other')"
+          },
+          {
+            "model": "q9_strengths_or_opportunities",
+            "component": "TextArea",
+            "label": "What do you see as strengths or opportunities for outreach and services in this Neighborhood/Town?"
+          },
+          {
+            "model": "q10_rate_likert_scale",
+            "component": "LikertScale",
+            "label": "Please rate how much you Disagree or Agree with each of these statements",
+            "statements": [
+              "It is easy to get sterile needles",
+              "It is easy to get new works (like cookers, cottons, sterile water)",
+              "It is easy to get fentanyl test strips",
+              "It is easy to get naloxone",
+              "It is easy to get access to healthcare services (low cost clinic, ED, free clinic)",
+              "It is easy to get to a licensed clinic/provider for methadone",
+              "It is easy to get to a licensed clinic/provider for buprenorphine",
+              "Police are visible or active here",
+              "Police are a barrier to service provision here",
+              "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
+            ]
+          }
+        ]
+      }
     },
     "sample_organization_form": {
-      "title": "Sample Organization Form",
-      "type": "organization",
-      "release_date": "2021-07-26",
-      "questions": [
-        {
-          "model": "resources",
-          "component": "TextArea",
-          "label": "What available resources does your organization provide for the community?"
+      "data": {
+        "title": "Sample Organization Form",
+        "type": "organization",
+        "questions": [
+          {
+            "model": "resources",
+            "component": "TextArea",
+            "label": "What available resources does your organization provide for the community?"
+          }
+        ]
+      }
+    },
+    "User Assigned Form": {
+      "data": {
+        "title": "User Assigned Form",
+        "type": "user",
+        "questions": [
+          {
+            "model": "q1",
+            "component": "TextArea",
+            "label": "How are you?"
+          }
+        ]
+      }
+    },
+    "Organization Assigned Form": {
+      "data": {
+        "title": "Organization Assigned Form",
+        "type": "organization",
+        "questions": [
+          {
+            "model": "q1",
+            "component": "TextArea",
+            "label": "How's the organization?"
+          }
+        ]
+      }
+    }
+  },
+  "form_assignments": {
+    "user_form_to_admin_approved": {
+      "data": {
+        "created_date": 1630413971991,
+        "expire_date": "3000-09-09",
+        "form_id": "test",
+        "form_type": "user",
+        "release_date": "2021-05-21",
+        "target": {
+          "groups": [],
+          "organizations": [],
+          "users": [
+            "admin@admin.com",
+            "user@user.com"
+          ]
         }
-      ]
+      }
+    },
+    "user_form_assigned_to_all": {
+      "data": {
+        "created_date": 1630413971991,
+        "expire_date": "3000-09-09",
+        "form_id": "test2",
+        "form_type": "user",
+        "release_date": "2021-05-21",
+        "target": {
+          "groups": ["all"],
+          "organizations": [],
+          "users": []
+        }
+      }
+    },
+    "org_form_assigned_to_orgs": {
+      "data": {
+        "created_date": 1630413971991,
+        "expire_date": "3000-09-09",
+        "form_id": "sample_organization_form",
+        "form_type": "organization",
+        "release_date": "2021-05-21",
+        "target": {
+          "groups": [],
+          "organizations": ["Good Doers", "RI 4 Us"],
+          "users": []
+        }
+      }
+    },
+    "unreleased_user_form": {
+      "data": {
+        "created_date": 1630413971991,
+        "expire_date": "4000-09-09",
+        "form_id": "test3",
+        "form_type": "user",
+        "release_date": "3000-01-01",
+        "target": {
+          "groups": [],
+          "organizations": [],
+          "users": ["admin@admin.com", "user@user.com"]
+        }
+      }
     }
   },
   "model_data": {
     "2019-1": {
-      "data": [
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401011",
-          "pct_demographic_1": "57.48",
-          "pct_demographic_2": "4.35",
-          "pct_demographic_3": "13.89",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "14",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "6",
-          "structure_8": "2",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401011",
-          "GEOID": "440050401011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401012",
-          "pct_demographic_1": "50.42",
-          "pct_demographic_2": "4.53",
-          "pct_demographic_3": "3.68",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "16",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "22",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401012",
-          "GEOID": "440050401012",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401013",
-          "pct_demographic_1": "48.65",
-          "pct_demographic_2": "4.18",
-          "pct_demographic_3": "2.12",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "23",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "4",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "6",
-          "id": "2019-1",
-          "bg_id": "0401013",
-          "GEOID": "440050401013",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401021",
-          "pct_demographic_1": "48.19",
-          "pct_demographic_2": "8.11",
-          "pct_demographic_3": "6.59",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "50",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "8",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401021",
-          "GEOID": "440050401021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401022",
-          "pct_demographic_1": "44.1",
-          "pct_demographic_2": "11.05",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "104",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "4",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401022",
-          "GEOID": "440050401022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401023",
-          "pct_demographic_1": "48.49",
-          "pct_demographic_2": "11.98",
-          "pct_demographic_3": "2.69",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "20",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "20",
-          "structure_8": "0",
-          "overdoses": "7",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401023",
-          "GEOID": "440050401023",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401031",
-          "pct_demographic_1": "0",
-          "pct_demographic_2": "0",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "12",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "1",
-          "id": "2019-1",
-          "bg_id": "0401031",
-          "GEOID": "440050401031",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401032",
-          "pct_demographic_1": "39.73",
-          "pct_demographic_2": "13.65",
-          "pct_demographic_3": "5.73",
-          "mat_services": "1",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "52",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "12",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "5",
-          "id": "2019-1",
-          "bg_id": "0401032",
-          "GEOID": "440050401032",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401033",
-          "pct_demographic_1": "30.74",
-          "pct_demographic_2": "7.79",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "164",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "2",
-          "id": "2019-1",
-          "bg_id": "0401033",
-          "GEOID": "440050401033",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401034",
-          "pct_demographic_1": "43.22",
-          "pct_demographic_2": "0",
-          "pct_demographic_3": "25.42",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "18",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "2",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "21",
-          "id": "2019-1",
-          "bg_id": "0401034",
-          "GEOID": "440050401034",
-          "NAMELSAD": "Block Group 4",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401035",
-          "pct_demographic_1": "56.67",
-          "pct_demographic_2": "7.33",
-          "pct_demographic_3": "0",
-          "mat_services": "1",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "62",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "19",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "2",
-          "id": "2019-1",
-          "bg_id": "0401035",
-          "GEOID": "440050401035",
-          "NAMELSAD": "Block Group 5",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050401036",
-          "pct_demographic_1": "56.69",
-          "pct_demographic_2": "1.83",
-          "pct_demographic_3": "3.16",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "58",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "17",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0401036",
-          "GEOID": "440050401036",
-          "NAMELSAD": "Block Group 6",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050414001",
-          "pct_demographic_1": "48.55",
-          "pct_demographic_2": "17.03",
-          "pct_demographic_3": "3.82",
-          "mat_services": "1",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "383",
-          "structure_5": "1",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "50",
-          "id": "2019-1",
-          "bg_id": "0414001",
-          "GEOID": "440050414001",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Little Compton",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050414002",
-          "pct_demographic_1": "52.06",
-          "pct_demographic_2": "6.74",
-          "pct_demographic_3": "0.53",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "677",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0414002",
-          "GEOID": "440050414002",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Little Compton",
-          "intervention_arm": true
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050416011",
-          "pct_demographic_1": "52.2",
-          "pct_demographic_2": "6.96",
-          "pct_demographic_3": "7.78",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "6",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0416011",
-          "GEOID": "440050416011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050416012",
-          "pct_demographic_1": "51.71",
-          "pct_demographic_2": "7",
-          "pct_demographic_3": "1.3",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "5",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "10",
-          "id": "2019-1",
-          "bg_id": "0416012",
-          "GEOID": "440050416012",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050416021",
-          "pct_demographic_1": "47.89",
-          "pct_demographic_2": "3.89",
-          "pct_demographic_3": "7.53",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "30",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "1",
-          "id": "2019-1",
-          "bg_id": "0416021",
-          "GEOID": "440050416021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050416022",
-          "pct_demographic_1": "49.09",
-          "pct_demographic_2": "10.32",
-          "pct_demographic_3": "2.36",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "18",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "4",
-          "id": "2019-1",
-          "bg_id": "0416022",
-          "GEOID": "440050416022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050417011",
-          "pct_demographic_1": "51.47",
-          "pct_demographic_2": "7.13",
-          "pct_demographic_3": "2.22",
-          "mat_services": "1",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "145",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "2",
-          "structure_8": "1",
-          "overdoses": "4",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0417011",
-          "GEOID": "440050417011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050417021",
-          "pct_demographic_1": "54.01",
-          "pct_demographic_2": "6.22",
-          "pct_demographic_3": "0.41",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "1",
-          "housing_score": "88",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0417021",
-          "GEOID": "440050417021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050417022",
-          "pct_demographic_1": "46.98",
-          "pct_demographic_2": "11.84",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "317",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0417022",
-          "GEOID": "440050417022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2019",
-          "period": "1",
-          "geoid": "440050417023",
-          "pct_demographic_1": "52.27",
-          "pct_demographic_2": "4.94",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "219",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2019-1",
-          "bg_id": "0417023",
-          "GEOID": "440050417023",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        }
-      ]
+      "data": {
+        "data": [
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401011",
+            "pct_demographic_1": "57.48",
+            "pct_demographic_2": "4.35",
+            "pct_demographic_3": "13.89",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "14",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "6",
+            "structure_8": "2",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401011",
+            "GEOID": "440050401011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401012",
+            "pct_demographic_1": "50.42",
+            "pct_demographic_2": "4.53",
+            "pct_demographic_3": "3.68",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "16",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "22",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401012",
+            "GEOID": "440050401012",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401013",
+            "pct_demographic_1": "48.65",
+            "pct_demographic_2": "4.18",
+            "pct_demographic_3": "2.12",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "23",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "4",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "6",
+            "id": "2019-1",
+            "bg_id": "0401013",
+            "GEOID": "440050401013",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401021",
+            "pct_demographic_1": "48.19",
+            "pct_demographic_2": "8.11",
+            "pct_demographic_3": "6.59",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "50",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "8",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401021",
+            "GEOID": "440050401021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401022",
+            "pct_demographic_1": "44.1",
+            "pct_demographic_2": "11.05",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "104",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "4",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401022",
+            "GEOID": "440050401022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401023",
+            "pct_demographic_1": "48.49",
+            "pct_demographic_2": "11.98",
+            "pct_demographic_3": "2.69",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "20",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "20",
+            "structure_8": "0",
+            "overdoses": "7",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401023",
+            "GEOID": "440050401023",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401031",
+            "pct_demographic_1": "0",
+            "pct_demographic_2": "0",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "12",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "1",
+            "id": "2019-1",
+            "bg_id": "0401031",
+            "GEOID": "440050401031",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401032",
+            "pct_demographic_1": "39.73",
+            "pct_demographic_2": "13.65",
+            "pct_demographic_3": "5.73",
+            "mat_services": "1",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "52",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "12",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "5",
+            "id": "2019-1",
+            "bg_id": "0401032",
+            "GEOID": "440050401032",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401033",
+            "pct_demographic_1": "30.74",
+            "pct_demographic_2": "7.79",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "164",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "2",
+            "id": "2019-1",
+            "bg_id": "0401033",
+            "GEOID": "440050401033",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401034",
+            "pct_demographic_1": "43.22",
+            "pct_demographic_2": "0",
+            "pct_demographic_3": "25.42",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "18",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "2",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "21",
+            "id": "2019-1",
+            "bg_id": "0401034",
+            "GEOID": "440050401034",
+            "NAMELSAD": "Block Group 4",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401035",
+            "pct_demographic_1": "56.67",
+            "pct_demographic_2": "7.33",
+            "pct_demographic_3": "0",
+            "mat_services": "1",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "62",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "19",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "2",
+            "id": "2019-1",
+            "bg_id": "0401035",
+            "GEOID": "440050401035",
+            "NAMELSAD": "Block Group 5",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050401036",
+            "pct_demographic_1": "56.69",
+            "pct_demographic_2": "1.83",
+            "pct_demographic_3": "3.16",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "58",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "17",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0401036",
+            "GEOID": "440050401036",
+            "NAMELSAD": "Block Group 6",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050414001",
+            "pct_demographic_1": "48.55",
+            "pct_demographic_2": "17.03",
+            "pct_demographic_3": "3.82",
+            "mat_services": "1",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "383",
+            "structure_5": "1",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "50",
+            "id": "2019-1",
+            "bg_id": "0414001",
+            "GEOID": "440050414001",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Little Compton",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050414002",
+            "pct_demographic_1": "52.06",
+            "pct_demographic_2": "6.74",
+            "pct_demographic_3": "0.53",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "677",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0414002",
+            "GEOID": "440050414002",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Little Compton",
+            "intervention_arm": true
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050416011",
+            "pct_demographic_1": "52.2",
+            "pct_demographic_2": "6.96",
+            "pct_demographic_3": "7.78",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "6",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0416011",
+            "GEOID": "440050416011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050416012",
+            "pct_demographic_1": "51.71",
+            "pct_demographic_2": "7",
+            "pct_demographic_3": "1.3",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "5",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "10",
+            "id": "2019-1",
+            "bg_id": "0416012",
+            "GEOID": "440050416012",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050416021",
+            "pct_demographic_1": "47.89",
+            "pct_demographic_2": "3.89",
+            "pct_demographic_3": "7.53",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "30",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "1",
+            "id": "2019-1",
+            "bg_id": "0416021",
+            "GEOID": "440050416021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050416022",
+            "pct_demographic_1": "49.09",
+            "pct_demographic_2": "10.32",
+            "pct_demographic_3": "2.36",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "18",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "4",
+            "id": "2019-1",
+            "bg_id": "0416022",
+            "GEOID": "440050416022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050417011",
+            "pct_demographic_1": "51.47",
+            "pct_demographic_2": "7.13",
+            "pct_demographic_3": "2.22",
+            "mat_services": "1",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "145",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "2",
+            "structure_8": "1",
+            "overdoses": "4",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0417011",
+            "GEOID": "440050417011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050417021",
+            "pct_demographic_1": "54.01",
+            "pct_demographic_2": "6.22",
+            "pct_demographic_3": "0.41",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "1",
+            "housing_score": "88",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0417021",
+            "GEOID": "440050417021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050417022",
+            "pct_demographic_1": "46.98",
+            "pct_demographic_2": "11.84",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "317",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0417022",
+            "GEOID": "440050417022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2019",
+            "period": "1",
+            "geoid": "440050417023",
+            "pct_demographic_1": "52.27",
+            "pct_demographic_2": "4.94",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "219",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2019-1",
+            "bg_id": "0417023",
+            "GEOID": "440050417023",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          }
+        ]
+      }
     },
     "2018-2": {
-      "data": [
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401011",
-          "pct_demographic_1": "54.57",
-          "pct_demographic_2": "6.11",
-          "pct_demographic_3": "11.69",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "14",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "6",
-          "structure_8": "2",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401011",
-          "GEOID": "440050401011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401012",
-          "pct_demographic_1": "48.72",
-          "pct_demographic_2": "4.15",
-          "pct_demographic_3": "0.24",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "16",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "22",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401012",
-          "GEOID": "440050401012",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401013",
-          "pct_demographic_1": "48.19",
-          "pct_demographic_2": "5.71",
-          "pct_demographic_3": "2.04",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "23",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "4",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "6",
-          "id": "2018-2",
-          "bg_id": "0401013",
-          "GEOID": "440050401013",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401021",
-          "pct_demographic_1": "45.64",
-          "pct_demographic_2": "11.08",
-          "pct_demographic_3": "6.6",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "50",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "8",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401021",
-          "GEOID": "440050401021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401022",
-          "pct_demographic_1": "46.25",
-          "pct_demographic_2": "10.29",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "104",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "4",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401022",
-          "GEOID": "440050401022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401023",
-          "pct_demographic_1": "51.35",
-          "pct_demographic_2": "14.55",
-          "pct_demographic_3": "3.21",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "20",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "20",
-          "structure_8": "0",
-          "overdoses": "7",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401023",
-          "GEOID": "440050401023",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401031",
-          "pct_demographic_1": "0",
-          "pct_demographic_2": "0",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "12",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "1",
-          "id": "2018-2",
-          "bg_id": "0401031",
-          "GEOID": "440050401031",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401032",
-          "pct_demographic_1": "40.95",
-          "pct_demographic_2": "12.67",
-          "pct_demographic_3": "7.59",
-          "mat_services": "1",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "52",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "12",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "5",
-          "id": "2018-2",
-          "bg_id": "0401032",
-          "GEOID": "440050401032",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401033",
-          "pct_demographic_1": "40.29",
-          "pct_demographic_2": "5.76",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "164",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "2",
-          "id": "2018-2",
-          "bg_id": "0401033",
-          "GEOID": "440050401033",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401034",
-          "pct_demographic_1": "49.3",
-          "pct_demographic_2": "0",
-          "pct_demographic_3": "6.34",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "18",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "2",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "21",
-          "id": "2018-2",
-          "bg_id": "0401034",
-          "GEOID": "440050401034",
-          "NAMELSAD": "Block Group 4",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401035",
-          "pct_demographic_1": "56.13",
-          "pct_demographic_2": "5.25",
-          "pct_demographic_3": "0",
-          "mat_services": "1",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "62",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "19",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "2",
-          "id": "2018-2",
-          "bg_id": "0401035",
-          "GEOID": "440050401035",
-          "NAMELSAD": "Block Group 5",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050401036",
-          "pct_demographic_1": "54.19",
-          "pct_demographic_2": "1.38",
-          "pct_demographic_3": "3.18",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "58",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "17",
-          "structure_8": "0",
-          "overdoses": "2",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0401036",
-          "GEOID": "440050401036",
-          "NAMELSAD": "Block Group 6",
-          "municipality": "Portsmouth",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050414001",
-          "pct_demographic_1": "44.46",
-          "pct_demographic_2": "15.34",
-          "pct_demographic_3": "3.09",
-          "mat_services": "1",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "383",
-          "structure_5": "1",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "50",
-          "id": "2018-2",
-          "bg_id": "0414001",
-          "GEOID": "440050414001",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Little Compton",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050414002",
-          "pct_demographic_1": "50.05",
-          "pct_demographic_2": "5.75",
-          "pct_demographic_3": "2.6",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "677",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0414002",
-          "GEOID": "440050414002",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Little Compton",
-          "intervention_arm": true
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050416011",
-          "pct_demographic_1": "54.65",
-          "pct_demographic_2": "5.28",
-          "pct_demographic_3": "5.46",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "6",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0416011",
-          "GEOID": "440050416011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050416012",
-          "pct_demographic_1": "54.78",
-          "pct_demographic_2": "6",
-          "pct_demographic_3": "1.3",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "5",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "10",
-          "id": "2018-2",
-          "bg_id": "0416012",
-          "GEOID": "440050416012",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050416021",
-          "pct_demographic_1": "48.71",
-          "pct_demographic_2": "2.33",
-          "pct_demographic_3": "6.75",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "30",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "1",
-          "id": "2018-2",
-          "bg_id": "0416021",
-          "GEOID": "440050416021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050416022",
-          "pct_demographic_1": "46.63",
-          "pct_demographic_2": "8",
-          "pct_demographic_3": "2.97",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "18",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "4",
-          "id": "2018-2",
-          "bg_id": "0416022",
-          "GEOID": "440050416022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050417011",
-          "pct_demographic_1": "51.18",
-          "pct_demographic_2": "8.68",
-          "pct_demographic_3": "1.72",
-          "mat_services": "1",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "145",
-          "structure_5": "1",
-          "structure_6": "0",
-          "ems_runs": "2",
-          "structure_8": "1",
-          "overdoses": "4",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0417011",
-          "GEOID": "440050417011",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050417021",
-          "pct_demographic_1": "48.42",
-          "pct_demographic_2": "4.53",
-          "pct_demographic_3": "1.05",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "1",
-          "housing_score": "88",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "0",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0417021",
-          "GEOID": "440050417021",
-          "NAMELSAD": "Block Group 1",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050417022",
-          "pct_demographic_1": "46.07",
-          "pct_demographic_2": "5.94",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "1",
-          "structure_1": "1",
-          "housing_score": "317",
-          "structure_5": "0",
-          "structure_6": "1",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0417022",
-          "GEOID": "440050417022",
-          "NAMELSAD": "Block Group 2",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        },
-        {
-          "year": "2018",
-          "period": "2",
-          "geoid": "440050417023",
-          "pct_demographic_1": "53.6",
-          "pct_demographic_2": "5.59",
-          "pct_demographic_3": "0",
-          "mat_services": "0",
-          "parks": "0",
-          "structure_1": "0",
-          "housing_score": "219",
-          "structure_5": "0",
-          "structure_6": "0",
-          "ems_runs": "0",
-          "structure_8": "0",
-          "overdoses": "1",
-          "structure_10": "0",
-          "id": "2018-2",
-          "bg_id": "0417023",
-          "GEOID": "440050417023",
-          "NAMELSAD": "Block Group 3",
-          "municipality": "Tiverton",
-          "intervention_arm": false
-        }
-      ]
+      "data": {
+        "data": [
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401011",
+            "pct_demographic_1": "54.57",
+            "pct_demographic_2": "6.11",
+            "pct_demographic_3": "11.69",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "14",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "6",
+            "structure_8": "2",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401011",
+            "GEOID": "440050401011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401012",
+            "pct_demographic_1": "48.72",
+            "pct_demographic_2": "4.15",
+            "pct_demographic_3": "0.24",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "16",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "22",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401012",
+            "GEOID": "440050401012",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401013",
+            "pct_demographic_1": "48.19",
+            "pct_demographic_2": "5.71",
+            "pct_demographic_3": "2.04",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "23",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "4",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "6",
+            "id": "2018-2",
+            "bg_id": "0401013",
+            "GEOID": "440050401013",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401021",
+            "pct_demographic_1": "45.64",
+            "pct_demographic_2": "11.08",
+            "pct_demographic_3": "6.6",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "50",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "8",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401021",
+            "GEOID": "440050401021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401022",
+            "pct_demographic_1": "46.25",
+            "pct_demographic_2": "10.29",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "104",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "4",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401022",
+            "GEOID": "440050401022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401023",
+            "pct_demographic_1": "51.35",
+            "pct_demographic_2": "14.55",
+            "pct_demographic_3": "3.21",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "20",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "20",
+            "structure_8": "0",
+            "overdoses": "7",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401023",
+            "GEOID": "440050401023",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401031",
+            "pct_demographic_1": "0",
+            "pct_demographic_2": "0",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "12",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "1",
+            "id": "2018-2",
+            "bg_id": "0401031",
+            "GEOID": "440050401031",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401032",
+            "pct_demographic_1": "40.95",
+            "pct_demographic_2": "12.67",
+            "pct_demographic_3": "7.59",
+            "mat_services": "1",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "52",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "12",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "5",
+            "id": "2018-2",
+            "bg_id": "0401032",
+            "GEOID": "440050401032",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401033",
+            "pct_demographic_1": "40.29",
+            "pct_demographic_2": "5.76",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "164",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "2",
+            "id": "2018-2",
+            "bg_id": "0401033",
+            "GEOID": "440050401033",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401034",
+            "pct_demographic_1": "49.3",
+            "pct_demographic_2": "0",
+            "pct_demographic_3": "6.34",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "18",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "2",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "21",
+            "id": "2018-2",
+            "bg_id": "0401034",
+            "GEOID": "440050401034",
+            "NAMELSAD": "Block Group 4",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401035",
+            "pct_demographic_1": "56.13",
+            "pct_demographic_2": "5.25",
+            "pct_demographic_3": "0",
+            "mat_services": "1",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "62",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "19",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "2",
+            "id": "2018-2",
+            "bg_id": "0401035",
+            "GEOID": "440050401035",
+            "NAMELSAD": "Block Group 5",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050401036",
+            "pct_demographic_1": "54.19",
+            "pct_demographic_2": "1.38",
+            "pct_demographic_3": "3.18",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "58",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "17",
+            "structure_8": "0",
+            "overdoses": "2",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0401036",
+            "GEOID": "440050401036",
+            "NAMELSAD": "Block Group 6",
+            "municipality": "Portsmouth",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050414001",
+            "pct_demographic_1": "44.46",
+            "pct_demographic_2": "15.34",
+            "pct_demographic_3": "3.09",
+            "mat_services": "1",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "383",
+            "structure_5": "1",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "50",
+            "id": "2018-2",
+            "bg_id": "0414001",
+            "GEOID": "440050414001",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Little Compton",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050414002",
+            "pct_demographic_1": "50.05",
+            "pct_demographic_2": "5.75",
+            "pct_demographic_3": "2.6",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "677",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0414002",
+            "GEOID": "440050414002",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Little Compton",
+            "intervention_arm": true
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050416011",
+            "pct_demographic_1": "54.65",
+            "pct_demographic_2": "5.28",
+            "pct_demographic_3": "5.46",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "6",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0416011",
+            "GEOID": "440050416011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050416012",
+            "pct_demographic_1": "54.78",
+            "pct_demographic_2": "6",
+            "pct_demographic_3": "1.3",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "5",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "10",
+            "id": "2018-2",
+            "bg_id": "0416012",
+            "GEOID": "440050416012",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050416021",
+            "pct_demographic_1": "48.71",
+            "pct_demographic_2": "2.33",
+            "pct_demographic_3": "6.75",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "30",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "1",
+            "id": "2018-2",
+            "bg_id": "0416021",
+            "GEOID": "440050416021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050416022",
+            "pct_demographic_1": "46.63",
+            "pct_demographic_2": "8",
+            "pct_demographic_3": "2.97",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "18",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "4",
+            "id": "2018-2",
+            "bg_id": "0416022",
+            "GEOID": "440050416022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050417011",
+            "pct_demographic_1": "51.18",
+            "pct_demographic_2": "8.68",
+            "pct_demographic_3": "1.72",
+            "mat_services": "1",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "145",
+            "structure_5": "1",
+            "structure_6": "0",
+            "ems_runs": "2",
+            "structure_8": "1",
+            "overdoses": "4",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0417011",
+            "GEOID": "440050417011",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050417021",
+            "pct_demographic_1": "48.42",
+            "pct_demographic_2": "4.53",
+            "pct_demographic_3": "1.05",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "1",
+            "housing_score": "88",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "0",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0417021",
+            "GEOID": "440050417021",
+            "NAMELSAD": "Block Group 1",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050417022",
+            "pct_demographic_1": "46.07",
+            "pct_demographic_2": "5.94",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "1",
+            "structure_1": "1",
+            "housing_score": "317",
+            "structure_5": "0",
+            "structure_6": "1",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0417022",
+            "GEOID": "440050417022",
+            "NAMELSAD": "Block Group 2",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          },
+          {
+            "year": "2018",
+            "period": "2",
+            "geoid": "440050417023",
+            "pct_demographic_1": "53.6",
+            "pct_demographic_2": "5.59",
+            "pct_demographic_3": "0",
+            "mat_services": "0",
+            "parks": "0",
+            "structure_1": "0",
+            "housing_score": "219",
+            "structure_5": "0",
+            "structure_6": "0",
+            "ems_runs": "0",
+            "structure_8": "0",
+            "overdoses": "1",
+            "structure_10": "0",
+            "id": "2018-2",
+            "bg_id": "0417023",
+            "GEOID": "440050417023",
+            "NAMELSAD": "Block Group 3",
+            "municipality": "Tiverton",
+            "intervention_arm": false
+          }
+        ]
+      }
     }
   },
   "model_predictions": {
     "2019-1": {
-      "data": [
-        {
-          "bg_id": "0401011",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401012",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401013",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401021",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401022",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401023",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401031",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401032",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401033",
-          "flag_1": "1",
-          "flag_2": "3"
-        },
-        {
-          "bg_id": "0401034",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401035",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401036",
-          "flag_1": "1",
-          "flag_2": "1"
-        },
-        {
-          "bg_id": "0414001",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0414002",
-          "flag_1": "0",
-          "flag_2": "0"
-        }
-      ]
+      "data": {
+        "data": [
+          {
+            "bg_id": "0401011",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401012",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401013",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401021",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401022",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401023",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401031",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401032",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401033",
+            "flag_1": "1",
+            "flag_2": "3"
+          },
+          {
+            "bg_id": "0401034",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401035",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401036",
+            "flag_1": "1",
+            "flag_2": "1"
+          },
+          {
+            "bg_id": "0414001",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0414002",
+            "flag_1": "0",
+            "flag_2": "0"
+          }
+        ]
+      }
     },
     "2018-2": {
-      "data": [
-        {
-          "bg_id": "0401011",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401012",
-          "flag_1": "1",
-          "flag_2": "3"
-        },
-        {
-          "bg_id": "0401013",
-          "flag_1": "1",
-          "flag_2": "3"
-        },
-        {
-          "bg_id": "0401021",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401022",
-          "flag_1": "1",
-          "flag_2": "1"
-        },
-        {
-          "bg_id": "0401023",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401031",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401032",
-          "flag_1": "1",
-          "flag_2": "1"
-        },
-        {
-          "bg_id": "0401033",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401034",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0401035",
-          "flag_1": "1",
-          "flag_2": "1"
-        },
-        {
-          "bg_id": "0401036",
-          "flag_1": "0",
-          "flag_2": "0"
-        },
-        {
-          "bg_id": "0414001",
-          "flag_1": "1",
-          "flag_2": "1"
-        },
-        {
-          "bg_id": "0414002",
-          "flag_1": "1",
-          "flag_2": "1"
-        }
-      ]
+      "data": {
+        "data": [
+          {
+            "bg_id": "0401011",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401012",
+            "flag_1": "1",
+            "flag_2": "3"
+          },
+          {
+            "bg_id": "0401013",
+            "flag_1": "1",
+            "flag_2": "3"
+          },
+          {
+            "bg_id": "0401021",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401022",
+            "flag_1": "1",
+            "flag_2": "1"
+          },
+          {
+            "bg_id": "0401023",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401031",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401032",
+            "flag_1": "1",
+            "flag_2": "1"
+          },
+          {
+            "bg_id": "0401033",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401034",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0401035",
+            "flag_1": "1",
+            "flag_2": "1"
+          },
+          {
+            "bg_id": "0401036",
+            "flag_1": "0",
+            "flag_2": "0"
+          },
+          {
+            "bg_id": "0414001",
+            "flag_1": "1",
+            "flag_2": "1"
+          },
+          {
+            "bg_id": "0414002",
+            "flag_1": "1",
+            "flag_2": "1"
+          }
+        ]
+      }
     }
   }
 }

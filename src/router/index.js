@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import ContentWithSidebar from "../views/ContentWithSidebar";
 import store from "@/store";
 
 const routes = [
@@ -49,11 +50,22 @@ const routes = [
         return { name: "Login", query: { redirect: to.path } };
       }
     },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/snack/Snack.vue"),
+    component: ContentWithSidebar,
+    props: {
+      parentRoute: "snack",
+      pages: [
+        {
+          name: "Dashboard",
+          route: "dashboard",
+          icon: "fa-chart-line",
+        },
+        {
+          name: "Forms",
+          route: "forms",
+          icon: "fa-file-alt",
+        },
+      ],
+    },
     children: [
       {
         path: "",
@@ -87,8 +99,54 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "admin" */ "../views/Admin.vue"),
+    component: ContentWithSidebar,
+    props: {
+      parentRoute: "admin",
+      pages: [
+        {
+          name: "Review Access Requests",
+          route: "review_access_requests",
+          icon: "fa-universal-access",
+        },
+        {
+          name: "User Management",
+          route: "user_management",
+          icon: "fa-crown",
+        },
+        {
+          name: "Form Assignments",
+          route: "form_assignments",
+          icon: "fa-file-import",
+        },
+      ],
+    },
+    children: [
+      {
+        path: "",
+        redirect: "/admin/review_access_requests",
+      },
+      {
+        path: "review_access_requests",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/ReviewAccessRequests.vue"
+          ),
+      },
+      {
+        path: "user_management",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/UserManagement.vue"
+          ),
+      },
+      {
+        path: "form_assignments",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/FormAssignments.vue"
+          ),
+      },
+    ],
   },
 ];
 

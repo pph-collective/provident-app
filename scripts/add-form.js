@@ -27,11 +27,6 @@ const warnAndExit = (warning) => {
 };
 
 const validateForm = (form) => {
-  // check release date
-  if (!form["release_date"] || !dateRegex.test(form["release_date"])) {
-    warnAndExit("release_date key missing or not formatted as yyyy-mm-dd");
-  }
-
   // check title
   if (!form["title"]) {
     warnAndExit("must provide title");
@@ -65,6 +60,19 @@ const validateForm = (form) => {
       warnAndExit(`question missing component: ${key}`);
     } else {
       switch (question["component"]) {
+        case "Date":
+          ["max_date", "min_date"].forEach((field) => {
+            if (
+              question[field] &&
+              question[field] !== "today" &&
+              !dateRegex.test(question[field])
+            ) {
+              warnAndExit(
+                `${field} key should either be 'today' or in yyyy-mm-dd format`
+              );
+            }
+          });
+          break;
         case "TextArea":
         case "TextInput":
           break;

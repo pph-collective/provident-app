@@ -23,6 +23,20 @@ describe("User Views", () => {
     cy.url().should("eq", Cypress.config().baseUrl);
   });
 
+  it("navigating to /admin/form_assignments shouldn't be allowed", () => {
+    cy.visit("/admin/form_assignments");
+
+    // User should be redirected
+    cy.url().should("eq", Cypress.config().baseUrl);
+  });
+
+  it("navigating to /admin/review_access_requests shouldn't be allowed", () => {
+    cy.visit("/admin/review_access_requests");
+
+    // User should be redirected
+    cy.url().should("eq", Cypress.config().baseUrl);
+  });
+
   it("navigating to /snack shouldn't ask to log in", () => {
     cy.visit("/snack");
     cy.contains("h1", "Log In").should("not.exist");

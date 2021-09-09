@@ -12,6 +12,7 @@
             </div>
             <div class="control">
               <button
+                v-if="showSaveButton"
                 type="button"
                 class="button is-info"
                 :disabled="saveDisabled"
@@ -61,6 +62,10 @@ export default {
     closeRequest: {
       type: Number,
       required: true,
+    },
+    showSaveButton: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ["save", "submitted", "close"],
@@ -134,3 +139,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+// This style element isn't scoped because the following styles affects those within the SchemaForm component which
+// would be out of scope.
+
+@import "bulma";
+
+.schema-row {
+  margin-bottom: #{$block-spacing};
+}
+</style>

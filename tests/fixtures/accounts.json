@@ -8,7 +8,7 @@
     "password": "user-password"
   },
   "pending": {
-    "email": "user1@user.com",
+    "email": "pendinguser@user.com",
     "password": "user-password"
   },
   "control": {

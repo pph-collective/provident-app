@@ -27,6 +27,9 @@ describe("Admin Views and Powers", () => {
       .get('[data-cy="approve"]')
       .should("exist")
       .click();
+
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get('[data-cy="alert-message"]')
       .should("exist")
       .should("contain", `Success! ${ACCOUNTS.pending.email} was approved`);
@@ -38,6 +41,31 @@ describe("Admin Views and Powers", () => {
     cy.get('[type="password"]').type(`${ACCOUNTS.pending.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
     cy.get("a").contains("Log Out").should("exist");
+
+    // Navigate to forms, there should be an assigned form
+    cy.visit("/snack/forms");
+    cy.get(".loading-icon").should("not.exist");
+
+    cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
+
+    // Confirm that forms are loaded prior to continuing
+    cy.get(".loading-icon").should("not.exist");
+    cy.get('[data-cy="forms-panel-block"]').should(
+      "not.contain",
+      "No forms here"
+    );
+
+    cy.get('[data-cy="forms-panel-block"]:contains("Simple Form")')
+      .should("have.length", 1)
+      .find('[data-cy="status-tag"]')
+      .should("contain", "Not Started");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]').should("exist");
+    cy.get('[data-cy="active-form-title"]').should("contain", "Simple Form");
   });
 
   it("Denying a user", () => {
@@ -57,5 +85,33 @@ describe("Admin Views and Powers", () => {
     cy.get('[data-cy="error-message"]')
       .should("exist")
       .contains("User account not approved: denied");
+  });
+
+  it("User management", () => {
+    cy.get('a[href="/admin/user_management"]').click();
+    cy.get(".loading-icon").should("not.exist");
+    cy.get("table tbody tr").should("have.length", 4).first().find("i").click();
+    cy.get("table tbody tr").find("select").should("have.value", "champion");
+    cy.get("table tbody tr").find("select").select("user");
+    cy.get("table tbody tr").first().find("i.fa-save").click();
+    cy.get("table tbody tr")
+      .first()
+      .find('td[data-cy="role"]')
+      .should("contain", "user");
+
+    // still there after hard refresh
+    cy.visit("/admin/user_management");
+    cy.get("h1.title").should("contain", "User Management");
+    cy.get(".loading-icon").should("not.exist");
+    cy.get("table tbody tr")
+      .first()
+      .find('td[data-cy="role"]')
+      .should("contain", "user");
+
+    cy.get("table thead input").first().type("asdf");
+    cy.get("table tbody tr")
+      .should("have.length", 1)
+      .find("td")
+      .should("contain", "No users found");
   });
 });
