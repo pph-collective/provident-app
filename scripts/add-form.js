@@ -61,25 +61,17 @@ const validateForm = (form) => {
     } else {
       switch (question["component"]) {
         case "Date":
-          if (
-            question["max_date"] &&
-            question["max_date"] !== "today" &&
-            !dateRegex.test(question["max_date"])
-          ) {
-            warnAndExit(
-              "max_date key should either be 'today' or in yyyy-mm-dd format"
-            );
-          }
-
-          if (
-            question["min_date"] &&
-            question["min_date"] !== "today" &&
-            !dateRegex.test(question["min_date"])
-          ) {
-            warnAndExit(
-              "min_date key should either be 'today' or in yyyy-mm-dd format"
-            );
-          }
+          ["max_date", "min_date"].forEach((field) => {
+            if (
+              question[field] &&
+              question[field] !== "today" &&
+              !dateRegex.test(question[field])
+            ) {
+              warnAndExit(
+                `${field} key should either be 'today' or in yyyy-mm-dd format`
+              );
+            }
+          });
           break;
         case "TextArea":
         case "TextInput":
