@@ -158,11 +158,11 @@ import { useStore } from "vuex";
 
 import fb from "@/firebase";
 import { esc } from "@/directives/escape";
-import JSONForm from "@/components/form/JSONForm.vue";
-import Loading from "@/components/Loading.vue";
-
 import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
+
+import JSONForm from "@/components/form/JSONForm.vue";
+import Loading from "@/components/Loading.vue";
 
 export default {
   components: {

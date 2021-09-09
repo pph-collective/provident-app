@@ -57,13 +57,13 @@
 
 <script>
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
-
-import fb from "@/firebase";
 import { useStore } from "vuex";
 
-import Loading from "@/components/Loading.vue";
+import fb from "@/firebase";
 import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
+
+import Loading from "@/components/Loading.vue";
 
 export default {
   components: {

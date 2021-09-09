@@ -109,9 +109,11 @@
 <script>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
+
+import utils from "@/utils/utils";
+
 import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
-import utils from "@/utils/utils";
 
 export default {
   components: {
