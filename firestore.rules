@@ -13,27 +13,27 @@ service cloud.firestore {
     }
 
     function isAdminUser() {
-      return request.auth != null && request.auth.token.admin == true;
+      return request.auth != null && "admin" in request.auth.token && request.auth.token.admin == true;
+    }
+
+    function isLoggedInUser(email) {
+      return request.auth != null && request.auth.token.email == email;
     }
 
     match /users/{user} {
-      function isLoggedInUser() {
-        return request.auth != null && request.auth.token.email == user;
-      }
-
       allow update, delete: if isAdminUser();
-      allow read: if isLoggedInUser() || isAdminUser();
-      allow create: if request.auth != null && request.auth.token.email == request.resource.data.email;
+      allow read: if isLoggedInUser(user) || isAdminUser();
+      allow create: if isLoggedInUser(request.resource.data.email);
 
       match /form_responses/{form} {
         allow create: if isAdminUser();
-        allow read: if isLoggedInUser();
-        allow update: if isLoggedInUser() && resource.data.status != 'Submitted';
+        allow read: if isLoggedInUser(user);
+        allow update: if isLoggedInUser(user) && resource.data.status != 'Submitted';
       }
 
       match /activity_log/{document=**} {
         allow read, update, delete: if isAdminUser();
-        allow create: if isLoggedInUser();
+        allow create: if isLoggedInUser(user);
       }
 
     }
@@ -62,6 +62,11 @@ service cloud.firestore {
 
     match /model_predictions/{document=**} {
       allow read: if request.auth != null && isInterventionUser();
+    }
+
+    match /emails/{email} {
+      allow read: if isAdminUser();
+      allow create: if request.auth != null;
     }
   }
 }

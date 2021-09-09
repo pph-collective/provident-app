@@ -162,7 +162,6 @@ export default {
     ...esc,
   },
   setup() {
-    // TODO: terms and conditions
     const form = reactive({
       email: "",
       name: "",
@@ -208,7 +207,6 @@ export default {
         form.password = "";
         form.confirmPassword = "";
         await fb.auth.currentUser.updateProfile({ displayName: form.name });
-        // to do set display name
         await fb.db.collection("users").doc(form.email).set({
           email: form.email,
           name: form.name,
@@ -217,12 +215,22 @@ export default {
           status: "pending",
         });
 
-        await fb.logout();
         requested.value = true;
       } catch (err) {
         error.value = err.message;
-        await fb.logout();
       }
+
+      try {
+        await fb.createEmail({
+          subject: "PROVIDENT User Request",
+          body: `<p>${form.name} has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
+          to: [process.env.VUE_APP_ADMIN_EMAIL],
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      await fb.logout();
     };
 
     return {

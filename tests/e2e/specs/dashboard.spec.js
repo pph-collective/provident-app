@@ -175,7 +175,6 @@ describe("Dashboard viewed as a user", () => {
       .should("have.text", "Continue");
 
     // fill out another form partially, save, two rows
-
     cy.get("#nra-widget button#new-assessment").click();
 
     cy.get("[data-cy='active-form-title']").should(
@@ -210,6 +209,29 @@ describe("Dashboard viewed as a user", () => {
 
     cy.get("#nra-widget .form-response-container table tbody tr")
       .should("have.length", 2)
+      .find("button")
+      .first()
+      .should("have.text", "Review");
+
+    // fill out form save, then submit, only one row for this action
+    cy.get("#nra-widget button#new-assessment").click();
+
+    cy.get("[model='q2_other_related_services']")
+      .find("textarea")
+      .type("Lots of resources");
+
+    cy.get("button").contains("Save").click();
+
+    cy.get("#nra-widget .form-response-container table tbody tr")
+      .should("have.length", 3)
+      .find("button")
+      .first()
+      .should("have.text", "Continue");
+
+    cy.get("button").contains("Submit").click();
+
+    cy.get("#nra-widget .form-response-container table tbody tr")
+      .should("have.length", 3)
       .find("button")
       .first()
       .should("have.text", "Review");

@@ -161,11 +161,11 @@ Optional keys:
 `options`: a list of strings on a rating scale and defaults to the following.
 ```
 options: [
-    "Strongly Disagree", 
-    "Disagree", 
-    "Neutral", 
-    "Agree", 
-    "Strongly Agree", 
+    "Strongly Disagree",
+    "Disagree",
+    "Neutral",
+    "Agree",
+    "Strongly Agree",
     "N/A"
 ]
 ```
@@ -230,3 +230,7 @@ In separate terminals, run `yarn firebase:dev`, `yarn serve`, and then `yarn tes
 ### Notes
 
 In order for Cypress to access admin firebase commands in test specs, use/create custom Cypress tasks in `./tests/e2e/plugins/index.js` or use the custom Cypress commands included in [cypress-firebase](https://github.com/prescottprue/cypress-firebase).
+
+## Email
+
+The admin email is set in the `.env.production` file, if you would like to override this in development create a file with the same keys called `.env.local` and set the email to the value you'd like.  See `email_service/` for more details on sending emails.
