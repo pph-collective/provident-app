@@ -290,6 +290,14 @@ export default {
           required: true,
           min_date: "today",
         },
+        {
+          component: "Checkbox",
+          label: "Send Email?",
+          help_text:
+            "Send an email to targeted users on the release date notifying them of this form.",
+          model: "send_email",
+          options: ["Yes, send a notification"],
+        },
       ];
     });
 
@@ -311,27 +319,32 @@ export default {
       target_users,
       target_organizations,
       target_groups,
+      send_email,
     }) => {
       loading.value = true;
+      const form_type = forms.value[form_id].type;
+
+      const target = {
+        users: target_users,
+        organizations: target_organizations,
+        groups: target_groups,
+      };
 
       const formAssignmentData = {
         created_date: Date.now(),
         form_id,
-        form_type: forms.value[form_id].type,
+        form_type,
         release_date,
         expire_date,
-        target: {
-          users: target_users,
-          organizations: target_organizations,
-          groups: target_groups,
-        },
+        target,
       };
 
-      // Create the form assignment on the db
-      formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
-
+      let emails = [];
       try {
-        await formAssignmentUtils.addFormResponses(
+        // Create the form assignment on the db
+        formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
+
+        emails = await formAssignmentUtils.addFormResponses(
           formAssignmentData,
           organizations.value,
           users.value
@@ -346,14 +359,35 @@ export default {
 
         // show the message only for 6 seconds
         setTimeout(() => (alert.message = ""), 6000);
-      } catch (err) {
-        await fb.db
-          .collection("form_assignments")
-          .doc(formAssignmentData._id)
-          .delete();
 
-        formMessage.value =
-          "Error creating form responses for form assignments.";
+        // add an email to the queue
+        if (send_email.length > 0) {
+          const formTitle = forms.value[form_id].title;
+          await fb.createEmail({
+            subject: `PROVIDENT New Form: ${formTitle}`,
+            body: `<p>A form, <em>${formTitle}</em>, has been assigned to ${
+              form_type === "user" ? "you" : "your organiztion"
+            }. Check out the form on <a href='${
+              location.origin
+            }/snack/forms'>PROVIDENT</a></p>`,
+            to: emails,
+            sendDate: release_date,
+          });
+        }
+      } catch (err) {
+        if (formAssignmentData._id) {
+          await fb.db
+            .collection("form_assignments")
+            .doc(formAssignmentData._id)
+            .delete();
+        }
+        console.log(err);
+
+        // only show the form error if the error was with form assignment, not email
+        if (showModal.value) {
+          formMessage.value =
+            "Error creating form responses for form assignments.";
+        }
       }
 
       loading.value = false;

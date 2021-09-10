@@ -66,11 +66,12 @@ const getFormResponseData = (formAssignment) => {
 /**
  * Adds form responses to the db for the target audience in the form assignment.
  *
- * To minimize calls to firebase, we pass in the full list of organizations and users
+ * To minimize calls to firebase, we pass in the full list of organizations and users.
+ * Returns the emails of the targeted users.
  * @param {Object} formAssignment
  * @param {Object[]} organizations
  * @param {Object[]} users
- * @returns {Promise<void>}
+ * @returns {String[]}
  */
 const addFormResponses = async (formAssignment, organizations, users) => {
   const { form_type, target } = formAssignment;
@@ -81,11 +82,18 @@ const addFormResponses = async (formAssignment, organizations, users) => {
       ? getAssignedOrgs(target, organizations)
       : getAssignedUsers(target, organizations, users);
 
-  return await fb.batchAddFormResponses(
-    form_type,
-    [formResponseData],
-    assigned
-  );
+  await fb.batchAddFormResponses(form_type, [formResponseData], assigned);
+
+  return form_type === "user"
+    ? [...assigned]
+    : users
+        .filter(
+          (user) =>
+            user.status === "approved" &&
+            user.role === "champion" &&
+            assigned.has(user.organization)
+        )
+        .map((user) => user.email);
 };
 
 /**
