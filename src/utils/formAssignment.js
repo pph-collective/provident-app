@@ -64,6 +64,36 @@ const getFormResponseData = (formAssignment) => {
 };
 
 /**
+ * Gets the assignments and emails for a target.
+ *
+ * @param {String} formType
+ * @param {String} target
+ * @param {Object[]} organizations
+ * @param {Object[]} users
+ * @returns {Object} assigned and emails
+ */
+const getAssignments = (formType, target, organizations, users) => {
+  const assigned =
+    formType === "organization"
+      ? getAssignedOrgs(target, organizations)
+      : getAssignedUsers(target, organizations, users);
+
+  const emails =
+    formType === "user"
+      ? [...assigned]
+      : users
+          .filter(
+            (user) =>
+              user.status === "approved" &&
+              user.role === "champion" &&
+              assigned.has(user.organization)
+          )
+          .map((user) => user.email);
+
+  return { assigned, emails };
+};
+
+/**
  * Adds form responses to the db for the target audience in the form assignment.
  *
  * To minimize calls to firebase, we pass in the full list of organizations and users.
@@ -77,23 +107,16 @@ const addFormResponses = async (formAssignment, organizations, users) => {
   const { form_type, target } = formAssignment;
   const formResponseData = getFormResponseData(formAssignment);
 
-  const assigned =
-    form_type === "organization"
-      ? getAssignedOrgs(target, organizations)
-      : getAssignedUsers(target, organizations, users);
+  const { assigned, emails } = getAssignments(
+    form_type,
+    target,
+    organizations,
+    users
+  );
 
   await fb.batchAddFormResponses(form_type, [formResponseData], assigned);
 
-  return form_type === "user"
-    ? [...assigned]
-    : users
-        .filter(
-          (user) =>
-            user.status === "approved" &&
-            user.role === "champion" &&
-            assigned.has(user.organization)
-        )
-        .map((user) => user.email);
+  return emails;
 };
 
 /**
