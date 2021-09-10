@@ -12,6 +12,8 @@ const store = createStore({
       },
       organizations: [],
       forms: {},
+      users: [],
+      formAssignments: [],
     };
   },
 
@@ -25,28 +27,34 @@ const store = createStore({
   },
 
   actions: {
-    async fetchUser({ commit }, user) {
+    fetchUser({ commit }, user) {
       commit("mutateUser", { property: "authenticated", with: user !== null });
+
+      // always start empty, controlled by ContentWithSidebar
+      commit("mutate", { property: "users", with: [] });
+      commit("mutate", { property: "formAssignments", with: [] });
 
       if (user) {
         commit("mutateUser", {
           property: "data",
           with: user,
         });
-        const formResponses = await fb.getFormResponses(
-          user.email,
-          user.organization
+        fb.getFormResponses(user.email, user.organization).then(
+          (formResponses) => {
+            commit("mutateUser", {
+              property: "formResponses",
+              with: formResponses,
+            });
+          }
         );
-        commit("mutateUser", {
-          property: "formResponses",
-          with: formResponses,
+
+        fb.getForms().then((forms) => {
+          commit("mutate", { property: "forms", with: forms });
         });
-        const forms = await fb.getForms();
-        commit("mutate", { property: "forms", with: forms });
       } else {
         commit("mutateUser", { property: "data", with: null });
         commit("mutateUser", { property: "formResponses", with: [] });
-        commit("mutate", { property: "form", with: {} });
+        commit("mutate", { property: "forms", with: {} });
       }
     },
     fetchAdmin({ commit }, admin) {
@@ -78,6 +86,13 @@ const store = createStore({
 
       return _id;
     },
+    updateUsers({ commit }, users) {
+      commit("mutate", { property: "users", with: users });
+    },
+    async getFormAssignments({ commit }) {
+      const formAssignments = await fb.getCollection("form_assignments");
+      commit("mutate", { property: "formAssignments", with: formAssignments });
+    },
   },
 
   getters: {
@@ -93,6 +108,12 @@ const store = createStore({
       return state.organizations.find(
         (org) => org.name === state.user.data.organization
       ).intervention_arm;
+    },
+    pendingUsers(state) {
+      return state.users.filter((user) => user.status === "pending");
+    },
+    approvedUsers(state) {
+      return state.users.filter((user) => user.status === "approved");
     },
   },
 });

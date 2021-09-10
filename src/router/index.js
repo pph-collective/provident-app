@@ -45,7 +45,6 @@ const routes = [
     path: "/snack",
     name: "Snack",
     beforeEnter: (to) => {
-      console.log(store.state.user);
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       }

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -72,45 +72,25 @@ export default {
   setup() {
     const loading = ref(false);
 
-    const userRequests = ref([]);
     const alert = reactive({ color: "", message: "" });
-    const formAssignments = ref([]);
 
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
+    const userRequests = computed(() => store.getters.pendingUsers);
+    const formAssignments = computed(() => store.state.formAssignments);
 
     const dismissAlert = () => {
       alert.message = "";
     };
 
-    let unsubUserRequests = fb.db
-      .collection("users")
-      .where("status", "==", "pending")
-      .onSnapshot((snapshot) => {
-        userRequests.value = snapshot.docs.map((doc) => {
-          let userRequest = doc.data();
-          return { ...userRequest, id: doc.id };
-        });
-      });
-
     const today = utils.today();
-
-    onMounted(async () => {
-      formAssignments.value = await fb.getCollection("form_assignments");
-    });
-
-    // unsubscribe when leaving this page
-    onUnmounted(unsubUserRequests);
 
     const approve = async (user) => {
       loading.value = true;
 
       try {
         // update request status
-        await fb.db
-          .collection("users")
-          .doc(user.id)
-          .update({ status: "approved" });
+        await fb.updateUser({ email: user.email, status: "approved" });
 
         await formAssignmentUtils.addFormResponsesForUser(
           user,

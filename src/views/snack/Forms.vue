@@ -5,7 +5,7 @@
 
     <div class="panel-tabs" data-cy="panel-tabs">
       <a
-        v-for="tab in tabs"
+        v-for="tab in Object.keys(tabs)"
         :key="tab"
         :class="selectedTab === tab ? 'is-active' : ''"
         @click="selectedTab = tab"
@@ -128,45 +128,31 @@ export default {
     );
     const formResponses = computed(() => {
       if (!user.value.admin) {
-        return user.value.formResponses.filter((f) => {
+        return store.state.user.formResponses.filter((f) => {
           return f.release_date <= today;
         });
       }
 
-      return user.value.formResponses;
+      return store.state.user.formResponses;
     });
 
     const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
-    const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
-    const selectedTab = ref("To Do");
-    const selectedFormResponses = computed(() => {
-      if (selectedTab.value === "All") return formResponses.value;
-
-      return formResponses.value.filter((formResponse) => {
-        if (
-          selectedTab.value === "To Do" &&
-          formResponse.status !== "Submitted" &&
-          (formResponse.type === "user" ||
-            (formResponse.type === "organization" &&
-              userRole.value === "champion"))
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Submitted" &&
-          formResponse.status === "Submitted"
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Organization-level" &&
-          formResponse.type === "organization"
-        ) {
-          return true;
-        }
-
-        return false;
-      });
-    });
+    const tabs = {
+      "To Do": (formResponse) =>
+        formResponse.status !== "Submitted" &&
+        (formResponse.type === "user" ||
+          (formResponse.type === "organization" &&
+            userRole.value === "champion")),
+      All: () => true,
+      Submitted: (formResponse) => formResponse.status === "Submitted",
+      "Organization-level": (formResponse) =>
+        formResponse.type === "organization",
+    };
+    const selectedTab = ref(Object.keys(tabs)[0]);
+    const selectedFormResponses = computed(() =>
+      formResponses.value.filter(tabs[selectedTab.value])
+    );
 
     const today = utils.today();
 

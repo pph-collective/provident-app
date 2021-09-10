@@ -1,6 +1,6 @@
 <template>
   <Loading :loading="loading" />
-  <div class="container">
+  <div class="container form-assignments">
     <div
       v-if="alert.message"
       :class="['notification', 'mt-4', 'is-' + alert.color]"
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -173,18 +173,19 @@ export default {
     ...esc,
   },
   setup() {
-    const loading = ref(false);
-
     const alert = reactive({ color: "", message: "" });
     const closeFormRequest = ref(0);
-    const formAssignments = ref([]);
     const formMessage = ref("");
     const showModal = ref(false);
 
     const store = useStore();
     const forms = computed(() => store.state.forms);
     const organizations = computed(() => store.state.organizations);
-    const users = ref([]);
+    const users = computed(() => store.getters.approvedUsers);
+    const formAssignments = computed(() => store.state.formAssignments);
+    const loading = computed(
+      () => users.value.length === 0 || formAssignments.value.length === 0
+    );
 
     const today = utils.today();
 
@@ -198,11 +199,9 @@ export default {
       All: () => true,
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
-    const selectedFormAssignments = computed(() => {
-      return formAssignments.value.filter((formAssignment) =>
-        tabs[selectedTab.value](formAssignment)
-      );
-    });
+    const selectedFormAssignments = computed(() =>
+      formAssignments.value.filter(tabs[selectedTab.value])
+    );
 
     const dismissAlert = () => {
       alert.message = "";
@@ -299,17 +298,6 @@ export default {
           options: ["Yes, send a notification"],
         },
       ];
-    });
-
-    onMounted(async () => {
-      loading.value = true;
-
-      formAssignments.value = await fb.getCollection("form_assignments");
-      users.value = (await fb.getCollection("users")).filter(
-        (u) => u.status === "approved"
-      );
-
-      loading.value = false;
     });
 
     const createFormAssignment = async ({

@@ -38,9 +38,9 @@ const checkFormAssignedInToDos = (permission, formTitle, should) => {
   cy.logout();
   cy.login_by_permission(permission).then(() => {
     cy.visit("/snack/forms");
+    cy.get('[data-cy="form-panel"]').should("exist");
+    cy.get(".loading-icon").should("not.exist");
   });
-
-  cy.get(".loading-icon").should("not.exist");
 
   cy.contains('[data-cy="forms-panel-block"]', formTitle).should(should);
 
@@ -62,6 +62,7 @@ describe("Form Assignment functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.visit("/admin/form_assignments");
+      cy.get(".form-assignments").should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
   });
@@ -319,6 +320,7 @@ describe("Form Assignment functionality", () => {
     setDatesAndSubmit();
 
     cy.visit("/snack/forms");
+    cy.get('[data-cy="form-panel"]').should("exist");
     cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");

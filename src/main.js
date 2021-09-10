@@ -30,11 +30,7 @@ fb.auth.onAuthStateChanged(async (user) => {
         role,
       });
       let token = await user.getIdTokenResult();
-      if (token.claims && token.claims.admin) {
-        store.dispatch("fetchAdmin", true);
-      } else {
-        store.dispatch("fetchAdmin", false);
-      }
+      store.dispatch("fetchAdmin", token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
       fb.logActivity(user.email, "login");
       return;
