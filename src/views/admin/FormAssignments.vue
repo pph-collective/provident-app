@@ -226,17 +226,9 @@ export default {
         .filter((f) => f.type === "user")
         .map((f) => f._id);
 
-      const userOptions = users.value
-        .map((u) => {
-          return { value: u.email, label: `${u.name} (${u.email})` };
-        })
-        .sort(utils.sortByProperty("label"));
-
-      const organizationOptions = organizations.value
-        .map((org) => org.name)
-        .sort();
-
-      const groups = ["all", "intervention", "control"];
+      const userOptions = store.getters.formUserOptions;
+      const organizationOptions = store.getters.formOrganizationOptions;
+      const groups = formAssignmentUtils.TARGET_GROUPS;
 
       return [
         {

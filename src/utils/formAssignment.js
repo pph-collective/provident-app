@@ -1,5 +1,13 @@
 import fb from "@/firebase";
 
+const TARGET_FILTERS = {
+  all: () => true,
+  intervention: (org) => org.intervention_arm,
+  control: (org) => !org.intervention_arm,
+};
+
+const TARGET_GROUPS = Object.keys(TARGET_FILTERS);
+
 /**
  * Returns a set of organization names filtered by the target
  *
@@ -8,14 +16,8 @@ import fb from "@/firebase";
  * @returns {Set<String>}
  */
 const getAssignedOrgs = (target, organizations) => {
-  const filters = {
-    all: () => true,
-    intervention: (org) => org.intervention_arm,
-    control: (org) => !org.intervention_arm,
-  };
-
   const targetGroupOrgs = organizations
-    .filter((org) => target.groups.some((group) => filters[group](org)))
+    .filter((org) => target.groups.some((group) => TARGET_FILTERS[group](org)))
     .map((o) => o.name);
 
   return new Set([...target.organizations, ...targetGroupOrgs]);
@@ -158,4 +160,6 @@ const addFormResponsesForUser = async (
 export default {
   addFormResponses,
   addFormResponsesForUser,
+  getAssignments,
+  TARGET_GROUPS,
 };

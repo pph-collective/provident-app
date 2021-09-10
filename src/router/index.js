@@ -117,6 +117,11 @@ const routes = [
           route: "form_assignments",
           icon: "fa-file-import",
         },
+        {
+          name: "Emails",
+          route: "email",
+          icon: "fa-paper-plane",
+        },
       ],
     },
     children: [
@@ -144,6 +149,11 @@ const routes = [
           import(
             /* webpackChunkName: "admin" */ "../views/admin/FormAssignments.vue"
           ),
+      },
+      {
+        path: "email",
+        component: () =>
+          import(/* webpackChunkName: "admin" */ "../views/admin/Emails.vue"),
       },
     ],
   },

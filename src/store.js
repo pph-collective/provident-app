@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import fb from "@/firebase.js";
+import utils from "@/utils/utils.js";
 
 const store = createStore({
   state() {
@@ -114,6 +115,16 @@ const store = createStore({
     },
     approvedUsers(state) {
       return state.users.filter((user) => user.status === "approved");
+    },
+    formUserOptions(state) {
+      return state.users
+        .map((u) => {
+          return { value: u.email, label: `${u.name} (${u.email})` };
+        })
+        .sort(utils.sortByProperty("label"));
+    },
+    formOrganizationOptions(state) {
+      return state.organizations.map((org) => org.name).sort();
     },
   },
 });
