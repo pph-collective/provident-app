@@ -375,13 +375,14 @@ export default {
           });
         }
       } catch (err) {
+        console.log(err);
+
         if (formAssignmentData._id) {
           await fb.db
             .collection("form_assignments")
             .doc(formAssignmentData._id)
             .delete();
         }
-        console.log(err);
 
         // only show the form error if the error was with form assignment, not email
         if (showModal.value) {

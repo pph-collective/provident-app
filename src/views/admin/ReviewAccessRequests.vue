@@ -107,7 +107,6 @@ export default {
 
       try {
         // update request status
-        // TODO: emails on approval/denial
         await fb.db
           .collection("users")
           .doc(user.id)
@@ -120,6 +119,12 @@ export default {
           today
         );
 
+        await fb.createEmail({
+          subject: `PROVIDENT Access Approved`,
+          body: `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been approved. <a href='${location.origin}/snack'>Go check out PROVIDENT!</a></p>`,
+          to: [user.email],
+        });
+
         alert.color = "success";
         alert.message = `Success! ${user.email} was approved.`;
       } catch (err) {
@@ -131,14 +136,17 @@ export default {
       loading.value = false;
     };
 
-    const deny = (userRequest) => {
-      fb.db
-        .collection("users")
-        .doc(userRequest.id)
-        .update({ status: "denied" });
+    const deny = async (user) => {
+      await fb.db.collection("users").doc(user.id).update({ status: "denied" });
+
+      await fb.createEmail({
+        subject: "PROVIDENT Access Denied",
+        body: `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been denied. If you believe this is an error, please reach out to <a href='mailto:${process.env.VUE_APP_ADMIN_EMAIL}'>the PROVIDENT admin</a>.</p>`,
+        to: [user.email],
+      });
 
       alert.color = "info";
-      alert.message = `${userRequest.email} was denied.`;
+      alert.message = `${user.email} was denied.`;
     };
 
     return { userRequests, approve, deny, alert, dismissAlert, loading };
