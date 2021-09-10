@@ -366,7 +366,7 @@ export default {
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${formTitle}`,
             body: `<p>A form, <em>${formTitle}</em>, has been assigned to ${
-              form_type === "user" ? "you" : "your organiztion"
+              form_type === "user" ? "you" : "your organization"
             }. Check out the form on <a href='${
               location.origin
             }/snack/forms'>PROVIDENT</a></p>`,
