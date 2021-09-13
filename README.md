@@ -234,3 +234,6 @@ In order for Cypress to access admin firebase commands in test specs, use/create
 ## Email
 
 The admin email is set in the `.env.production` file, if you would like to override this in development create a file with the same keys called `.env.local` and set the email to the value you'd like.  See `email_service/` for more details on sending emails.
+
+## Firestore rules
+In development, you can use the `firestore.rules` file to test edits to the firestore rules against the firebase emulator. Afterwards, you'll want to make your changes live in the production firebase project, `provident-ri`.
