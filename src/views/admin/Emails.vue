@@ -2,7 +2,7 @@
   <Loading :loading="loading" />
   <div class="container">
     <section>
-      <div class="panel is-primary m-4 had-background-white">
+      <div class="panel is-primary m-4 has-background-white">
         <p class="panel-heading">Emails</p>
 
         <div class="panel-block is-block">
@@ -42,72 +42,31 @@
           class="panel-block"
         >
           <div class="form-assignment-row">
-            <div class="level">
+            <div class="level mb-2">
               <div class="level-left">
-                <p class="level-item is-size-5">
+                <p class="level-item is-size-6">
                   <b>
                     {{ email.subject }}
                   </b>
                 </p>
               </div>
               <div class="level-right has-text-centered">
-                <span
-                  class="level-item tag is-success is-light"
-                  data-cy="release-date-tag"
-                  ><p><strong>SEND DATE:</strong> {{ email.sendDate }}</p></span
-                >
+                <PanelTag
+                  :class="['is-' + (email.sent ? 'success' : 'warning')]"
+                  label="send date"
+                  :value="email.sendDate.slice(0, 10)"
+                />
               </div>
             </div>
-            <div class="level">
-              <div class="level-left">
-                <span class="level-item">
-                  <p class="px-4"><b>To:</b></p>
-                </span>
-                <div class="level-item">
-                  <div class="tags has-addons" data-cy="target-tags">
-                    <span
-                      v-for="(address, idx) in email.to"
-                      :key="idx"
-                      class="tag is-info is-rounded is-light"
-                    >
-                      {{ address }}
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div class="is-flex is-flex-wrap-wrap">
+              <span
+                v-for="(address, idx) in email.to"
+                :key="idx"
+                class="tag is-info is-rounded is-light m-1"
+              >
+                {{ address }}
+              </span>
             </div>
-          </div>
-        </div>
-
-        <div
-          v-if="showModal && formQuestions.length > 0"
-          class="modal"
-          :class="{ 'is-active': showModal }"
-          data-cy="form-assignment-modal"
-          v-esc="() => (closeFormRequest += 1)"
-        >
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Create New Form Assignment</p>
-              <button
-                class="delete"
-                aria-label="close"
-                @click="closeFormRequest += 1"
-              ></button>
-            </header>
-            <section class="modal-card-body">
-              <JSONForm
-                v-if="showModal"
-                :init-schema="formQuestions"
-                :init-value="{}"
-                :read-only="false"
-                :showSaveButton="false"
-                :close-request="closeFormRequest"
-                @submitted="createFormAssignment($event)"
-                @close="showModal = false"
-              />
-            </section>
           </div>
         </div>
       </div>
@@ -135,12 +94,28 @@
               :init-schema="formQuestions"
               :init-value="{}"
               :read-only="false"
-              :showSaveButton="false"
+              altButtonLabel="Preview"
               :close-request="closeFormRequest"
-              @submitted="submitEmail($event)"
+              @alt="updatePreview"
+              @submitted="submitEmail"
               @close="showModal = false"
             />
-            <div class="email-preview">TODO: a preview?</div>
+
+            <div class="container is-fluid">
+              <label class="label" for="email-preview">Email preview</label>
+              <p class="help">
+                Note: Styling as the recipient will see it is highly dependent
+                on their email client.
+              </p>
+              <article class="message" id="email-preview">
+                <div class="message-header">
+                  {{ preview.subject }}
+                </div>
+                <div class="message-body">
+                  <div v-html="preview.body" class="content"></div>
+                </div>
+              </article>
+            </div>
           </section>
         </div>
       </div>
@@ -151,18 +126,22 @@
 <script>
 import { computed, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
+import sanitizeHtml from "sanitize-html";
 
 import fb from "@/firebase.js";
 import formAssignmentUtils from "@/utils/formAssignment";
+import utils from "@/utils/utils.js";
 import { esc } from "@/directives/escape";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
+import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     JSONForm,
     Loading,
+    PanelTag,
   },
   directives: {
     ...esc,
@@ -172,6 +151,11 @@ export default {
     const showModal = ref(false);
     const loading = ref(true);
     const closeFormRequest = ref(0);
+    const preview = ref({
+      body: "[body of the email...]",
+      subject: "[subject...]",
+    });
+    const today = utils.today();
 
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
@@ -243,7 +227,7 @@ export default {
           component: "TextArea",
           label: "Body",
           help_text:
-            "HTML body of the email to send (e.g. `<p>Hello <a href='earth.google.com'>World</a></p>`).  See preview below.",
+            "HTML body of the email to send (e.g. `<p>Hello, <a href='earth.google.com'>World</a></p>`).  Click preview button to see preview below.",
           model: "body",
           required: true,
         },
@@ -274,7 +258,7 @@ export default {
       try {
         await fb.createEmail({
           subject,
-          body,
+          body: sanitizeHtml(body),
           to,
           sendDate: send_date,
         });
@@ -284,16 +268,30 @@ export default {
       }
     };
 
+    const updatePreview = ({ body, subject }) => {
+      subject = subject || "No subject";
+      preview.value = { body: sanitizeHtml(body), subject };
+    };
+
     return {
       closeFormRequest,
       formQuestions,
       loading,
+      preview,
       selectedEmails,
       selectedTab,
       showModal,
       submitEmail,
       tabs,
+      today,
+      updatePreview,
     };
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.form-assignment-row {
+  width: 100%;
+}
+</style>

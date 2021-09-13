@@ -12,13 +12,13 @@
             </div>
             <div class="control">
               <button
-                v-if="showSaveButton"
+                v-if="showAltButton"
                 type="button"
                 class="button is-info"
-                :disabled="saveDisabled"
-                @click="$emit('save', cloneDeep(value))"
+                :disabled="!formUpdated"
+                @click="$emit('alt', cloneDeep(value))"
               >
-                Save
+                {{ altButtonLabel }}
               </button>
             </div>
           </div>
@@ -63,12 +63,16 @@ export default {
       type: Number,
       required: true,
     },
-    showSaveButton: {
+    showAltButton: {
       type: Boolean,
       default: true,
     },
+    altButtonLabel: {
+      type: String,
+      default: "Save",
+    },
   },
-  emits: ["save", "submitted", "close"],
+  emits: ["alt", "submitted", "close"],
   setup(props, { emit }) {
     const value = ref({ ...props.initValue });
     useSchemaForm(value);
@@ -94,9 +98,9 @@ export default {
 
     const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
-    const saveDisabled = computed(
+    const formUpdated = computed(
       () =>
-        JSON.stringify({ ...props.initValue }) === JSON.stringify(value.value)
+        JSON.stringify({ ...props.initValue }) !== JSON.stringify(value.value)
     );
 
     const closeDialog =
@@ -108,7 +112,7 @@ export default {
     watch(
       () => props.closeRequest,
       () => {
-        if (!saveDisabled.value) {
+        if (formUpdated.value) {
           const answer = window.confirm(closeDialog);
           if (answer) {
             emit("close");
@@ -120,7 +124,7 @@ export default {
     );
 
     onBeforeRouteLeave((to, from, next) => {
-      if (!saveDisabled.value) {
+      if (formUpdated.value) {
         const answer = window.confirm(closeDialog);
         if (answer) {
           next();
@@ -134,7 +138,7 @@ export default {
       value,
       schema,
       cloneDeep,
-      saveDisabled,
+      formUpdated,
     };
   },
 };

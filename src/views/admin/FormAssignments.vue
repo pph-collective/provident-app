@@ -10,7 +10,7 @@
       {{ alert.message }}
     </div>
     <section>
-      <div class="panel is-primary m-4 had-background-white">
+      <div class="panel is-primary m-4 has-background-white">
         <p class="panel-heading">Form Assignments</p>
 
         <div class="panel-block is-block">
@@ -52,57 +52,49 @@
           data-cy="form-assignment-panel-block"
         >
           <div class="form-assignment-row" data-cy="form-assignment-row">
-            <div class="level">
+            <div class="level mb-2">
               <div class="level-left">
-                <p class="level-item is-size-5">
-                  <b v-if="assignment.form_id in forms" data-cy="form-title">
+                <p
+                  v-if="assignment.form_id in forms"
+                  class="level-item is-size-6"
+                >
+                  <b data-cy="form-title">
                     {{ forms[assignment.form_id].title }}
                   </b>
                 </p>
               </div>
               <div class="level-right has-text-centered">
-                <span
-                  class="level-item tag is-success is-light"
-                  data-cy="release-date-tag"
-                  ><p>
-                    <strong>RELEASE DATE:</strong> {{ assignment.release_date }}
-                  </p></span
-                >
-                <span
-                  class="level-item tag is-danger is-light"
-                  data-cy="expire-date-tag"
-                  ><p>
-                    <strong>EXPIRE DATE:</strong> {{ assignment.expire_date }}
-                  </p></span
-                >
+                <PanelTag
+                  label="release date"
+                  :value="assignment.release_date"
+                  class="is-success"
+                />
+                <PanelTag
+                  label="expire date"
+                  :value="assignment.expire_date"
+                  class="is-danger"
+                />
               </div>
             </div>
-            <div class="level">
-              <div class="level-left">
-                <span class="level-item">
-                  <p class="px-4"><b>Assigned To:</b></p>
-                </span>
-                <div
-                  v-for="(target_list, category) in assignment.target"
-                  :key="category"
-                  class="level-item"
-                >
-                  <div
-                    v-if="target_list.length > 0"
-                    class="tags has-addons"
-                    data-cy="target-tags"
+            <div class="is-flex is-flex-wrap-wrap">
+              <div
+                v-for="(target_list, category) in nonEmptyVals(
+                  assignment.target
+                )"
+                :key="category"
+                class="m-1"
+              >
+                <div class="tags has-addons" data-cy="target-tags">
+                  <span class="tag is-primary is-rounded">
+                    <b>{{ category }}</b>
+                  </span>
+                  <span
+                    v-for="(target, idx) in target_list"
+                    :key="idx"
+                    class="tag is-info is-rounded is-light"
                   >
-                    <span class="tag is-primary is-rounded">
-                      <b>{{ category }}</b>
-                    </span>
-                    <span
-                      v-for="(target, idx) in target_list"
-                      :key="idx"
-                      class="tag is-info is-rounded is-light"
-                    >
-                      {{ target }}
-                    </span>
-                  </div>
+                    {{ target }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -132,7 +124,7 @@
                 :init-schema="formQuestions"
                 :init-value="{}"
                 :read-only="false"
-                :showSaveButton="false"
+                :showAltButton="false"
                 :close-request="closeFormRequest"
                 @submitted="createFormAssignment($event)"
                 @close="showModal = false"
@@ -163,11 +155,13 @@ import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
+import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     JSONForm,
     Loading,
+    PanelTag,
   },
   directives: {
     ...esc,
@@ -374,6 +368,19 @@ export default {
       loading.value = false;
     };
 
+    const nonEmptyVals = (obj) => {
+      const res = {};
+      if (obj) {
+        for (const [k, v] of Object.entries(obj)) {
+          if (v.length > 0) {
+            res[k] = v;
+          }
+        }
+      }
+
+      return res;
+    };
+
     return {
       alert,
       closeFormRequest,
@@ -384,6 +391,7 @@ export default {
       formQuestions,
       forms,
       loading,
+      nonEmptyVals,
       selectedFormAssignments,
       selectedTab,
       showModal,

@@ -29,7 +29,7 @@
               "
               :init-value="formResponse.response"
               :close-request="closeFormRequest"
-              @save="updateFormResponse($event, 'Draft')"
+              @alt="updateFormResponse($event, 'Draft')"
               @submitted="updateFormResponse($event, 'Submitted')"
               @close="closeForm"
             />
