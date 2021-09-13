@@ -46,7 +46,7 @@ const checkFormAssignedInToDos = (permission, formTitle, should) => {
 
   if (should === "exist") {
     cy.contains('[data-cy="forms-panel-block"]', formTitle)
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', formTitle)
@@ -72,15 +72,15 @@ describe("Form Assignment functionality", () => {
     cy.get('[data-cy="create-button"]').should("exist");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="release-date-tag"]')
+      .find(".tag")
       .should("contain", "2021-05-21");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="expire-date-tag"]')
+      .find(".tag")
       .should("contain", "3000-09-09");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="target-tags"]')
+      .find(".tags")
       .should("contain", "users")
       .should("contain", "admin@admin.com")
       .should("contain", "user@user.com")
@@ -235,7 +235,7 @@ describe("Form Assignment functionality", () => {
       '[data-cy="form-assignment-panel-block"]',
       "Organization Assigned Form"
     )
-      .find('[data-cy="expire-date-tag"]')
+      .find(".tag")
       .should("contain", "3000-01-01");
 
     // Admin is in the control group
@@ -334,7 +334,7 @@ describe("Form Assignment functionality", () => {
     ).should("have.length", 1);
 
     cy.contains('[data-cy="forms-panel-block"]', "User Assigned Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     checkFormAssignedInToDos("approved", "User Assigned Form", "exist");

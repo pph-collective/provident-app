@@ -33,6 +33,7 @@ fb.auth.onAuthStateChanged(async (user) => {
       store.dispatch("fetchAdmin", token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
       fb.logActivity(user.email, "login");
+      store.dispatch("setLoaded");
       return;
     }
   }
@@ -40,6 +41,7 @@ fb.auth.onAuthStateChanged(async (user) => {
   // fallthrough
   store.dispatch("fetchUser", null);
   store.dispatch("fetchAdmin", false);
+  store.dispatch("setLoaded");
 });
 
 createApp(App)

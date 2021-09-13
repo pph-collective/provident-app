@@ -16,7 +16,7 @@ describe("Form functionality", () => {
       "not.contain",
       "No forms here"
     );
-    cy.get('[data-cy="status-tag"]').should("contain", "Not Started");
+    cy.get(".tag").should("contain", "Not Started");
   });
 
   it("Launch form button", () => {
@@ -35,7 +35,7 @@ describe("Form functionality", () => {
     );
 
     cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "My Form")
@@ -54,7 +54,7 @@ describe("Form functionality", () => {
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="close-form"]').click();
     cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
   });
 
@@ -67,11 +67,11 @@ describe("Form functionality", () => {
       cy.get(".loading-icon").should("not.exist");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Not Started");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Not Started");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
@@ -204,7 +204,7 @@ describe("Form functionality", () => {
 
       // Check form status
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Submitted");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
@@ -318,7 +318,7 @@ describe("Form functionality", () => {
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
         .should("exist")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Submitted");
 
       // Review form
@@ -343,7 +343,7 @@ describe("Form functionality", () => {
       );
 
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Not Started");
 
       // Click to launch the Simple Form
@@ -421,7 +421,7 @@ describe("Form functionality", () => {
 
       // Assert Status: Draft
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Draft");
 
       // Reopen
@@ -455,7 +455,7 @@ describe("Form functionality", () => {
 
       // Check form
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Submitted");
 
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
@@ -479,7 +479,7 @@ describe("Form functionality", () => {
 
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
         .should("exist")
-        .find('[data-cy="status-tag"]')
+        .find(".tag")
         .should("contain", "Submitted");
 
       // Review form
@@ -504,9 +504,7 @@ describe("Forms viewed as an admin", () => {
       "not.contain",
       "No forms here"
     );
-    cy.get('[data-cy="release-date-tag"]')
-      .should("exist")
-      .should("contain", "2021-05-21");
+    cy.get(".tag").should("exist").should("contain", "2021-05-21");
   });
 
   it("Unreleased form is viewable as an admin", () => {
@@ -517,7 +515,7 @@ describe("Forms viewed as an admin", () => {
     );
 
     cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     // Click to launch the Simple Form
@@ -547,18 +545,18 @@ describe("Forms viewed as a user", () => {
   });
 
   it("Release date is not viewable as a user", () => {
-    cy.get('[data-cy="release-date-tag"]').should("not.exist");
+    cy.get(".tag").should("not.exist");
   });
 
   it("Released forms should be viewable and see status", () => {
     cy.contains('[data-cy="forms-panel-block"]', "My Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
   });
 
@@ -587,7 +585,7 @@ describe("Forms viewed as a user", () => {
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -620,7 +618,7 @@ describe("Forms viewed as a champion", () => {
     // wait for status tag to load before trying to launch the form
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -633,7 +631,7 @@ describe("Forms viewed as a champion", () => {
     // wait for status tag to load before trying to launch the form
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -668,7 +666,7 @@ describe("Forms viewed as a champion", () => {
 
     // Assert Status: Draft
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Draft");
 
     // Reopen
@@ -698,7 +696,7 @@ describe("Forms viewed as a champion", () => {
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Draft");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -717,7 +715,7 @@ describe("Forms viewed as a champion", () => {
     // wait for status tag to load before trying to launch the form
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -749,7 +747,7 @@ describe("Forms viewed as a champion", () => {
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Submitted");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
@@ -779,7 +777,7 @@ describe("Forms viewed as a champion", () => {
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Submitted");
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")

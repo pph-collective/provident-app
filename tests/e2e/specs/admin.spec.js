@@ -34,6 +34,14 @@ describe("Admin Views and Powers", () => {
       .should("exist")
       .should("contain", `Success! ${ACCOUNTS.pending.email} was approved`);
 
+    cy.get('a[href="/admin/email"]').click();
+    cy.get(".loading-icon").should("not.exist");
+
+    cy.get(".email-row .level-item").should(
+      "contain",
+      "TEST: PROVIDENT Access Approved"
+    );
+
     // Try to log in
     cy.logout();
     cy.visit("/login");
@@ -43,7 +51,9 @@ describe("Admin Views and Powers", () => {
     cy.get("a").contains("Log Out").should("exist");
 
     // Navigate to forms, there should be an assigned form
-    cy.visit("/snack/forms");
+    cy.get("a.navbar-item").contains("Snack").click();
+    cy.get("a[href='/snack/forms']").click();
+    cy.get(".snack-content").should("exist");
     cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
@@ -57,7 +67,7 @@ describe("Admin Views and Powers", () => {
 
     cy.get('[data-cy="forms-panel-block"]:contains("Simple Form")')
       .should("have.length", 1)
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
@@ -113,5 +123,52 @@ describe("Admin Views and Powers", () => {
       .should("have.length", 1)
       .find("td")
       .should("contain", "No users found");
+  });
+
+  describe("emails", () => {
+    beforeEach(() => {
+      cy.get('a[href="/admin/email"]').click();
+      cy.get(".loading-icon").should("not.exist");
+    });
+
+    it("has no emails to start", () => {
+      cy.get(".panel-block").should("contain", "No emails here");
+    });
+
+    it("can compose an email", () => {
+      cy.get("button#compose-button").click();
+      cy.get(".modal-card-title").should("contain", "Compose Email");
+      cy.get("[model='target_groups']")
+        .find(".multiselect")
+        .click()
+        .contains(".multiselect-option", "control")
+        .click();
+      cy.get("[model='send_date']").find("input").type("2021-12-12");
+      cy.get("[model='subject']").find("input").type("A test email");
+      cy.get("[model='body']").find("textarea").type("<p>Hello, world</p>");
+
+      cy.get("#email-preview .message-header").should("contain", "subject");
+      cy.get("#email-preview .message-body").should(
+        "contain",
+        "body of the email"
+      );
+
+      cy.get("button").contains("Preview").click();
+
+      cy.get("#email-preview .message-header").should(
+        "contain",
+        "A test email"
+      );
+      cy.get("#email-preview .message-body").should("contain", "Hello, world");
+
+      cy.get("button").contains("Submit").click();
+
+      cy.get(".email-row").contains("A test email").should("exist");
+      cy.get(".email-row").contains("span", "2021-12-12").should("exist");
+      cy.get(".email-row")
+        .find(".tag")
+        .should("have.length", 3)
+        .should("contain", "admin@admin.com");
+    });
   });
 });

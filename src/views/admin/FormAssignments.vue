@@ -84,7 +84,7 @@
                 :key="category"
                 class="m-1"
               >
-                <div class="tags has-addons" data-cy="target-tags">
+                <div class="tags has-addons">
                   <span class="tag is-primary is-rounded">
                     <b>{{ category }}</b>
                   </span>

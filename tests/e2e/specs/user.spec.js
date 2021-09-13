@@ -38,7 +38,7 @@ describe("User Views", () => {
   });
 
   it("navigating to /snack shouldn't ask to log in", () => {
-    cy.visit("/snack");
+    cy.get("a.navbar-item").contains("Snack").click();
     cy.contains("h1", "Log In").should("not.exist");
   });
 });

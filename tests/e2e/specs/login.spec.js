@@ -47,8 +47,8 @@ describe("Log In View", () => {
   it("Navigates to / on successful login", () => {
     cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
-    cy.url().should("eq", Cypress.config().baseUrl);
     cy.get("a").contains("Log Out").should("exist");
+    cy.url().should("eq", Cypress.config().baseUrl);
   });
 
   it("Logging in as a user that is still pending approval", () => {

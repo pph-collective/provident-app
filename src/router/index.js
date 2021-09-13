@@ -3,6 +3,10 @@ import Home from "../views/Home.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar";
 import store from "@/store";
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const routes = [
   {
     path: "/",
@@ -12,7 +16,7 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    beforeEnter: (to, from) => {
+    beforeEnter: async (to, from) => {
       if (!to.query.redirect && from.name !== "ResetPassword") {
         return { path: to.path, query: { redirect: from.path } };
       }
@@ -172,6 +176,12 @@ const router = createRouter({
       return { top: 0, behavior: "smooth" };
     }
   },
+});
+
+router.beforeEach(async () => {
+  while (!store.state.loaded) {
+    await sleep(20);
+  }
 });
 
 export default router;

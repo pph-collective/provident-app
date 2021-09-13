@@ -9,8 +9,8 @@
           <div class="columns">
             <span class="column has-text-centered">
               <button
+                id="compose-button"
                 class="button is-primary"
-                data-cy="create-button"
                 @click="showModal = true"
               >
                 + Compose
@@ -41,7 +41,7 @@
           :key="'email-' + idx"
           class="panel-block"
         >
-          <div class="form-assignment-row">
+          <div class="email-row">
             <div class="level mb-2">
               <div class="level-left">
                 <p class="level-item is-size-6">
@@ -75,7 +75,6 @@
         v-if="showModal && formQuestions.length > 0"
         class="modal"
         :class="{ 'is-active': showModal }"
-        data-cy="form-assignment-modal"
         v-esc="() => (closeFormRequest += 1)"
       >
         <div class="modal-background"></div>
@@ -291,7 +290,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-assignment-row {
+.email-row {
   width: 100%;
 }
 </style>

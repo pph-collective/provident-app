@@ -15,6 +15,7 @@ const store = createStore({
       forms: {},
       users: [],
       formAssignments: [],
+      loaded: false,
     };
   },
 
@@ -93,6 +94,9 @@ const store = createStore({
     async getFormAssignments({ commit }) {
       const formAssignments = await fb.getCollection("form_assignments");
       commit("mutate", { property: "formAssignments", with: formAssignments });
+    },
+    setLoaded({ commit }) {
+      commit("mutate", { property: "loaded", with: true });
     },
   },
 
