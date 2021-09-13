@@ -296,6 +296,7 @@ export default {
           help_text:
             "Send an email to targeted users on the release date notifying them of this form.",
           model: "send_email",
+          default: [],
           options: ["Yes, send a notification"],
         },
       ];
