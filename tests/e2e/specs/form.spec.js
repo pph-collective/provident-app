@@ -185,6 +185,35 @@ describe("Form functionality", () => {
         .find('[data-label="Rarely"]')
         .click();
 
+      // SAVE
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.enabled")
+        .click();
+
+      // CLOSE
+      cy.get('[data-cy="close-form"]').click();
+
+      // REOPEN
+      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+        .find('[data-cy="launch-form-button"]')
+        .click();
+
+      // Change answer!
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Rarely"]')
+        .click();
+
+      // SAVE
+      cy.get('[data-cy="active-form-modal"]')
+        .find("button")
+        .contains("Save")
+        .should("be.enabled")
+        .click();
+
       // Submit the form
       cy.get('[data-cy="active-form-modal"]')
         .find("button")
@@ -293,6 +322,12 @@ describe("Form functionality", () => {
         .find("tr")
         .eq(1)
         .find('[data-label="Never"] > input')
+        .should("not.be.checked");
+
+      cy.get('[model="likert_scale_activities"]')
+        .find("tr")
+        .eq(1)
+        .find('[data-label="Rarely"] > input')
         .should("be.checked");
 
       cy.get('[model="likert_scale_activities"]')
