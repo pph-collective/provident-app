@@ -20,7 +20,7 @@ describe("Log In View", () => {
 
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
-    cy.get("[daya-cy='home']").click();
+    cy.get("[data-cy='home']").click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -31,7 +31,7 @@ describe("Log In View", () => {
 
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
-    cy.get("[daya-cy='home']").click();
+    cy.get("[data-cy='home']").click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -68,7 +68,7 @@ describe("Log In View", () => {
   });
 
   it("Redirect back to previous page prior to logging in after login", () => {
-    cy.get("[daya-cy='snack']").click();
+    cy.get("[data-cy='snack']").click();
 
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
