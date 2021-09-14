@@ -74,7 +74,9 @@ export default {
   },
   emits: ["alt", "submitted", "close"],
   setup(props, { emit }) {
-    const value = ref({ ...props.initValue });
+    const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
+
+    const value = ref(cloneDeep(props.initValue));
     useSchemaForm(value);
 
     const schema = ref([...props.initSchema]);
@@ -95,8 +97,6 @@ export default {
       });
     };
     evalSchema(schema.value, yup);
-
-    const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
     const formUpdated = computed(
       () =>
