@@ -187,11 +187,10 @@ describe("Reset Password Page", () => {
 
     // Assert redirected home
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get('[data-cy="logout-button"]').should("exist");
+    cy.get('[data-cy="logout-button"]').should("exist").click();
 
     // Log out and try to sign in with old password
-    cy.logout();
-    cy.visit("/login");
+    cy.get("a").contains("Log In").click();
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 

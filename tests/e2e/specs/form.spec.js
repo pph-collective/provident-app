@@ -580,7 +580,7 @@ describe("Forms viewed as a user", () => {
   });
 
   it("Release date is not viewable as a user", () => {
-    cy.get(".tag").should("not.exist");
+    cy.get(".tag").contains("RELEASE DATE").should("not.exist");
   });
 
   it("Released forms should be viewable and see status", () => {
