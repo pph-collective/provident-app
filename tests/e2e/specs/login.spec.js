@@ -73,8 +73,6 @@ describe("Log In View", () => {
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/snack");
-    });
+    cy.url().should("eq", `${Cypress.config().baseUrl}snack`);
   });
 });
