@@ -19,6 +19,15 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 
 // Runs prior to every test across all files
 beforeEach(() => {
+  cy.get("body").then(($body) => {
+    if (
+      $body.find("[data-cy='logout-button']").length === 0 &&
+      $body.find("[data-cy='login-button']").length === 0
+    ) {
+      cy.visit("/");
+    }
+  });
+
   cy.logout();
 
   // Reset auth
@@ -32,17 +41,6 @@ beforeEach(() => {
   // Reset database
   cy.task("db:teardown");
   cy.task("db:seed");
-
-  // cy.wait(500); // wait a half beat for db to catch up
-  //
-  // cy.get("body").then(($body) => {
-  //   if (
-  //     $body.find("[data-cy='logout-button']").length === 0 &&
-  //     $body.find("[data-cy='login-button']").length === 0
-  //   ) {
-  //     cy.visit("/");
-  //   }
-  // });
 });
 
 // afterEach(() => {

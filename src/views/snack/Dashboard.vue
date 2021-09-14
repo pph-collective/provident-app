@@ -110,7 +110,6 @@ export default {
   },
   setup() {
     const store = useStore();
-    // const user = computed(() => store.state.user);
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
     );
