@@ -20,6 +20,8 @@ import FormTextInput from "@/components/form/TextInput";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
+  await store.dispatch("fetchOrgs");
+
   if (user) {
     const { status, organization, role } = await fb.getUserRequest(user.email);
     if (status === "approved") {

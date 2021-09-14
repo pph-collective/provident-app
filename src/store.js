@@ -62,9 +62,11 @@ const store = createStore({
     fetchAdmin({ commit }, admin) {
       commit("mutateUser", { property: "admin", with: admin });
     },
-    async fetchOrgs({ commit }) {
-      const orgs = await fb.getCollection("organizations");
-      commit("mutate", { property: "organizations", with: orgs });
+    async fetchOrgs({ commit, state }) {
+      if (state.organizations.length === 0) {
+        const orgs = await fb.getCollection("organizations");
+        commit("mutate", { property: "organizations", with: orgs });
+      }
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
       const _id = await fb.updateFormResponse(updatedFormResponse, {

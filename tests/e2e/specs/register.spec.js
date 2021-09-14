@@ -2,7 +2,7 @@ describe("Register User", () => {
   beforeEach(() => {
     cy.task("auth:deleteUserByEmail", "register@register.com");
     cy.get("[data-cy='login-button']").click();
-    cy.get("[data-cy='request-access-buton']").click();
+    cy.get("[data-cy='request-access-button']").click();
   });
 
   it("Request Access Header", () => {

@@ -175,9 +175,7 @@ export default {
     const showTerms = ref(false);
 
     const store = useStore();
-    const organizations = computed(() =>
-      store.state.organizations.map((org) => org.name)
-    );
+    const organizations = computed(() => store.getters.formOrganizationOptions);
 
     const formValid = computed(() => {
       // all fields must be filled in
@@ -220,21 +218,22 @@ export default {
         error.value = err.message;
       }
 
-      try {
-        await fb.createEmail({
-          subject: "PROVIDENT User Request",
-          body: `<p>${form.name} has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
-          to: [process.env.VUE_APP_ADMIN_EMAIL],
-        });
-        await fb.createEmail({
-          subject: "PROVIDENT Access Request",
-          body: `<p>Hello ${form.name},</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${process.env.VUE_APP_ADMIN_EMAIL}'>the PROVIDENT admin</a>.</p>`,
-          to: [form.email],
-        });
-      } catch (e) {
-        console.log(e);
+      if (requested.value) {
+        try {
+          await fb.createEmail({
+            subject: "PROVIDENT User Request",
+            body: `<p>${form.name} has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
+            to: [process.env.VUE_APP_ADMIN_EMAIL],
+          });
+          await fb.createEmail({
+            subject: "PROVIDENT Access Request",
+            body: `<p>Hello ${form.name},</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${process.env.VUE_APP_ADMIN_EMAIL}'>the PROVIDENT admin</a>.</p>`,
+            to: [form.email],
+          });
+        } catch (e) {
+          console.log(e);
+        }
       }
-
       await fb.logout();
     };
 

@@ -39,6 +39,9 @@ Cypress.Commands.add("logout", () => {
       cy.get("a").contains("Log Out", { timeout: 200 }).click();
       cy.url().should("eq", Cypress.config().baseUrl);
     } else if ($body.find("[data-cy='login-button']").length) {
+      cy.get("[data-cy='home']").click();
+    } else {
+      // shouldn't ever hit here
       cy.visit("/");
     }
   });
