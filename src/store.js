@@ -29,7 +29,7 @@ const store = createStore({
   },
 
   actions: {
-    fetchUser({ commit }, user) {
+    fetchUser({ commit, dispatch }, user) {
       commit("mutateUser", { property: "authenticated", with: user !== null });
 
       // always start empty, controlled by ContentWithSidebar
@@ -41,14 +41,7 @@ const store = createStore({
           property: "data",
           with: user,
         });
-        fb.getFormResponses(user.email, user.organization).then(
-          (formResponses) => {
-            commit("mutateUser", {
-              property: "formResponses",
-              with: formResponses,
-            });
-          }
-        );
+        dispatch("updateUserFormResponses");
 
         fb.getForms().then((forms) => {
           commit("mutate", { property: "forms", with: forms });
@@ -58,6 +51,16 @@ const store = createStore({
         commit("mutateUser", { property: "formResponses", with: [] });
         commit("mutate", { property: "forms", with: {} });
       }
+    },
+    async updateUserFormResponses({ commit, state }) {
+      const formResponses = await fb.getFormResponses(
+        state.user.data.email,
+        state.user.data.organization
+      );
+      commit("mutateUser", {
+        property: "formResponses",
+        with: formResponses,
+      });
     },
     fetchAdmin({ commit }, admin) {
       commit("mutateUser", { property: "admin", with: admin });

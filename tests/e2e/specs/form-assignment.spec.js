@@ -56,6 +56,8 @@ const checkFormAssignedInToDos = (permission, formTitle, should) => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="active-form-title"]').should("contain", formTitle);
+
+    cy.get('[aria-label="close"]').click();
   }
 };
 
@@ -120,6 +122,8 @@ describe("Form Assignment functionality", () => {
       "have.class",
       "is-active"
     );
+
+    cy.get('[aria-label="close"]').click();
   });
 
   it("Assign Organization Form to All", () => {

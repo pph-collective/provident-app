@@ -328,6 +328,11 @@ export default {
         // Update the page
         formAssignments.value.unshift(formAssignmentData);
 
+        // assigned form to self
+        if (emails.includes(store.state.user.data.email)) {
+          await store.dispatch("updateUserFormResponses");
+        }
+
         showModal.value = false;
         alert.color = "success";
         alert.message = "form assignment added";
