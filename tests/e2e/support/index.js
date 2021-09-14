@@ -42,7 +42,3 @@ beforeEach(() => {
   cy.task("db:teardown");
   cy.task("db:seed");
 });
-
-// afterEach(() => {
-//   cy.logout();
-// });
