@@ -3,7 +3,7 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 describe("Admin Views and Powers", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
-    cy.visit("/admin");
+    cy.get("[data-cy='admin']").click();
   });
 
   it("navigation bar to /admin", () => {
@@ -44,7 +44,7 @@ describe("Admin Views and Powers", () => {
 
     // Try to log in
     cy.logout();
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
     cy.get('[type="email"]').type(ACCOUNTS.pending.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.pending.password}{enter}`);
     cy.url().should("eq", Cypress.config().baseUrl);
@@ -76,6 +76,7 @@ describe("Admin Views and Powers", () => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="active-form-title"]').should("contain", "Simple Form");
+    cy.get("textarea").type("{esc}");
   });
 
   it("Denying a user", () => {
@@ -89,7 +90,7 @@ describe("Admin Views and Powers", () => {
 
     // Try to log in as the denied user
     cy.logout();
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
     cy.get('[type="email"]').type(ACCOUNTS.pending.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.pending.password}{enter}`);
     cy.get('[data-cy="error-message"]')

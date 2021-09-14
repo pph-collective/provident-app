@@ -1,7 +1,8 @@
 describe("Register User", () => {
   beforeEach(() => {
     cy.task("auth:deleteUserByEmail", "register@register.com");
-    cy.visit("/register");
+    cy.get("[daya-cy='login-button']").click();
+    cy.get("[data-cy='request-access-buton']").click();
   });
 
   it("Request Access Header", () => {
@@ -28,7 +29,7 @@ describe("Register User", () => {
       .contains("Your request has been received.");
 
     // Try to log in
-    cy.visit("/login");
+    cy.get("[daya-cy='login-button']").click();
     cy.get('[type="email"]').type("register@register.com");
     cy.get('[type="password"]').type("register-password{enter}");
     cy.get('[data-cy="error-message"]')

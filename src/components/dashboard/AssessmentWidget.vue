@@ -96,7 +96,7 @@ export default {
         geoidQuestion.readOnly = true;
       }
 
-      return form;
+      return form ?? {};
     });
 
     const completedAssessments = computed(() => {

@@ -19,7 +19,14 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 
 // Runs prior to every test across all files
 beforeEach(() => {
-  cy.logout();
+  cy.get("body").then(($body) => {
+    if (
+      $body.find("[data-cy='logout-button']").length === 0 &&
+      $body.find("[data-cy='login-button']").length === 0
+    ) {
+      cy.visit("/");
+    }
+  });
 
   // Reset auth
   // Currently only resets the password for approved user since it is altered in reset-password.spec.js
@@ -32,4 +39,8 @@ beforeEach(() => {
   // Reset database
   cy.task("db:teardown");
   cy.task("db:seed");
+});
+
+afterEach(() => {
+  cy.logout();
 });

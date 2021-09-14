@@ -53,6 +53,7 @@
           <button
             class="button is-light"
             type="button"
+            data-cy="request-access-button"
             @click="$router.push('/register')"
           >
             Request Access

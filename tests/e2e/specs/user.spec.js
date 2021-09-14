@@ -1,7 +1,6 @@
 describe("User Views", () => {
   beforeEach(() => {
     cy.login_by_permission("approved");
-    cy.visit("/");
   });
 
   it("log out button exists", () => {

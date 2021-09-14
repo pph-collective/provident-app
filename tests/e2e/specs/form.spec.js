@@ -1,7 +1,8 @@
 describe("Form functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -62,7 +63,8 @@ describe("Form functionality", () => {
     cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
@@ -367,7 +369,8 @@ describe("Form functionality", () => {
     cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
@@ -528,7 +531,8 @@ describe("Form functionality", () => {
 describe("Forms viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -563,13 +567,16 @@ describe("Forms viewed as an admin", () => {
       "contain",
       "Unreleased Form"
     );
+
+    cy.get('[data-cy="close-form"]').click();
   });
 });
 
 describe("Forms viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("approved").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -632,13 +639,16 @@ describe("Forms viewed as a user", () => {
       .find("textarea")
       .should("exist")
       .should("be.disabled");
+
+    cy.get('[data-cy="close-form"]').click();
   });
 });
 
 describe("Forms viewed as a champion", () => {
   beforeEach(() => {
     cy.login_by_permission("champion").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -715,10 +725,13 @@ describe("Forms viewed as a champion", () => {
       .find("textarea")
       .should("have.value", "water");
 
+    cy.get('[data-cy="close-form"]').click();
+
     // Log out and log in as a user
     cy.logout();
     cy.login_by_permission("approved").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -744,6 +757,8 @@ describe("Forms viewed as a champion", () => {
       .should("exist")
       .should("be.disabled")
       .should("have.value", "water");
+
+    cy.get('[data-cy="close-form"]').click();
   });
 
   it("Submitting an organization-level form", () => {
@@ -796,10 +811,13 @@ describe("Forms viewed as a champion", () => {
       .should("be.disabled")
       .should("have.value", "water");
 
+    cy.get('[data-cy="close-form"]').click();
+
     // Log out and log in as a user to view the form
     cy.logout();
     cy.login_by_permission("approved").then(() => {
-      cy.visit("/snack/forms");
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -825,5 +843,7 @@ describe("Forms viewed as a champion", () => {
       .should("exist")
       .should("be.disabled")
       .should("have.value", "water");
+
+    cy.get('[data-cy="close-form"]').click();
   });
 });

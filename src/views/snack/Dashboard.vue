@@ -110,7 +110,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const user = computed(() => store.state.user);
+    // const user = computed(() => store.state.user);
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
     );
@@ -137,14 +137,17 @@ export default {
         }
       });
       towns.sort(utils.sortByProperty("name"));
-      if (user.value.admin) {
+      if (store.state.user.admin) {
         return [ri, ...orgs, ...towns];
-      } else {
+      } else if (store.state.user.data) {
         return [
-          orgs.find((o) => o.name === user.value.data.organization),
+          orgs.find((o) => o.name === store.state.user.data.organization),
           ri,
           ...towns,
         ];
+      } else {
+        // shouldn't hit here in reality
+        return [ri, ...towns];
       }
     });
 
