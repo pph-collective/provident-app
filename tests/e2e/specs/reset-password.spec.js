@@ -2,7 +2,7 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 
 describe("Login Page: Requesting an email to reset password", () => {
   beforeEach(() => {
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
   });
 
   it("Submit empty form to reset password", () => {
@@ -98,7 +98,7 @@ describe("Login Page: Requesting an email to reset password", () => {
 
 describe("Reset Password Page", () => {
   beforeEach(() => {
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
 
     // Intercept the password email reset request
     cy.intercept(
@@ -135,7 +135,7 @@ describe("Reset Password Page", () => {
   });
 
   it("Log in with old password before reset", () => {
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
@@ -187,11 +187,10 @@ describe("Reset Password Page", () => {
 
     // Assert redirected home
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get('[data-cy="logout-button"]').should("exist");
+    cy.get('[data-cy="logout-button"]').should("exist").click();
 
     // Log out and try to sign in with old password
-    cy.logout();
-    cy.visit("/login");
+    cy.get("[data-cy='login-button']").click();
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 

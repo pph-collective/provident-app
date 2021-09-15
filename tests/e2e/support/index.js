@@ -19,6 +19,15 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 
 // Runs prior to every test across all files
 beforeEach(() => {
+  cy.get("body").then(($body) => {
+    if (
+      $body.find("[data-cy='logout-button']").length === 0 &&
+      $body.find("[data-cy='login-button']").length === 0
+    ) {
+      cy.visit("/");
+    }
+  });
+
   cy.logout();
 
   // Reset auth

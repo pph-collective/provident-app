@@ -139,7 +139,7 @@ const batchAddFormResponses = async (form_type, formResponses, assigned) => {
     }
   }
 
-  return writeBatch.commit();
+  await writeBatch.commit();
 };
 
 const updateFormResponse = async (formResponse, { email, organization }) => {

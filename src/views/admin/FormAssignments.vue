@@ -1,6 +1,6 @@
 <template>
   <Loading :loading="loading" />
-  <div class="container">
+  <div class="container form-assignments">
     <div
       v-if="alert.message"
       :class="['notification', 'mt-4', 'is-' + alert.color]"
@@ -10,7 +10,7 @@
       {{ alert.message }}
     </div>
     <section>
-      <div class="panel is-primary m-4 had-background-white">
+      <div class="panel is-primary m-4 has-background-white">
         <p class="panel-heading">Form Assignments</p>
 
         <div class="panel-block is-block">
@@ -52,57 +52,49 @@
           data-cy="form-assignment-panel-block"
         >
           <div class="form-assignment-row" data-cy="form-assignment-row">
-            <div class="level">
+            <div class="level mb-2">
               <div class="level-left">
-                <p class="level-item is-size-5">
-                  <b v-if="assignment.form_id in forms" data-cy="form-title">
+                <p
+                  v-if="assignment.form_id in forms"
+                  class="level-item is-size-6"
+                >
+                  <b data-cy="form-title">
                     {{ forms[assignment.form_id].title }}
                   </b>
                 </p>
               </div>
               <div class="level-right has-text-centered">
-                <span
-                  class="level-item tag is-success is-light"
-                  data-cy="release-date-tag"
-                  ><p>
-                    <strong>RELEASE DATE:</strong> {{ assignment.release_date }}
-                  </p></span
-                >
-                <span
-                  class="level-item tag is-danger is-light"
-                  data-cy="expire-date-tag"
-                  ><p>
-                    <strong>EXPIRE DATE:</strong> {{ assignment.expire_date }}
-                  </p></span
-                >
+                <PanelTag
+                  label="release date"
+                  :value="assignment.release_date"
+                  class="is-success"
+                />
+                <PanelTag
+                  label="expire date"
+                  :value="assignment.expire_date"
+                  class="is-danger"
+                />
               </div>
             </div>
-            <div class="level">
-              <div class="level-left">
-                <span class="level-item">
-                  <p class="px-4"><b>Assigned To:</b></p>
-                </span>
-                <div
-                  v-for="(target_list, category) in assignment.target"
-                  :key="category"
-                  class="level-item"
-                >
-                  <div
-                    v-if="target_list.length > 0"
-                    class="tags has-addons"
-                    data-cy="target-tags"
+            <div class="is-flex is-flex-wrap-wrap">
+              <div
+                v-for="(target_list, category) in nonEmptyVals(
+                  assignment.target
+                )"
+                :key="category"
+                class="m-1"
+              >
+                <div class="tags has-addons">
+                  <span class="tag is-primary is-rounded">
+                    <b>{{ category }}</b>
+                  </span>
+                  <span
+                    v-for="(target, idx) in target_list"
+                    :key="idx"
+                    class="tag is-info is-rounded is-light"
                   >
-                    <span class="tag is-primary is-rounded">
-                      <b>{{ category }}</b>
-                    </span>
-                    <span
-                      v-for="(target, idx) in target_list"
-                      :key="idx"
-                      class="tag is-info is-rounded is-light"
-                    >
-                      {{ target }}
-                    </span>
-                  </div>
+                    {{ target }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -132,7 +124,7 @@
                 :init-schema="formQuestions"
                 :init-value="{}"
                 :read-only="false"
-                :showSaveButton="false"
+                :showAltButton="false"
                 :close-request="closeFormRequest"
                 @submitted="createFormAssignment($event)"
                 @close="showModal = false"
@@ -153,7 +145,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -163,28 +155,31 @@ import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
+import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     JSONForm,
     Loading,
+    PanelTag,
   },
   directives: {
     ...esc,
   },
   setup() {
-    const loading = ref(false);
-
     const alert = reactive({ color: "", message: "" });
     const closeFormRequest = ref(0);
-    const formAssignments = ref([]);
     const formMessage = ref("");
     const showModal = ref(false);
 
     const store = useStore();
     const forms = computed(() => store.state.forms);
     const organizations = computed(() => store.state.organizations);
-    const users = ref([]);
+    const users = computed(() => store.getters.approvedUsers);
+    const formAssignments = computed(() => store.state.formAssignments);
+    const loading = computed(
+      () => users.value.length === 0 || formAssignments.value.length === 0
+    );
 
     const today = utils.today();
 
@@ -198,11 +193,9 @@ export default {
       All: () => true,
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
-    const selectedFormAssignments = computed(() => {
-      return formAssignments.value.filter((formAssignment) =>
-        tabs[selectedTab.value](formAssignment)
-      );
-    });
+    const selectedFormAssignments = computed(() =>
+      formAssignments.value.filter(tabs[selectedTab.value])
+    );
 
     const dismissAlert = () => {
       alert.message = "";
@@ -227,17 +220,9 @@ export default {
         .filter((f) => f.type === "user")
         .map((f) => f._id);
 
-      const userOptions = users.value
-        .map((u) => {
-          return { value: u.email, label: `${u.name} (${u.email})` };
-        })
-        .sort(utils.sortByProperty("label"));
-
-      const organizationOptions = organizations.value
-        .map((org) => org.name)
-        .sort();
-
-      const groups = ["all", "intervention", "control"];
+      const userOptions = store.getters.formUserOptions;
+      const organizationOptions = store.getters.formOrganizationOptions;
+      const groups = formAssignmentUtils.TARGET_GROUPS;
 
       return [
         {
@@ -302,17 +287,6 @@ export default {
       ];
     });
 
-    onMounted(async () => {
-      loading.value = true;
-
-      formAssignments.value = await fb.getCollection("form_assignments");
-      users.value = (await fb.getCollection("users")).filter(
-        (u) => u.status === "approved"
-      );
-
-      loading.value = false;
-    });
-
     const createFormAssignment = async ({
       form_id,
       release_date,
@@ -353,6 +327,11 @@ export default {
 
         // Update the page
         formAssignments.value.unshift(formAssignmentData);
+
+        // assigned form to self
+        if (emails.includes(store.state.user.data.email)) {
+          await store.dispatch("updateUserFormResponses");
+        }
 
         showModal.value = false;
         alert.color = "success";
@@ -395,6 +374,19 @@ export default {
       loading.value = false;
     };
 
+    const nonEmptyVals = (obj) => {
+      const res = {};
+      if (obj) {
+        for (const [k, v] of Object.entries(obj)) {
+          if (v.length > 0) {
+            res[k] = v;
+          }
+        }
+      }
+
+      return res;
+    };
+
     return {
       alert,
       closeFormRequest,
@@ -405,6 +397,7 @@ export default {
       formQuestions,
       forms,
       loading,
+      nonEmptyVals,
       selectedFormAssignments,
       selectedTab,
       showModal,

@@ -3,6 +3,10 @@ import Home from "../views/Home.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar";
 import store from "@/store";
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const routes = [
   {
     path: "/",
@@ -12,7 +16,7 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    beforeEnter: (to, from) => {
+    beforeEnter: async (to, from) => {
       if (!to.query.redirect && from.name !== "ResetPassword") {
         return { path: to.path, query: { redirect: from.path } };
       }
@@ -45,7 +49,6 @@ const routes = [
     path: "/snack",
     name: "Snack",
     beforeEnter: (to) => {
-      console.log(store.state.user);
       if (!store.state.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       }
@@ -118,6 +121,11 @@ const routes = [
           route: "form_assignments",
           icon: "fa-file-import",
         },
+        {
+          name: "Emails",
+          route: "email",
+          icon: "fa-paper-plane",
+        },
       ],
     },
     children: [
@@ -146,6 +154,11 @@ const routes = [
             /* webpackChunkName: "admin" */ "../views/admin/FormAssignments.vue"
           ),
       },
+      {
+        path: "email",
+        component: () =>
+          import(/* webpackChunkName: "admin" */ "../views/admin/Emails.vue"),
+      },
     ],
   },
 ];
@@ -163,6 +176,12 @@ const router = createRouter({
       return { top: 0, behavior: "smooth" };
     }
   },
+});
+
+router.beforeEach(async () => {
+  while (!store.state.loaded) {
+    await sleep(20);
+  }
 });
 
 export default router;

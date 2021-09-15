@@ -20,6 +20,8 @@ import FormTextInput from "@/components/form/TextInput";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
+  await store.dispatch("fetchOrgs");
+
   if (user) {
     const { status, organization, role } = await fb.getUserRequest(user.email);
     if (status === "approved") {
@@ -30,13 +32,10 @@ fb.auth.onAuthStateChanged(async (user) => {
         role,
       });
       let token = await user.getIdTokenResult();
-      if (token.claims && token.claims.admin) {
-        store.dispatch("fetchAdmin", true);
-      } else {
-        store.dispatch("fetchAdmin", false);
-      }
+      store.dispatch("fetchAdmin", token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
       fb.logActivity(user.email, "login");
+      store.dispatch("setLoaded");
       return;
     }
   }
@@ -44,6 +43,7 @@ fb.auth.onAuthStateChanged(async (user) => {
   // fallthrough
   store.dispatch("fetchUser", null);
   store.dispatch("fetchAdmin", false);
+  store.dispatch("setLoaded");
 });
 
 createApp(App)

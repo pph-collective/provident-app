@@ -2,7 +2,7 @@ import ACCOUNTS from "../../fixtures/accounts.json";
 
 describe("Log In View", () => {
   beforeEach(() => {
-    cy.visit("/login");
+    cy.get('[data-cy="login-button"]').click();
   });
 
   it("Greets with log in", () => {
@@ -20,7 +20,7 @@ describe("Log In View", () => {
 
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
-    cy.visit("/");
+    cy.get("[data-cy='home']").click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -31,7 +31,7 @@ describe("Log In View", () => {
 
     // Just make sure we're still not signed in
     cy.contains("h1", "Log In").should("exist");
-    cy.visit("/");
+    cy.get("[data-cy='home']").click();
     cy.get('[data-cy="login-button"]').should("exist");
   });
 
@@ -47,8 +47,8 @@ describe("Log In View", () => {
   it("Navigates to / on successful login", () => {
     cy.get('[type="email"]').type(ACCOUNTS.admin.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.admin.password}{enter}`);
+    cy.get("a").should("contain", "Log Out");
     cy.url().should("eq", Cypress.config().baseUrl);
-    cy.get("a").contains("Log Out").should("exist");
   });
 
   it("Logging in as a user that is still pending approval", () => {
@@ -68,13 +68,11 @@ describe("Log In View", () => {
   });
 
   it("Redirect back to previous page prior to logging in after login", () => {
-    cy.visit("/snack");
+    cy.get("[data-cy='snack']").click();
 
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/snack");
-    });
+    cy.url().should("eq", `${Cypress.config().baseUrl}snack`);
   });
 });

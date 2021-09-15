@@ -34,7 +34,13 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
 });
 
 Cypress.Commands.add("logout", () => {
-  fb.logout();
-  cy.visit("/");
+  cy.get("body").then(($body) => {
+    if ($body.find("[data-cy='logout-button']").length) {
+      cy.get("a").contains("Log Out", { timeout: 200 }).click();
+    }
+
+    cy.get("[data-cy='home']").click();
+    cy.url().should("eq", Cypress.config().baseUrl);
+  });
   cy.log("Logged out");
 });

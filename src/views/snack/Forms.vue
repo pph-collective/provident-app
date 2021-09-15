@@ -5,7 +5,7 @@
 
     <div class="panel-tabs" data-cy="panel-tabs">
       <a
-        v-for="tab in tabs"
+        v-for="tab in Object.keys(tabs)"
         :key="tab"
         :class="selectedTab === tab ? 'is-active' : ''"
         @click="selectedTab = tab"
@@ -39,36 +39,27 @@
         </div>
 
         <div class="level-right has-text-centered">
-          <span
+          <PanelTag
             v-if="formResponse.type === 'organization'"
-            class="level-item tag"
-            data-cy="organization-level-tag"
-          >
-            <p><strong>Organization-level</strong></p>
-          </span>
-          <span
+            label="organization-level"
+          />
+          <PanelTag
             v-if="user.admin"
-            class="level-item tag"
             :class="{
               'is-success is-light': formResponse.release_date <= today,
             }"
-            data-cy="release-date-tag"
-          >
-            <p>
-              <strong>RELEASE DATE:</strong> {{ formResponse.release_date }}
-            </p>
-          </span>
-          <span
-            class="level-item tag is-light"
+            label="release date"
+            :value="formResponse.release_date"
+          />
+          <PanelTag
             :class="{
               'is-warning': formResponse.status === 'Not Started',
               'is-info': formResponse.status === 'Draft',
               'is-success': formResponse.status === 'Submitted',
             }"
-            data-cy="status-tag"
-          >
-            <p><strong>STATUS:</strong> {{ formResponse.status }}</p>
-          </span>
+            label="status"
+            :value="formResponse.status"
+          />
           <div class="level-item">
             <button
               v-if="
@@ -114,11 +105,13 @@ import utils from "@/utils/utils";
 
 import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
+import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     FormModal,
     Loading,
+    PanelTag,
   },
   setup() {
     const store = useStore();
@@ -128,45 +121,31 @@ export default {
     );
     const formResponses = computed(() => {
       if (!user.value.admin) {
-        return user.value.formResponses.filter((f) => {
+        return store.state.user.formResponses.filter((f) => {
           return f.release_date <= today;
         });
       }
 
-      return user.value.formResponses;
+      return store.state.user.formResponses;
     });
 
     const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
-    const tabs = ref(["To Do", "All", "Submitted", "Organization-level"]);
-    const selectedTab = ref("To Do");
-    const selectedFormResponses = computed(() => {
-      if (selectedTab.value === "All") return formResponses.value;
-
-      return formResponses.value.filter((formResponse) => {
-        if (
-          selectedTab.value === "To Do" &&
-          formResponse.status !== "Submitted" &&
-          (formResponse.type === "user" ||
-            (formResponse.type === "organization" &&
-              userRole.value === "champion"))
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Submitted" &&
-          formResponse.status === "Submitted"
-        ) {
-          return true;
-        } else if (
-          selectedTab.value === "Organization-level" &&
-          formResponse.type === "organization"
-        ) {
-          return true;
-        }
-
-        return false;
-      });
-    });
+    const tabs = {
+      "To Do": (formResponse) =>
+        formResponse.status !== "Submitted" &&
+        (formResponse.type === "user" ||
+          (formResponse.type === "organization" &&
+            userRole.value === "champion")),
+      All: () => true,
+      Submitted: (formResponse) => formResponse.status === "Submitted",
+      "Organization-level": (formResponse) =>
+        formResponse.type === "organization",
+    };
+    const selectedTab = ref(Object.keys(tabs)[0]);
+    const selectedFormResponses = computed(() =>
+      formResponses.value.filter(tabs[selectedTab.value])
+    );
 
     const today = utils.today();
 

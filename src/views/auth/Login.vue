@@ -44,6 +44,7 @@
           <button
             class="button is-primary"
             type="submit"
+            :class="{ 'is-loading': buttonLoading }"
             data-cy="login-form-button"
           >
             Log In
@@ -53,6 +54,7 @@
           <button
             class="button is-light"
             type="button"
+            data-cy="request-access-button"
             @click="$router.push('/register')"
           >
             Request Access
@@ -82,6 +84,7 @@ export default {
     const form = reactive({ email: "", password: "" });
     const error = ref(null);
     const alert = ref("");
+    const buttonLoading = ref(false);
 
     const store = useStore();
     const userAuthenticated = computed(() => store.state.user.authenticated);
@@ -91,12 +94,13 @@ export default {
 
     // handle case of user log in via cookie post redirect
     watchEffect(() => {
-      if (userAuthenticated.value && route.query.redirect && form.email == "") {
+      if (userAuthenticated.value && route.query.redirect) {
         router.push(route.query.redirect);
       }
     });
 
     const submit = async () => {
+      buttonLoading.value = true;
       try {
         await fb.login(form.email, form.password);
         const { status } = await fb.getUserRequest(form.email);
@@ -115,6 +119,7 @@ export default {
         await fb.logout();
         console.log(err);
       }
+      buttonLoading.value = false;
     };
 
     const resetRequest = async () => {
@@ -137,6 +142,7 @@ export default {
     };
 
     return {
+      buttonLoading,
       submit,
       resetRequest,
       dismissAlert,

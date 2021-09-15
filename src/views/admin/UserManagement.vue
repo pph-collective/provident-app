@@ -21,9 +21,7 @@
                 >
                   <i
                     class="fas"
-                    :class="[
-                      'fa-arrow-' + (sortDirection === 1 ? 'up' : 'down'),
-                    ]"
+                    :class="['fa-arrow-' + (sortAscending ? 'up' : 'down')]"
                   />
                 </span>
               </span>
@@ -113,12 +111,13 @@
 </template>
 
 <script>
-import { computed, reactive, ref, onUnmounted } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 import Loading from "@/components/Loading.vue";
 
 import fb from "@/firebase.js";
+import utils from "@/utils/utils.js";
 
 export default {
   components: {
@@ -127,12 +126,16 @@ export default {
   setup() {
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
+    const users = computed(() =>
+      store.getters.approvedUsers.map((user) => {
+        user.edit = false;
+        return user;
+      })
+    );
     const roles = ["champion", "user"];
     const fields = ["Name", "Organization", "Email", "Role"];
     const sortField = ref("name");
-    const sortDirection = ref(1); // ascending
-
-    const users = ref([]);
+    const sortAscending = ref(true); // ascending
 
     const filters = reactive({
       name: "",
@@ -150,35 +153,12 @@ export default {
           );
         }
       }
-      filtered.sort((a, b) => {
-        const valA = a[sortField.value].toUpperCase(); // ignore upper and lowercase
-        const valB = b[sortField.value].toUpperCase(); // ignore upper and lowercase
-        if (valA < valB) {
-          return -1 * sortDirection.value;
-        }
-        if (valA > valB) {
-          return 1 * sortDirection.value;
-        }
+      filtered.sort(utils.sortByProperty(sortField.value));
 
-        // values must be equal
-        return 0;
-      });
+      if (!sortAscending.value) filtered.reverse();
 
       return filtered;
     });
-
-    let unsubUsers = fb.db
-      .collection("users")
-      .where("status", "==", "approved")
-      .onSnapshot((snapshot) => {
-        users.value = snapshot.docs.map((doc) => {
-          let user = doc.data();
-          return { ...user, id: doc.id, edit: false };
-        });
-      });
-
-    // unsubscribe when leaving this page
-    onUnmounted(unsubUsers);
 
     const saveUser = async ({ email, role }) => {
       try {
@@ -191,10 +171,10 @@ export default {
     const updateSort = (fieldTitle) => {
       const field = fieldTitle.toLowerCase();
       if (field === sortField.value) {
-        sortDirection.value *= -1; // flip sort order
+        sortAscending.value = !sortAscending.value; // flip sort order
       } else {
         sortField.value = field;
-        sortDirection.value = 1;
+        sortAscending.value = true;
       }
     };
 
@@ -207,7 +187,7 @@ export default {
       filters,
       saveUser,
       sortField,
-      sortDirection,
+      sortAscending,
       updateSort,
     };
   },

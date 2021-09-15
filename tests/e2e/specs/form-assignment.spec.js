@@ -37,16 +37,17 @@ const setDatesAndSubmit = () => {
 const checkFormAssignedInToDos = (permission, formTitle, should) => {
   cy.logout();
   cy.login_by_permission(permission).then(() => {
-    cy.visit("/snack/forms");
+    cy.get("[data-cy='snack']").click();
+    cy.get("a[href='/snack/forms']").click();
+    cy.get('[data-cy="form-panel"]').should("exist");
+    cy.get(".loading-icon").should("not.exist");
   });
-
-  cy.get(".loading-icon").should("not.exist");
 
   cy.contains('[data-cy="forms-panel-block"]', formTitle).should(should);
 
   if (should === "exist") {
     cy.contains('[data-cy="forms-panel-block"]', formTitle)
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     cy.contains('[data-cy="forms-panel-block"]', formTitle)
@@ -55,13 +56,17 @@ const checkFormAssignedInToDos = (permission, formTitle, should) => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="active-form-title"]').should("contain", formTitle);
+
+    cy.get('[aria-label="close"]').click();
   }
 };
 
 describe("Form Assignment functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
-      cy.visit("/admin/form_assignments");
+      cy.get("[data-cy='admin']").click();
+      cy.get("a[href='/admin/form_assignments']").click();
+      cy.get(".form-assignments").should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
   });
@@ -71,15 +76,15 @@ describe("Form Assignment functionality", () => {
     cy.get('[data-cy="create-button"]').should("exist");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="release-date-tag"]')
+      .find(".tag")
       .should("contain", "2021-05-21");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="expire-date-tag"]')
+      .find(".tag")
       .should("contain", "3000-09-09");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
-      .find('[data-cy="target-tags"]')
+      .find(".tags")
       .should("contain", "users")
       .should("contain", "admin@admin.com")
       .should("contain", "user@user.com")
@@ -117,6 +122,8 @@ describe("Form Assignment functionality", () => {
       "have.class",
       "is-active"
     );
+
+    cy.get('[aria-label="close"]').click();
   });
 
   it("Assign Organization Form to All", () => {
@@ -234,7 +241,7 @@ describe("Form Assignment functionality", () => {
       '[data-cy="form-assignment-panel-block"]',
       "Organization Assigned Form"
     )
-      .find('[data-cy="expire-date-tag"]')
+      .find(".tag")
       .should("contain", "3000-01-01");
 
     // Admin is in the control group
@@ -318,7 +325,9 @@ describe("Form Assignment functionality", () => {
 
     setDatesAndSubmit();
 
-    cy.visit("/snack/forms");
+    cy.get("[data-cy='snack']").click();
+    cy.get("a[href='/snack/forms']").click();
+    cy.get('[data-cy="form-panel"]').should("exist");
     cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
@@ -332,7 +341,7 @@ describe("Form Assignment functionality", () => {
     ).should("have.length", 1);
 
     cy.contains('[data-cy="forms-panel-block"]', "User Assigned Form")
-      .find('[data-cy="status-tag"]')
+      .find(".tag")
       .should("contain", "Not Started");
 
     checkFormAssignedInToDos("approved", "User Assigned Form", "exist");
