@@ -4,7 +4,9 @@
     <section class="section">
       <h1 class="title">Organization Management</h1>
       <div class="content">
-        <button class="button is-primary">+ Create</button>
+        <button class="button is-primary" @click="showModal = true">
+          + Create
+        </button>
       </div>
 
       <table class="table" data-cy="organization-table">
@@ -32,28 +34,111 @@
           </tr>
         </tbody>
       </table>
+
+      <div
+        v-if="showModal && formQuestions.length > 0"
+        class="modal"
+        :class="{ 'is-active': showModal }"
+        data-cy="form-assignment-modal"
+        v-esc="() => (closeFormRequest += 1)"
+      >
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Create New Organization</p>
+            <button
+              class="delete"
+              aria-label="close"
+              @click="closeFormRequest += 1"
+            ></button>
+          </header>
+          <section class="modal-card-body">
+            <JSONForm
+              v-if="showModal"
+              :init-schema="formQuestions"
+              :init-value="{}"
+              :read-only="false"
+              :showAltButton="false"
+              :close-request="closeFormRequest"
+              @submitted="createOrganization($event)"
+              @close="showModal = false"
+            />
+            <p
+              v-if="formMessage"
+              class="has-text-centered"
+              data-cy="form-message"
+            >
+              <small>{{ formMessage }}</small>
+            </p>
+          </section>
+        </div>
+      </div>
     </section>
   </div>
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
+import { esc } from "@/directives/escape";
+
+import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
 
 export default {
   components: {
+    JSONForm,
     Loading,
+  },
+  directives: {
+    ...esc,
   },
   setup() {
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
     const fields = ["Name", "Intervention Arm", "Municipalities"];
+    const showModal = ref(false);
+    const closeFormRequest = ref(0);
+    const municipalities = computed(() => store.getters.municipalities);
+
+    const formMessage = ref("");
+
+    const createOrganization = () => {
+      console.log("Create an organization!");
+    };
+
+    const formQuestions = computed(() => [
+      {
+        component: "TextInput",
+        label: "Organization's Name",
+        model: "name",
+        required: true,
+      },
+      {
+        component: "Radio",
+        label: "Intervention or Control Group?",
+        model: "group",
+        options: ["intervention", "control"],
+      },
+      {
+        component: "Select",
+        multiple: true,
+        label: "Municipalities",
+        model: "municipalities",
+        options: municipalities,
+      },
+    ]);
 
     return {
+      createOrganization,
+      closeFormRequest,
       fields,
+      formMessage,
+      formQuestions,
+      municipalities,
       organizations,
+      showModal,
     };
   },
 };
