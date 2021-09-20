@@ -74,6 +74,17 @@ const store = createStore({
         commit("mutate", { property: "organizations", with: orgs });
       }
     },
+    async addOrg({ commit, state }, organization) {
+      organization._id = await fb.db
+        .collection("organizations")
+        .doc(organization.name)
+        .set(organization);
+
+      commit("mutate", {
+        property: "organizations",
+        with: [...state.organizations, organization],
+      });
+    },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
       const _id = await fb.updateFormResponse(updatedFormResponse, {
         email: state.user.data.email,

@@ -92,8 +92,8 @@ export default {
         // update request status
         await fb.updateUser({ email: user.email, status: "approved" });
 
-        await formAssignmentUtils.addFormResponsesForUser(
-          user,
+        await formAssignmentUtils.addFormResponsesForApproved(
+          { user },
           formAssignments.value,
           organizations.value,
           today

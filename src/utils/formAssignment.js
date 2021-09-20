@@ -122,44 +122,60 @@ const addFormResponses = async (formAssignment, organizations, users) => {
 };
 
 /**
- * Adds form responses to the db for the user based on the existing form assignments
+ * Adds form responses to the db for a user or organization based on the existing form assignments
  *
- * @param {Object} user - needs the email and organization fields
+ * @param {Object} { user, organization } - Provide one of user or organization to add form responses for.
+ *     A user needs the email and organization fields, while an organization needs name field
  * @param {Object[]} formAssignments
  * @param {Object[]} organizations
  * @param {String} today - in ISO format. For example - "2021-01-01".
  * @returns {Promise<void>}
  */
-const addFormResponsesForUser = async (
-  user,
+const addFormResponsesForApproved = async (
+  { user, organization },
   formAssignments,
   organizations,
   today
 ) => {
-  const activeUserFormAssignments = formAssignments.filter(
-    (f) => f.form_type === "user" && today <= f.expire_date
-  );
+  const typeMap = {
+    user: {
+      organization: user?.organization,
+      documentId: user?.email,
+    },
+    organization: {
+      organization: organization?.name,
+      documentId: organization?.name,
+    },
+  };
 
-  let formResponses = [];
-  for (const formAssignment of activeUserFormAssignments) {
-    const { target } = formAssignment;
-    const assignedOrgs = getAssignedOrgs(target, organizations);
+  for (const formResponseType of Object.keys(typeMap)) {
+    if (typeMap[formResponseType].organization === undefined) continue;
 
-    if (assignedOrgs.has(user.organization)) {
-      formResponses.push(getFormResponseData(formAssignment));
+    const activeFormAssignments = formAssignments.filter(
+      (f) => f.form_type === formResponseType && today <= f.expire_date
+    );
+
+    let formResponses = [];
+    for (const formAssignment of activeFormAssignments) {
+      const { target } = formAssignment;
+      const assignedOrgs = getAssignedOrgs(target, organizations);
+
+      if (assignedOrgs.has(typeMap[formResponseType].organization)) {
+        formResponses.push(getFormResponseData(formAssignment));
+      }
     }
-  }
 
-  return await fb.batchAddFormResponses(
-    "user",
-    formResponses,
-    new Set([user.email])
-  );
+    return await fb.batchAddFormResponses(
+      formResponseType,
+      formResponses,
+      new Set([typeMap[formResponseType].documentId])
+    );
+  }
 };
 
 export default {
   addFormResponses,
-  addFormResponsesForUser,
+  addFormResponsesForApproved,
   getAssignments,
   TARGET_GROUPS,
 };

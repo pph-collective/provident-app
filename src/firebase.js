@@ -66,7 +66,7 @@ const getUserRequest = async (email) => {
 };
 
 const updateUser = async (user) => {
-  db.collection("users").doc(user.email).update(user);
+  await db.collection("users").doc(user.email).update(user);
 };
 
 const getCollection = async (collection) => {

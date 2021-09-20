@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="organizations.length === 0" />
+  <Loading :loading="organizations.length === 0 || loading" />
   <div class="container">
     <section class="section">
       <h1 class="title">Organization Management</h1>
@@ -82,6 +82,8 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import { esc } from "@/directives/escape";
+import utils from "@/utils/utils";
+import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
@@ -96,16 +98,42 @@ export default {
   },
   setup() {
     const store = useStore();
-    const organizations = computed(() => store.state.organizations);
-    const fields = ["Name", "Intervention Arm", "Municipalities"];
-    const showModal = ref(false);
-    const closeFormRequest = ref(0);
+    const formAssignments = computed(() => store.state.formAssignments);
     const municipalities = computed(() => store.getters.municipalities);
+    const organizations = computed(() => store.state.organizations);
 
+    const fields = ["Name", "Intervention Arm", "Municipalities"];
+    const closeFormRequest = ref(0);
     const formMessage = ref("");
+    const showModal = ref(false);
+    const loading = ref(false);
 
-    const createOrganization = () => {
-      console.log("Create an organization!");
+    const today = utils.today();
+
+    const createOrganization = async ({ name, group, municipalities }) => {
+      loading.value = true;
+
+      const organization = {
+        name,
+        intervention_arm: group === "intervention",
+        municipalities,
+      };
+
+      try {
+        await store.dispatch("addOrg", organization);
+
+        await formAssignmentUtils.addFormResponsesForApproved(
+          { organization },
+          formAssignments.value,
+          organizations.value,
+          today
+        );
+
+        loading.value = false;
+        showModal.value = false;
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     const formQuestions = computed(() => [
@@ -114,6 +142,7 @@ export default {
         label: "Organization's Name",
         model: "name",
         required: true,
+        // TODO require that the organization name doesn't exist
       },
       {
         component: "Radio",
@@ -136,6 +165,7 @@ export default {
       fields,
       formMessage,
       formQuestions,
+      loading,
       municipalities,
       organizations,
       showModal,
