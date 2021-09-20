@@ -59,7 +59,8 @@
 import { ref, toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import utils from "@/utils/utils";
+import utils from "@/utils/utils.js";
+import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
@@ -123,6 +124,11 @@ export default {
         status: "Not Started",
         response: { neighborhood_id: activeGeoid.value },
       };
+      fb.logActivity(
+        store.state.user.data.email,
+        "create NRA",
+        activeGeoid.value
+      );
     };
 
     const formatDate = (dateNumber) => {

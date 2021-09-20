@@ -124,7 +124,7 @@ Required keys for all fields:
 
 Optional keys supported on all fields:
 * `required`: A boolean (true/false) indicating if the field is required
-* `help_text` : A string containing help text displayed for the user to see. 
+* `help_text` : A string containing help text displayed for the user to see.
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
 
@@ -237,3 +237,13 @@ The admin email is set in the `.env.production` file, if you would like to overr
 
 ## Firestore rules
 In development, you can use the `firestore.rules` file to test edits to the firestore rules against the firebase emulator. Afterwards, you'll want to make your changes live in the production firebase project, `provident-ri`.
+
+## Activity Logging
+
+Various actions are logged as a user interacts with the app:
+
+* `login`: the user logs in, no `subAction`
+* `click map`: the user selects a block group on the map, `subAction` is the selected geoid
+* `zoom map`: the user zooms in on a block group on the map, `subAction` is the selected geoid
+* `launch form`: the user launches a form on the forms page, `subAction` is the form id
+* `create NRA`: the user selects the create button on the neighborhood rapid assessment widget, `subAction` is the selected geoid

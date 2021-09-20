@@ -71,7 +71,7 @@
               class="button is-primary level-item"
               data-cy="launch-form-button"
               type="button"
-              @click="activeFormResponse = formResponse"
+              @click="launchForm(formResponse)"
             >
               {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
             </button>
@@ -80,7 +80,7 @@
               class="button is-primary is-light level-item"
               data-cy="review-form-button"
               type="button"
-              @click="activeFormResponse = formResponse"
+              @click="launchForm(formResponse)"
             >
               Review Form
             </button>
@@ -101,7 +101,8 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import utils from "@/utils/utils";
+import utils from "@/utils/utils.js";
+import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
@@ -159,6 +160,11 @@ export default {
       return {};
     });
 
+    const launchForm = (formResponse) => {
+      activeFormResponse.value = formResponse;
+      fb.logActivity(user.value.data.email, "launch form", formResponse._id);
+    };
+
     return {
       selectedFormResponses,
       activeFormResponse,
@@ -168,6 +174,7 @@ export default {
       today,
       forms,
       formResponses,
+      launchForm,
       user,
       userRole,
     };
