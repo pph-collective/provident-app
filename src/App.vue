@@ -1,6 +1,9 @@
 <template>
   <NavBar />
-  <router-view />
+  <div id="content-container">
+    <Notifications :notifications="notifications" />
+    <router-view />
+  </div>
   <Footer />
 
   <!-- diagonal hash pattern for map -->
@@ -22,13 +25,25 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+
 import NavBar from "@/components/NavBar.vue";
 import Footer from "@/components/Footer.vue";
+import Notifications from "@/components/Notifications.vue";
 
 export default {
   components: {
     NavBar,
     Footer,
+    Notifications,
+  },
+  setup() {
+    const store = useStore();
+
+    const notifications = computed(() => store.state.notifications);
+
+    return { notifications };
   },
 };
 </script>
@@ -36,5 +51,9 @@ export default {
 <style lang="scss">
 .svg-container {
   height: 0px;
+}
+
+#content-container {
+  position: relative;
 }
 </style>

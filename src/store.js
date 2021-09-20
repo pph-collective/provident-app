@@ -16,6 +16,7 @@ const store = createStore({
       users: [],
       formAssignments: [],
       loaded: false,
+      notifications: [],
     };
   },
 
@@ -35,6 +36,7 @@ const store = createStore({
       // always start empty, controlled by ContentWithSidebar
       commit("mutate", { property: "users", with: [] });
       commit("mutate", { property: "formAssignments", with: [] });
+      commit("mutate", { property: "notifications", with: [] });
 
       if (user) {
         commit("mutateUser", {
@@ -102,6 +104,23 @@ const store = createStore({
     },
     setLoaded({ commit }) {
       commit("mutate", { property: "loaded", with: true });
+    },
+    addNotification(
+      { commit, dispatch, state },
+      { color = "success", message }
+    ) {
+      const id = utils.uniqueId();
+      commit("mutate", {
+        property: "notifications",
+        with: [...state.notifications, { id, color, message }],
+      });
+      setTimeout(() => dispatch("dismissNotification", id), 6000);
+    },
+    dismissNotification({ commit, state }, id) {
+      commit("mutate", {
+        property: "notifications",
+        with: state.notifications.filter((n) => n.id != id),
+      });
     },
   },
 
