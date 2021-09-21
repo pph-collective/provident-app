@@ -82,7 +82,7 @@ const store = createStore({
 
       commit("mutate", {
         property: "organizations",
-        with: [...state.organizations, organization],
+        with: [organization, ...state.organizations],
       });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {

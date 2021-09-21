@@ -172,4 +172,126 @@ describe("Admin Views and Powers", () => {
         .should("contain", "admin@admin.com");
     });
   });
+
+  describe("Organization Management", () => {
+    const testUser = {
+      email: "test@user.com",
+      password: "user-password",
+    };
+
+    beforeEach(() => {
+      cy.task("auth:deleteUserByEmail", testUser.email);
+      cy.get('a[href="/admin/organization_management"]').click();
+      cy.get(".loading-icon").should("not.exist");
+    });
+
+    it("Page loads", () => {
+      cy.get('[data-cy="organization-table"]').should(
+        "not.contain",
+        "No organizations found"
+      );
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", "Good Doers")
+        .should("exist");
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", "RI 4 Us")
+        .should("exist");
+    });
+
+    it("Creating an intervention organization", () => {
+      cy.get('[data-cy="create-button"]').should("exist").click();
+
+      cy.get('[model="name"]').type("good doers");
+      cy.get('[model="name"]')
+        .find(".has-text-danger")
+        .should("contain", "Organization already exists");
+
+      cy.get('[model="name"]').clear().type("Test Intervention Organization");
+
+      cy.get('[model="group"]').find("input").first().check();
+
+      cy.get('[model="municipalities"]')
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .contains("Providence")
+        .click();
+
+      cy.get('[model="municipalities"]')
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .contains("Little Compton")
+        .click();
+
+      cy.get("button").contains("Submit").click();
+      cy.get(".loading-icon").should("not.exist");
+
+      // Check that it exists on the page
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", "Test Intervention Organization")
+        .should("exist");
+
+      // Log Out
+      cy.logout();
+
+      // Register a user
+      cy.get("[data-cy='login-button']").click();
+      cy.get("[data-cy='request-access-button']").click();
+
+      cy.get('[type="email"]').type(testUser.email);
+      cy.get('[data-cy="form-name"]').type("Test User");
+      cy.get('[data-cy="form-organization"]').select(
+        "Test Intervention Organization"
+      );
+      cy.get('[data-cy="form-password"]').type(testUser.password);
+      cy.get('[data-cy="form-confirm-password"]').type(testUser.password);
+      cy.get('[data-cy="form-terms"]').click();
+
+      cy.get(".button").contains("Request Access").should("be.enabled");
+      cy.get("form").submit();
+      cy.get('[data-cy="error-message"]').should("not.exist");
+      cy.get('[data-cy="success-message"]')
+        .should("exist")
+        .contains("Your request has been received.");
+
+      // Log In As Admin to Approve
+      cy.reload(); // Need to refresh the store
+      cy.login_by_permission("admin").then(() => {
+        // Need to navigate to another page before admin button appears
+        cy.get("[data-cy='home']").click();
+        cy.get("[data-cy='admin']").should("exist").click();
+      });
+
+      cy.contains('[data-cy="user-request"]', testUser.email)
+        .find('[data-cy="approve"]')
+        .should("exist")
+        .click();
+      cy.get(".loading-icon").should("not.exist");
+
+      cy.logout();
+
+      // Log in as test user
+      cy.login(testUser.email, testUser.password);
+      cy.get("[data-cy='home']").click();
+      // Navigate to form
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("Organization-level")
+        .click();
+
+      cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+        .find('[data-cy="review-form-button"]')
+        .should("exist")
+        .click();
+
+      cy.get('[data-cy="active-form-modal"]').should("exist");
+      cy.get('[data-cy="active-form-title"]').should(
+        "contain",
+        "Sample Organization Form"
+      );
+    });
+  });
 });

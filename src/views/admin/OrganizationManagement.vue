@@ -4,7 +4,11 @@
     <section class="section">
       <h1 class="title">Organization Management</h1>
       <div class="content">
-        <button class="button is-primary" @click="showModal = true">
+        <button
+          class="button is-primary"
+          data-cy="create-button"
+          @click="showModal = true"
+        >
           + Create
         </button>
       </div>
@@ -22,8 +26,20 @@
         <tbody>
           <tr v-for="org in organizations" :key="org.name">
             <td>{{ org.name }}</td>
-            <td>{{ org.intervention_arm }}</td>
-            <td>{{ org.municipalities }}</td>
+            <td>
+              <i
+                :class="['fas', org.intervention_arm ? 'fa-check' : 'fa-times']"
+              ></i>
+            </td>
+            <td>
+              <span
+                v-for="municipality in org.municipalities.sort()"
+                class="tag"
+                :key="municipality"
+              >
+                {{ municipality }}
+              </span>
+            </td>
           </tr>
           <tr v-if="organizations.length === 0">
             <td :colspan="fields.length">
@@ -142,13 +158,16 @@ export default {
         label: "Organization's Name",
         model: "name",
         required: true,
-        // TODO require that the organization name doesn't exist
+        validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
+          organizations.value.map((org) => org.name.toUpperCase())
+        )}, 'Organization already exists.')`,
       },
       {
         component: "Radio",
         label: "Intervention or Control Group?",
         model: "group",
         options: ["intervention", "control"],
+        required: true,
       },
       {
         component: "Select",
