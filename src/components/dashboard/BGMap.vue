@@ -6,9 +6,6 @@
 import { ref, toRefs, computed } from "vue";
 
 import * as topology from "topojson-server";
-import * as tc from "topojson-client";
-import * as ts from "topojson-simplify";
-const topojson = { ...ts, ...tc };
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
@@ -33,20 +30,7 @@ export default {
         blocks: { type: "FeatureCollection", features: filtered },
       };
 
-      let topo = topology.topology(collection, 1e5);
-
-      // simplify/smooth out the geometry a bit
-      const sphericalArea = 1e-9;
-      topo = topojson.presimplify(topo, topojson.sphericalTriangleArea);
-      topo = topojson.simplify(topo, sphericalArea);
-      topo = topojson.filter(
-        topo,
-        topojson.filterAttachedWeight(
-          topo,
-          sphericalArea,
-          topojson.sphericalRingArea
-        )
-      );
+      let topo = topology.topology(collection, 1e9);
 
       return topo;
     });
@@ -109,7 +93,8 @@ export default {
             from: { data: "bg_outlines" },
             encode: {
               enter: {
-                strokeWidth: { value: 1 },
+                strokeWidth: { value: 6 },
+                strokeOpacity: { value: 0.6 },
               },
             },
             transform: [{ type: "geoshape", projection: "projection" }],
