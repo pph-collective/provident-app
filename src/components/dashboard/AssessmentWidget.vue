@@ -15,7 +15,7 @@
                   : '',
               ]"
               type="button"
-              @click="activeFormResponse = assessment"
+              @click="launchForm(assessment)"
             >
               {{
                 assessment.status === "Submitted" || userRole === "user"
@@ -59,7 +59,8 @@
 import { ref, toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import utils from "@/utils/utils";
+import utils from "@/utils/utils.js";
+import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
@@ -123,6 +124,11 @@ export default {
         status: "Not Started",
         response: { neighborhood_id: activeGeoid.value },
       };
+      fb.logActivity(
+        store.state.user.data.email,
+        "create NRA",
+        activeGeoid.value
+      );
     };
 
     const formatDate = (dateNumber) => {
@@ -130,13 +136,23 @@ export default {
       return d.toDateString();
     };
 
+    const launchForm = (formResponse) => {
+      activeFormResponse.value = formResponse;
+      fb.logActivity(
+        store.state.user.data.email,
+        "launch NRA form",
+        formResponse._id
+      );
+    };
+
     return {
-      userRole,
-      bgAssessments,
       activeFormResponse,
       assessmentForm,
+      bgAssessments,
       createNewAssessment,
       formatDate,
+      launchForm,
+      userRole,
     };
   },
 };

@@ -15,7 +15,7 @@
           v-if="!zoomed"
           :disabled="!activeGeoid || !activeClickedStatus"
           class="zoom-button button is-family-secondary is-info is-light"
-          @click="zoomed = true"
+          @click="zoomBg"
         >
           <span class="icon">
             <i class="fas fa-search-plus"></i>
@@ -46,7 +46,7 @@
             :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
-            @active-clicked-status="activeClickedStatus = $event"
+            @active-clicked-status="clickMap"
             :data-cy="controls.geography.name"
           />
           <BGMap
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
 import * as aq from "arquero";
 
@@ -213,19 +213,46 @@ export default {
       return dataset.value.length === 0 || resultPeriods.value.length === 0;
     });
 
+    // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
+    const clickMap = (clickedStatus) => {
+      activeClickedStatus.value = clickedStatus;
+      if (clickedStatus) {
+        // wait for the next render cycle as the activeGeoid gets updated at about the
+        // same time and otherwise could be stale
+        nextTick(() =>
+          fb.logActivity(
+            store.state.user.data.email,
+            "click map",
+            activeGeoid.value
+          )
+        );
+      }
+    };
+
+    const zoomBg = () => {
+      zoomed.value = true;
+      fb.logActivity(
+        store.state.user.data.email,
+        "zoom map",
+        activeGeoid.value
+      );
+    };
+
     return {
-      dropDowns,
-      controls,
-      resultPeriods,
-      dataset,
-      previousDataset,
-      updateControls,
-      activeMuni,
-      activeGeoid,
       activeClickedStatus,
+      activeGeoid,
+      activeMuni,
+      clickMap,
+      controls,
+      dataset,
+      dropDowns,
       interventionArmUser,
-      zoomed,
       loading,
+      previousDataset,
+      resultPeriods,
+      updateControls,
+      zoomBg,
+      zoomed,
     };
   },
 };

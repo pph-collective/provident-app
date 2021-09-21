@@ -28,11 +28,12 @@ if (location.hostname === "localhost") {
   emailSubjectPrefix = "TEST: ";
 }
 
-const logActivity = async (user, action) => {
+const logActivity = async (user, action, subAction = "") => {
   try {
     await db.collection("users").doc(user).collection("activity_log").add({
       user,
       action,
+      subAction,
       datetime: Date.now(),
     });
   } catch (e) {
