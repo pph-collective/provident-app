@@ -1,8 +1,4 @@
 <template>
-  <div v-if="alert.length > 0" class="notification is-primary" data-cy="alert">
-    <button @click="dismissAlert" class="delete"></button>
-    {{ alert }}
-  </div>
   <FormCard>
     <h1 class="is-size-3 has-text-centered pb-3">Log In</h1>
     <form @submit.prevent="submit">
@@ -83,7 +79,6 @@ export default {
   setup() {
     const form = reactive({ email: "", password: "" });
     const error = ref(null);
-    const alert = ref("");
     const buttonLoading = ref(false);
 
     const store = useStore();
@@ -130,24 +125,20 @@ export default {
 
       try {
         await fb.auth.sendPasswordResetEmail(form.email);
-        alert.value = "Success. Check your email to reset your password.";
+        store.dispatch("addNotification", {
+          message: "Success. Check your email to reset your password.",
+        });
         error.value = null;
       } catch (err) {
         error.value = err.message;
       }
     };
 
-    const dismissAlert = () => {
-      alert.value = "";
-    };
-
     return {
       buttonLoading,
       submit,
       resetRequest,
-      dismissAlert,
       form,
-      alert,
       error,
     };
   },

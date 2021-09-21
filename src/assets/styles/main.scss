@@ -29,6 +29,10 @@ $box-radius: 2px;
     font-weight: bold;
 }
 
+.notification {
+  font-family: $family-secondary;
+}
+
 @import '~bulma';
 
 #vg-tooltip-element.vg-tooltip {
@@ -78,5 +82,3 @@ fieldset[disabled] {
     cursor: not-allowed;
   }
 }
-
-

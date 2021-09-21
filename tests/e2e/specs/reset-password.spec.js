@@ -59,7 +59,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     });
 
     // Assert notification to user
-    cy.get('[data-cy="alert"]').should(
+    cy.get(".notification").should(
       "contain",
       "Success. Check your email to reset your password."
     );
