@@ -247,3 +247,4 @@ Various actions are logged as a user interacts with the app:
 * `zoom map`: the user zooms in on a block group on the map, `subAction` is the selected geoid
 * `launch form`: the user launches a form on the forms page, `subAction` is the form id
 * `create NRA`: the user selects the create button on the neighborhood rapid assessment widget, `subAction` is the selected geoid
+* `launch NRA form`: the user launches a form on the NRA widget, `subAction` is the form id

@@ -15,7 +15,7 @@
                   : '',
               ]"
               type="button"
-              @click="activeFormResponse = assessment"
+              @click="launchForm(assessment)"
             >
               {{
                 assessment.status === "Submitted" || userRole === "user"
@@ -136,13 +136,23 @@ export default {
       return d.toDateString();
     };
 
+    const launchForm = (formResponse) => {
+      activeFormResponse.value = formResponse;
+      fb.logActivity(
+        store.state.user.data.email,
+        "launch NRA form",
+        formResponse._id
+      );
+    };
+
     return {
-      userRole,
-      bgAssessments,
       activeFormResponse,
       assessmentForm,
+      bgAssessments,
       createNewAssessment,
       formatDate,
+      launchForm,
+      userRole,
     };
   },
 };
