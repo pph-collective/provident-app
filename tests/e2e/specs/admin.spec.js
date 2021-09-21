@@ -30,7 +30,7 @@ describe("Admin Views and Powers", () => {
 
     cy.get(".loading-icon").should("not.exist");
 
-    cy.get('[data-cy="alert-message"]')
+    cy.get(".notification")
       .should("exist")
       .should("contain", `Success! ${ACCOUNTS.pending.email} was approved`);
 
@@ -84,7 +84,7 @@ describe("Admin Views and Powers", () => {
       .get('[data-cy="deny"]')
       .should("exist")
       .click();
-    cy.get('[data-cy="alert-message"]')
+    cy.get(".notification")
       .should("exist")
       .should("contain", `${ACCOUNTS.pending.email} was denied`);
 

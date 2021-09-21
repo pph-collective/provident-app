@@ -1,14 +1,6 @@
 <template>
-  <Loading :loading="loading" />
+  <Loading :loading="pageLoading || formLoading" />
   <div class="container form-assignments">
-    <div
-      v-if="alert.message"
-      :class="['notification', 'mt-4', 'is-' + alert.color]"
-      data-cy="alert-message"
-    >
-      <button class="delete" @click="dismissAlert"></button>
-      {{ alert.message }}
-    </div>
     <section>
       <div class="panel is-primary m-4 has-background-white">
         <p class="panel-heading">Form Assignments</p>
@@ -145,7 +137,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -167,7 +159,6 @@ export default {
     ...esc,
   },
   setup() {
-    const alert = reactive({ color: "", message: "" });
     const closeFormRequest = ref(0);
     const formMessage = ref("");
     const showModal = ref(false);
@@ -177,9 +168,10 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const users = computed(() => store.getters.approvedUsers);
     const formAssignments = computed(() => store.state.formAssignments);
-    const loading = computed(
+    const pageLoading = computed(
       () => users.value.length === 0 || formAssignments.value.length === 0
     );
+    const formLoading = ref(false);
 
     const today = utils.today();
 
@@ -196,10 +188,6 @@ export default {
     const selectedFormAssignments = computed(() =>
       formAssignments.value.filter(tabs[selectedTab.value])
     );
-
-    const dismissAlert = () => {
-      alert.message = "";
-    };
 
     const formQuestions = computed(() => {
       if (
@@ -296,7 +284,7 @@ export default {
       target_groups,
       send_email,
     }) => {
-      loading.value = true;
+      formLoading.value = true;
       const form_type = forms.value[form_id].type;
 
       const target = {
@@ -326,7 +314,7 @@ export default {
         );
 
         // Update the page
-        formAssignments.value.unshift(formAssignmentData);
+        store.dispatch("addFormAssignment", formAssignmentData);
 
         // assigned form to self
         if (emails.includes(store.state.user.data.email)) {
@@ -334,15 +322,15 @@ export default {
         }
 
         showModal.value = false;
-        alert.color = "success";
-        alert.message = "form assignment added";
 
-        // show the message only for 6 seconds
-        setTimeout(() => (alert.message = ""), 6000);
+        const formTitle = forms.value[form_id].title;
+        store.dispatch("addNotification", {
+          color: "success",
+          message: `Form assignment added: ${formTitle}`,
+        });
 
         // add an email to the queue
         if (send_email.length > 0) {
-          const formTitle = forms.value[form_id].title;
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${formTitle}`,
             body: `<p>A form, <em>${formTitle}</em>, has been assigned to ${
@@ -368,10 +356,15 @@ export default {
         if (showModal.value) {
           formMessage.value =
             "Error creating form responses for form assignments.";
+        } else {
+          store.dispatch("addNotification", {
+            color: "danger",
+            message: "Form assignment succesfully saved. Error creating email.",
+          });
         }
       }
 
-      loading.value = false;
+      formLoading.value = false;
     };
 
     const nonEmptyVals = (obj) => {
@@ -388,15 +381,14 @@ export default {
     };
 
     return {
-      alert,
       closeFormRequest,
       createFormAssignment,
-      dismissAlert,
       formAssignments,
       formMessage,
       formQuestions,
       forms,
-      loading,
+      formLoading,
+      pageLoading,
       nonEmptyVals,
       selectedFormAssignments,
       selectedTab,

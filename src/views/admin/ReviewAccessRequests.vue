@@ -1,14 +1,6 @@
 <template>
   <Loading :loading="loading" />
   <div class="container">
-    <div
-      v-if="alert.message"
-      data-cy="alert-message"
-      :class="['notification', 'mt-4', 'is-' + alert.color]"
-    >
-      <button class="delete" @click="dismissAlert"></button>
-      {{ alert.message }}
-    </div>
     <section class="section">
       <h1 class="title">Review Access Requests</h1>
 
@@ -56,7 +48,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
@@ -72,16 +64,10 @@ export default {
   setup() {
     const loading = ref(false);
 
-    const alert = reactive({ color: "", message: "" });
-
     const store = useStore();
     const organizations = computed(() => store.state.organizations);
     const userRequests = computed(() => store.getters.pendingUsers);
     const formAssignments = computed(() => store.state.formAssignments);
-
-    const dismissAlert = () => {
-      alert.message = "";
-    };
 
     const today = utils.today();
 
@@ -105,12 +91,15 @@ export default {
           to: [user.email],
         });
 
-        alert.color = "success";
-        alert.message = `Success! ${user.email} was approved.`;
+        store.dispatch("addNotification", {
+          message: `Success! ${user.email} was approved.`,
+        });
       } catch (err) {
         console.log(err);
-        alert.color = "danger";
-        alert.message = err.message;
+        store.dispatch("addNotification", {
+          color: "danger",
+          message: err.message,
+        });
       }
 
       loading.value = false;
@@ -125,11 +114,13 @@ export default {
         to: [user.email],
       });
 
-      alert.color = "info";
-      alert.message = `${user.email} was denied.`;
+      store.dispatch("addNotification", {
+        color: "info",
+        message: `${user.email} was denied.`,
+      });
     };
 
-    return { userRequests, approve, deny, alert, dismissAlert, loading };
+    return { userRequests, approve, deny, loading };
   },
 };
 </script>
