@@ -57,7 +57,6 @@ export default {
 .list-complete-enter-from,
 .list-complete-leave-to {
   opacity: 0;
-  // transform: translateY(30px);
 }
 
 .list-complete-leave-active {

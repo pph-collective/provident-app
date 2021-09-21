@@ -27,9 +27,9 @@ const setDatesAndSubmit = () => {
 
   cy.get('[data-cy="form-assignment-modal"]').should("not.exist");
 
-  cy.get('[data-cy="alert-message"]')
+  cy.get(".notification")
     .should("exist")
-    .should("contain", "form assignment added");
+    .should("contain", "Form assignment added");
 
   cy.get(".loading-icon").should("not.exist");
 };

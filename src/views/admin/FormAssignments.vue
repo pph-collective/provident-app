@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" />
+  <Loading :loading="pageLoading || formLoading" />
   <div class="container form-assignments">
     <section>
       <div class="panel is-primary m-4 has-background-white">
@@ -168,9 +168,10 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const users = computed(() => store.getters.approvedUsers);
     const formAssignments = computed(() => store.state.formAssignments);
-    const loading = computed(
+    const pageLoading = computed(
       () => users.value.length === 0 || formAssignments.value.length === 0
     );
+    const formLoading = ref(false);
 
     const today = utils.today();
 
@@ -283,7 +284,7 @@ export default {
       target_groups,
       send_email,
     }) => {
-      loading.value = true;
+      formLoading.value = true;
       const form_type = forms.value[form_id].type;
 
       const target = {
@@ -313,7 +314,7 @@ export default {
         );
 
         // Update the page
-        formAssignments.value.unshift(formAssignmentData);
+        store.dispatch("addFormAssignment", formAssignmentData);
 
         // assigned form to self
         if (emails.includes(store.state.user.data.email)) {
@@ -325,7 +326,7 @@ export default {
         const formTitle = forms.value[form_id].title;
         store.dispatch("addNotification", {
           color: "success",
-          message: `form assignment added: ${formTitle}`,
+          message: `Form assignment added: ${formTitle}`,
         });
 
         // add an email to the queue
@@ -355,10 +356,15 @@ export default {
         if (showModal.value) {
           formMessage.value =
             "Error creating form responses for form assignments.";
+        } else {
+          store.dispatch("addNotification", {
+            color: "danger",
+            message: "Form assignment succesfully saved. Error creating email.",
+          });
         }
       }
 
-      loading.value = false;
+      formLoading.value = false;
     };
 
     const nonEmptyVals = (obj) => {
@@ -381,7 +387,8 @@ export default {
       formMessage,
       formQuestions,
       forms,
-      loading,
+      formLoading,
+      pageLoading,
       nonEmptyVals,
       selectedFormAssignments,
       selectedTab,

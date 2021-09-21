@@ -102,6 +102,12 @@ const store = createStore({
       const formAssignments = await fb.getCollection("form_assignments");
       commit("mutate", { property: "formAssignments", with: formAssignments });
     },
+    addFormAssignment({ commit, state }, formAssignment) {
+      commit("mutate", {
+        property: "formAssignments",
+        with: [formAssignment, ...state.formAssignments],
+      });
+    },
     setLoaded({ commit }) {
       commit("mutate", { property: "loaded", with: true });
     },
