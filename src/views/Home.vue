@@ -2,8 +2,13 @@
   <div class="home">
     <section class="hero is-fullheight-with-navbar is-primary" id="top">
       <div class="hero-body">
-        <h1 class="title">PROVIDENT</h1>
-        <h2 class="subtitle">A model with <i class="fas fa-heart" /></h2>
+        <h1 class="title">
+          Our current methods for ending the overdose crisis are limited by
+          tools that respond after overdose events occur.
+        </h1>
+        <h2 class="subtitle">
+          What if we could prevent overdose events before they occur?
+        </h2>
       </div>
       <div class="hero-foot is-hidden-touch">
         <div class="container has-text-centered">
@@ -37,24 +42,17 @@ export default {
     const biteData = reactive([
       reactive({
         id: 0,
-        title: "A First Bite",
+        title: "How will we do this?",
         description:
-          "<h1>The first bite is always the best bite.</h1><p>...or is it?</p>",
-        icon: "cookie",
-      }),
-      reactive({
-        id: 1,
-        title: "A Second Bite",
-        description:
-          "<h2>The second bite is when you really taste the cookie.</h2><p>hee hee hee</p>",
-        icon: "cookie-bite",
+          "<h1>The PROVIDENT Study is a research study looking to prevent drug-related deaths in neighborhoods across Rhode Island.</h1><p>We will test a new set of tools for public health and policy leaders to help them predict, or forecast, the future overdose trends and patterns in their state - and identify the best ways to intervene and save lives. Our results will improve public health decision-making and inform resource allocation to communities that should be prioritized for evidence-based prevention, treatment, recovery, and overdose rescue services. If found to be effective, The PROVIDENT Model forecasting tool will be disseminated to other states, which could adapt the tool to guide resource allocation and maximize public health impact.</p>",
+        icon: "far fa-layer-group ",
       }),
       reactive({
         id: 2,
-        title: "A Different Choice",
+        title: "Study Design",
         description:
-          "<h2>Waffles are cookies too.</h2><p>#neverforgetwaffles</p>",
-        icon: "stroopwafel",
+          "<h2>This study is a randomized control trial, a type of trial that helps researchers and government agencies see whether new interventions are an improvement over existing ones.</h2><p>In PROVIDENT, the intervention will be a model that maps out neighborhoods in Rhode Island where future overdose deaths are most likely to occur. Half of the cities in Rhode Island will be assigned at random (by chance) to receive targeted interventions based on the PROVIDENT model while the other half will be assigned to the control group. In cities randomized to the PROVIDENT intervention, researchers at Brown University and the Rhode Island Department of Health will work with community leaders to target overdose prevention and treatment interventions to those neighborhoods identified by the model as being at the highest risk for future overdose outbreaks. It is important to note that there will be no changes to the overall amount of resources dedicated to preventing overdose deaths in Rhode Island. If the trial is successful, our goal is to reduce overdose rates by 40% in five years.</p>",
+        icon: "fas fa-ruler-combined",
       }),
     ]);
 
