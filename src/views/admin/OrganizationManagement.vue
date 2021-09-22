@@ -137,7 +137,8 @@ export default {
         await store.dispatch("addOrg", organization);
 
         await formAssignmentUtils.addFormResponsesForApproved(
-          { organization },
+          "organization",
+          organization,
           formAssignments.value,
           organizations.value
         );

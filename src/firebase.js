@@ -226,10 +226,24 @@ const createEmail = async ({
   }
 };
 
+const addOrg = async (organization) => {
+  try {
+    const res = await db
+      .collection("organizations")
+      .doc(organization.name)
+      .set(organization);
+
+    return res.id;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export default {
   auth,
   db,
   addFormAssignment,
+  addOrg,
   batchAddFormResponses,
   createEmail,
   getCollection,

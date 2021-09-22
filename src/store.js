@@ -74,10 +74,7 @@ const store = createStore({
       }
     },
     async addOrg({ commit, state }, organization) {
-      organization._id = await fb.db
-        .collection("organizations")
-        .doc(organization.name)
-        .set(organization);
+      organization._id = await fb.addOrg(organization);
 
       commit("mutate", {
         property: "organizations",

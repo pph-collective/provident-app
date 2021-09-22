@@ -125,29 +125,23 @@ const addFormResponses = async (formAssignment, organizations, users) => {
 /**
  * Adds form responses to the db for a user or organization based on the existing form assignments
  *
- * @param {Object} { user, organization } - Provide one of user or organization to add form responses for.
+ * @param {String} formResponseType - either "user" or "organization"
+ * @param {Object} approved - Provide one of user or organization to add form responses for.
  *     A user needs the email and organization fields, while an organization needs name field
  * @param {Object[]} formAssignments
  * @param {Object[]} organizations
  * @returns {Promise<void>}
  */
 const addFormResponsesForApproved = async (
-  { user, organization },
+  formResponseType,
+  approved,
   formAssignments,
   organizations
 ) => {
-  const formResponseType = user ? "user" : "organization";
-
-  const typeMap = {
-    user: {
-      organization: user?.organization,
-      documentId: user?.email,
-    },
-    organization: {
-      organization: organization?.name,
-      documentId: organization?.name,
-    },
-  };
+  const organization =
+    formResponseType === "user" ? approved.organization : approved.name;
+  const documentId =
+    formResponseType === "user" ? approved.email : approved.name;
 
   const activeFormAssignments = formAssignments.filter(
     (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
@@ -158,7 +152,7 @@ const addFormResponsesForApproved = async (
     const { target } = formAssignment;
     const assignedOrgs = getAssignedOrgs(target, organizations);
 
-    if (assignedOrgs.has(typeMap[formResponseType].organization)) {
+    if (assignedOrgs.has(organization)) {
       formResponses.push(getFormResponseData(formAssignment));
     }
   }
@@ -166,7 +160,7 @@ const addFormResponsesForApproved = async (
   return await fb.batchAddFormResponses(
     formResponseType,
     formResponses,
-    new Set([typeMap[formResponseType].documentId])
+    new Set([documentId])
   );
 };
 
