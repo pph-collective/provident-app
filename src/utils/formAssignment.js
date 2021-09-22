@@ -136,6 +136,8 @@ const addFormResponsesForApproved = async (
   formAssignments,
   organizations
 ) => {
+  const formResponseType = user ? "user" : "organization";
+
   const typeMap = {
     user: {
       organization: user?.organization,
@@ -147,29 +149,25 @@ const addFormResponsesForApproved = async (
     },
   };
 
-  for (const formResponseType of Object.keys(typeMap)) {
-    if (typeMap[formResponseType].organization === undefined) continue;
+  const activeFormAssignments = formAssignments.filter(
+    (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
+  );
 
-    const activeFormAssignments = formAssignments.filter(
-      (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
-    );
+  let formResponses = [];
+  for (const formAssignment of activeFormAssignments) {
+    const { target } = formAssignment;
+    const assignedOrgs = getAssignedOrgs(target, organizations);
 
-    let formResponses = [];
-    for (const formAssignment of activeFormAssignments) {
-      const { target } = formAssignment;
-      const assignedOrgs = getAssignedOrgs(target, organizations);
-
-      if (assignedOrgs.has(typeMap[formResponseType].organization)) {
-        formResponses.push(getFormResponseData(formAssignment));
-      }
+    if (assignedOrgs.has(typeMap[formResponseType].organization)) {
+      formResponses.push(getFormResponseData(formAssignment));
     }
-
-    return await fb.batchAddFormResponses(
-      formResponseType,
-      formResponses,
-      new Set([typeMap[formResponseType].documentId])
-    );
   }
+
+  return await fb.batchAddFormResponses(
+    formResponseType,
+    formResponses,
+    new Set([typeMap[formResponseType].documentId])
+  );
 };
 
 export default {

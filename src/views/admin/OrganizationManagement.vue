@@ -74,9 +74,9 @@
               :init-schema="formQuestions"
               :init-value="{}"
               :read-only="false"
-              :showAltButton="false"
+              :show-alt-button="false"
               :close-request="closeFormRequest"
-              @submitted="createOrganization($event)"
+              @submitted="createOrganization"
               @close="showModal = false"
             />
             <p
