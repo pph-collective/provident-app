@@ -8,6 +8,8 @@ describe("Register User", () => {
 
   beforeEach(() => {
     cy.task("auth:deleteUserByEmail", testUser.email);
+    cy.get("[data-cy='login-button']").click();
+    cy.get("[data-cy='request-access-button']").click();
   });
 
   it("Request Access Header", () => {

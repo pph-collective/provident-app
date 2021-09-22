@@ -1,4 +1,5 @@
 import fb from "@/firebase";
+import utils from "@/utils/utils.js";
 
 const TARGET_FILTERS = {
   all: () => true,
@@ -128,14 +129,12 @@ const addFormResponses = async (formAssignment, organizations, users) => {
  *     A user needs the email and organization fields, while an organization needs name field
  * @param {Object[]} formAssignments
  * @param {Object[]} organizations
- * @param {String} today - in ISO format. For example - "2021-01-01".
  * @returns {Promise<void>}
  */
 const addFormResponsesForApproved = async (
   { user, organization },
   formAssignments,
-  organizations,
-  today
+  organizations
 ) => {
   const typeMap = {
     user: {
@@ -152,7 +151,7 @@ const addFormResponsesForApproved = async (
     if (typeMap[formResponseType].organization === undefined) continue;
 
     const activeFormAssignments = formAssignments.filter(
-      (f) => f.form_type === formResponseType && today <= f.expire_date
+      (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
     );
 
     let formResponses = [];

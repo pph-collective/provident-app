@@ -98,7 +98,6 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import { esc } from "@/directives/escape";
-import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
@@ -124,8 +123,6 @@ export default {
     const showModal = ref(false);
     const loading = ref(false);
 
-    const today = utils.today();
-
     const createOrganization = async ({ name, group, municipalities }) => {
       loading.value = true;
 
@@ -141,8 +138,7 @@ export default {
         await formAssignmentUtils.addFormResponsesForApproved(
           { organization },
           formAssignments.value,
-          organizations.value,
-          today
+          organizations.value
         );
         showModal.value = false;
 
