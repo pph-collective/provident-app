@@ -98,6 +98,7 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import { esc } from "@/directives/escape";
+import utils from "../../utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
@@ -114,8 +115,8 @@ export default {
   setup() {
     const store = useStore();
     const formAssignments = computed(() => store.state.formAssignments);
-    const municipalities = computed(() => store.getters.municipalities);
     const organizations = computed(() => store.state.organizations);
+    const municipalities = utils.MUNICIPALITIES;
 
     const fields = ["Name", "Intervention Arm", "Municipalities"];
     const closeFormRequest = ref(0);

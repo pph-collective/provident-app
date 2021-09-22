@@ -2,8 +2,6 @@ import { createStore } from "vuex";
 import fb from "@/firebase.js";
 import utils from "@/utils/utils.js";
 
-import geo from "@/assets/geojson/ri.json";
-
 const store = createStore({
   state() {
     return {
@@ -15,7 +13,6 @@ const store = createStore({
       },
       formAssignments: [],
       forms: {},
-      geo: geo,
       organizations: [],
       users: [],
       loaded: false,
@@ -173,9 +170,6 @@ const store = createStore({
     },
     formOrganizationOptions(state) {
       return state.organizations.map((org) => org.name).sort();
-    },
-    municipalities(state) {
-      return [...new Set(state.geo.map((g) => g.properties.name))].sort();
     },
   },
 });
