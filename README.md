@@ -220,8 +220,8 @@ This web app uses the Cypress testing framework alongside a locally run Firestor
 In order for `firebase-admin` to have read/write access during testing, we need to include a private key.
 
 1. Navigate to the Firebase console to generate a private key (Settings > Service Accounts).
-1. Click **Generate New Private Key** and save the JSON file as `serviceAccount.json`
-1. Add that JSON file to the project root directory. This file is listed in the `.gitignore`. Do not share this private key.
+2. Click **Generate New Private Key** and save the JSON file as `serviceAccount.json`
+3. Add that JSON file to the project root directory. This file is listed in the `.gitignore`. Do not share this private key.
 
 ### Running the tests
 
@@ -248,3 +248,7 @@ Various actions are logged as a user interacts with the app:
 * `launch form`: the user launches a form on the forms page, `subAction` is the form id
 * `create NRA`: the user selects the create button on the neighborhood rapid assessment widget, `subAction` is the selected geoid
 * `launch NRA form`: the user launches a form on the NRA widget, `subAction` is the form id
+
+## Querying the Data
+
+See [`query_examples/`](query_examples) for more on how to get data out of firebase.
