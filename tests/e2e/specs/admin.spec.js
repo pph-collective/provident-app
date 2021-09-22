@@ -177,6 +177,8 @@ describe("Admin Views and Powers", () => {
   describe("Organization Management", () => {
     const testUser = {
       email: "test@user.com",
+      name: "Test User",
+      organization: "Test Organization",
       password: "user-password",
     };
 
@@ -201,9 +203,11 @@ describe("Admin Views and Powers", () => {
         "not.contain",
         "No organizations found"
       );
+
       cy.get('[data-cy="organization-table"]')
         .contains("td", "Good Doers")
         .should("exist");
+
       cy.get('[data-cy="organization-table"]')
         .contains("td", "RI 4 Us")
         .should("exist");
@@ -217,7 +221,7 @@ describe("Admin Views and Powers", () => {
         .find(".has-text-danger")
         .should("contain", "Organization already exists");
 
-      cy.get('[model="name"]').clear().type("Test Intervention Organization");
+      cy.get('[model="name"]').clear().type(testUser.organization);
 
       cy.get('[model="group"]').find("input").first().check();
 
@@ -225,7 +229,7 @@ describe("Admin Views and Powers", () => {
         .find(".multiselect")
         .click()
         .find(".multiselect-option")
-        .contains("Providence")
+        .contains(/^Providence$/)
         .click();
 
       cy.get('[model="municipalities"]')
@@ -240,51 +244,15 @@ describe("Admin Views and Powers", () => {
 
       // Check that it exists on the page
       cy.get('[data-cy="organization-table"]')
-        .contains("td", "Test Intervention Organization")
+        .contains("td", testUser.organization)
         .should("exist");
 
-      // Log Out
-      cy.logout();
-
-      // Register a user
-      cy.get("[data-cy='login-button']").click();
-      cy.get("[data-cy='request-access-button']").click();
-
-      cy.get('[type="email"]').type(testUser.email);
-      cy.get('[data-cy="form-name"]').type("Test User");
-      cy.get('[data-cy="form-organization"]').select(
-        "Test Intervention Organization"
-      );
-      cy.get('[data-cy="form-password"]').type(testUser.password);
-      cy.get('[data-cy="form-confirm-password"]').type(testUser.password);
-      cy.get('[data-cy="form-terms"]').click();
-
-      cy.get(".button").contains("Request Access").should("be.enabled");
-      cy.get("form").submit();
-      cy.get('[data-cy="error-message"]').should("not.exist");
-      cy.get('[data-cy="success-message"]')
-        .should("exist")
-        .contains("Your request has been received.");
-
-      // Log In As Admin to Approve
-      cy.reload(); // Need to refresh the store
-      cy.login_by_permission("admin").then(() => {
-        // Need to navigate to another page before admin button appears
-        cy.get("[data-cy='home']").click();
-        cy.get("[data-cy='admin']").should("exist").click();
-      });
-
-      cy.contains('[data-cy="user-request"]', testUser.email)
-        .find('[data-cy="approve"]')
-        .should("exist")
-        .click();
-      cy.get(".loading-icon").should("not.exist");
-
-      cy.logout();
+      cy.registerUser(testUser);
+      cy.approveUser(testUser.email);
 
       // Log in as test user
+      cy.logout();
       cy.login(testUser.email, testUser.password);
-      cy.get("[data-cy='home']").click();
       // Navigate to form
       cy.get("[data-cy='snack']").click();
       cy.get("a[href='/snack/forms']").click();
@@ -303,6 +271,48 @@ describe("Admin Views and Powers", () => {
         "contain",
         "Sample Organization Form"
       );
+      cy.get('[data-cy="close-form"]').click();
+    });
+
+    it("Creating a control organization without forms", () => {
+      cy.get('[data-cy="create-button"]').should("exist").click();
+
+      cy.get('[model="name"]').clear().type(testUser.organization);
+
+      cy.get('[model="group"]').find("input").eq(1).check();
+
+      cy.get('[model="municipalities"]')
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .contains(/^Providence$/)
+        .click();
+
+      cy.get("button").contains("Submit").click();
+      cy.get(".loading-icon").should("not.exist");
+
+      // Check that it exists on the page
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", testUser.organization)
+        .should("exist");
+
+      cy.registerUser(testUser);
+      cy.approveUser(testUser.email);
+
+      // Log in as test user
+      cy.logout();
+      cy.login(testUser.email, testUser.password);
+      // Navigate to form
+      cy.get("[data-cy='snack']").click();
+      cy.get("a[href='/snack/forms']").click();
+      cy.get('[data-cy="panel-tabs"]')
+        .find("a")
+        .contains("Organization-level")
+        .click();
+
+      cy.get('[data-cy="forms-panel-block"]')
+        .find("Sample Organization Form")
+        .should("not.exist");
     });
   });
 });

@@ -1,8 +1,13 @@
 describe("Register User", () => {
+  const testUser = {
+    email: "register@register.com",
+    name: "First Last",
+    organization: "Good Doers",
+    password: "register-password",
+  };
+
   beforeEach(() => {
-    cy.task("auth:deleteUserByEmail", "register@register.com");
-    cy.get("[data-cy='login-button']").click();
-    cy.get("[data-cy='request-access-button']").click();
+    cy.task("auth:deleteUserByEmail", testUser.email);
   });
 
   it("Request Access Header", () => {
@@ -14,30 +19,26 @@ describe("Register User", () => {
   });
 
   it("Submit valid form", () => {
-    cy.get('[type="email"]').type("register@register.com");
-    cy.get('[data-cy="form-name"]').type("First Last");
-    cy.get('[data-cy="form-organization"]').select("Good Doers");
-    cy.get('[data-cy="form-password"]').type("register-password");
-    cy.get('[data-cy="form-confirm-password"]').type("register-password");
-    cy.get('[data-cy="form-terms"]').click();
-
-    cy.get(".button").contains("Request Access").should("be.enabled");
-    cy.get("form").submit();
-    cy.get('[data-cy="error-message"]').should("not.exist");
-    cy.get('[data-cy="success-message"]')
-      .should("exist")
-      .contains("Your request has been received.");
+    cy.registerUser({
+      email: "register@register.com",
+      name: "First Last",
+      organization: "Good Doers",
+      password: "register-password",
+    });
 
     // Try to log in
     cy.get("[data-cy='login-button']").click();
-    cy.get('[type="email"]').type("register@register.com");
-    cy.get('[type="password"]').type("register-password{enter}");
+    cy.get('[type="email"]').type(testUser.email);
+    cy.get('[type="password"]').type(`${testUser.password}{enter}`);
     cy.get('[data-cy="error-message"]')
       .should("exist")
       .contains("User account not approved: pending");
   });
 
   it("Email is already in use", () => {
+    cy.get("[data-cy='login-button']").click();
+    cy.get("[data-cy='request-access-button']").click();
+
     cy.get('[type="email"]').type("user@user.com");
     cy.get('[data-cy="form-name"]').type("First Last");
     cy.get('[data-cy="form-organization"]').select("Good Doers");
