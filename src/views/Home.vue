@@ -37,21 +37,21 @@ export default {
     const biteData = reactive([
       reactive({
         id: 0,
-        title: "A First Bite",
+        title: "One Bite",
         description:
           "<h1>The first bite is always the best bite.</h1><p>...or is it?</p>",
         icon: "cookie",
       }),
       reactive({
         id: 1,
-        title: "A Second Bite",
+        title: "Two Bites",
         description:
           "<h2>The second bite is when you really taste the cookie.</h2><p>hee hee hee</p>",
         icon: "cookie-bite",
       }),
       reactive({
         id: 2,
-        title: "A Different Choice",
+        title: "Three Bites!",
         description:
           "<h2>Waffles are cookies too.</h2><p>#neverforgetwaffles</p>",
         icon: "stroopwafel",
