@@ -1,4 +1,5 @@
 import ACCOUNTS from "../../fixtures/accounts.json";
+import { resetDatabase } from "../support";
 
 describe("Admin Views and Powers", () => {
   beforeEach(() => {
@@ -179,10 +180,20 @@ describe("Admin Views and Powers", () => {
       password: "user-password",
     };
 
-    beforeEach(() => {
+    const resetTest = () => {
       cy.task("auth:deleteUserByEmail", testUser.email);
+      cy.reload(); // Refresh store
+    };
+
+    beforeEach(() => {
+      resetTest();
       cy.get('a[href="/admin/organization_management"]').click();
       cy.get(".loading-icon").should("not.exist");
+    });
+
+    after(() => {
+      resetDatabase();
+      resetTest();
     });
 
     it("Page loads", () => {

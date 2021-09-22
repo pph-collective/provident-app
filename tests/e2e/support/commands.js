@@ -41,6 +41,7 @@ Cypress.Commands.add("logout", () => {
 
     cy.get("[data-cy='home']").click();
     cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get("[data-cy='login-button']").should("exist");
   });
   cy.log("Logged out");
 });

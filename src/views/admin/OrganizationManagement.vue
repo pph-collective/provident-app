@@ -144,12 +144,21 @@ export default {
           organizations.value,
           today
         );
-
-        loading.value = false;
         showModal.value = false;
+
+        store.dispatch("addNotification", {
+          color: "success",
+          message: `Success! Organization added: ${name}`,
+        });
       } catch (err) {
         console.log(err);
+        store.dispatch("addNotification", {
+          color: "danger",
+          message: err.message,
+        });
       }
+
+      loading.value = false;
     };
 
     const formQuestions = computed(() => [
