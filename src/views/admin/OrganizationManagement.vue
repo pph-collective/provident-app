@@ -32,12 +32,15 @@
               ></i>
             </td>
             <td>
-              <span v-if="org.municipalities.length === 0" class="tag">
+              <span
+                v-if="org.municipalities.length === 0"
+                class="tag is-info is-rounded is-light m-1"
+              >
                 All of Rhode Island
               </span>
               <span
                 v-for="municipality in org.municipalities.sort()"
-                class="tag"
+                class="tag is-info is-rounded is-light m-1"
                 :key="municipality"
               >
                 {{ municipality }}
@@ -119,7 +122,7 @@ export default {
     const store = useStore();
     const formAssignments = computed(() => store.state.formAssignments);
     const organizations = computed(() => store.state.organizations);
-    const municipalities = utils.MUNICIPALITIES;
+    const allMunicipalities = utils.MUNICIPALITIES;
 
     const fields = ["Name", "Intervention Arm", "Municipalities"];
     const closeFormRequest = ref(0);
@@ -184,7 +187,7 @@ export default {
         multiple: true,
         label: "Municipalities",
         model: "municipalities",
-        options: municipalities,
+        options: allMunicipalities,
       },
     ]);
 
@@ -195,7 +198,6 @@ export default {
       formMessage,
       formQuestions,
       loading,
-      municipalities,
       organizations,
       showModal,
     };

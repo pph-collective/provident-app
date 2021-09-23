@@ -138,10 +138,10 @@ const addFormResponsesForApproved = async (
   formAssignments,
   organizations
 ) => {
-  const organization =
-    formResponseType === "user" ? approved.organization : approved.name;
-  const documentId =
-    formResponseType === "user" ? approved.email : approved.name;
+  const [organization, documentId] =
+    formResponseType === "user"
+      ? [approved.organization, approved.email]
+      : [approved.name, approved.name];
 
   const activeFormAssignments = formAssignments.filter(
     (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
