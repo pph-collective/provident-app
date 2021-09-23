@@ -1,12 +1,25 @@
 <template>
   <div class="home">
-    <section class="hero is-fullheight-with-navbar is-primary" id="top">
-      <div class="hero-body">
-        <h1 class="title">
+    <section
+      class="hero is-fullheight-with-navbar is-primary header-image"
+      id="top"
+    >
+      <div
+        class="
+          hero-body
+          is-flex-direction-column
+          is-justify-content-center
+          is-align-items-flex-end
+        "
+      >
+        <h1 class="title mb-6" :class="[isMobile ? 'is-size-3' : 'is-size-1']">
           Our current methods for ending the overdose crisis are limited by
           tools that respond after overdose events occur.
         </h1>
-        <h2 class="subtitle">
+        <h2
+          class="subtitle mt-4"
+          :class="[isMobile ? 'is-size-4' : 'is-size-2']"
+        >
           What if we could prevent overdose events before they occur?
         </h2>
       </div>
@@ -65,3 +78,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.header-image {
+  background-image: url("../assets/images/pawel-czerwinski-kmviGX74hXU-unsplash.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #999;
+}
+</style>
