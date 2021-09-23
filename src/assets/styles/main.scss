@@ -1,5 +1,7 @@
 // variables.scss automatically loaded by webpack
 
+@import "bulma-responsive-tables";
+
 $box-radius: 2px;
 
 @media (min-width: 900px) {

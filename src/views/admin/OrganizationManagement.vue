@@ -13,49 +13,58 @@
         </button>
       </div>
 
-      <table class="table" data-cy="organization-table">
-        <thead>
-          <tr>
-            <th v-for="field in fields" class="is-clickable" :key="field">
-              <span class="icon-text">
-                <span>{{ field }}</span>
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="org in organizations" :key="org.name">
-            <td>{{ org.name }}</td>
-            <td>
-              <i
-                :class="['fas', org.intervention_arm ? 'fa-check' : 'fa-times']"
-              ></i>
-            </td>
-            <td>
-              <span
-                v-if="org.municipalities.length === 0"
-                class="tag is-info is-rounded is-light m-1"
-              >
-                All of Rhode Island
-              </span>
-              <span
-                v-for="municipality in org.municipalities.sort()"
-                class="tag is-info is-rounded is-light m-1"
-                :key="municipality"
-              >
-                {{ municipality }}
-              </span>
-            </td>
-          </tr>
-          <tr v-if="organizations.length === 0">
-            <td :colspan="fields.length">
-              <div class="is-flex is-justify-content-center">
-                <p>No organizations found</p>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="b-table">
+        <div class="table-wrapper has-mobile-cards">
+          <table class="table" data-cy="organization-table">
+            <thead>
+              <tr>
+                <th v-for="field in fields" class="is-clickable" :key="field">
+                  <span class="icon-text">
+                    <span>{{ field }}</span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="org in organizations" :key="org.name">
+                <td :data-label="fields[0]">{{ org.name }}</td>
+                <td :data-label="fields[1]">
+                  <i
+                    :class="[
+                      'fas',
+                      org.intervention_arm ? 'fa-check' : 'fa-times',
+                    ]"
+                  ></i>
+                </td>
+                <td :data-label="fields[2]" class="is-flex-wrap-wrap">
+                  <div>
+                    <span
+                      v-if="org.municipalities.length === 0"
+                      class="tag is-info is-rounded is-light m-1"
+                    >
+                      All of Rhode Island
+                    </span>
+                    <span
+                      v-for="municipality in org.municipalities.sort()"
+                      class="tag is-info is-rounded is-light m-1"
+                      :key="municipality"
+                    >
+                      {{ municipality }}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="organizations.length === 0">
+                <td :colspan="fields.length">
+                  <div class="is-flex is-justify-content-center">
+                    <p>No organizations found</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div
         v-if="showModal && formQuestions.length > 0"
