@@ -32,6 +32,9 @@
               ></i>
             </td>
             <td>
+              <span v-if="org.municipalities.length === 0" class="tag">
+                All of Rhode Island
+              </span>
               <span
                 v-for="municipality in org.municipalities.sort()"
                 class="tag"
