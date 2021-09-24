@@ -36,8 +36,8 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
 });
 
 Cypress.Commands.add("logout", () => {
+  cy.get(".loading-icon", { timeout: 500 }).should("not.exist");
   fb.logout();
-  cy.get(".loading-icon").should("not.exist");
   cy.get("[data-cy='home']").click();
   cy.log("Logged out");
 });
