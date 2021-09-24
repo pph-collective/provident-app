@@ -227,16 +227,11 @@ const createEmail = async ({
 };
 
 const addOrg = async (organization) => {
-  try {
-    const res = await db
-      .collection("organizations")
-      .doc(organization.name)
-      .set(organization);
+  const docId = organization.name;
 
-    return res.id;
-  } catch (err) {
-    console.log(err);
-  }
+  await db.collection("organizations").doc(docId).set(organization);
+
+  return docId;
 };
 
 export default {

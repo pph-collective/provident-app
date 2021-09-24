@@ -165,10 +165,8 @@ export default {
         });
       } catch (err) {
         console.log(err);
-        store.dispatch("addNotification", {
-          color: "danger",
-          message: err.message,
-        });
+        formMessage.value = "Error creating organization";
+        setTimeout(() => (formMessage.value = ""), 6000);
       }
 
       loading.value = false;
