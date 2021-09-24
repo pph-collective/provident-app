@@ -58,7 +58,7 @@ export default {
         title: "How will we do this?",
         description:
           "<h1>The PROVIDENT Study is a research study looking to prevent drug-related deaths in neighborhoods across Rhode Island.</h1><p>We will test a new set of tools for public health and policy leaders to help them predict, or forecast, the future overdose trends and patterns in their state - and identify the best ways to intervene and save lives. Our results will improve public health decision-making and inform resource allocation to communities that should be prioritized for evidence-based prevention, treatment, recovery, and overdose rescue services. If found to be effective, The PROVIDENT Model forecasting tool will be disseminated to other states, which could adapt the tool to guide resource allocation and maximize public health impact.</p>",
-        icon: "far fa-layer-group ",
+        icon: "layer-group ",
       }),
       reactive({
         id: 1,
