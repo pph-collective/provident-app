@@ -1,6 +1,9 @@
 <template>
   <div
-    class="is-flex is-flex-direction-row is-flex-grow-5 is-align-items-center"
+    class="
+      is-flex is-flex-direction-row is-flex-grow-5 is-align-items-center
+      has-text-dark
+    "
   >
     <div class="column is-two-thirds content" v-html="description"></div>
     <div class="column has-text-centered">

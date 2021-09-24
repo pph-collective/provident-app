@@ -8,18 +8,12 @@
         'is-flex-wrap-nowrap',
         'is-align-items-center',
         'bite-column',
-        isActive
-          ? 'has-background-primary-dark'
-          : 'has-background-primary-light',
+        isActive ? 'has-background-primary' : 'has-background-primary-light',
+        isActive ? 'has-text-primary-light' : 'has-text-primary',
       ]"
     >
       <i :class="['fas', 'fa-2x', `fa-${icon}`, 'p-2']" />
-      <h3
-        :class="[
-          'is-size-3',
-          isActive ? 'has-text-primary-light' : 'has-text-primary-dark',
-        ]"
-      >
+      <h3 class="is-size-3">
         {{ title }}
       </h3>
     </div>
