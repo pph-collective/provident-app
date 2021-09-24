@@ -65,7 +65,7 @@ export default {
         title: "Study Design",
         description:
           "<h2>This study is a randomized control trial, a type of trial that helps researchers and government agencies see whether new interventions are an improvement over existing ones.</h2><p>In PROVIDENT, the intervention will be a model that maps out neighborhoods in Rhode Island where future overdose deaths are most likely to occur. Half of the cities in Rhode Island will be assigned at random (by chance) to receive targeted interventions based on the PROVIDENT model while the other half will be assigned to the control group. In cities randomized to the PROVIDENT intervention, researchers at Brown University and the Rhode Island Department of Health will work with community leaders to target overdose prevention and treatment interventions to those neighborhoods identified by the model as being at the highest risk for future overdose outbreaks. It is important to note that there will be no changes to the overall amount of resources dedicated to preventing overdose deaths in Rhode Island. If the trial is successful, our goal is to reduce overdose rates by 40% in five years.</p>",
-        icon: "fas fa-ruler-combined",
+        icon: "ruler-combined",
       }),
     ]);
 
