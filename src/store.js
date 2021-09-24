@@ -74,6 +74,7 @@ const store = createStore({
       }
     },
     async addOrg({ commit, state }, organization) {
+      // Setting _id to be more consistent to getCollection in firebase.js
       organization._id = await fb.addOrg(organization);
 
       commit("mutate", {

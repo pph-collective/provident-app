@@ -1,3 +1,45 @@
+const MUNICIPALITIES = [
+  "Barrington",
+  "Bristol",
+  "Burrillville",
+  "Central Falls",
+  "Charlestown",
+  "Coventry",
+  "Cranston",
+  "Cumberland",
+  "East Greenwich",
+  "East Providence",
+  "Exeter",
+  "Foster",
+  "Glocester",
+  "Hopkinton",
+  "Jamestown",
+  "Johnston",
+  "Lincoln",
+  "Little Compton",
+  "Middletown",
+  "Narragansett",
+  "New Shoreham",
+  "Newport",
+  "North Kingstown",
+  "North Providence",
+  "North Smithfield",
+  "Pawtucket",
+  "Portsmouth",
+  "Providence",
+  "Richmond",
+  "Scituate",
+  "Smithfield",
+  "South Kingstown",
+  "Tiverton",
+  "Warren",
+  "Warwick",
+  "West Greenwich",
+  "West Warwick",
+  "Westerly",
+  "Woonsocket",
+];
+
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("champion");
@@ -19,9 +61,7 @@ describe("Dashboard viewed as a user", () => {
         expect(actual).to.deep.eq([
           "Good Doers",
           "All of Rhode Island",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
+          ...MUNICIPALITIES,
         ]);
       });
 
@@ -259,9 +299,7 @@ describe("Dashboard viewed as a control arm user", () => {
         expect(actual).to.deep.eq([
           "RI 4 Us",
           "All of Rhode Island",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
+          ...MUNICIPALITIES,
         ]);
       });
   });
@@ -384,9 +422,7 @@ describe("Dashboard viewed as an admin", () => {
           "All of Rhode Island",
           "Good Doers",
           "RI 4 Us",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
+          ...MUNICIPALITIES,
         ]);
       });
   });

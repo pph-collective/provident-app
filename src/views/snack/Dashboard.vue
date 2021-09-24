@@ -109,6 +109,11 @@ export default {
     Loading,
   },
   setup() {
+    const towns = utils.MUNICIPALITIES.map((m) => ({
+      name: m,
+      municipalities: [m],
+    }));
+
     const store = useStore();
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
@@ -123,19 +128,6 @@ export default {
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
       const orgs = store.state.organizations;
-      const towns = [];
-      dataset.value.forEach((d) => {
-        if (
-          d.municipality &&
-          !towns.some((town) => d.municipality === town.name)
-        ) {
-          towns.push({
-            name: d.municipality,
-            municipalities: [d.municipality],
-          });
-        }
-      });
-      towns.sort(utils.sortByProperty("name"));
       if (store.state.user.admin) {
         return [ri, ...orgs, ...towns];
       } else if (store.state.user.data) {
