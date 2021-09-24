@@ -3,7 +3,7 @@
     <div class="hero-head is-hidden-touch">
       <div class="container has-text-centered">
         <router-link to="/"
-          ><i class="fas fa-2x my-5 fa-chevron-circle-up"
+          ><i class="fas fa-2x my-5 fa-chevron-circle-up has-text-primary"
         /></router-link>
       </div>
     </div>
