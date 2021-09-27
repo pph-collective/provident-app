@@ -1,45 +1,3 @@
-const MUNICIPALITIES = [
-  "Barrington",
-  "Bristol",
-  "Burrillville",
-  "Central Falls",
-  "Charlestown",
-  "Coventry",
-  "Cranston",
-  "Cumberland",
-  "East Greenwich",
-  "East Providence",
-  "Exeter",
-  "Foster",
-  "Glocester",
-  "Hopkinton",
-  "Jamestown",
-  "Johnston",
-  "Lincoln",
-  "Little Compton",
-  "Middletown",
-  "Narragansett",
-  "New Shoreham",
-  "Newport",
-  "North Kingstown",
-  "North Providence",
-  "North Smithfield",
-  "Pawtucket",
-  "Portsmouth",
-  "Providence",
-  "Richmond",
-  "Scituate",
-  "Smithfield",
-  "South Kingstown",
-  "Tiverton",
-  "Warren",
-  "Warwick",
-  "West Greenwich",
-  "West Warwick",
-  "Westerly",
-  "Woonsocket",
-];
-
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("champion");
@@ -58,10 +16,9 @@ describe("Dashboard viewed as a user", () => {
       .should("have.lengthOf.above", 3)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 2)).to.deep.eq([
           "Good Doers",
           "All of Rhode Island",
-          ...MUNICIPALITIES,
         ]);
       });
 
@@ -296,10 +253,9 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("have.lengthOf.above", 4)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 2)).to.deep.eq([
           "RI 4 Us",
           "All of Rhode Island",
-          ...MUNICIPALITIES,
         ]);
       });
   });
@@ -418,11 +374,10 @@ describe("Dashboard viewed as an admin", () => {
       .should("have.lengthOf.above", 4)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 3)).to.deep.eq([
           "All of Rhode Island",
           "Good Doers",
           "RI 4 Us",
-          ...MUNICIPALITIES,
         ]);
       });
   });

@@ -21,12 +21,7 @@ describe("Register User", () => {
   });
 
   it("Submit valid form", () => {
-    cy.registerUser({
-      email: "register@register.com",
-      name: "First Last",
-      organization: "Good Doers",
-      password: "register-password",
-    });
+    cy.registerUser(testUser);
 
     // Try to log in
     cy.get("[data-cy='login-button']").click();
