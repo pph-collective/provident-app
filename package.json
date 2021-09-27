@@ -12,7 +12,8 @@
     "firebase:savedev": "firebase emulators:export emulator_data",
     "add-admin": "node scripts/add-admin.js",
     "add-form": "node scripts/add-form.js",
-    "add-results": "node scripts/add-results.js"
+    "add-results": "node scripts/add-results.js",
+    "add-svi": "node scripts/add-svi.js"
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
@@ -45,6 +46,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.2.4",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "argparse": "^2.0.1",
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
     "csv-parse": "^4.16.0",

@@ -33,6 +33,15 @@ The `add-results` script reads in a csv with results, and loads them to the fire
 yarn add-results <path to csv> [--emulator]
 ```
 
+## `add-svi`
+
+The `add-svi` script reads in a csv with svi data for a single period, and loads it to the firestore "svi_data" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database. The `-p` `--period` flag must be passed with the model period for this data (e.g. `2019-2`).  The `-f` `--file` flag must be passed with the path to the csv containing the data.
+
+### Usage
+```
+yarn add-svi -p 2019-2 -f <path to csv> [--emulator]
+```
+
 ## `shp2topo`
 
 The `shp2topo` script downloads shp file data from the census wibsite and processes it into the format needed fot the `Map.vue` component.

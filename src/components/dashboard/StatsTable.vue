@@ -93,7 +93,22 @@ export default {
       toRefs(props);
 
     const metrics = {
-      mean: ["pct_demographic_1", "pct_demographic_2"],
+      mean: [
+        "below_poverty",
+        "unemployed",
+        "income",
+        "no_high_school_diploma",
+        "age_65_older",
+        "age_17_younger",
+        "household_with_disability",
+        "single_parent_households",
+        "minority",
+        "no_english",
+        "multi_unit_structures",
+        "mobile_homes",
+        "crowded_housing",
+        "no_vehicle",
+      ],
       sum: [],
     };
 

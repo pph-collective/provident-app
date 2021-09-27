@@ -27,3 +27,5 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+hero_image_options
