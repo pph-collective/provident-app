@@ -116,6 +116,7 @@ describe("Admin Views and Powers", () => {
 
     // still there after hard refresh
     cy.visit("/admin/user_management");
+    cy.get(".loading-icon").should("not.exist");
     cy.get("h1.title").should("contain", "User Management");
     cy.get(".loading-icon").should("not.exist");
     cy.get("table tbody tr")
