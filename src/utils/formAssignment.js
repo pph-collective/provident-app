@@ -1,4 +1,5 @@
 import fb from "@/firebase";
+import utils from "@/utils/utils.js";
 
 const TARGET_FILTERS = {
   all: () => true,
@@ -122,44 +123,50 @@ const addFormResponses = async (formAssignment, organizations, users) => {
 };
 
 /**
- * Adds form responses to the db for the user based on the existing form assignments
+ * Adds form responses to the db for a user or organization based on the existing form assignments
  *
- * @param {Object} user - needs the email and organization fields
+ * @param {String} formResponseType - either "user" or "organization"
+ * @param {Object} approved - Provide one of user or organization to add form responses for.
+ *     A user needs the email and organization fields, while an organization needs name field
  * @param {Object[]} formAssignments
  * @param {Object[]} organizations
- * @param {String} today - in ISO format. For example - "2021-01-01".
  * @returns {Promise<void>}
  */
-const addFormResponsesForUser = async (
-  user,
+const addFormResponsesForApproved = async (
+  formResponseType,
+  approved,
   formAssignments,
-  organizations,
-  today
+  organizations
 ) => {
-  const activeUserFormAssignments = formAssignments.filter(
-    (f) => f.form_type === "user" && today <= f.expire_date
+  const [organization, documentId] =
+    formResponseType === "user"
+      ? [approved.organization, approved.email]
+      : [approved.name, approved.name];
+
+  const activeFormAssignments = formAssignments.filter(
+    (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
   );
 
   let formResponses = [];
-  for (const formAssignment of activeUserFormAssignments) {
+  for (const formAssignment of activeFormAssignments) {
     const { target } = formAssignment;
     const assignedOrgs = getAssignedOrgs(target, organizations);
 
-    if (assignedOrgs.has(user.organization)) {
+    if (assignedOrgs.has(organization)) {
       formResponses.push(getFormResponseData(formAssignment));
     }
   }
 
   return await fb.batchAddFormResponses(
-    "user",
+    formResponseType,
     formResponses,
-    new Set([user.email])
+    new Set([documentId])
   );
 };
 
 export default {
   addFormResponses,
-  addFormResponsesForUser,
+  addFormResponsesForApproved,
   getAssignments,
   TARGET_GROUPS,
 };

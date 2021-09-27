@@ -97,7 +97,16 @@ describe("Login Page: Requesting an email to reset password", () => {
 });
 
 describe("Reset Password Page", () => {
+  const resetAuth = () => {
+    cy.task("auth:updateUserByEmail", {
+      email: ACCOUNTS.approved.email,
+      userData: { password: ACCOUNTS.approved.password },
+    });
+  };
+
   beforeEach(() => {
+    resetAuth();
+
     cy.get("[data-cy='login-button']").click();
 
     // Intercept the password email reset request
@@ -132,6 +141,10 @@ describe("Reset Password Page", () => {
         }`
       );
     });
+  });
+
+  after(() => {
+    resetAuth();
   });
 
   it("Log in with old password before reset", () => {
