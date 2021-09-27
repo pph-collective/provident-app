@@ -54,6 +54,9 @@ describe("Admin Views and Powers", () => {
     // Navigate to forms, there should be an assigned form
     cy.get("a.navbar-item").contains("Snack").click();
     cy.get("a[href='/snack/forms']").click();
+
+    cy.get(".loading-icon").should("not.exist");
+
     cy.get(".snack-content").should("exist");
     cy.get(".loading-icon").should("not.exist");
 
@@ -256,6 +259,9 @@ describe("Admin Views and Powers", () => {
       // Navigate to form
       cy.get("[data-cy='snack']").click();
       cy.get("a[href='/snack/forms']").click();
+
+      cy.get(".loading-icon").should("not.exist");
+
       cy.get('[data-cy="panel-tabs"]')
         .find("a")
         .contains("Organization-level")
@@ -305,6 +311,9 @@ describe("Admin Views and Powers", () => {
       // Navigate to form
       cy.get("[data-cy='snack']").click();
       cy.get("a[href='/snack/forms']").click();
+
+      cy.get(".loading-icon").should("not.exist");
+
       cy.get('[data-cy="panel-tabs"]')
         .find("a")
         .contains("Organization-level")
