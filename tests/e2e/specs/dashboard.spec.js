@@ -13,7 +13,7 @@ describe("Dashboard viewed as a user", () => {
       .should("have.length", "2")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 3)
+      .should("have.length", 41)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
         expect(actual.slice(0, 2)).to.deep.eq([
@@ -250,7 +250,7 @@ describe("Dashboard viewed as a control arm user", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 4)
+      .should("have.length", 41)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
         expect(actual.slice(0, 2)).to.deep.eq([
@@ -371,7 +371,7 @@ describe("Dashboard viewed as an admin", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 4)
+      .should("have.length", 42)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
         expect(actual.slice(0, 3)).to.deep.eq([
