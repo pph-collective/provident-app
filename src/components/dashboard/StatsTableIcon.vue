@@ -1,6 +1,7 @@
 <template>
-  <span :class="['icon', 'has-text-' + icon.color]">
-    <i :class="icon.type"></i>
+  <span class="stat-icon has-text-grey-dark is-family-monospace">
+    {{ stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
+    }}<span class="has-text-weight-bold" :class="['has-text-' + color]">⬥</span>
   </span>
 </template>
 
@@ -25,9 +26,13 @@ export default {
       type: String,
       required: true,
     },
+    formatFn: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
-    const { stats, metric, location, previousStats } = toRefs(props);
+    const { stats, metric, location } = toRefs(props);
 
     const getTertile = (s, m) => {
       if (s[m] === undefined) {
@@ -41,9 +46,8 @@ export default {
       }
     };
 
-    const icon = computed(() => {
+    const color = computed(() => {
       let color = "light";
-      let type = [];
       if (location.value) {
         const currentTertile = getTertile(stats.value, metric.value);
         switch (currentTertile) {
@@ -57,27 +61,13 @@ export default {
             color = "danger";
             break;
         }
-
-        if (previousStats.value[metric.value] !== undefined) {
-          type.push("fas", "fa-arrow-alt-circle-right");
-          const previousTertile = getTertile(previousStats.value, metric.value);
-          if (currentTertile < previousTertile) {
-            type.push("rotate-down");
-          } else if (currentTertile > previousTertile) {
-            type.push("rotate-up");
-          }
-        } else {
-          type.push("fas", "fa-circle");
-        }
-      } else {
-        type.push("far", "fa-circle");
       }
 
-      return { color, type };
+      return color;
     });
 
     return {
-      icon,
+      color,
     };
   },
 };
@@ -90,5 +80,10 @@ export default {
 
 .rotate-down {
   transform: rotate(45deg);
+}
+
+// between size 6 and 7
+.stat-icon {
+  font-size: 0.825rem;
 }
 </style>

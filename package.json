@@ -21,6 +21,7 @@
     "arquero": "^4.8.4",
     "bulma": "^0.9.3",
     "bulma-responsive-tables": "^1.2.3",
+    "d3-format": "^3.0.1",
     "firebase": "^8.10.0",
     "formvuelate": "^3.5.0",
     "sanitize-html": "^2.5.0",

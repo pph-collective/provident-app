@@ -22,26 +22,29 @@
     </thead>
     <tbody>
       <tr v-for="metric in metricsList" :key="metric">
-        <th class="has-text-right">{{ metric }}</th>
-        <td class="data-column">
+        <th class="has-text-right is-size-7">{{ metric }}</th>
+        <td class="data-column has-text-center">
           <StatsTableIcon
             :metric="metric"
+            :format-fn="formatFns[metric]"
             :stats="current.ri"
             :previous-stats="previous.ri"
             location="RI"
           />
         </td>
-        <td class="data-column">
+        <td class="data-column has-text-center">
           <StatsTableIcon
             :metric="metric"
+            :format-fn="formatFns[metric]"
             :stats="current.municipality"
             :previous-stats="previous.municipality"
             :location="municipality"
           />
         </td>
-        <td class="data-column">
+        <td class="data-column has-text-center">
           <StatsTableIcon
             :metric="metric"
+            :format-fn="formatFns[metric]"
             :stats="current.geoid"
             :previous-stats="previous.geoid"
             :location="geoid"
@@ -55,6 +58,7 @@
 <script>
 import { toRefs } from "vue";
 import * as aq from "arquero";
+import { format } from "d3-format";
 
 import { useStats } from "@/composables/useStats.js";
 import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
@@ -92,8 +96,13 @@ export default {
     const { dataset, geoid, municipality, previousDataset, withPredictions } =
       toRefs(props);
 
+    const formatters = {
+      pct: format(".1%"),
+      dollar: format("$,.0f"),
+    };
+
     const metrics = {
-      mean: [
+      median: [
         "below_poverty",
         "unemployed",
         "income",
@@ -112,6 +121,25 @@ export default {
       sum: [],
     };
 
+    const formats = {
+      pct: [
+        "below_poverty",
+        "unemployed",
+        "no_high_school_diploma",
+        "age_65_older",
+        "age_17_younger",
+        "household_with_disability",
+        "single_parent_households",
+        "minority",
+        "no_english",
+        "multi_unit_structures",
+        "mobile_homes",
+        "crowded_housing",
+        "no_vehicle",
+      ],
+      dollar: ["income"],
+    };
+
     if (withPredictions.value) metrics.sum.push("flag_1");
 
     const metricsList = Object.values(metrics).flat();
@@ -120,6 +148,13 @@ export default {
     for (const [agg, aggMetrics] of Object.entries(metrics)) {
       for (const metric of aggMetrics) {
         statFns[metric] = aq.op[agg](metric);
+      }
+    }
+
+    const formatFns = {};
+    for (const [format, formatMetrics] of Object.entries(formats)) {
+      for (const metric of formatMetrics) {
+        formatFns[metric] = formatters[format];
       }
     }
 
@@ -149,16 +184,28 @@ export default {
       current,
       previous,
       metricsList,
+      formatFns,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.table {
+  line-height: 1;
+
+  th,
+  td {
+    vertical-align: middle;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+  }
+}
+
 .data-column {
-  max-width: 45px;
-  padding-left: 5px;
-  padding-right: 5px;
+  min-width: 60px;
+  padding-left: 3px;
+  padding-right: 3px;
   text-align: center !important;
 }
 </style>
