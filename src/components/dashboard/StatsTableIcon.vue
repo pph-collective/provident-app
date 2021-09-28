@@ -1,5 +1,5 @@
 <template>
-  <span class="stat-icon has-text-grey-dark is-family-monospace">
+  <span class="has-text-grey-dark is-family-monospace">
     {{ stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}<span class="has-text-weight-bold" :class="['has-text-' + color]">⬥</span>
   </span>

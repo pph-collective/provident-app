@@ -20,43 +20,102 @@
         <th class="data-column"><abbr :title="geoid">BG</abbr></th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="metric in metrics" :key="metric">
-        <th class="has-text-right is-size-7">{{ metric.title }}</th>
-        <td class="data-column has-text-center">
-          <StatsTableIcon
-            :metric="metric.field"
-            :format-fn="metric.formatter"
-            :stats="current.ri"
-            :tertile-direction="metric.tertile_direction"
-            location="RI"
-          />
-        </td>
-        <td class="data-column has-text-center">
-          <StatsTableIcon
-            :metric="metric.field"
-            :format-fn="metric.formatter"
-            :stats="current.municipality"
-            :tertile-direction="metric.tertile_direction"
-            :location="municipality"
-          />
-        </td>
-        <td class="data-column has-text-center">
-          <StatsTableIcon
-            :metric="metric.field"
-            :format-fn="metric.formatter"
-            :stats="current.geoid"
-            :tertile-direction="metric.tertile_direction"
-            :location="geoid"
-          />
-        </td>
-      </tr>
+    <tbody class="is-size-6-7">
+      <template v-for="(metrics, group) in groupedMetrics" :key="group">
+        <!-- group level row -->
+        <tr
+          @click="showGroups[group] = !showGroups[group]"
+          class="is-clickable"
+        >
+          <th
+            class="
+              has-text-right has-text-bold
+              is-flex is-justify-content-space-between is-align-items-center
+            "
+          >
+            <span class="icon">
+              <i
+                class="fas"
+                :class="[
+                  showGroups[group] ? 'fa-caret-down' : 'fa-caret-right',
+                ]"
+              />
+            </span>
+            <span>
+              {{ group }}
+            </span>
+          </th>
+          <td class="data-column has-text-center">
+            <StatsTableIcon
+              :metric="metrics[0].field"
+              :format-fn="metrics[0].formatter"
+              :stats="current.ri"
+              :tertile-direction="metrics[0].tertile_direction"
+              location="RI"
+            />
+          </td>
+          <td class="data-column has-text-center">
+            <StatsTableIcon
+              :metric="metrics[0].field"
+              :format-fn="metrics[0].formatter"
+              :stats="current.municipality"
+              :tertile-direction="metrics[0].tertile_direction"
+              :location="municipality"
+            />
+          </td>
+          <td class="data-column has-text-center">
+            <StatsTableIcon
+              :metric="metrics[0].field"
+              :format-fn="metrics[0].formatter"
+              :stats="current.geoid"
+              :tertile-direction="metrics[0].tertile_direction"
+              :location="geoid"
+            />
+          </td>
+        </tr>
+
+        <!-- group detail rows -->
+        <template v-if="showGroups[group]">
+          <tr v-for="metric in metrics" :key="metric">
+            <th class="has-text-right has-text-weight-medium">
+              {{ metric.title }}
+            </th>
+            <td class="data-column has-text-center">
+              <StatsTableIcon
+                :metric="metric.field"
+                :format-fn="metric.formatter"
+                :stats="current.ri"
+                :tertile-direction="metric.tertile_direction"
+                location="RI"
+              />
+            </td>
+            <td class="data-column has-text-center">
+              <StatsTableIcon
+                :metric="metric.field"
+                :format-fn="metric.formatter"
+                :stats="current.municipality"
+                :tertile-direction="metric.tertile_direction"
+                :location="municipality"
+              />
+            </td>
+            <td class="data-column has-text-center">
+              <StatsTableIcon
+                :metric="metric.field"
+                :format-fn="metric.formatter"
+                :stats="current.geoid"
+                :tertile-direction="metric.tertile_direction"
+                :location="geoid"
+              />
+            </td>
+          </tr>
+        </template>
+      </template>
     </tbody>
   </table>
 </template>
 
 <script>
-import { toRefs } from "vue";
+import { toRefs, reactive } from "vue";
 import * as aq from "arquero";
 import { format } from "d3-format";
 
@@ -235,6 +294,17 @@ export default {
         tertile_direction: "ascending",
       });
 
+    const groupedMetrics = {};
+    const showGroups = reactive({});
+    for (const metric of metrics) {
+      if (groupedMetrics[metric.group] === undefined) {
+        groupedMetrics[metric.group] = [metric];
+        showGroups[metric.group] = false;
+      } else {
+        groupedMetrics[metric.group].push(metric);
+      }
+    }
+
     const statFns = {};
     for (const metric of metrics) {
       statFns[metric.field] = aq.op[metric.aggregate](metric.field);
@@ -254,11 +324,10 @@ export default {
       geoid,
     });
 
-    console.log(current.value);
-
     return {
       current,
-      metrics,
+      groupedMetrics,
+      showGroups,
     };
   },
 };
@@ -281,5 +350,10 @@ export default {
   padding-left: 3px;
   padding-right: 3px;
   text-align: center !important;
+}
+
+// between size 6 and 7
+.is-size-6-7 {
+  font-size: 0.825rem;
 }
 </style>
