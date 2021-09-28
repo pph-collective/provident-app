@@ -7,6 +7,8 @@ export function useStats({
   dataset,
   municipality,
   geoid,
+  calcTertile,
+  groupTertile,
 }) {
   const dt = computed(() => {
     return aq.from(dataset.value);
@@ -28,6 +30,8 @@ export function useStats({
         .rollup(statFns)
         .derive({ area: () => "RI" })
         .cross(tertiles.value)
+        .derive(calcTertile)
+        .derive(groupTertile)
         .objects()[0];
     } else {
       return [];
@@ -41,6 +45,8 @@ export function useStats({
         .rollup(statFns)
         .derive({ area: (d) => d.municipality })
         .cross(tertiles.value)
+        .derive(calcTertile)
+        .derive(groupTertile)
         .objects();
     } else {
       return [];
@@ -52,6 +58,8 @@ export function useStats({
       return dt.value
         .derive({ area: (d) => d.bg_id })
         .cross(tertiles.value)
+        .derive(calcTertile)
+        .derive(groupTertile)
         .objects();
     } else {
       return [];

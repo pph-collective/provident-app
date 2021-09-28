@@ -8,7 +8,7 @@
       @selected="updateControls"
     />
 
-    <Card width="two-thirds" :height="4" id="map">
+    <Card width="two-thirds" :height="5" id="map">
       <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
       <template #top-right>
         <button
@@ -59,7 +59,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="3" id="stats">
+    <Card width="one-third" :height="4" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
@@ -72,7 +72,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="1" id="nra-widget">
+    <Card width="one-third" :height="2" id="nra-widget">
       <template #title>Neighborhood Rapid Assessment</template>
       <template #content>
         <AssessmentWidget :active-geoid="activeGeoid" />

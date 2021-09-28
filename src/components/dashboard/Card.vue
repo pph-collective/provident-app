@@ -61,8 +61,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  @extend .px-4;
-  @extend .py-4;
+  @extend .px-0;
+  @extend .py-0;
   width: 100%;
 }
 .title {
@@ -71,6 +71,7 @@ export default {
 .dashboard-card-content {
   padding: 0;
   width: 100%;
+  height: 100%;
 }
 .fullwidth {
   width: 100%;

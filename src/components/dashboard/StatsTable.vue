@@ -47,28 +47,25 @@
           </th>
           <td class="data-column has-text-center">
             <StatsTableIcon
-              :metric="metrics[0].field"
-              :format-fn="metrics[0].formatter"
+              :metric="group"
               :stats="current.ri"
-              :tertile-direction="metrics[0].tertile_direction"
+              :icon-only="true"
               location="RI"
             />
           </td>
           <td class="data-column has-text-center">
             <StatsTableIcon
-              :metric="metrics[0].field"
-              :format-fn="metrics[0].formatter"
+              :metric="group"
               :stats="current.municipality"
-              :tertile-direction="metrics[0].tertile_direction"
+              :icon-only="true"
               :location="municipality"
             />
           </td>
           <td class="data-column has-text-center">
             <StatsTableIcon
-              :metric="metrics[0].field"
-              :format-fn="metrics[0].formatter"
+              :metric="group"
               :stats="current.geoid"
-              :tertile-direction="metrics[0].tertile_direction"
+              :icon-only="true"
               :location="geoid"
             />
           </td>
@@ -96,7 +93,6 @@
                 :metric="metric.field"
                 :format-fn="metric.formatter"
                 :stats="current.ri"
-                :tertile-direction="metric.tertile_direction"
                 location="RI"
               />
             </td>
@@ -105,7 +101,6 @@
                 :metric="metric.field"
                 :format-fn="metric.formatter"
                 :stats="current.municipality"
-                :tertile-direction="metric.tertile_direction"
                 :location="municipality"
               />
             </td>
@@ -114,7 +109,6 @@
                 :metric="metric.field"
                 :format-fn="metric.formatter"
                 :stats="current.geoid"
-                :tertile-direction="metric.tertile_direction"
                 :location="geoid"
               />
             </td>
@@ -327,12 +321,36 @@ export default {
       tertileFns[metric.field + "_upper"] = aq.op.quantile(metric.field, 0.67);
     }
 
+    const calcTertile = {};
+    for (const metric of metrics) {
+      if (metric.tertile_direction === "ascending") {
+        calcTertile[
+          metric.field + "_tertile"
+        ] = `d => d['${metric.field}'] <= d['${metric.field}_lower'] ? 1 : (d['${metric.field}'] <= d['${metric.field}_upper'] ? 2 : 3)`;
+      } else {
+        calcTertile[
+          metric.field + "_tertile"
+        ] = `d => d['${metric.field}'] >= d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
+      }
+    }
+
+    const groupTertile = {};
+    for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
+      const meanString =
+        "aq.op.round((" +
+        groupMetrics.map((m) => `d['${m.field}_tertile']`).join(" + ") +
+        `) / ${groupMetrics.length})`;
+      groupTertile[group + "_tertile"] = `d => ${meanString}`;
+    }
+
     const { stats: current } = useStats({
       statFns,
       tertileFns,
       dataset,
       municipality,
       geoid,
+      calcTertile,
+      groupTertile,
     });
 
     return {
@@ -359,8 +377,8 @@ export default {
 
 .data-column {
   min-width: 65px;
-  padding-left: 3px;
-  padding-right: 3px;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
   text-align: center !important;
 }
 
