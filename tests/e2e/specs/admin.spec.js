@@ -260,7 +260,7 @@ describe("Admin Views and Powers", () => {
       // Navigate to form
       cy.get("[data-cy='snack']").click();
       cy.get("a[href='/snack/forms']").click();
-
+      cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
       cy.get('[data-cy="panel-tabs"]')
@@ -312,7 +312,7 @@ describe("Admin Views and Powers", () => {
       // Navigate to form
       cy.get("[data-cy='snack']").click();
       cy.get("a[href='/snack/forms']").click();
-
+      cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
       cy.get('[data-cy="panel-tabs"]')
