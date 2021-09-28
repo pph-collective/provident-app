@@ -54,7 +54,7 @@ describe("Admin Views and Powers", () => {
     // Navigate to forms, there should be an assigned form
     cy.get("a.navbar-item").contains("Snack").click();
     cy.get("a[href='/snack/forms']").click();
-
+    cy.get('[data-cy="form-panel"]').should("exist");
     cy.get(".loading-icon").should("not.exist");
 
     cy.get(".snack-content").should("exist");
@@ -116,7 +116,6 @@ describe("Admin Views and Powers", () => {
 
     // still there after hard refresh
     cy.visit("/admin/user_management");
-    cy.get(".loading-icon").should("not.exist");
     cy.get("h1.title").should("contain", "User Management");
     cy.get(".loading-icon").should("not.exist");
     cy.get("table tbody tr")
