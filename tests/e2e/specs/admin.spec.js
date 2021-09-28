@@ -243,7 +243,7 @@ describe("Admin Views and Powers", () => {
         .click();
 
       cy.get("button").contains("Submit").click();
-      cy.get(".loading-icon").should("exist");
+      cy.get('[data-cy="active-form-modal"]').should("not.exist");
       cy.get(".loading-icon").should("not.exist");
 
       // Check that it exists on the page
@@ -296,7 +296,7 @@ describe("Admin Views and Powers", () => {
         .click();
 
       cy.get("button").contains("Submit").click();
-      cy.get(".loading-icon").should("exist");
+      cy.get('[data-cy="active-form-modal"]').should("not.exist");
       cy.get(".loading-icon").should("not.exist");
 
       // Check that it exists on the page
