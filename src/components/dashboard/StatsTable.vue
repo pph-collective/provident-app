@@ -243,7 +243,7 @@ export default {
       },
       {
         field: "no_english",
-        title: "No English",
+        title: "Non-English Speakers",
         info: "Percent of residents who do not speak english",
         aggregate: "mean",
         formatter: pct,
