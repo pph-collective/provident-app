@@ -616,8 +616,8 @@
         "form_type": "organization",
         "release_date": "2021-05-21",
         "target": {
-          "groups": [],
-          "organizations": ["Good Doers", "RI 4 Us"],
+          "groups": ["intervention"],
+          "organizations": ["RI 4 Us"],
           "users": []
         }
       }

@@ -1,3 +1,7 @@
+import GEO from "@/assets/geojson/ri.json";
+
+const MUNICIPALITIES = [...new Set(GEO.map((g) => g.properties.name))].sort();
+
 const sortByProperty = (property) => (a, b) => {
   let valA = a[property];
   let valB = b[property];
@@ -29,4 +33,4 @@ const uniqueId = () => {
   return dateString + randomness;
 };
 
-export default { sortByProperty, today, uniqueId };
+export default { MUNICIPALITIES, sortByProperty, today, uniqueId };

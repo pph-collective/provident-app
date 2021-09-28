@@ -4,7 +4,7 @@ A base web application for the PROVIDENT project.
 
 ## Project setup
 ```
-yarn install
+yarn
 yarn firebase login
 ```
 

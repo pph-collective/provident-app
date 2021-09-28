@@ -52,7 +52,6 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import fb from "@/firebase";
-import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import Loading from "@/components/Loading.vue";
@@ -69,8 +68,6 @@ export default {
     const userRequests = computed(() => store.getters.pendingUsers);
     const formAssignments = computed(() => store.state.formAssignments);
 
-    const today = utils.today();
-
     const approve = async (user) => {
       loading.value = true;
 
@@ -78,11 +75,11 @@ export default {
         // update request status
         await fb.updateUser({ email: user.email, status: "approved" });
 
-        await formAssignmentUtils.addFormResponsesForUser(
+        await formAssignmentUtils.addFormResponsesForApproved(
+          "user",
           user,
           formAssignments.value,
-          organizations.value,
-          today
+          organizations.value
         );
 
         await fb.createEmail({

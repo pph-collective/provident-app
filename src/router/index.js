@@ -117,6 +117,11 @@ const routes = [
           icon: "fa-crown",
         },
         {
+          name: "Organization Management",
+          route: "organization_management",
+          icon: "fa-handshake",
+        },
+        {
           name: "Form Assignments",
           route: "form_assignments",
           icon: "fa-file-import",
@@ -145,6 +150,13 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "admin" */ "../views/admin/UserManagement.vue"
+          ),
+      },
+      {
+        path: "organization_management",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin" */ "../views/admin/OrganizationManagement.vue"
           ),
       },
       {

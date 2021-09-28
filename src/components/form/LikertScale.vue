@@ -119,7 +119,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "bulma-responsive-tables";
-</style>
