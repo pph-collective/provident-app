@@ -65,7 +65,6 @@
         <StatsTable
           v-if="dataset.length > 0"
           :dataset="dataset"
-          :previous-dataset="previousDataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
           :with-predictions="interventionArmUser"
@@ -114,7 +113,6 @@ export default {
       () => store.getters.interventionArmUser
     );
     const dataset = ref([]);
-    const previousDataset = ref([]);
     const activeGeoid = ref("");
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
@@ -188,19 +186,9 @@ export default {
 
       // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
-        previousDataset.value = [];
         updateDataset(newControls.model_version).then((res) => {
           dataset.value = res;
         });
-        const prevPeriodIdx =
-          resultPeriods.value.findIndex(
-            (p) => p === newControls.model_version
-          ) + 1;
-        if (prevPeriodIdx < resultPeriods.value.length) {
-          updateDataset(resultPeriods.value[prevPeriodIdx]).then((res) => {
-            previousDataset.value = res;
-          });
-        }
       }
 
       // update the control selections
@@ -248,7 +236,6 @@ export default {
       dropDowns,
       interventionArmUser,
       loading,
-      previousDataset,
       resultPeriods,
       updateControls,
       zoomBg,

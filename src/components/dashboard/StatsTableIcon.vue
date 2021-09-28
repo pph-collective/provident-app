@@ -14,15 +14,15 @@ export default {
       type: Object,
       required: true,
     },
-    previousStats: {
-      type: Object,
-      required: true,
-    },
     metric: {
       type: String,
       required: true,
     },
     location: {
+      type: String,
+      required: true,
+    },
+    tertileDirection: {
       type: String,
       required: true,
     },
@@ -32,25 +32,34 @@ export default {
     },
   },
   setup(props) {
-    const { stats, metric, location } = toRefs(props);
+    const { stats, metric, location, tertileDirection } = toRefs(props);
 
-    const getTertile = (s, m) => {
-      if (s[m] === undefined) {
+    const tertile = computed(() => {
+      const val = stats.value[metric.value];
+      if (val === undefined) {
         return 0;
-      } else if (s[m] <= s[m + "_lower"]) {
-        return 1;
-      } else if (s[m] <= s[m + "_upper"]) {
-        return 2;
-      } else {
-        return 3;
       }
-    };
+
+      let res;
+      if (val <= stats.value[metric.value + "_lower"]) {
+        res = 1;
+      } else if (val <= stats.value[metric.value + "_upper"]) {
+        res = 2;
+      } else {
+        res = 3;
+      }
+
+      if (tertileDirection.value === "descending") {
+        res = Math.abs(res - 4);
+      }
+
+      return res;
+    });
 
     const color = computed(() => {
       let color = "light";
       if (location.value) {
-        const currentTertile = getTertile(stats.value, metric.value);
-        switch (currentTertile) {
+        switch (tertile.value) {
           case 1:
             color = "success";
             break;

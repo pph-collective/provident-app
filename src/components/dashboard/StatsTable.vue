@@ -21,32 +21,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="metric in metricsList" :key="metric">
-        <th class="has-text-right is-size-7">{{ metric }}</th>
+      <tr v-for="metric in metrics" :key="metric">
+        <th class="has-text-right is-size-7">{{ metric.title }}</th>
         <td class="data-column has-text-center">
           <StatsTableIcon
-            :metric="metric"
-            :format-fn="formatFns[metric]"
+            :metric="metric.field"
+            :format-fn="metric.formatter"
             :stats="current.ri"
-            :previous-stats="previous.ri"
+            :tertile-direction="metric.tertile_direction"
             location="RI"
           />
         </td>
         <td class="data-column has-text-center">
           <StatsTableIcon
-            :metric="metric"
-            :format-fn="formatFns[metric]"
+            :metric="metric.field"
+            :format-fn="metric.formatter"
             :stats="current.municipality"
-            :previous-stats="previous.municipality"
+            :tertile-direction="metric.tertile_direction"
             :location="municipality"
           />
         </td>
         <td class="data-column has-text-center">
           <StatsTableIcon
-            :metric="metric"
-            :format-fn="formatFns[metric]"
+            :metric="metric.field"
+            :format-fn="metric.formatter"
             :stats="current.geoid"
-            :previous-stats="previous.geoid"
+            :tertile-direction="metric.tertile_direction"
             :location="geoid"
           />
         </td>
@@ -72,10 +72,6 @@ export default {
       type: Array,
       required: true,
     },
-    previousDataset: {
-      type: Array,
-      required: true,
-    },
     municipality: {
       type: String,
       required: false,
@@ -93,75 +89,161 @@ export default {
   },
 
   setup(props) {
-    const { dataset, geoid, municipality, previousDataset, withPredictions } =
-      toRefs(props);
+    const { dataset, geoid, municipality, withPredictions } = toRefs(props);
 
-    const formatters = {
-      pct: format(".1%"),
-      dollar: format("$,.0f"),
-    };
+    // number formatters
+    const pct = format(".1%");
+    const dollar = format("$,.0f");
 
-    const metrics = {
-      median: [
-        "below_poverty",
-        "unemployed",
-        "income",
-        "no_high_school_diploma",
-        "age_65_older",
-        "age_17_younger",
-        "household_with_disability",
-        "single_parent_households",
-        "minority",
-        "no_english",
-        "multi_unit_structures",
-        "mobile_homes",
-        "crowded_housing",
-        "no_vehicle",
-      ],
-      sum: [],
-    };
+    const metrics = [
+      {
+        field: "below_poverty",
+        title: "Below FPL",
+        info: "Percentage of residents living below the federal poverty line (FPL)",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Socioeconimic Status",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "unemployed",
+        title: "Unemployed",
+        info: "Percentage of residents unemployed",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Socioeconimic Status",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "income",
+        title: "Household Income",
+        info: "Average household income",
+        aggregate: "mean",
+        formatter: dollar,
+        group: "Socioeconimic Status",
+        tertile_direction: "descending",
+      },
+      {
+        field: "no_high_school_diploma",
+        title: "No HS Diploma",
+        info: "Percent of adult residents without a high school diploma or equivalent",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Socioeconimic Status",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "age_65_older",
+        title: "Age Over 65",
+        info: "Percent of residents over the age of 65",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "age_17_younger",
+        title: "Age Under 17",
+        info: "Percent of residents under the age of 17",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "household_with_disability",
+        title: "Household w/Disability",
+        info: "Percent of households with at least one member with a disability",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "single_parent_households",
+        title: "Single Parent",
+        info: "Percent of households with a single parent",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "minority",
+        title: "Minority",
+        info: "Percent of minority residents",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Minority Status & Language",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "no_english",
+        title: "No English",
+        info: "Percent of residents who do not speak english",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Minority Status & Language",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "multi_unit_structures",
+        title: "Multi-Unit Stuctures",
+        info: "Percent of residential buildings which contain multiple units",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Housing Type & Transportation",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "mobile_homes",
+        title: "Mobile Homes",
+        info: "Percent of residential buildings which are mobile homes",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Housing Type & Transportation",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "crowded_housing",
+        title: "Crowded Housing",
+        info: "Percent of households which are crowded",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Housing Type & Transportation",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "no_vehicle",
+        title: "No Vehicle",
+        info: "Percent of households without a personal vehicle",
+        aggregate: "mean",
+        formatter: pct,
+        group: "Housing Type & Transportation",
+        tertile_direction: "ascending",
+      },
+    ];
 
-    const formats = {
-      pct: [
-        "below_poverty",
-        "unemployed",
-        "no_high_school_diploma",
-        "age_65_older",
-        "age_17_younger",
-        "household_with_disability",
-        "single_parent_households",
-        "minority",
-        "no_english",
-        "multi_unit_structures",
-        "mobile_homes",
-        "crowded_housing",
-        "no_vehicle",
-      ],
-      dollar: ["income"],
-    };
-
-    if (withPredictions.value) metrics.sum.push("flag_1");
-
-    const metricsList = Object.values(metrics).flat();
+    if (withPredictions.value)
+      metrics.push({
+        field: "flag_1",
+        title: "PROVIDENT Prediction",
+        info: "Whether the block group was flagged by PROVIDENT",
+        aggregate: "sum",
+        formatter: (x) => x,
+        group: "PROVIDENT Prediction",
+        tertile_direction: "ascending",
+      });
 
     const statFns = {};
-    for (const [agg, aggMetrics] of Object.entries(metrics)) {
-      for (const metric of aggMetrics) {
-        statFns[metric] = aq.op[agg](metric);
-      }
-    }
-
-    const formatFns = {};
-    for (const [format, formatMetrics] of Object.entries(formats)) {
-      for (const metric of formatMetrics) {
-        formatFns[metric] = formatters[format];
-      }
+    for (const metric of metrics) {
+      statFns[metric.field] = aq.op[metric.aggregate](metric.field);
     }
 
     const tertileFns = {};
-    for (const metric of metricsList) {
-      tertileFns[metric + "_lower"] = aq.op.quantile(metric, 0.33);
-      tertileFns[metric + "_upper"] = aq.op.quantile(metric, 0.67);
+    for (const metric of metrics) {
+      tertileFns[metric.field + "_lower"] = aq.op.quantile(metric.field, 0.33);
+      tertileFns[metric.field + "_upper"] = aq.op.quantile(metric.field, 0.67);
     }
 
     const { stats: current } = useStats({
@@ -172,19 +254,11 @@ export default {
       geoid,
     });
 
-    const { stats: previous } = useStats({
-      statFns,
-      tertileFns,
-      dataset: previousDataset,
-      municipality,
-      geoid,
-    });
+    console.log(current.value);
 
     return {
       current,
-      previous,
-      metricsList,
-      formatFns,
+      metrics,
     };
   },
 };
