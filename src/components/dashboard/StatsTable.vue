@@ -77,8 +77,19 @@
         <!-- group detail rows -->
         <template v-if="showGroups[group]">
           <tr v-for="metric in metrics" :key="metric">
-            <th class="has-text-right has-text-weight-medium">
-              {{ metric.title }}
+            <th
+              class="
+                has-text-right has-text-weight-medium
+                is-flex is-justify-content-end is-align-items-center
+              "
+            >
+              <span>
+                {{ metric.title }}
+              </span>
+              <span class="tooltip icon is-small has-text-info">
+                <i class="fas fa-xs fa-info-circle" />
+                <span class="tooltiptext">{{ metric.info }}</span>
+              </span>
             </th>
             <td class="data-column has-text-center">
               <StatsTableIcon
@@ -334,6 +345,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "bulma";
 .table {
   line-height: 1;
 
@@ -346,7 +358,7 @@ export default {
 }
 
 .data-column {
-  min-width: 60px;
+  min-width: 65px;
   padding-left: 3px;
   padding-right: 3px;
   text-align: center !important;
@@ -355,5 +367,34 @@ export default {
 // between size 6 and 7
 .is-size-6-7 {
   font-size: 0.825rem;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -90px;
+  background-color: $grey-dark;
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  border-radius: 3px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 </style>
