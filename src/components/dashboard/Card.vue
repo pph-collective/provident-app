@@ -102,20 +102,26 @@ export default {
 }
 .is-height-1 {
   grid-row-start: span 1;
+  min-height: 5vh;
 }
 .is-height-2 {
   grid-row-start: span 2;
+  min-height: 30vh;
 }
 .is-height-3 {
   grid-row-start: span 3;
+  min-height: 45vh;
 }
 .is-height-4 {
   grid-row-start: span 4;
+  min-height: 60vh;
 }
 .is-height-5 {
   grid-row-start: span 5;
+  min-height: 75vh;
 }
 .is-height-6 {
   grid-row-start: span 6;
+  min-height: 80vh;
 }
 </style>

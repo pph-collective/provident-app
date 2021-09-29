@@ -1,5 +1,5 @@
 <template>
-  <Card :no-header="true">
+  <Card :no-header="true" width="two-thirds" :height="1">
     <template #content>
       <div class="control-panel is-family-secondary">
         <div

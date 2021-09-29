@@ -59,7 +59,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="4" id="stats">
+    <Card width="one-third" :height="5" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
         <StatsTable
@@ -72,8 +72,8 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="2" id="nra-widget">
-      <template #title>Neighborhood Rapid Assessment</template>
+    <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
+      <!-- <template #title>Neighborhood Rapid Assessment</template> -->
       <template #content>
         <AssessmentWidget :active-geoid="activeGeoid" />
       </template>
@@ -269,9 +269,8 @@ export default {
   row-gap: 15px;
   justify-items: stretch;
   align-items: stretch;
-  justify-content: space-between;
   align-content: start;
-  grid-auto-flow: row;
+  grid-auto-flow: row dense;
   @include mobile {
     grid-template-columns: 100%;
     column-gap: 0px;
