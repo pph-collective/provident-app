@@ -32,8 +32,8 @@
         No Assessments Found for {{ activeGeoid }}
       </p>
       <p v-else class="assessment-message">
-        Select a block group on the map to see its completed assessments or
-        start a new one
+        Select a block group on the map to see its completed assessments
+        {{ userRole === "champion" ? " or start a new one" : "" }}
       </p>
     </div>
     <div class="is-flex is-justify-content-center">

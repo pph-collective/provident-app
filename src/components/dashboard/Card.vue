@@ -122,6 +122,6 @@ export default {
 }
 .is-height-6 {
   grid-row-start: span 6;
-  min-height: 80vh;
+  min-height: 90vh;
 }
 </style>
