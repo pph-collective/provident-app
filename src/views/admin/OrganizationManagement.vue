@@ -70,7 +70,7 @@
         v-if="showModal && formQuestions.length > 0"
         class="modal"
         :class="{ 'is-active': showModal }"
-        data-cy="form-assignment-modal"
+        data-cy="active-form-modal"
         v-esc="() => (closeFormRequest += 1)"
       >
         <div class="modal-background"></div>
