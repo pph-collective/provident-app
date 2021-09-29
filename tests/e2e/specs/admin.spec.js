@@ -193,6 +193,10 @@ describe("Admin Views and Powers", () => {
     beforeEach(() => {
       resetTest();
       cy.get('a[href="/admin/organization_management"]').click();
+      cy.get('[data-cy="organization-table"]').should(
+        "not.contain",
+        "No organizations found"
+      );
       cy.get(".loading-icon").should("not.exist");
     });
 
