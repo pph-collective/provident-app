@@ -40,6 +40,7 @@ service cloud.firestore {
 
     match /organizations/{organization} {
       allow read: if true;
+      allow create: if isAdminUser();
 
       match /form_responses/{form} {
         allow create: if request.auth != null && isUserInOrgWithRole(organization, 'champion') || isAdminUser();

@@ -13,15 +13,12 @@ describe("Dashboard viewed as a user", () => {
       .should("have.length", "2")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 3)
+      .should("have.length", 41)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 2)).to.deep.eq([
           "Good Doers",
           "All of Rhode Island",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
         ]);
       });
 
@@ -253,15 +250,12 @@ describe("Dashboard viewed as a control arm user", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 4)
+      .should("have.length", 41)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 2)).to.deep.eq([
           "RI 4 Us",
           "All of Rhode Island",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
         ]);
       });
   });
@@ -377,16 +371,13 @@ describe("Dashboard viewed as an admin", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .should("have.lengthOf.above", 4)
+      .should("have.length", 42)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual).to.deep.eq([
+        expect(actual.slice(0, 3)).to.deep.eq([
           "All of Rhode Island",
           "Good Doers",
           "RI 4 Us",
-          "Little Compton",
-          "Portsmouth",
-          "Tiverton",
         ]);
       });
   });

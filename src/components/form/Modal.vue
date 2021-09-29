@@ -142,31 +142,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "bulma";
-
-.modal-card-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: calc(100% - 40px);
-}
-
-@include mobile {
-  .modal-card {
-    max-height: 100vh;
-    max-width: 100vw;
-  }
-
-  /* Reduce the padding when on mobile */
-  .modal-card-body {
-    padding: 10px;
-  }
-
-  .modal .container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
-</style>

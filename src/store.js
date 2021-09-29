@@ -11,10 +11,10 @@ const store = createStore({
         admin: false,
         formResponses: [],
       },
-      organizations: [],
-      forms: {},
-      users: [],
       formAssignments: [],
+      forms: {},
+      organizations: [],
+      users: [],
       loaded: false,
       notifications: [],
     };
@@ -72,6 +72,15 @@ const store = createStore({
         const orgs = await fb.getCollection("organizations");
         commit("mutate", { property: "organizations", with: orgs });
       }
+    },
+    async addOrg({ commit, state }, organization) {
+      // Setting _id to be more consistent to getCollection in firebase.js
+      organization._id = await fb.addOrg(organization);
+
+      commit("mutate", {
+        property: "organizations",
+        with: [organization, ...state.organizations],
+      });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
       const _id = await fb.updateFormResponse(updatedFormResponse, {
