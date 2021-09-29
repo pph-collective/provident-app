@@ -39,10 +39,17 @@
           >
 
           <router-link
-            data-cy="snack"
-            to="/snack"
+            data-cy="dashboard"
+            to="/snack/dashboard"
             class="navbar-item has-text-primary"
-            >Snack</router-link
+            >Dashboard</router-link
+          >
+
+          <router-link
+            data-cy="forms"
+            to="/snack/forms"
+            class="navbar-item has-text-primary"
+            >Forms</router-link
           >
 
           <router-link
