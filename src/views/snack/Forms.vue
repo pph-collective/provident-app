@@ -1,89 +1,91 @@
 <template>
   <Loading :loading="user !== undefined && Object.keys(forms).length === 0" />
-  <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-    <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
+  <div class="container is-fullhd">
+    <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
+      <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-    <div class="panel-tabs" data-cy="panel-tabs">
-      <a
-        v-for="tab in Object.keys(tabs)"
-        :key="tab"
-        :class="selectedTab === tab ? 'is-active' : ''"
-        @click="selectedTab = tab"
-        >{{ tab }}</a
+      <div class="panel-tabs" data-cy="panel-tabs">
+        <a
+          v-for="tab in Object.keys(tabs)"
+          :key="tab"
+          :class="selectedTab === tab ? 'is-active' : ''"
+          @click="selectedTab = tab"
+          >{{ tab }}</a
+        >
+      </div>
+
+      <div
+        v-if="selectedFormResponses.length === 0"
+        data-cy="forms-panel-block"
+        class="panel-block is-justify-content-center"
       >
-    </div>
-
-    <div
-      v-if="selectedFormResponses.length === 0"
-      data-cy="forms-panel-block"
-      class="panel-block is-justify-content-center"
-    >
-      <span>No forms here</span>
-    </div>
-    <div
-      v-else
-      data-cy="forms-panel-block"
-      v-for="(formResponse, idx) in selectedFormResponses"
-      :key="'formResponse-' + idx"
-      class="panel-block"
-    >
-      <div class="level form-row" data-cy="form-row">
-        <div class="level-left">
-          <p
-            v-if="formResponse.form_id in forms"
-            class="level-item is-size-5"
-            data-cy="form-title"
-          >
-            {{ forms[formResponse.form_id].title }}
-          </p>
-        </div>
-
-        <div class="level-right has-text-centered">
-          <PanelTag
-            v-if="formResponse.type === 'organization'"
-            label="organization-level"
-          />
-          <PanelTag
-            v-if="user.admin"
-            :class="{
-              'is-success is-light': formResponse.release_date <= today,
-            }"
-            label="release date"
-            :value="formResponse.release_date"
-          />
-          <PanelTag
-            :class="{
-              'is-warning': formResponse.status === 'Not Started',
-              'is-info': formResponse.status === 'Draft',
-              'is-success': formResponse.status === 'Submitted',
-            }"
-            label="status"
-            :value="formResponse.status"
-          />
-          <div class="level-item">
-            <button
-              v-if="
-                formResponse.status !== 'Submitted' &&
-                (formResponse.type === 'user' ||
-                  (formResponse.type === 'organization' &&
-                    userRole === 'champion'))
-              "
-              class="button is-primary level-item"
-              data-cy="launch-form-button"
-              type="button"
-              @click="launchForm(formResponse)"
+        <span>No forms here</span>
+      </div>
+      <div
+        v-else
+        data-cy="forms-panel-block"
+        v-for="(formResponse, idx) in selectedFormResponses"
+        :key="'formResponse-' + idx"
+        class="panel-block"
+      >
+        <div class="level form-row" data-cy="form-row">
+          <div class="level-left">
+            <p
+              v-if="formResponse.form_id in forms"
+              class="level-item is-size-5"
+              data-cy="form-title"
             >
-              {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
-            </button>
-            <button
-              v-else
-              class="button is-primary is-light level-item"
-              data-cy="review-form-button"
-              type="button"
-              @click="launchForm(formResponse)"
-            >
-              Review Form
-            </button>
+              {{ forms[formResponse.form_id].title }}
+            </p>
+          </div>
+
+          <div class="level-right has-text-centered">
+            <PanelTag
+              v-if="formResponse.type === 'organization'"
+              label="organization-level"
+            />
+            <PanelTag
+              v-if="user.admin"
+              :class="{
+                'is-success is-light': formResponse.release_date <= today,
+              }"
+              label="release date"
+              :value="formResponse.release_date"
+            />
+            <PanelTag
+              :class="{
+                'is-warning': formResponse.status === 'Not Started',
+                'is-info': formResponse.status === 'Draft',
+                'is-success': formResponse.status === 'Submitted',
+              }"
+              label="status"
+              :value="formResponse.status"
+            />
+            <div class="level-item">
+              <button
+                v-if="
+                  formResponse.status !== 'Submitted' &&
+                  (formResponse.type === 'user' ||
+                    (formResponse.type === 'organization' &&
+                      userRole === 'champion'))
+                "
+                class="button is-primary level-item"
+                data-cy="launch-form-button"
+                type="button"
+                @click="launchForm(formResponse)"
+              >
+                {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
+              </button>
+              <button
+                v-else
+                class="button is-primary is-light level-item"
+                data-cy="review-form-button"
+                type="button"
+                @click="launchForm(formResponse)"
+              >
+                Review Form
+              </button>
+            </div>
           </div>
         </div>
       </div>

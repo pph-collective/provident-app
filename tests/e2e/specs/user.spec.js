@@ -15,6 +15,15 @@ describe("User Views", () => {
     cy.get('[data-cy="admin"]').should("not.exist");
   });
 
+  it("navigating to /snack redirects to the dashboard", () => {
+    cy.visit("/snack");
+
+    // User should be redirected to the dashboard
+    cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.get(".dashboard").should("exist");
+    cy.get(".loading-icon").should("not.exist");
+  });
+
   it("navigating to /admin shouldn't be allowed", () => {
     cy.visit("/admin");
 
