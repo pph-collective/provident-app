@@ -69,13 +69,16 @@ describe("Log In View", () => {
 
   it("Redirect back to previous page prior to logging in after login", () => {
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
+    cy.get(".dashboard").should("not.exist");
     cy.get(".loading-icon").should("not.exist");
+
+    cy.contains("h1", "Log In").should("exist");
 
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.get(".dashboard").should("exist");
     cy.get(".loading-icon").should("not.exist");
   });
 });
