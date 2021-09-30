@@ -1,6 +1,6 @@
 <template>
-  <NavBar class="navbar" />
-  <div id="content-container" class="hero is-fullheight-with-navbar">
+  <NavBar />
+  <div id="content-container">
     <Notifications :notifications="notifications" />
     <router-view />
   </div>
