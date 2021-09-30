@@ -68,11 +68,14 @@ describe("Log In View", () => {
   });
 
   it("Redirect back to previous page prior to logging in after login", () => {
-    cy.get("[data-cy='snack']").click();
+    cy.get("[data-cy='dashboard']").click();
+    cy.get(".dashboard").should("exist");
+    cy.get(".loading-icon").should("not.exist");
 
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
-    cy.url().should("eq", `${Cypress.config().baseUrl}snack`);
+    cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.get(".loading-icon").should("not.exist");
   });
 });

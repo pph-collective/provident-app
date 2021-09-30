@@ -1,8 +1,7 @@
 describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("champion");
-    cy.get("[data-cy='snack']").click();
-    cy.get("a[href='/snack/dashboard']").click();
+    cy.get("[data-cy='dashboard']").click();
     cy.get(".dashboard").should("exist");
     cy.get(".loading-icon").should("not.exist");
   });
@@ -239,8 +238,7 @@ describe("Dashboard viewed as a user", () => {
 describe("Dashboard viewed as a control arm user", () => {
   beforeEach(() => {
     cy.login_by_permission("control");
-    cy.get("[data-cy='snack']").click();
-    cy.get("a[href='/snack/dashboard']").click();
+    cy.get("[data-cy='dashboard']").click();
     cy.get(".dashboard").should("exist");
     cy.get(".loading-icon").should("not.exist");
   });
@@ -360,8 +358,7 @@ describe("Dashboard viewed as a control arm user", () => {
 describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
-    cy.get("[data-cy='snack']").click();
-    cy.get("a[href='/snack/dashboard']").click();
+    cy.get("[data-cy='dashboard']").click();
     cy.get(".dashboard").should("exist");
     cy.get(".loading-icon").should("not.exist");
   });

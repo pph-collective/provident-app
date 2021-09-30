@@ -1,8 +1,7 @@
 describe("Form functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -63,8 +62,7 @@ describe("Form functionality", () => {
     cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
@@ -369,8 +367,7 @@ describe("Form functionality", () => {
     cy.wrap(["admin", "approved"]).each((permission_level) => {
       cy.logout();
       cy.login_by_permission(permission_level);
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
@@ -531,8 +528,7 @@ describe("Form functionality", () => {
 describe("Forms viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -575,8 +571,7 @@ describe("Forms viewed as an admin", () => {
 describe("Forms viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("approved").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -647,8 +642,7 @@ describe("Forms viewed as a user", () => {
 describe("Forms viewed as a champion", () => {
   beforeEach(() => {
     cy.login_by_permission("champion").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -730,8 +724,7 @@ describe("Forms viewed as a champion", () => {
     // Log out and log in as a user
     cy.logout();
     cy.login_by_permission("approved").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
@@ -816,8 +809,7 @@ describe("Forms viewed as a champion", () => {
     // Log out and log in as a user to view the form
     cy.logout();
     cy.login_by_permission("approved").then(() => {
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get("[data-cy='forms']").click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
     });
