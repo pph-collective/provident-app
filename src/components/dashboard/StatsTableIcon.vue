@@ -3,7 +3,7 @@
     <span v-if="!iconOnly">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
-    ><span class="has-text-weight-bold" :class="['has-text-' + color]">{{
+    ><span class="has-text-weight-bold" :style="{ color }">{{
       location ? "⬥" : "⬦"
     }}</span>
   </span>
@@ -11,6 +11,8 @@
 
 <script>
 import { computed, toRefs } from "vue";
+import { scaleLinear } from "d3-scale";
+import { interpolateLab } from "d3-interpolate";
 
 export default {
   props: {
@@ -39,20 +41,16 @@ export default {
   setup(props) {
     const { stats, metric, location } = toRefs(props);
 
+    const scale = scaleLinear()
+      .domain([-1, 0, 1.0])
+      .range(["#2A3465", "#dbdbdb", "orange"])
+      .interpolate(interpolateLab);
+
     const color = computed(() => {
-      let color = "grey-lighter";
+      let color = "#dbdbdb";
       if (location.value) {
-        switch (stats.value[metric.value + "_tertile"]) {
-          case 1:
-            color = "success";
-            break;
-          case 2:
-            color = "warning";
-            break;
-          case 3:
-            color = "danger";
-            break;
-        }
+        color = scale(stats.value[metric.value + "_normalized"]);
+        console.log(stats.value[metric.value + "_normalized"], color);
       }
 
       return color;
