@@ -54,6 +54,7 @@ export default {
 }
 
 #content-container {
+  min-height: 90vh;
   position: relative;
 }
 </style>
