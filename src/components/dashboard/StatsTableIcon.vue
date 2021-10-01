@@ -1,12 +1,13 @@
 <template>
-  <span class="has-text-grey-dark is-family-monospace">
-    <span v-if="!iconOnly">{{
-      stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
-    }}</span
-    ><span class="has-text-weight-bold" :style="{ color }">{{
-      location ? "⬥" : "⬦"
-    }}</span>
-  </span>
+  <span class="has-text-grey-dark is-family-monospace" v-if="!iconOnly">{{
+    stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
+  }}</span
+  ><span
+    class="has-text-weight-bold"
+    :class="['is-size-' + size]"
+    :style="{ color }"
+    >{{ shape }}</span
+  >
 </template>
 
 <script>
@@ -50,14 +51,43 @@ export default {
       let color = "#dbdbdb";
       if (location.value) {
         color = scale(stats.value[metric.value + "_normalized"]);
-        console.log(stats.value[metric.value + "_normalized"], color);
       }
 
       return color;
     });
 
+    const shape = computed(() => {
+      let shape = "◦";
+      if (location.value) {
+        const value = stats.value[metric.value + "_normalized"];
+        if (Math.abs(value) < 0.1) {
+          shape = "●";
+        } else if (value >= 0.1) {
+          shape = "◼︎";
+        } else {
+          shape = "◆";
+        }
+      }
+
+      return shape;
+    });
+
+    const size = computed(() => {
+      let size = "6";
+      if (location.value) {
+        const value = stats.value[metric.value + "_normalized"];
+        if (value >= 0.1) {
+          size = "6-7";
+        }
+      }
+
+      return size;
+    });
+
     return {
       color,
+      shape,
+      size,
     };
   },
 };

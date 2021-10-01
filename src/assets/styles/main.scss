@@ -35,6 +35,15 @@ $box-radius: 2px;
   font-family: $family-secondary;
 }
 
+// between size 6 and 7
+.is-size-6-7 {
+  font-size: 0.825rem;
+}
+
+.is-size-8 {
+  font-size: 0.65rem;
+}
+
 @import '~bulma';
 
 #vg-tooltip-element.vg-tooltip {

@@ -386,11 +386,6 @@ export default {
   text-align: center !important;
 }
 
-// between size 6 and 7
-.is-size-6-7 {
-  font-size: 0.825rem;
-}
-
 /* Tooltip container */
 .tooltip {
   position: relative;
