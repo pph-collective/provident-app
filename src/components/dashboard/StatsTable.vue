@@ -304,7 +304,7 @@ export default {
     for (const metric of metrics) {
       if (groupedMetrics[metric.group] === undefined) {
         groupedMetrics[metric.group] = [metric];
-        showGroups[metric.group] = false;
+        showGroups[metric.group] = true;
       } else {
         groupedMetrics[metric.group].push(metric);
       }

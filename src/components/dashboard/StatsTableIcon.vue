@@ -2,9 +2,6 @@
   <span class="has-text-grey-dark is-family-monospace">
     <span v-if="!iconOnly">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
-    }}</span
-    ><span class="has-text-weight-bold" :style="{ color }">{{
-      location ? "⬥" : "⬦"
     }}</span>
   </span>
 </template>
