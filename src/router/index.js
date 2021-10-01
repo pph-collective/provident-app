@@ -53,27 +53,12 @@ const routes = [
         return { name: "Login", query: { redirect: to.path } };
       }
     },
-    component: ContentWithSidebar,
-    props: {
-      parentRoute: "snack",
-      pages: [
-        {
-          name: "Dashboard",
-          route: "dashboard",
-          icon: "fa-chart-line",
-        },
-        {
-          name: "Forms",
-          route: "forms",
-          icon: "fa-file-alt",
-        },
-      ],
-    },
+    component: () =>
+      import(/* webpackChunkName: "snack" */ "../views/PassThrough.vue"),
     children: [
       {
         path: "",
-        component: () =>
-          import(/* webpackChunkName: "snack" */ "../views/snack/Landing.vue"),
+        redirect: "/snack/dashboard",
       },
       {
         path: "forms",

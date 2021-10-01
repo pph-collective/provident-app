@@ -37,8 +37,7 @@ const setDatesAndSubmit = () => {
 const checkFormAssignedInToDos = (permission, formTitle, should) => {
   cy.logout();
   cy.login_by_permission(permission).then(() => {
-    cy.get("[data-cy='snack']").click();
-    cy.get("a[href='/snack/forms']").click();
+    cy.get("[data-cy='forms']").click();
     cy.get('[data-cy="form-panel"]').should("exist");
     cy.get(".loading-icon").should("not.exist");
   });
@@ -325,8 +324,7 @@ describe("Form Assignment functionality", () => {
 
     setDatesAndSubmit();
 
-    cy.get("[data-cy='snack']").click();
-    cy.get("a[href='/snack/forms']").click();
+    cy.get("[data-cy='forms']").click();
     cy.get('[data-cy="form-panel"]').should("exist");
     cy.get(".loading-icon").should("not.exist");
 
