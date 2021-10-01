@@ -63,9 +63,9 @@ export default {
         if (Math.abs(value) < 0.1) {
           shape = "●";
         } else if (value >= 0.1) {
-          shape = "◼︎";
+          shape = "⬆︎";
         } else {
-          shape = "◆";
+          shape = "⬇︎";
         }
       }
 
@@ -76,8 +76,8 @@ export default {
       let size = "6";
       if (location.value) {
         const value = stats.value[metric.value + "_normalized"];
-        if (value >= 0.1) {
-          size = "6-7";
+        if (Math.abs(value) >= 0.1) {
+          size = "8";
         }
       }
 
