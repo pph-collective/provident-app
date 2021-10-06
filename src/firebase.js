@@ -199,7 +199,10 @@ const getModelData = async (period) => {
     const sviData = getDataFromDoc(sviDataDoc);
     const sviDt = aq.from(sviData);
 
-    return modelDt.join(sviDt, "bg_id").objects();
+    return modelDt
+      .join(sviDt, "bg_id")
+      .filter((d) => d.municipality !== "")
+      .objects();
   } catch (err) {
     console.log(err);
     return [];
