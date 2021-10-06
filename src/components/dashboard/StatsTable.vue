@@ -49,7 +49,7 @@
             <StatsTableIcon
               :metric="group"
               :stats="current.geoid"
-              :icon-only="true"
+              :number="false"
               :location="geoid"
             />
           </td>
@@ -57,7 +57,7 @@
             <StatsTableIcon
               :metric="group"
               :stats="current.municipality"
-              :icon-only="true"
+              :number="false"
               :location="municipality"
             />
           </td>
@@ -65,7 +65,7 @@
             <StatsTableIcon
               :metric="group"
               :stats="current.ri"
-              :icon-only="true"
+              :number="false"
               location="RI"
             />
           </td>

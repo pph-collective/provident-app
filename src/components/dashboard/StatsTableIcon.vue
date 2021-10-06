@@ -1,9 +1,9 @@
 <template>
   <span class="has-text-grey-dark is-family-monospace">
-    <span v-if="!iconOnly">{{
+    <span v-if="number">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
-    ><span class="has-text-weight-bold" :style="{ color }">{{
+    ><span v-if="icon" class="has-text-weight-bold" :style="{ color }">{{
       location ? "⬥" : "⬦"
     }}</span>
   </span>
@@ -31,9 +31,13 @@ export default {
       required: false,
       default() {},
     },
-    iconOnly: {
+    icon: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    number: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props) {
