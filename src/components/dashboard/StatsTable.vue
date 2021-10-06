@@ -53,6 +53,7 @@
               :stats="current.geoid"
               :number="false"
               :location="geoid"
+              :icon="false"
             />
           </td>
           <td class="data-column has-text-center">
@@ -61,6 +62,7 @@
               :stats="current.municipality"
               :number="false"
               :location="municipality"
+              :icon="false"
             />
           </td>
           <td class="data-column has-text-center">
@@ -69,6 +71,7 @@
               :stats="current.ri"
               :number="false"
               location="RI"
+              :icon="false"
             />
           </td>
         </tr>
@@ -96,6 +99,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.geoid"
                 :location="geoid"
+                :icon="false"
               />
             </td>
             <td class="data-column has-text-center">
@@ -104,6 +108,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.municipality"
                 :location="municipality"
+                :icon="false"
               />
             </td>
             <td class="data-column has-text-center">
@@ -112,6 +117,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.ri"
                 location="RI"
+                :icon="false"
               />
             </td>
           </tr>
