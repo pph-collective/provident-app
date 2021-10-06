@@ -52,12 +52,8 @@ describe("Admin Views and Powers", () => {
     cy.get("a").contains("Log Out").should("exist");
 
     // Navigate to forms, there should be an assigned form
-    cy.get("a.navbar-item").contains("Snack").click();
-    cy.get("a[href='/snack/forms']").click();
+    cy.get('[data-cy="forms"]').click();
     cy.get('[data-cy="form-panel"]').should("exist");
-    cy.get(".loading-icon").should("not.exist");
-
-    cy.get(".snack-content").should("exist");
     cy.get(".loading-icon").should("not.exist");
 
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
@@ -262,8 +258,7 @@ describe("Admin Views and Powers", () => {
       cy.logout();
       cy.login(testUser.email, testUser.password);
       // Navigate to form
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      cy.get('[data-cy="forms"]').click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
@@ -314,9 +309,8 @@ describe("Admin Views and Powers", () => {
       // Log in as test user
       cy.logout();
       cy.login(testUser.email, testUser.password);
-      // Navigate to form
-      cy.get("[data-cy='snack']").click();
-      cy.get("a[href='/snack/forms']").click();
+      // Navigate to forms
+      cy.get('[data-cy="forms"]').click();
       cy.get('[data-cy="form-panel"]').should("exist");
       cy.get(".loading-icon").should("not.exist");
 
