@@ -66,6 +66,7 @@
               :metric="group"
               :stats="current.ri"
               :number="false"
+              :icon="false"
               location="RI"
             />
           </td>
@@ -109,6 +110,7 @@
                 :metric="metric.field"
                 :format-fn="metric.formatter"
                 :stats="current.ri"
+                :icon="false"
                 location="RI"
               />
             </td>
