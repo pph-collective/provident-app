@@ -3,9 +3,12 @@
     <span v-if="number">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
-    ><span v-if="icon" class="has-text-weight-bold" :style="{ color }">{{
-      location ? "⬥" : "⬦"
-    }}</span>
+    ><span
+      v-if="icon"
+      class="has-text-weight-bold is-size-5"
+      :style="{ color }"
+      >{{ location ? "⬥" : "⬦" }}</span
+    >
   </span>
 </template>
 
@@ -76,10 +79,5 @@ export default {
 
 .rotate-down {
   transform: rotate(45deg);
-}
-
-// between size 6 and 7
-.stat-icon {
-  font-size: 0.825rem;
 }
 </style>

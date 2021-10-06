@@ -25,24 +25,8 @@
     <tbody class="is-size-6-7">
       <template v-for="(metrics, group) in groupedMetrics" :key="group">
         <!-- group level row -->
-        <tr
-          @click="showGroups[group] = !showGroups[group]"
-          class="is-clickable"
-        >
-          <th
-            class="
-              has-text-right has-text-bold
-              is-flex is-justify-content-space-between is-align-items-center
-            "
-          >
-            <span class="icon">
-              <i
-                class="fas"
-                :class="[
-                  showGroups[group] ? 'fa-caret-down' : 'fa-caret-right',
-                ]"
-              />
-            </span>
+        <tr>
+          <th class="has-text-right has-text-bold">
             <span>
               {{ group }}
             </span>
@@ -72,57 +56,13 @@
             />
           </td>
         </tr>
-
-        <!-- group detail rows -->
-        <template v-if="showGroups[group]">
-          <tr v-for="metric in metrics" :key="metric">
-            <th
-              class="
-                has-text-right has-text-weight-medium
-                is-flex is-justify-content-end is-align-items-center
-              "
-            >
-              <span>
-                {{ metric.title }}
-              </span>
-              <span class="tooltip icon is-small has-text-info">
-                <i class="fas fa-xs fa-info-circle" />
-                <span class="tooltiptext">{{ metric.info }}</span>
-              </span>
-            </th>
-            <td class="data-column has-text-center">
-              <StatsTableIcon
-                :metric="metric.field"
-                :format-fn="metric.formatter"
-                :stats="current.geoid"
-                :location="geoid"
-              />
-            </td>
-            <td class="data-column has-text-center">
-              <StatsTableIcon
-                :metric="metric.field"
-                :format-fn="metric.formatter"
-                :stats="current.municipality"
-                :location="municipality"
-              />
-            </td>
-            <td class="data-column has-text-center">
-              <StatsTableIcon
-                :metric="metric.field"
-                :format-fn="metric.formatter"
-                :stats="current.ri"
-                location="RI"
-              />
-            </td>
-          </tr>
-        </template>
       </template>
     </tbody>
   </table>
 </template>
 
 <script>
-import { toRefs, reactive, computed } from "vue";
+import { toRefs, computed } from "vue";
 import * as aq from "arquero";
 import { format } from "d3-format";
 
@@ -293,13 +233,9 @@ export default {
     ];
 
     const groupedMetrics = {};
-    const showGroups = reactive({});
-    let showGroup = true; // want to show the first group
     for (const metric of metrics) {
       if (groupedMetrics[metric.group] === undefined) {
         groupedMetrics[metric.group] = [metric];
-        showGroups[metric.group] = showGroup;
-        showGroup = false;
       } else {
         groupedMetrics[metric.group].push(metric);
       }
@@ -354,7 +290,6 @@ export default {
       current,
       prediction,
       groupedMetrics,
-      showGroups,
     };
   },
 };
@@ -363,7 +298,7 @@ export default {
 <style lang="scss" scoped>
 @import "bulma";
 .table {
-  line-height: 1;
+  line-height: 2;
 
   th,
   td {
