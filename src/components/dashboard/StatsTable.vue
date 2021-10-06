@@ -15,9 +15,9 @@
     <thead>
       <tr>
         <th class="has-text-right">Metric</th>
-        <th class="data-column"><abbr title="Rhode Island">RI</abbr></th>
-        <th class="data-column"><abbr :title="municipality">Town</abbr></th>
         <th class="data-column"><abbr :title="geoid">BG</abbr></th>
+        <th class="data-column"><abbr :title="municipality">Town</abbr></th>
+        <th class="data-column"><abbr title="Rhode Island">RI</abbr></th>
       </tr>
     </thead>
     <tbody class="is-size-6-7">
@@ -48,9 +48,9 @@
           <td class="data-column has-text-center">
             <StatsTableIcon
               :metric="group"
-              :stats="current.ri"
+              :stats="current.geoid"
               :icon-only="true"
-              location="RI"
+              :location="geoid"
             />
           </td>
           <td class="data-column has-text-center">
@@ -64,9 +64,9 @@
           <td class="data-column has-text-center">
             <StatsTableIcon
               :metric="group"
-              :stats="current.geoid"
+              :stats="current.ri"
               :icon-only="true"
-              :location="geoid"
+              location="RI"
             />
           </td>
         </tr>
@@ -92,8 +92,8 @@
               <StatsTableIcon
                 :metric="metric.field"
                 :format-fn="metric.formatter"
-                :stats="current.ri"
-                location="RI"
+                :stats="current.geoid"
+                :location="geoid"
               />
             </td>
             <td class="data-column has-text-center">
@@ -108,8 +108,8 @@
               <StatsTableIcon
                 :metric="metric.field"
                 :format-fn="metric.formatter"
-                :stats="current.geoid"
-                :location="geoid"
+                :stats="current.ri"
+                location="RI"
               />
             </td>
           </tr>
@@ -156,8 +156,8 @@ export default {
     const { dataset, geoid, municipality, withPredictions } = toRefs(props);
 
     // number formatters
-    const pct = format(".1%");
-    const dollar = format("$,.0f");
+    const pct = (x) => (x > 0 && x < 0.01 ? "<1%" : format(".0%")(x));
+    const dollar = (x) => (x > 100000 ? format("$.3s")(x) : format("$.2s")(x));
 
     const metrics = [
       {
@@ -301,10 +301,12 @@ export default {
 
     const groupedMetrics = {};
     const showGroups = reactive({});
+    let showGroup = true; // want to show the first group
     for (const metric of metrics) {
       if (groupedMetrics[metric.group] === undefined) {
         groupedMetrics[metric.group] = [metric];
-        showGroups[metric.group] = false;
+        showGroups[metric.group] = showGroup;
+        showGroup = false;
       } else {
         groupedMetrics[metric.group].push(metric);
       }
@@ -376,7 +378,7 @@ export default {
 }
 
 .data-column {
-  min-width: 65px;
+  min-width: 48px;
   padding-left: 2px !important;
   padding-right: 2px !important;
   text-align: center !important;
