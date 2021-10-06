@@ -164,7 +164,7 @@ export default {
         field: "below_poverty",
         title: "Below FPL",
         info: "Percentage of residents living below the federal poverty line (FPL)",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Socioeconimic Status",
         tertile_direction: "ascending",
@@ -173,7 +173,7 @@ export default {
         field: "unemployed",
         title: "Unemployed",
         info: "Percentage of residents unemployed",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Socioeconimic Status",
         tertile_direction: "ascending",
@@ -182,7 +182,7 @@ export default {
         field: "income",
         title: "Household Income",
         info: "Average household income",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: dollar,
         group: "Socioeconimic Status",
         tertile_direction: "descending",
@@ -191,7 +191,7 @@ export default {
         field: "no_high_school_diploma",
         title: "No HS Diploma",
         info: "Percent of adult residents without a high school diploma or equivalent",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Socioeconimic Status",
         tertile_direction: "ascending",
@@ -200,7 +200,7 @@ export default {
         field: "age_65_older",
         title: "Age Over 65",
         info: "Percent of residents over the age of 65",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Household Composition",
         tertile_direction: "ascending",
@@ -209,7 +209,7 @@ export default {
         field: "age_17_younger",
         title: "Age Under 17",
         info: "Percent of residents under the age of 17",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Household Composition",
         tertile_direction: "ascending",
@@ -218,7 +218,7 @@ export default {
         field: "household_with_disability",
         title: "Household w/Disability",
         info: "Percent of households with at least one member with a disability",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Household Composition",
         tertile_direction: "ascending",
@@ -227,7 +227,7 @@ export default {
         field: "single_parent_households",
         title: "Single Parent",
         info: "Percent of households with a single parent",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Household Composition",
         tertile_direction: "ascending",
@@ -236,7 +236,7 @@ export default {
         field: "minority",
         title: "Minority",
         info: "Percent of minority residents",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Minority Status & Language",
         tertile_direction: "ascending",
@@ -245,7 +245,7 @@ export default {
         field: "no_english",
         title: "Non-English Speaker",
         info: "Percent of residents who do not speak english",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Minority Status & Language",
         tertile_direction: "ascending",
@@ -254,7 +254,7 @@ export default {
         field: "multi_unit_structures",
         title: "Multi-Unit Stuctures",
         info: "Percent of residential buildings which contain multiple units",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Housing Type & Transportation",
         tertile_direction: "ascending",
@@ -263,7 +263,7 @@ export default {
         field: "mobile_homes",
         title: "Mobile Homes",
         info: "Percent of residential buildings which are mobile homes",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Housing Type & Transportation",
         tertile_direction: "ascending",
@@ -272,7 +272,7 @@ export default {
         field: "crowded_housing",
         title: "Crowded Housing",
         info: "Percent of households which are crowded",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Housing Type & Transportation",
         tertile_direction: "ascending",
@@ -281,7 +281,7 @@ export default {
         field: "no_vehicle",
         title: "No Vehicle",
         info: "Percent of households without a personal vehicle",
-        aggregate: "mean",
+        aggregate: "median",
         formatter: pct,
         group: "Housing Type & Transportation",
         tertile_direction: "ascending",
@@ -326,11 +326,11 @@ export default {
       if (metric.tertile_direction === "ascending") {
         calcTertile[
           metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] <= d['${metric.field}_lower'] ? 1 : (d['${metric.field}'] <= d['${metric.field}_upper'] ? 2 : 3)`;
+        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
       } else {
         calcTertile[
           metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] >= d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
+        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
       }
     }
 

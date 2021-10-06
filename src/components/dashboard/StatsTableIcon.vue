@@ -3,7 +3,7 @@
     <span v-if="!iconOnly">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
-    ><span class="has-text-weight-bold" :class="['has-text-' + color]">{{
+    ><span class="has-text-weight-bold" :style="{ color }">{{
       location ? "⬥" : "⬦"
     }}</span>
   </span>
@@ -40,17 +40,17 @@ export default {
     const { stats, metric, location } = toRefs(props);
 
     const color = computed(() => {
-      let color = "grey-lighter";
+      let color = "hsl(0deg 0% 70%)";
       if (location.value) {
         switch (stats.value[metric.value + "_tertile"]) {
           case 1:
-            color = "success";
+            color = "hsl(230deg 41% 28%)";
             break;
           case 2:
-            color = "warning";
+            color = "hsl(0deg 0% 70%)";
             break;
           case 3:
-            color = "danger";
+            color = "orange";
             break;
         }
       }
