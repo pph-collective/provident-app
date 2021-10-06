@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <p>
-      <span class="is-size-5 has-text-weight-semibold">Municipality: </span
-      >{{ municipality }}
-    </p>
-    <p>
-      <span class="is-size-5 has-text-weight-semibold">Block Group: </span
-      >{{ geoid }}
-    </p>
+  <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+    <LabelledTag label="Municipality" :value="municipality" min-width="110px" />
+    <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
   </div>
+
+  <LabelledTag
+    v-if="withPredictions"
+    class="my-2"
+    label="PROVIDENT Prediction"
+    :value="prediction"
+    min-width="55px"
+  />
 
   <!-- fix table column widths so it doesn't change with the data -->
   <table class="table is-striped is-fullwidth">
@@ -120,16 +122,18 @@
 </template>
 
 <script>
-import { toRefs, reactive } from "vue";
+import { toRefs, reactive, computed } from "vue";
 import * as aq from "arquero";
 import { format } from "d3-format";
 
 import { useStats } from "@/composables/useStats.js";
 import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
+import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 export default {
   components: {
     StatsTableIcon,
+    LabelledTag,
   },
   props: {
     dataset: {
@@ -153,7 +157,7 @@ export default {
   },
 
   setup(props) {
-    const { dataset, geoid, municipality, withPredictions } = toRefs(props);
+    const { dataset, geoid, municipality } = toRefs(props);
 
     // number formatters
     const pct = (x) => (x > 0 && x < 0.01 ? "<1%" : format(".0%")(x));
@@ -288,17 +292,6 @@ export default {
       },
     ];
 
-    if (withPredictions.value)
-      metrics.push({
-        field: "flag_1",
-        title: "PROVIDENT Prediction",
-        info: "Whether the block group was flagged by PROVIDENT",
-        aggregate: "sum",
-        formatter: (x) => x,
-        group: "PROVIDENT Prediction",
-        tertile_direction: "ascending",
-      });
-
     const groupedMetrics = {};
     const showGroups = reactive({});
     let showGroup = true; // want to show the first group
@@ -355,8 +348,11 @@ export default {
       groupTertile,
     });
 
+    const prediction = computed(() => current.value.geoid?.flag_1 ?? "-");
+
     return {
       current,
+      prediction,
       groupedMetrics,
       showGroups,
     };
@@ -382,11 +378,6 @@ export default {
   padding-left: 2px !important;
   padding-right: 2px !important;
   text-align: center !important;
-}
-
-// between size 6 and 7
-.is-size-6-7 {
-  font-size: 0.825rem;
 }
 
 /* Tooltip container */
