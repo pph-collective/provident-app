@@ -96,6 +96,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.geoid"
                 :location="geoid"
+                :icon="false"
               />
             </td>
             <td class="data-column has-text-center">
@@ -104,6 +105,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.municipality"
                 :location="municipality"
+                :icon="false"
               />
             </td>
             <td class="data-column has-text-center">
@@ -112,6 +114,7 @@
                 :format-fn="metric.formatter"
                 :stats="current.ri"
                 location="RI"
+                :icon="false"
               />
             </td>
           </tr>
