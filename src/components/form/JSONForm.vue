@@ -90,8 +90,9 @@ export default {
           } else if (key === "component" && !q[key].startsWith("Form")) {
             q[key] = "Form" + q[key];
           } else if (q[key] !== null && typeof q[key] === "object") {
-            // should never get hit, but need this to keep yup available (should be a better way...)
-            evalSchema(q[key], yup);
+            // Need this to keep yup available (should be a better way...)
+            // The form in formAssignments passes an object
+            yup.string(); // Do nothing
           }
         }
       });
