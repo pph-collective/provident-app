@@ -2,7 +2,7 @@ const selectForm = (formTitle) => {
   cy.get(".loading-icon").should("not.exist");
   cy.get('[data-cy="create-button"]').should("exist").click();
 
-  cy.get('[model="form_id"]')
+  cy.get('[model="form"]')
     .find(".multiselect")
     .click()
     .contains(".multiselect-option", formTitle)
