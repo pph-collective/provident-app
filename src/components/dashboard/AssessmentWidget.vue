@@ -50,7 +50,6 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form="assessmentForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -116,10 +115,12 @@ export default {
     });
 
     const createNewAssessment = () => {
-      const { title, type } = assessmentForm.value;
+      const { title, questions, type } = assessmentForm.value;
+
       activeFormResponse.value = {
         form_id: FORM_ID,
-        title,
+        form_title: title,
+        form_questions: questions,
         type,
         status: "Not Started",
         response: { neighborhood_id: activeGeoid.value },

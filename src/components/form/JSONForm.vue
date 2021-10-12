@@ -79,7 +79,7 @@ export default {
     const value = ref(cloneDeep(props.initValue));
     useSchemaForm(value);
 
-    const schema = ref([...props.initSchema]);
+    const schema = ref([...cloneDeep(props.initSchema)]);
 
     // evaluate strings that are really methods
     const evalSchema = (s, yup) => {

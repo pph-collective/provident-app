@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="user !== undefined && Object.keys(forms).length === 0" />
+  <Loading :loading="user === undefined" />
   <div class="container is-fullhd">
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
@@ -30,12 +30,8 @@
       >
         <div class="level form-row" data-cy="form-row">
           <div class="level-left">
-            <p
-              v-if="formResponse.form_id in forms"
-              class="level-item is-size-5"
-              data-cy="form-title"
-            >
-              {{ forms[formResponse.form_id].title }}
+            <p class="level-item is-size-5" data-cy="form-title">
+              {{ formResponse.form_title }}
             </p>
           </div>
 
@@ -94,7 +90,6 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form="activeForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -131,8 +126,6 @@ export default {
 
       return store.state.user.formResponses;
     });
-
-    const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
     const tabs = {
       "To Do": (formResponse) =>
@@ -152,16 +145,6 @@ export default {
 
     const today = utils.today();
 
-    const activeForm = computed(() => {
-      const formId = activeFormResponse.value.form_id;
-
-      if (formId) {
-        return forms.value[formId];
-      }
-
-      return {};
-    });
-
     const launchForm = (formResponse) => {
       activeFormResponse.value = formResponse;
       fb.logActivity(user.value.data.email, "launch form", formResponse._id);
@@ -172,9 +155,7 @@ export default {
       activeFormResponse,
       tabs,
       selectedTab,
-      activeForm,
       today,
-      forms,
       formResponses,
       launchForm,
       user,
