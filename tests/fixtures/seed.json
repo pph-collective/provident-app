@@ -129,7 +129,6 @@
           "status": "Not Started",
           "last_updated": 1634139937447,
           "form": {
-            "release_date": "3000-01-01",
             "_id": "test3",
             "type": "user",
             "questions": [
@@ -286,7 +285,6 @@
           "status": "Not Started",
           "last_updated": 1634139937447,
           "form": {
-            "release_date": "3000-01-01",
             "_id": "test3",
             "type": "user",
             "questions": [
@@ -384,7 +382,6 @@
           "status": "Not Started",
           "last_updated": 1634139891594,
           "form": {
-            "release_date": "2021-07-26",
             "_id": "sample_organization_form",
             "type": "organization",
             "questions": [
@@ -416,7 +413,6 @@
           "status": "Not Started",
           "last_updated": 1634139891594,
           "form": {
-            "release_date": "2021-07-26",
             "_id": "sample_organization_form",
             "type": "organization",
             "questions": [
@@ -948,7 +944,6 @@
           ]
         },
         "form": {
-          "release_date": "2021-07-26",
           "_id": "sample_organization_form",
           "type": "organization",
           "questions": [
@@ -1002,7 +997,6 @@
           "groups": []
         },
         "form": {
-          "release_date": "3000-01-01",
           "_id": "test3",
           "type": "user",
           "questions": [
