@@ -46,12 +46,9 @@
           <div class="form-assignment-row" data-cy="form-assignment-row">
             <div class="level mb-2">
               <div class="level-left">
-                <p
-                  v-if="assignment.form_id in forms"
-                  class="level-item is-size-6"
-                >
+                <p class="level-item is-size-6">
                   <b data-cy="form-title">
-                    {{ forms[assignment.form_id].title }}
+                    {{ assignment.form.title }}
                   </b>
                 </p>
               </div>
@@ -280,7 +277,7 @@ export default {
     }) => {
       formLoading.value = true;
 
-      const { _id, type, questions, title } = form;
+      const { type, title } = form;
 
       const target = {
         users: target_users,
@@ -290,10 +287,7 @@ export default {
 
       const formAssignmentData = {
         created_date: Date.now(),
-        form_id: _id,
-        form_type: type,
-        form_questions: questions,
-        form_title: title,
+        form,
         release_date,
         expire_date,
         target,
