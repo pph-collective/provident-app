@@ -539,7 +539,7 @@ describe("Forms viewed as an admin", () => {
       "not.contain",
       "No forms here"
     );
-    cy.get(".tag").should("exist").should("contain", "2021-05-21");
+    cy.get(".tag").should("exist").should("contain", "2021-10-13");
   });
 
   it("Unreleased form is viewable as an admin", () => {

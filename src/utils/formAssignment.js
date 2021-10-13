@@ -141,7 +141,7 @@ const addFormResponsesForApproved = async (
       : [approved.name, approved.name];
 
   const activeFormAssignments = formAssignments.filter(
-    (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
+    (f) => f.form.type === formResponseType && utils.today() <= f.expire_date
   );
 
   let formResponses = [];

@@ -102,7 +102,7 @@ export default {
     const completedAssessments = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
-        .filter((response) => response.form_id === FORM_ID)
+        .filter((response) => response.form._id === FORM_ID)
         .sort(utils.sortByProperty("last_updated"))
         .reverse();
     });
