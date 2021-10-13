@@ -10,6 +10,7 @@ const store = createStore({
         data: null,
         admin: false,
         formResponses: [],
+        loaded: true,
       },
       formAssignments: [],
       forms: {},
@@ -31,6 +32,7 @@ const store = createStore({
 
   actions: {
     fetchUser({ commit, dispatch }, user) {
+      commit("mutateUser", { property: "loaded", with: false });
       commit("mutateUser", { property: "authenticated", with: user !== null });
 
       // always start empty, controlled by ContentWithSidebar
@@ -39,19 +41,20 @@ const store = createStore({
       commit("mutate", { property: "notifications", with: [] });
 
       if (user) {
-        commit("mutateUser", {
-          property: "data",
-          with: user,
-        });
-        dispatch("updateUserFormResponses");
-
-        fb.getForms().then((forms) => {
-          commit("mutate", { property: "forms", with: forms });
+        Promise.all([
+          commit("mutateUser", { property: "data", with: user }),
+          dispatch("updateUserFormResponses"),
+          fb.getForms().then((forms) => {
+            commit("mutate", { property: "forms", with: forms });
+          }),
+        ]).then(() => {
+          commit("mutateUser", { property: "loaded", with: true });
         });
       } else {
         commit("mutateUser", { property: "data", with: null });
         commit("mutateUser", { property: "formResponses", with: [] });
         commit("mutate", { property: "forms", with: {} });
+        commit("mutateUser", { property: "loaded", with: true });
       }
     },
     async updateUserFormResponses({ commit, state }) {

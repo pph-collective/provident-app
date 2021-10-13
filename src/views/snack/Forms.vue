@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="user !== undefined && Object.keys(forms).length === 0" />
+  <Loading :loading="!user.loaded" />
   <div class="container is-fullhd">
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
@@ -30,18 +30,14 @@
       >
         <div class="level form-row" data-cy="form-row">
           <div class="level-left">
-            <p
-              v-if="formResponse.form_id in forms"
-              class="level-item is-size-5"
-              data-cy="form-title"
-            >
-              {{ forms[formResponse.form_id].title }}
+            <p class="level-item is-size-5" data-cy="form-title">
+              {{ formResponse.form.title }}
             </p>
           </div>
 
           <div class="level-right has-text-centered">
             <PanelTag
-              v-if="formResponse.type === 'organization'"
+              v-if="formResponse.form.type === 'organization'"
               label="organization-level"
             />
             <PanelTag
@@ -65,8 +61,8 @@
               <button
                 v-if="
                   formResponse.status !== 'Submitted' &&
-                  (formResponse.type === 'user' ||
-                    (formResponse.type === 'organization' &&
+                  (formResponse.form.type === 'user' ||
+                    (formResponse.form.type === 'organization' &&
                       userRole === 'champion'))
                 "
                 class="button is-primary level-item"
@@ -94,7 +90,6 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form="activeForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -131,19 +126,17 @@ export default {
 
       return store.state.user.formResponses;
     });
-
-    const forms = computed(() => store.state.forms);
     const activeFormResponse = ref({});
     const tabs = {
       "To Do": (formResponse) =>
         formResponse.status !== "Submitted" &&
-        (formResponse.type === "user" ||
-          (formResponse.type === "organization" &&
+        (formResponse.form.type === "user" ||
+          (formResponse.form.type === "organization" &&
             userRole.value === "champion")),
       All: () => true,
       Submitted: (formResponse) => formResponse.status === "Submitted",
       "Organization-level": (formResponse) =>
-        formResponse.type === "organization",
+        formResponse.form.type === "organization",
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
     const selectedFormResponses = computed(() =>
@@ -151,16 +144,6 @@ export default {
     );
 
     const today = utils.today();
-
-    const activeForm = computed(() => {
-      const formId = activeFormResponse.value.form_id;
-
-      if (formId) {
-        return forms.value[formId];
-      }
-
-      return {};
-    });
 
     const launchForm = (formResponse) => {
       activeFormResponse.value = formResponse;
@@ -172,9 +155,7 @@ export default {
       activeFormResponse,
       tabs,
       selectedTab,
-      activeForm,
       today,
-      forms,
       formResponses,
       launchForm,
       user,

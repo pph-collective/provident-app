@@ -2,7 +2,7 @@ const selectForm = (formTitle) => {
   cy.get(".loading-icon").should("not.exist");
   cy.get('[data-cy="create-button"]').should("exist").click();
 
-  cy.get('[model="form_id"]')
+  cy.get('[model="form"]')
     .find(".multiselect")
     .click()
     .contains(".multiselect-option", formTitle)
@@ -76,7 +76,7 @@ describe("Form Assignment functionality", () => {
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
       .find(".tag")
-      .should("contain", "2021-05-21");
+      .should("contain", "2021-10-13");
 
     cy.contains('[data-cy="form-assignment-panel-block"]', "My Form")
       .find(".tag")

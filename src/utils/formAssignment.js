@@ -51,13 +51,10 @@ const getAssignedUsers = (target, organizations, users) => {
  * @param {Object} formAssignment
  * @returns {Object} formResponseData
  */
-const getFormResponseData = (formAssignment) => {
-  const { _id, form_id, form_type, release_date, expire_date } = formAssignment;
-
+const getFormResponseData = ({ _id, form, release_date, expire_date }) => {
   return {
-    form_id,
-    type: form_type,
     form_assignment_id: _id,
+    form,
     release_date,
     expire_date,
     response: {},
@@ -107,17 +104,17 @@ const getAssignments = (formType, target, organizations, users) => {
  * @returns {String[]}
  */
 const addFormResponses = async (formAssignment, organizations, users) => {
-  const { form_type, target } = formAssignment;
+  const { form, target } = formAssignment;
   const formResponseData = getFormResponseData(formAssignment);
 
   const { assigned, emails } = getAssignments(
-    form_type,
+    form.type,
     target,
     organizations,
     users
   );
 
-  await fb.batchAddFormResponses(form_type, [formResponseData], assigned);
+  await fb.batchAddFormResponses(form.type, [formResponseData], assigned);
 
   return emails;
 };
@@ -144,7 +141,7 @@ const addFormResponsesForApproved = async (
       : [approved.name, approved.name];
 
   const activeFormAssignments = formAssignments.filter(
-    (f) => f.form_type === formResponseType && utils.today() <= f.expire_date
+    (f) => f.form.type === formResponseType && utils.today() <= f.expire_date
   );
 
   let formResponses = [];
