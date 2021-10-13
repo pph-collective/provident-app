@@ -52,7 +52,6 @@ export default {
 
       filtered.forEach((g) => {
         const datum = dataset.value.find((d) => d.GEOID === g.id) ?? {};
-        console.log(datum);
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
       });

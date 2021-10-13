@@ -1,18 +1,4 @@
 <template>
-  <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-    <LabelledTag label="Municipality" :value="municipality" min-width="110px" />
-    <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
-  </div>
-
-  <LabelledTag
-    v-if="withPredictions"
-    class="my-2"
-    label="PROVIDENT Prediction"
-    :value="prediction"
-    min-width="55px"
-  />
-
-  <!-- fix table column widths so it doesn't change with the data -->
   <table class="table is-striped is-fullwidth">
     <thead>
       <tr>
@@ -50,7 +36,7 @@
           <td class="data-column has-text-center">
             <StatsTableIcon
               :metric="group"
-              :stats="current.geoid"
+              :stats="stats.geoid"
               :number="false"
               :location="geoid"
             />
@@ -58,7 +44,7 @@
           <td class="data-column has-text-center">
             <StatsTableIcon
               :metric="group"
-              :stats="current.municipality"
+              :stats="stats.municipality"
               :number="false"
               :location="municipality"
             />
@@ -66,7 +52,7 @@
           <td class="data-column has-text-center">
             <StatsTableIcon
               :metric="group"
-              :stats="current.ri"
+              :stats="stats.ri"
               :number="false"
               location="RI"
             />
@@ -94,7 +80,7 @@
               <StatsTableIcon
                 :metric="metric.field"
                 :format-fn="metric.formatter"
-                :stats="current.geoid"
+                :stats="stats.geoid"
                 :location="geoid"
                 :icon="false"
               />
@@ -103,7 +89,7 @@
               <StatsTableIcon
                 :metric="metric.field"
                 :format-fn="metric.formatter"
-                :stats="current.municipality"
+                :stats="stats.municipality"
                 :location="municipality"
                 :icon="false"
               />
@@ -112,7 +98,7 @@
               <StatsTableIcon
                 :metric="metric.field"
                 :format-fn="metric.formatter"
-                :stats="current.ri"
+                :stats="stats.ri"
                 location="RI"
                 :icon="false"
               />
@@ -125,22 +111,21 @@
 </template>
 
 <script>
-import { toRefs, reactive, computed } from "vue";
-import * as aq from "arquero";
-import { format } from "d3-format";
+import { toRefs, reactive } from "vue";
 
-import { useStats } from "@/composables/useStats.js";
 import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
-import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 export default {
   components: {
     StatsTableIcon,
-    LabelledTag,
   },
   props: {
-    dataset: {
-      type: Array,
+    stats: {
+      type: Object,
+      required: true,
+    },
+    groupedMetrics: {
+      type: Object,
       required: true,
     },
     municipality: {
@@ -153,210 +138,20 @@ export default {
       required: false,
       default: "",
     },
-    withPredictions: {
-      type: Boolean,
-      required: true,
-    },
   },
-
   setup(props) {
-    const { dataset, geoid, municipality } = toRefs(props);
+    const { groupedMetrics } = toRefs(props);
+    console.log(groupedMetrics.value);
 
-    // number formatters
-    const pct = (x) => (x > 0 && x < 0.01 ? "<1%" : format(".0%")(x));
-    const dollar = (x) => (x > 100000 ? format("$.3s")(x) : format("$.2s")(x));
-
-    const metrics = [
-      {
-        field: "below_poverty",
-        title: "Below FPL",
-        info: "Percentage of residents living below the federal poverty line (FPL)",
-        aggregate: "median",
-        formatter: pct,
-        group: "Socioeconimic Status",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "unemployed",
-        title: "Unemployed",
-        info: "Percentage of residents unemployed",
-        aggregate: "median",
-        formatter: pct,
-        group: "Socioeconimic Status",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "income",
-        title: "Household Income",
-        info: "Average household income",
-        aggregate: "median",
-        formatter: dollar,
-        group: "Socioeconimic Status",
-        tertile_direction: "descending",
-      },
-      {
-        field: "no_high_school_diploma",
-        title: "No HS Diploma",
-        info: "Percent of adult residents without a high school diploma or equivalent",
-        aggregate: "median",
-        formatter: pct,
-        group: "Socioeconimic Status",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "age_65_older",
-        title: "Age Over 65",
-        info: "Percent of residents over the age of 65",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "age_17_younger",
-        title: "Age Under 17",
-        info: "Percent of residents under the age of 17",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "household_with_disability",
-        title: "Household w/Disability",
-        info: "Percent of households with at least one member with a disability",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "single_parent_households",
-        title: "Single Parent",
-        info: "Percent of households with a single parent",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "minority",
-        title: "Minority",
-        info: "Percent of minority residents",
-        aggregate: "median",
-        formatter: pct,
-        group: "Minority Status & Language",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "no_english",
-        title: "Non-English Speaker",
-        info: "Percent of residents who do not speak english",
-        aggregate: "median",
-        formatter: pct,
-        group: "Minority Status & Language",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "multi_unit_structures",
-        title: "Multi-Unit Stuctures",
-        info: "Percent of residential buildings which contain multiple units",
-        aggregate: "median",
-        formatter: pct,
-        group: "Housing Type & Transportation",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "mobile_homes",
-        title: "Mobile Homes",
-        info: "Percent of residential buildings which are mobile homes",
-        aggregate: "median",
-        formatter: pct,
-        group: "Housing Type & Transportation",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "crowded_housing",
-        title: "Crowded Housing",
-        info: "Percent of households which are crowded",
-        aggregate: "median",
-        formatter: pct,
-        group: "Housing Type & Transportation",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "no_vehicle",
-        title: "No Vehicle",
-        info: "Percent of households without a personal vehicle",
-        aggregate: "median",
-        formatter: pct,
-        group: "Housing Type & Transportation",
-        tertile_direction: "ascending",
-      },
-    ];
-
-    const groupedMetrics = {};
     const showGroups = reactive({});
+
     let showGroup = true; // want to show the first group
-    for (const metric of metrics) {
-      if (groupedMetrics[metric.group] === undefined) {
-        groupedMetrics[metric.group] = [metric];
-        showGroups[metric.group] = showGroup;
-        showGroup = false;
-      } else {
-        groupedMetrics[metric.group].push(metric);
-      }
+    for (const group of Object.keys(groupedMetrics.value)) {
+      showGroups[group] = showGroup;
+      showGroup = false;
     }
-
-    const statFns = {};
-    for (const metric of metrics) {
-      statFns[metric.field] = aq.op[metric.aggregate](metric.field);
-    }
-
-    const tertileFns = {};
-    for (const metric of metrics) {
-      tertileFns[metric.field + "_lower"] = aq.op.quantile(metric.field, 0.33);
-      tertileFns[metric.field + "_upper"] = aq.op.quantile(metric.field, 0.67);
-    }
-
-    const calcTertile = {};
-    for (const metric of metrics) {
-      if (metric.tertile_direction === "ascending") {
-        calcTertile[
-          metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
-      } else {
-        calcTertile[
-          metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
-      }
-    }
-
-    const groupTertile = {};
-    for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
-      const meanString =
-        "aq.op.round((" +
-        groupMetrics.map((m) => `d['${m.field}_tertile']`).join(" + ") +
-        `) / ${groupMetrics.length})`;
-      groupTertile[group + "_tertile"] = `d => ${meanString}`;
-    }
-
-    const { stats: current } = useStats({
-      statFns,
-      tertileFns,
-      dataset,
-      municipality,
-      geoid,
-      calcTertile,
-      groupTertile,
-    });
-
-    const prediction = computed(() => current.value.geoid?.flag_1 ?? "-");
 
     return {
-      current,
-      prediction,
-      groupedMetrics,
       showGroups,
     };
   },

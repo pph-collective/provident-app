@@ -62,7 +62,7 @@
     <Card width="one-third" :height="5" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
-        <StatsTable
+        <StatsWidget
           v-if="dataset.length > 0"
           :dataset="dataset"
           :municipality="activeMuni"
@@ -93,7 +93,7 @@ import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/dashboard/Map.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
-import StatsTable from "@/components/dashboard/StatsTable.vue";
+import StatsWidget from "@/components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
 
@@ -103,7 +103,7 @@ export default {
     Map,
     BGMap,
     Card,
-    StatsTable,
+    StatsWidget,
     AssessmentWidget,
     Loading,
   },
