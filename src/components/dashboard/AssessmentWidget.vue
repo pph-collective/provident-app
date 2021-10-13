@@ -115,13 +115,8 @@ export default {
     });
 
     const createNewAssessment = () => {
-      const { title, questions, type } = assessmentForm.value;
-
       activeFormResponse.value = {
-        form_id: FORM_ID,
-        form_title: title,
-        form_questions: questions,
-        type,
+        form: assessmentForm.value,
         status: "Not Started",
         response: { neighborhood_id: activeGeoid.value },
       };
