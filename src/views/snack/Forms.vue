@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="user === undefined" />
+  <Loading :loading="!user.loaded" />
   <div class="container is-fullhd">
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
