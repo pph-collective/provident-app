@@ -10,7 +10,7 @@ const store = createStore({
         data: null,
         admin: false,
         formResponses: [],
-        loaded: false,
+        loaded: true,
       },
       formAssignments: [],
       forms: {},
