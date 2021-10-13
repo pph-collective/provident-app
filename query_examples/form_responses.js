@@ -14,7 +14,7 @@ const db = app.firestore();
 
 const FILE_PATH = "~/downloads/form_responses.json";
 
-db.collection("form_responses")
+db.collectionGroup("form_responses")
   .get()
   .then((querySnapshot) => {
     const results = [];
