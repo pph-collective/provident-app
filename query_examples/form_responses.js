@@ -8,13 +8,14 @@ const admin = require("firebase-admin");
 const fs = require("fs");
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
+process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
 
 const app = admin.initializeApp();
 const db = app.firestore();
 
-const FILE_PATH = "~/downloads/form_responses.json";
+const FILE_PATH = "./form_assignments.json";
 
-db.collectionGroup("form_responses")
+db.collection("form_assignments")
   .get()
   .then((querySnapshot) => {
     const results = [];
