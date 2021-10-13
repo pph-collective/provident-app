@@ -92,7 +92,7 @@ export default {
           } else if (q[key] !== null && typeof q[key] === "object") {
             // Need this to keep yup available (should be a better way...)
             // The form in formAssignments passes an object
-            yup.string(); // Do nothing
+            return yup;
           }
         }
       });
