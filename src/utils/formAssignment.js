@@ -53,11 +53,8 @@ const getAssignedUsers = (target, organizations, users) => {
  */
 const getFormResponseData = ({ _id, form, release_date, expire_date }) => {
   return {
-    form_id: form._id,
-    type: form.type,
-    form_title: form.title,
-    form_questions: form.questions,
     form_assignment_id: _id,
+    form,
     release_date,
     expire_date,
     response: {},

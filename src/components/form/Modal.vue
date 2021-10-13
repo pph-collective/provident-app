@@ -2,7 +2,7 @@
   <teleport to="body">
     <div v-esc="() => (closeFormRequest += 1)">
       <div
-        v-if="'form_id' in formResponse"
+        v-if="'form' in formResponse"
         class="modal is-active"
         data-cy="active-form-modal"
       >
@@ -10,7 +10,7 @@
         <div class="modal-card is-family-secondary">
           <header class="modal-card-head">
             <p class="modal-card-title" data-cy="active-form-title">
-              {{ formResponse.form_title }}
+              {{ formResponse.form.title }}
             </p>
             <button
               class="delete"
@@ -21,10 +21,10 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <JSONForm
-              :init-schema="formResponse.form_questions"
+              :init-schema="formResponse.form.questions"
               :read-only="
                 formResponse.status === 'Submitted' ||
-                (formResponse.type === 'organization' &&
+                (formResponse.form.type === 'organization' &&
                   userRole !== 'champion')
               "
               :init-value="formResponse.response"

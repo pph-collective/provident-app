@@ -31,13 +31,13 @@
         <div class="level form-row" data-cy="form-row">
           <div class="level-left">
             <p class="level-item is-size-5" data-cy="form-title">
-              {{ formResponse.form_title }}
+              {{ formResponse.form.title }}
             </p>
           </div>
 
           <div class="level-right has-text-centered">
             <PanelTag
-              v-if="formResponse.type === 'organization'"
+              v-if="formResponse.form.type === 'organization'"
               label="organization-level"
             />
             <PanelTag
@@ -61,8 +61,8 @@
               <button
                 v-if="
                   formResponse.status !== 'Submitted' &&
-                  (formResponse.type === 'user' ||
-                    (formResponse.type === 'organization' &&
+                  (formResponse.form.type === 'user' ||
+                    (formResponse.form.type === 'organization' &&
                       userRole === 'champion'))
                 "
                 class="button is-primary level-item"
@@ -130,13 +130,13 @@ export default {
     const tabs = {
       "To Do": (formResponse) =>
         formResponse.status !== "Submitted" &&
-        (formResponse.type === "user" ||
-          (formResponse.type === "organization" &&
+        (formResponse.form.type === "user" ||
+          (formResponse.form.type === "organization" &&
             userRole.value === "champion")),
       All: () => true,
       Submitted: (formResponse) => formResponse.status === "Submitted",
       "Organization-level": (formResponse) =>
-        formResponse.type === "organization",
+        formResponse.form.type === "organization",
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
     const selectedFormResponses = computed(() =>

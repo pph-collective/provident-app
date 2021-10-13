@@ -144,7 +144,8 @@ const batchAddFormResponses = async (form_type, formResponses, assigned) => {
 };
 
 const updateFormResponse = async (formResponse, { email, organization }) => {
-  const { type, _id } = formResponse;
+  const { _id, form } = formResponse;
+  const { type } = form;
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
