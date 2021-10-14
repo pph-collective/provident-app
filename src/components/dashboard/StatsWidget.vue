@@ -1,37 +1,54 @@
 <template>
-  <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-    <LabelledTag label="Municipality" :value="municipality" min-width="110px" />
-    <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
+  <div
+    class="
+      is-flex
+      is-flex-direction-column
+      is-justify-content-space-between
+      is-fullheight
+    "
+  >
+    <div>
+      <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+        <LabelledTag
+          label="Municipality"
+          :value="municipality"
+          min-width="110px"
+        />
+        <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
+      </div>
+
+      <LabelledTag
+        v-if="withPredictions"
+        class="my-2"
+        label="PROVIDENT Prediction"
+        :value="prediction"
+        min-width="55px"
+      />
+
+      <table class="table is-striped is-fullwidth mb-1">
+        <!-- community cmposition statistics -->
+        <StatsTableContent
+          :stats="communityStats"
+          :grouped-metrics="{ communityComposition }"
+          :geoid="geoid"
+          :municipality="municipality"
+          :grouped="false"
+          title="Community Composition"
+        />
+
+        <!-- tertiled/grouped statistics -->
+        <StatsTableContent
+          :stats="current"
+          :grouped-metrics="groupedMetrics"
+          :geoid="geoid"
+          :municipality="municipality"
+          title="Social Vulnerability Indicator"
+        />
+      </table>
+    </div>
+
+    <StatsTableLegend />
   </div>
-
-  <LabelledTag
-    v-if="withPredictions"
-    class="my-2"
-    label="PROVIDENT Prediction"
-    :value="prediction"
-    min-width="55px"
-  />
-
-  <table class="table is-striped is-fullwidth">
-    <!-- community cmposition statistics -->
-    <StatsTableContent
-      :stats="communityStats"
-      :grouped-metrics="{ communityComposition }"
-      :geoid="geoid"
-      :municipality="municipality"
-      :grouped="false"
-      title="Community Composition"
-    />
-
-    <!-- tertiled/grouped statistics -->
-    <StatsTableContent
-      :stats="current"
-      :grouped-metrics="groupedMetrics"
-      :geoid="geoid"
-      :municipality="municipality"
-      title="Social Vulnerability Indicator"
-    />
-  </table>
 </template>
 
 <script>
@@ -40,11 +57,13 @@ import { format } from "d3-format";
 
 import { useStats } from "@/composables/useStats.js";
 import StatsTableContent from "@/components/dashboard/StatsTableContent.vue";
+import StatsTableLegend from "@/components/dashboard/StatsTableLegend.vue";
 import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 export default {
   components: {
     StatsTableContent,
+    StatsTableLegend,
     LabelledTag,
   },
   props: {
@@ -247,3 +266,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.is-fullheight {
+  height: 100%;
+}
+</style>

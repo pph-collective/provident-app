@@ -66,13 +66,13 @@
               is-flex is-justify-content-end is-align-items-center
             "
           >
-            <span>
+            <div>
               {{ metric.title }}
-            </span>
-            <span class="tooltip icon is-small has-text-info">
+            </div>
+            <div class="tooltip has-text-info">
               <i class="fas fa-xs fa-info-circle" />
               <span class="tooltiptext">{{ metric.info }}</span>
-            </span>
+            </div>
           </th>
           <td class="data-column has-text-center">
             <StatsTableIcon
@@ -187,6 +187,7 @@ export default {
 .tooltip {
   position: relative;
   display: inline-block;
+  width: 1rem;
 }
 
 /* Tooltip text */
