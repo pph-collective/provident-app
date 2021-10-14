@@ -1,12 +1,12 @@
 <template>
-  <span class="has-text-grey-dark is-family-monospace">
+  <div class="has-text-grey-dark is-family-monospace">
     <span v-if="number">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
     ><span v-if="icon" class="has-text-weight-bold" :style="{ color }">{{
       location ? "⬥" : "⬦"
     }}</span>
-  </span>
+  </div>
 </template>
 
 <script>

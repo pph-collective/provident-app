@@ -1,13 +1,8 @@
 <template>
-  <thead>
-    <tr>
-      <th class="has-text-left pt-4">{{ title }}</th>
-      <th class="data-column pt-4"><abbr :title="geoid">BG</abbr></th>
-      <th class="data-column pt-4"><abbr :title="municipality">Town</abbr></th>
-      <th class="data-column pt-4"><abbr title="Rhode Island">RI</abbr></th>
-    </tr>
-  </thead>
   <tbody class="is-size-6-7">
+    <tr class="header-row">
+      <th colspan="4" class="has-text-centered has-text-light">{{ title }}</th>
+    </tr>
     <template v-for="(metrics, group) in groupedMetrics" :key="group">
       <!-- group level row -->
       <tr
@@ -174,6 +169,11 @@ export default {
     padding-top: 0.2em;
     padding-bottom: 0.2em;
   }
+}
+
+table tbody tr.header-row {
+  background-color: $grey-dark;
+  color: $light;
 }
 
 .data-column {

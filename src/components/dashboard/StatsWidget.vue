@@ -25,7 +25,15 @@
         min-width="55px"
       />
 
-      <table class="table is-striped is-fullwidth mb-1">
+      <table class="table is-striped is-fullwidth my-1">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="py-1"><abbr :title="geoid">BG</abbr></th>
+            <th class="py-1"><abbr :title="municipality">Town</abbr></th>
+            <th class="py-1"><abbr title="Rhode Island">RI</abbr></th>
+          </tr>
+        </thead>
         <!-- community cmposition statistics -->
         <StatsTableContent
           :stats="communityStats"
@@ -42,7 +50,7 @@
           :grouped-metrics="groupedMetrics"
           :geoid="geoid"
           :municipality="municipality"
-          title="Social Vulnerability Indicator"
+          title="Social Vulnerability Indicators"
         />
       </table>
     </div>
@@ -267,7 +275,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.table thead th {
+  vertical-align: bottom;
+}
+
 .is-fullheight {
   height: 100%;
 }
