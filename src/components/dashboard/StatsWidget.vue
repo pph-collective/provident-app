@@ -12,12 +12,26 @@
     min-width="55px"
   />
 
-  <StatsTable
-    :stats="current"
-    :grouped-metrics="groupedMetrics"
-    :geoid="geoid"
-    :municipality="municipality"
-  />
+  <table class="table is-striped is-fullwidth">
+    <!-- community cmposition statistics -->
+    <StatsTableContent
+      :stats="communityStats"
+      :grouped-metrics="{ communityComposition }"
+      :geoid="geoid"
+      :municipality="municipality"
+      :grouped="false"
+      title="Community Composition"
+    />
+
+    <!-- tertiled/grouped statistics -->
+    <StatsTableContent
+      :stats="current"
+      :grouped-metrics="groupedMetrics"
+      :geoid="geoid"
+      :municipality="municipality"
+      title="Social Vulnerability Indicator"
+    />
+  </table>
 </template>
 
 <script>
@@ -25,12 +39,12 @@ import { toRefs, computed } from "vue";
 import { format } from "d3-format";
 
 import { useStats } from "@/composables/useStats.js";
-import StatsTable from "@/components/dashboard/StatsTable.vue";
+import StatsTableContent from "@/components/dashboard/StatsTableContent.vue";
 import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 export default {
   components: {
-    StatsTable,
+    StatsTableContent,
     LabelledTag,
   },
   props: {
@@ -96,42 +110,6 @@ export default {
         aggregate: "median",
         formatter: pct,
         group: "Socioeconimic Status",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "age_65_older",
-        title: "Age Over 65",
-        info: "Percent of residents over the age of 65",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "age_17_younger",
-        title: "Age Under 17",
-        info: "Percent of residents under the age of 17",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "household_with_disability",
-        title: "Household w/Disability",
-        info: "Percent of households with at least one member with a disability",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
-        tertile_direction: "ascending",
-      },
-      {
-        field: "single_parent_households",
-        title: "Single Parent",
-        info: "Percent of households with a single parent",
-        aggregate: "median",
-        formatter: pct,
-        group: "Household Composition",
         tertile_direction: "ascending",
       },
       {
@@ -207,64 +185,65 @@ export default {
       geoid,
     });
 
-    const prediction = computed(() => current.value.geoid?.flag_1 ?? "-");
+    const communityComposition = [
+      {
+        field: "age_65_older",
+        title: "Age Over 65",
+        info: "Percent of residents over the age of 65",
+        aggregate: "median",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "age_17_younger",
+        title: "Age Under 17",
+        info: "Percent of residents under the age of 17",
+        aggregate: "median",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "household_with_disability",
+        title: "Household w/Disability",
+        info: "Percent of households with at least one member with a disability",
+        aggregate: "median",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+      {
+        field: "single_parent_households",
+        title: "Single Parent",
+        info: "Percent of households with a single parent",
+        aggregate: "median",
+        formatter: pct,
+        group: "Household Composition",
+        tertile_direction: "ascending",
+      },
+    ];
+
+    const { stats: communityStats } = useStats({
+      metrics: communityComposition,
+      dataset,
+      municipality,
+      geoid,
+      withTertiles: false,
+    });
+
+    const prediction = computed(
+      () => dataset.value.find((row) => row.bg_id === geoid)?.flag_1 ?? "-"
+    );
 
     return {
       current,
       prediction,
       metrics,
       groupedMetrics,
+      communityStats,
+      communityComposition,
     };
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "bulma";
-.table {
-  line-height: 1;
-
-  th,
-  td {
-    vertical-align: middle;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
-  }
-}
-
-.data-column {
-  min-width: 48px;
-  padding-left: 2px !important;
-  padding-right: 2px !important;
-  text-align: center !important;
-}
-
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 180px;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -90px;
-  background-color: $grey-dark;
-  color: #fff;
-  text-align: center;
-  padding: 5px 5px;
-  border-radius: 3px;
-
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
-</style>

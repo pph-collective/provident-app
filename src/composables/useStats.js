@@ -3,10 +3,11 @@ import * as aq from "arquero";
 
 export function useStats({
   metrics,
-  groupedMetrics,
+  groupedMetrics = {},
   dataset,
   municipality,
   geoid,
+  withTertiles = true,
 }) {
   const dt = computed(() => {
     return aq.from(dataset.value);
@@ -20,38 +21,44 @@ export function useStats({
   }
 
   const tertileFns = {};
-  for (const metric of metrics) {
-    tertileFns[metric.field + "_lower"] = aq.op.quantile(metric.field, 0.33);
-    tertileFns[metric.field + "_upper"] = aq.op.quantile(metric.field, 0.67);
+  if (withTertiles) {
+    for (const metric of metrics) {
+      tertileFns[metric.field + "_lower"] = aq.op.quantile(metric.field, 0.33);
+      tertileFns[metric.field + "_upper"] = aq.op.quantile(metric.field, 0.67);
+    }
   }
 
   const calcTertile = {};
-  for (const metric of metrics) {
-    if (metric.tertile_direction === "ascending") {
-      calcTertile[
-        metric.field + "_tertile"
-      ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
-    } else {
-      calcTertile[
-        metric.field + "_tertile"
-      ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
+  if (withTertiles) {
+    for (const metric of metrics) {
+      if (metric.tertile_direction === "ascending") {
+        calcTertile[
+          metric.field + "_tertile"
+        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
+      } else {
+        calcTertile[
+          metric.field + "_tertile"
+        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
+      }
     }
   }
 
   const groupTertile = {};
-  for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
-    const meanString =
-      "aq.op.round((" +
-      groupMetrics.map((m) => `d['${m.field}_tertile']`).join(" + ") +
-      `) / ${groupMetrics.length})`;
-    groupTertile[group + "_tertile"] = `d => ${meanString}`;
+  if (withTertiles) {
+    for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
+      const meanString =
+        "aq.op.round((" +
+        groupMetrics.map((m) => `d['${m.field}_tertile']`).join(" + ") +
+        `) / ${groupMetrics.length})`;
+      groupTertile[group + "_tertile"] = `d => ${meanString}`;
+    }
   }
 
   const tertiles = computed(() => {
-    if (isData.value) {
+    if (isData.value && withTertiles) {
       return dt.value.rollup(tertileFns);
     } else {
-      return [];
+      return aq.from([]);
     }
   });
 

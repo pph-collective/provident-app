@@ -1,12 +1,12 @@
 <template>
   <div class="tags has-addons m-1">
-    <span class="tag px-1 is-size-6-7 has-text-weight-semibold mb-0">{{
+    <span class="tag is-dark px-1 is-size-6-7 has-text-weight-semibold mb-0">{{
       label
     }}</span>
     <span
       class="
         tag
-        is-primary
+        is-light
         px-1
         is-size-6-7 is-family-monospace
         mb-0
