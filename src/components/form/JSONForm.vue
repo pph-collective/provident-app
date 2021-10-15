@@ -79,7 +79,7 @@ export default {
     const value = ref(cloneDeep(props.initValue));
     useSchemaForm(value);
 
-    const schema = ref([...props.initSchema]);
+    const schema = ref([...cloneDeep(props.initSchema)]);
 
     // evaluate strings that are really methods
     const evalSchema = (s, yup) => {
@@ -89,12 +89,11 @@ export default {
             q[key] = eval(q[key]);
           } else if (key === "component" && !q[key].startsWith("Form")) {
             q[key] = "Form" + q[key];
-          } else if (q[key] !== null && typeof q[key] === "object") {
-            // should never get hit, but need this to keep yup available (should be a better way...)
-            evalSchema(q[key], yup);
           }
         }
       });
+
+      return yup;
     };
     evalSchema(schema.value, yup);
 

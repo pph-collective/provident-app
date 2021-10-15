@@ -46,12 +46,9 @@
           <div class="form-assignment-row" data-cy="form-assignment-row">
             <div class="level mb-2">
               <div class="level-left">
-                <p
-                  v-if="assignment.form_id in forms"
-                  class="level-item is-size-6"
-                >
+                <p class="level-item is-size-6">
                   <b data-cy="form-title">
-                    {{ forms[assignment.form_id].title }}
+                    {{ assignment.form.title }}
                   </b>
                 </p>
               </div>
@@ -169,7 +166,7 @@ export default {
     const users = computed(() => store.getters.approvedUsers);
     const formAssignments = computed(() => store.state.formAssignments);
     const pageLoading = computed(
-      () => users.value.length === 0 || formAssignments.value.length === 0
+      () => users.value.length === 0 || forms.value.length === 0
     );
     const formLoading = ref(false);
 
@@ -200,13 +197,9 @@ export default {
 
       const formOptions = Object.values(forms.value)
         .map((f) => {
-          return { value: f._id, label: `${f.title} (type: ${f.type})` };
+          return { value: f, label: `${f.title} (type: ${f.type})` };
         })
         .sort(utils.sortByProperty("label"));
-
-      const userTypeForms = Object.values(forms.value)
-        .filter((f) => f.type === "user")
-        .map((f) => f._id);
 
       const userOptions = store.getters.formUserOptions;
       const organizationOptions = store.getters.formOrganizationOptions;
@@ -216,7 +209,7 @@ export default {
         {
           component: "Select",
           label: "Form",
-          model: "form_id",
+          model: "form",
           options: formOptions,
           required: true,
         },
@@ -242,9 +235,7 @@ export default {
           model: "target_users",
           default: [],
           options: userOptions,
-          condition: `(model) => model.form_id && ${JSON.stringify(
-            userTypeForms
-          )}.includes(model.form_id)`,
+          condition: "(model) => model.form && model.form.type === 'user'",
         },
         {
           component: "Date",
@@ -276,7 +267,7 @@ export default {
     });
 
     const createFormAssignment = async ({
-      form_id,
+      form,
       release_date,
       expire_date,
       target_users,
@@ -285,7 +276,8 @@ export default {
       send_email,
     }) => {
       formLoading.value = true;
-      const form_type = forms.value[form_id].type;
+
+      const { type, title } = form;
 
       const target = {
         users: target_users,
@@ -295,8 +287,7 @@ export default {
 
       const formAssignmentData = {
         created_date: Date.now(),
-        form_id,
-        form_type,
+        form,
         release_date,
         expire_date,
         target,
@@ -323,18 +314,17 @@ export default {
 
         showModal.value = false;
 
-        const formTitle = forms.value[form_id].title;
         store.dispatch("addNotification", {
           color: "success",
-          message: `Form assignment added: ${formTitle}`,
+          message: `Form assignment added: ${title}`,
         });
 
         // add an email to the queue
         if (send_email.length > 0) {
           await fb.createEmail({
-            subject: `PROVIDENT New Form: ${formTitle}`,
-            body: `<p>A form, <em>${formTitle}</em>, has been assigned to ${
-              form_type === "user" ? "you" : "your organization"
+            subject: `PROVIDENT New Form: ${title}`,
+            body: `<p>A form, <em>${title}</em>, has been assigned to ${
+              type === "user" ? "you" : "your organization"
             }. Check out the form on <a href='${
               location.origin
             }/snack/forms'>PROVIDENT</a></p>`,
@@ -359,7 +349,8 @@ export default {
         } else {
           store.dispatch("addNotification", {
             color: "danger",
-            message: "Form assignment succesfully saved. Error creating email.",
+            message:
+              "Form assignment successfully saved. Error creating email.",
           });
         }
       }

@@ -52,7 +52,6 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :form="assessmentForm"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -105,7 +104,7 @@ export default {
     const completedAssessments = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
-        .filter((response) => response.form_id === FORM_ID)
+        .filter((response) => response.form._id === FORM_ID)
         .sort(utils.sortByProperty("last_updated"))
         .reverse();
     });
@@ -118,11 +117,8 @@ export default {
     });
 
     const createNewAssessment = () => {
-      const { title, type } = assessmentForm.value;
       activeFormResponse.value = {
-        form_id: FORM_ID,
-        title,
-        type,
+        form: assessmentForm.value,
         status: "Not Started",
         response: { neighborhood_id: activeGeoid.value },
       };
