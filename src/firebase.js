@@ -184,8 +184,8 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
 const getModelDataPeriods = async () => {
   const res = [];
   try {
-    const docs = await db.collection("model_data").get();
-    docs.forEach((doc) => res.push(doc.id));
+    const doc = await db.collection("model_data").doc("periods").get();
+    return getDataFromDoc(doc);
   } catch (err) {
     console.log(err);
   }
@@ -194,9 +194,9 @@ const getModelDataPeriods = async () => {
 
 const getModelData = async (period) => {
   try {
-    const modelDataDoc = await db.collection("model_data").doc(period).get();
-    const modelData = getDataFromDoc(modelDataDoc);
-    const modelDt = aq.from(modelData);
+    const modelMetaDoc = await db.collection("model_data").doc("bg_meta").get();
+    const modelMeta = getDataFromDoc(modelMetaDoc);
+    const modelDt = aq.from(modelMeta);
 
     const sviDataDoc = await db.collection("svi_data").doc(period).get();
     const sviData = getDataFromDoc(sviDataDoc);
