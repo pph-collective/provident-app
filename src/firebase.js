@@ -202,10 +202,24 @@ const getModelData = async (period) => {
     const sviData = getDataFromDoc(sviDataDoc);
     const sviDt = aq.from(sviData);
 
-    return modelDt
+    const landmarkDataDoc = await db
+      .collection("landmark_data")
+      .doc(period)
+      .get();
+    const landmarkData = getDataFromDoc(landmarkDataDoc);
+
+    const a = modelDt
       .join(sviDt, "bg_id")
       .filter((d) => d.municipality !== "")
-      .objects();
+      .objects()
+      .map((row) => {
+        row.landmarks = landmarkData.filter(
+          (landmark) => landmark.bg_id === row.bg_id
+        );
+        return row;
+      });
+
+    return a;
   } catch (err) {
     console.log(err);
     return [];

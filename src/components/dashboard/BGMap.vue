@@ -16,10 +16,13 @@ export default {
       type: String,
       required: true,
     },
+    landmarks: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup(props) {
-    const { blockGroup } = toRefs(props);
-
+    const { blockGroup, landmarks } = toRefs(props);
     const el = ref(null);
 
     // filter geo data and simplify
@@ -63,6 +66,17 @@ export default {
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" },
           },
+          {
+            name: "landmarks",
+            values: landmarks.value,
+            transform: [
+              {
+                type: "geopoint",
+                projection: "projection",
+                fields: ["longitude", "latitude"],
+              },
+            ],
+          },
         ],
         projections: [
           {
@@ -99,6 +113,17 @@ export default {
             },
             transform: [{ type: "geoshape", projection: "projection" }],
           },
+          {
+            type: "symbol",
+            from: { data: "landmarks" },
+            encode: {
+              enter: {
+                size: { value: 50 },
+                x: { field: "x" },
+                y: { field: "y" },
+              },
+            },
+          },
         ],
       };
     });
@@ -110,7 +135,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(false),
+      includeActions: ref(true),
     });
 
     return {

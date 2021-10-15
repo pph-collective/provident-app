@@ -51,9 +51,10 @@ export default {
       }
 
       filtered.forEach((g) => {
-        const datum = dataset.value.find((d) => d.GEOID === g.id) ?? {};
+        const datum = dataset.value.find((d) => d.geoid_1 === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
+        g.properties.landmarks = datum.landmarks ?? [];
       });
 
       const collection = {
@@ -100,8 +101,11 @@ export default {
     });
 
     const tooltipSignal = computed(() => {
-      let signal =
-        "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No' ";
+      let signal = `{
+          Municipality: datum.properties.name,
+          title: 'Block Group ' + datum.properties.bg_id,
+          'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
+          Landmarks: datum.properties.landmarks`;
       if (withPredictions.value) {
         signal += ", 'Flag': datum.properties.flag";
       }
