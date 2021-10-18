@@ -185,7 +185,7 @@ const getModelDataPeriods = async () => {
   const res = [];
   try {
     const doc = await db.collection("model_data").doc("periods").get();
-    return getDataFromDoc(doc);
+    res.push(...getDataFromDoc(doc));
   } catch (err) {
     console.log(err);
   }
@@ -203,7 +203,7 @@ const getModelData = async (period) => {
     const sviDt = aq.from(sviData);
 
     return modelDt
-      .join(sviDt, "bg_id")
+      .join(sviDt) // joins on bg_id, geoid
       .filter((d) => d.municipality !== "")
       .objects();
   } catch (err) {

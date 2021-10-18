@@ -70,7 +70,7 @@ describe("Log In View", () => {
   it("Redirect back to previous page prior to logging in after login", () => {
     cy.get("[data-cy='dashboard']").click();
     cy.get(".dashboard").should("not.exist");
-    cy.get(".loading-icon").should("not.exist");
+    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 
     cy.contains("h1", "Log In").should("exist");
 
@@ -79,6 +79,6 @@ describe("Log In View", () => {
 
     cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
     cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon").should("not.exist");
+    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
   });
 });
