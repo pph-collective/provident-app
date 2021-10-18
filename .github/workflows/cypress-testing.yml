@@ -39,6 +39,9 @@ jobs:
             hashFiles('emulator-cache/**') }}
         continue-on-error: true
 
+      - name: What is happening?
+        run: cat tests/e2e/specs/dashboard.spec.js
+
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
