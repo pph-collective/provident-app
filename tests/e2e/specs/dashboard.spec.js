@@ -135,9 +135,8 @@ describe("Dashboard viewed as a user", () => {
 
   it("has a neighborhood rapid assessment widget", () => {
     // when nothing is selected, the correct message is shown, no table
-    cy.get("#nra-widget .form-response-container p").should(
-      "include.text",
-      "Select a block group on the map to see its completed assessments or start a new one"
+    cy.get("#nra-widget .form-response-container p").contains(
+      /Select a block group on the map to see its completed assessments or start a new one/
     );
 
     // when something is selected with no assessments, correct message is shown, no table
