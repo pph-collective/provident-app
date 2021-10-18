@@ -215,7 +215,9 @@ const getModelData = async (period) => {
 const getModelPredictions = async (period) => {
   try {
     const doc = await db.collection("model_predictions").doc(period).get();
-    return getDataFromDoc(doc);
+    const periods = getDataFromDoc(doc);
+    periods.sort().reverse();
+    return periods;
   } catch (err) {
     console.log(err);
     return [];
