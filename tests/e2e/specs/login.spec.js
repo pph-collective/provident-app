@@ -78,7 +78,6 @@ describe("Log In View", () => {
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 });

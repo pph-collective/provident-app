@@ -2,8 +2,7 @@ describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("champion");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with limited dropdowns", () => {
@@ -246,8 +245,7 @@ describe("Dashboard viewed as a control arm user", () => {
   beforeEach(() => {
     cy.login_by_permission("control");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with all dropdowns", () => {
@@ -371,8 +369,7 @@ describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with all dropdowns", () => {

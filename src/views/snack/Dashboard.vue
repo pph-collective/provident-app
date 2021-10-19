@@ -73,7 +73,6 @@
     </Card>
 
     <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
-      <!-- <template #title>Neighborhood Rapid Assessment</template> -->
       <template #content>
         <AssessmentWidget :active-geoid="activeGeoid" />
       </template>

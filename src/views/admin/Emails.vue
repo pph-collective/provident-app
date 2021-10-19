@@ -1,6 +1,6 @@
 <template>
   <Loading :loading="loading" />
-  <div class="container">
+  <div class="email container">
     <section>
       <div class="panel is-primary m-4 has-background-white">
         <p class="panel-heading">Emails</p>
