@@ -17,22 +17,24 @@
 </template>
 
 <script>
+import { tertileColorMap } from "@/utils/utils.js";
+
 export default {
   setup() {
     const items = [
       {
         symbol: "⬥",
-        color: "orange",
+        color: tertileColorMap.get(1),
         text: "Lower third",
       },
       {
         symbol: "⬥",
-        color: "hsl(0deg 0% 70%)",
+        color: tertileColorMap.get(2),
         text: "Middle third",
       },
       {
         symbol: "⬥",
-        color: "hsl(230deg 41% 28%)",
+        color: tertileColorMap.get(3),
         text: "Upper third",
       },
       {

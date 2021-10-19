@@ -1,10 +1,6 @@
 name: Cypress Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [push]
 
 jobs:
   test:
@@ -39,6 +35,7 @@ jobs:
             hashFiles('emulator-cache/**') }}
         continue-on-error: true
 
+
       - name: E2E on Chrome
         uses: cypress-io/github-action@v2
         with:
@@ -49,6 +46,7 @@ jobs:
           wait-on: "http://localhost:5000/"
           wait-on-timeout: 120
           config: baseUrl=http://localhost:5000/
+          spec: tests/e2e/specs/*.spec.js
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}

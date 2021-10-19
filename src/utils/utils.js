@@ -1,8 +1,10 @@
 import GEO from "@/assets/geojson/ri.json";
 
-const MUNICIPALITIES = [...new Set(GEO.map((g) => g.properties.name))].sort();
+export const MUNICIPALITIES = [
+  ...new Set(GEO.map((g) => g.properties.name)),
+].sort();
 
-const sortByProperty = (property) => (a, b) => {
+export const sortByProperty = (property) => (a, b) => {
   let valA = a[property];
   let valB = b[property];
 
@@ -23,14 +25,26 @@ const sortByProperty = (property) => (a, b) => {
   return 0;
 };
 
-const today = () => {
+export const today = () => {
   return new Date().toISOString().split("T")[0];
 };
 
-const uniqueId = () => {
+export const uniqueId = () => {
   const dateString = Date.now().toString(36);
   const randomness = Math.random().toString(36).substr(2);
   return dateString + randomness;
 };
 
-export default { MUNICIPALITIES, sortByProperty, today, uniqueId };
+export const tertileColorMap = new Map([
+  [1, "hsl(230deg 41% 28%)"],
+  [2, "hsl(0deg 0% 70%)"],
+  [3, "orange"],
+]);
+
+export default {
+  MUNICIPALITIES,
+  sortByProperty,
+  tertileColorMap,
+  today,
+  uniqueId,
+};

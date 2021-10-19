@@ -185,11 +185,12 @@ const getModelDataPeriods = async () => {
   const res = [];
   try {
     const doc = await db.collection("model_data").doc("periods").get();
-    return getDataFromDoc(doc);
+    res.push(...getDataFromDoc(doc));
+    res.sort().reverse();
   } catch (err) {
     console.log(err);
   }
-  return res.sort().reverse();
+  return res;
 };
 
 const getModelData = async (period) => {
@@ -208,8 +209,8 @@ const getModelData = async (period) => {
       .get();
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
-    const a = modelDt
-      .join(sviDt, "bg_id")
+    return modelDt
+      .join(sviDt) // joins on bg_id, geoid
       .filter((d) => d.municipality !== "")
       .objects()
       .map((row) => {
@@ -218,8 +219,6 @@ const getModelData = async (period) => {
         );
         return row;
       });
-
-    return a;
   } catch (err) {
     console.log(err);
     return [];

@@ -2,8 +2,7 @@ describe("Dashboard viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("champion");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with limited dropdowns", () => {
@@ -49,25 +48,29 @@ describe("Dashboard viewed as a user", () => {
 
     it("is Good Doers", () => {
       cy.get("div#stats")
-        .find("section div p")
+        .find("div.tags")
         .first()
-        .should("have.text", "Municipality: ");
+        .should("have.text", "Municipality-");
 
       // ri should be filled
       cy.get("div#stats")
-        .find("tbody tr td span")
+        .find("tbody tr")
         .first()
-        .should("have.class", "has-text-success")
-        .find("i")
-        .should("have.class", "fa-arrow-alt-circle-right");
+        .next() // first data row
+        .find("td span")
+        .last()
+        .should("not.be.empty")
+        .should("not.have.text", "-");
 
       // empty circle
       cy.get("div#stats")
-        .find("tbody tr td span")
-        .last()
-        .should("have.class", "has-text-light")
-        .find("i")
-        .should("have.class", "fa-circle");
+        .find("tbody tr")
+        .first()
+        .next() // first data row
+        .find("td span")
+        .first()
+        .should("not.be.empty")
+        .should("have.text", "-");
 
       cy.get("select#geography").select("Good Doers");
 
@@ -89,25 +92,29 @@ describe("Dashboard viewed as a user", () => {
         .should("have.text", "Flag:");
 
       cy.get("div#stats")
-        .find("section div p")
+        .find("div.tags")
         .first()
-        .should("have.text", "Municipality: Portsmouth");
+        .should("have.text", "MunicipalityPortsmouth");
 
-      // ri unchanged
+      // ri should be filled
       cy.get("div#stats")
-        .find("tbody tr td span")
+        .find("tbody tr")
         .first()
-        .should("have.class", "has-text-success")
-        .find("i")
-        .should("have.class", "fa-arrow-alt-circle-right");
-
-      // empty circle now filled arrow
-      cy.get("div#stats")
-        .find("tbody tr td span")
+        .next() // first data row
+        .find("td span")
         .last()
-        .should("not.have.class", "has-text-light")
-        .find("i")
-        .should("have.class", "fa-arrow-alt-circle-right");
+        .should("not.be.empty")
+        .should("not.have.text", "-");
+
+      // has data
+      cy.get("div#stats")
+        .find("tbody tr")
+        .first()
+        .next() // first data row
+        .find("td span")
+        .first()
+        .should("not.be.empty")
+        .should("not.have.text", "-");
     });
 
     it("is Little Compton", () => {
@@ -127,9 +134,8 @@ describe("Dashboard viewed as a user", () => {
 
   it("has a neighborhood rapid assessment widget", () => {
     // when nothing is selected, the correct message is shown, no table
-    cy.get("#nra-widget .form-response-container p").should(
-      "contain",
-      "Select a block group on the map to see its completed assessments or start a new one"
+    cy.get("#nra-widget .form-response-container p").contains(
+      /Select a block group on the map to see its completed assessments or start a new one/
     );
 
     // when something is selected with no assessments, correct message is shown, no table
@@ -239,8 +245,7 @@ describe("Dashboard viewed as a control arm user", () => {
   beforeEach(() => {
     cy.login_by_permission("control");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with all dropdowns", () => {
@@ -260,25 +265,27 @@ describe("Dashboard viewed as a control arm user", () => {
 
   it("is RI 4 Us", () => {
     cy.get("div#stats")
-      .find("section div p")
+      .find("div.tags")
       .first()
-      .should("have.text", "Municipality: ");
+      .should("have.text", "Municipality-");
 
     // ri should be filled
     cy.get("div#stats")
-      .find("tbody tr td span")
+      .find("tbody tr")
       .first()
-      .should("have.class", "has-text-success")
-      .find("i")
-      .should("have.class", "fa-arrow-alt-circle-right");
-
-    // empty circle
-    cy.get("div#stats")
-      .find("tbody tr td span")
+      .next() // first data row
+      .find("td span")
       .last()
-      .should("have.class", "has-text-light")
-      .find("i")
-      .should("have.class", "fa-circle");
+      .should("not.be.empty");
+
+    // empty data
+    cy.get("div#stats")
+      .find("tbody tr")
+      .first()
+      .next() // first data row
+      .find("td span")
+      .first()
+      .should("have.text", "-");
 
     cy.get("select#geography").select("RI 4 Us");
 
@@ -302,25 +309,28 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("not.have.text", "Flag:");
 
     cy.get("div#stats")
-      .find("section div p")
+      .find("div.tags")
       .first()
-      .should("have.text", "Municipality: Tiverton");
+      .should("have.text", "MunicipalityTiverton");
 
-    // ri unchanged
     cy.get("div#stats")
-      .find("tbody tr td span")
+      .find("tbody tr")
       .first()
-      .should("have.class", "has-text-success")
-      .find("i")
-      .should("have.class", "fa-arrow-alt-circle-right");
-
-    // empty circle now filled arrow
-    cy.get("div#stats")
-      .find("tbody tr td span")
+      .next() // first data row
+      .find("td span")
       .last()
-      .should("not.have.class", "has-text-light")
-      .find("i")
-      .should("have.class", "fa-arrow-alt-circle-right");
+      .should("not.be.empty")
+      .should("not.have.text", "-");
+
+    // empty data now have data
+    cy.get("div#stats")
+      .find("tbody tr")
+      .first()
+      .next() // first data row
+      .find("td span")
+      .first()
+      .should("not.be.empty")
+      .should("not.have.text", "-");
 
     // move mouse out of the way
     cy.get('.map-container [data-cy="RI 4 Us"] svg').trigger(
@@ -359,8 +369,7 @@ describe("Dashboard viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
     cy.get("[data-cy='dashboard']").click();
-    cy.get(".dashboard").should("exist");
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".dashboard");
   });
 
   it("Has a control panel with all dropdowns", () => {
