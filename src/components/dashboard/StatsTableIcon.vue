@@ -12,6 +12,8 @@
 <script>
 import { computed, toRefs } from "vue";
 
+import { tertileColorMap } from "@/utils/utils.js";
+
 export default {
   props: {
     stats: {
@@ -46,17 +48,8 @@ export default {
     const color = computed(() => {
       let color = "hsl(0deg 0% 70%)";
       if (location.value) {
-        switch (stats.value[metric.value + "_tertile"]) {
-          case 1:
-            color = "hsl(230deg 41% 28%)";
-            break;
-          case 2:
-            color = "hsl(0deg 0% 70%)";
-            break;
-          case 3:
-            color = "orange";
-            break;
-        }
+        color =
+          tertileColorMap.get(stats.value[metric.value + "_tertile"]) ?? color;
       }
 
       return color;
