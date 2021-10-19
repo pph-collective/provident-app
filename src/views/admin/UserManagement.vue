@@ -1,6 +1,6 @@
 <template>
   <Loading :loading="users.length === 0" />
-  <div class="container">
+  <div class="user-management container">
     <section class="section">
       <h1 class="title">User Management</h1>
 

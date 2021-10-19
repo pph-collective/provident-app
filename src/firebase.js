@@ -2,6 +2,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
+import * as aq from "arquero";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
   authDomain: "provident-ri.firebaseapp.com",
@@ -81,6 +83,15 @@ const getCollection = async (collection) => {
     console.log(err);
   }
   return res;
+};
+
+// common pattern for model related data which has an array of data under the data key
+const getDataFromDoc = (res) => {
+  if (res.exists) {
+    return res.data().data;
+  } else {
+    return [];
+  }
 };
 
 const getForms = async () => {
@@ -173,22 +184,29 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
 const getModelDataPeriods = async () => {
   const res = [];
   try {
-    const docs = await db.collection("model_data").get();
-    docs.forEach((doc) => res.push(doc.id));
+    const doc = await db.collection("model_data").doc("periods").get();
+    res.push(...getDataFromDoc(doc));
+    res.sort().reverse();
   } catch (err) {
     console.log(err);
   }
-  return res.sort().reverse();
+  return res;
 };
 
 const getModelData = async (period) => {
   try {
-    const doc = await db.collection("model_data").doc(period).get();
-    if (doc.exists) {
-      return doc.data().data;
-    } else {
-      return [];
-    }
+    const modelMetaDoc = await db.collection("model_data").doc("bg_meta").get();
+    const modelMeta = getDataFromDoc(modelMetaDoc);
+    const modelDt = aq.from(modelMeta);
+
+    const sviDataDoc = await db.collection("svi_data").doc(period).get();
+    const sviData = getDataFromDoc(sviDataDoc);
+    const sviDt = aq.from(sviData);
+
+    return modelDt
+      .join(sviDt) // joins on bg_id, geoid
+      .filter((d) => d.municipality !== "")
+      .objects();
   } catch (err) {
     console.log(err);
     return [];
@@ -198,11 +216,7 @@ const getModelData = async (period) => {
 const getModelPredictions = async (period) => {
   try {
     const doc = await db.collection("model_predictions").doc(period).get();
-    if (doc.exists) {
-      return doc.data().data;
-    } else {
-      return [];
-    }
+    return getDataFromDoc(doc);
   } catch (err) {
     console.log(err);
     return [];

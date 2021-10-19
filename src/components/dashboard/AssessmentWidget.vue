@@ -1,51 +1,53 @@
 <template>
-  <div class="form-response-container">
-    <table v-if="bgAssessments.length > 0" class="table is-fullwidth">
-      <tbody>
-        <tr v-for="assessment in bgAssessments" :key="assessment._id">
-          <th class="has-text-centered">
-            {{ formatDate(assessment.last_updated) }}
-          </th>
-          <td class="is-flex is-justify-content-center">
-            <button
-              class="button is-primary is-small"
-              :class="[
-                assessment.status === 'Submitted' || userRole === 'user'
-                  ? 'is-light'
-                  : '',
-              ]"
-              type="button"
-              @click="launchForm(assessment)"
-            >
-              {{
-                assessment.status === "Submitted" || userRole === "user"
-                  ? "Review"
-                  : "Continue"
-              }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p v-else-if="activeGeoid" class="assessment-message">
-      No Assessments Found for {{ activeGeoid }}
-    </p>
-    <p v-else class="assessment-message">
-      Select a block group on the map to see its completed assessments or start
-      a new one
-    </p>
-  </div>
-  <div class="is-flex is-justify-content-center">
-    <button
-      v-if="userRole === 'champion'"
-      id="new-assessment"
-      class="button is-primary mt-4"
-      type="button"
-      :disabled="!activeGeoid"
-      @click="createNewAssessment"
-    >
-      Start New Assessment
-    </button>
+  <div class="is-fullheight is-flex is-flex-direction-column">
+    <div class="form-response-container is-flex-grow-1">
+      <table v-if="bgAssessments.length > 0" class="table is-fullwidth">
+        <tbody>
+          <tr v-for="assessment in bgAssessments" :key="assessment._id">
+            <th class="has-text-centered">
+              {{ formatDate(assessment.last_updated) }}
+            </th>
+            <td class="is-flex is-justify-content-center">
+              <button
+                class="button is-primary is-small"
+                :class="[
+                  assessment.status === 'Submitted' || userRole === 'user'
+                    ? 'is-light'
+                    : '',
+                ]"
+                type="button"
+                @click="launchForm(assessment)"
+              >
+                {{
+                  assessment.status === "Submitted" || userRole === "user"
+                    ? "Review"
+                    : "Continue"
+                }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p v-else-if="activeGeoid" class="assessment-message">
+        No Assessments Found for {{ activeGeoid }}
+      </p>
+      <p v-else class="assessment-message">
+        Select a block group on the map to see its completed assessments
+        {{ userRole === "champion" ? "or start a new one" : "" }}
+      </p>
+    </div>
+    <div class="is-flex is-justify-content-center">
+      <button
+        v-if="userRole === 'champion'"
+        id="new-assessment"
+        class="button is-primary mt-4"
+        type="button"
+        :disabled="!activeGeoid"
+        @click="createNewAssessment"
+      >
+        Start New Assessment
+      </button>
+    </div>
   </div>
 
   <FormModal
@@ -156,7 +158,7 @@ export default {
 
 <style lang="scss" scoped>
 .form-response-container {
-  height: 150px;
+  min-height: 150px;
   border-style: solid;
   border-color: grey;
   border-width: 1px;
@@ -181,5 +183,9 @@ table {
   grid-template-areas: ".";
   position: absolute;
   top: 0;
+}
+
+.is-fullheight {
+  height: 100%;
 }
 </style>

@@ -29,14 +29,14 @@ describe("Admin Views and Powers", () => {
       .should("exist")
       .click();
 
-    cy.get(".loading-icon").should("not.exist");
+    cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 
     cy.get(".notification")
       .should("exist")
       .should("contain", `Success! ${ACCOUNTS.pending.email} was approved`);
 
     cy.get('a[href="/admin/email"]').click();
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".email");
 
     cy.get(".email-row .level-item").should(
       "contain",
@@ -53,13 +53,10 @@ describe("Admin Views and Powers", () => {
 
     // Navigate to forms, there should be an assigned form
     cy.get('[data-cy="forms"]').click();
-    cy.get('[data-cy="form-panel"]').should("exist");
-    cy.get(".loading-icon").should("not.exist");
-
+    cy.waitLoaded('[data-cy="form-panel"]');
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
 
     // Confirm that forms are loaded prior to continuing
-    cy.get(".loading-icon").should("not.exist");
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
@@ -100,7 +97,7 @@ describe("Admin Views and Powers", () => {
 
   it("User management", () => {
     cy.get('a[href="/admin/user_management"]').click();
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".user-management");
     cy.get("table tbody tr").should("have.length", 4).first().find("i").click();
     cy.get("table tbody tr").find("select").should("have.value", "champion");
     cy.get("table tbody tr").find("select").select("user");
@@ -112,8 +109,7 @@ describe("Admin Views and Powers", () => {
 
     // still there after hard refresh
     cy.visit("/admin/user_management");
-    cy.get("h1.title").should("contain", "User Management");
-    cy.get(".loading-icon").should("not.exist");
+    cy.waitLoaded(".user-management");
     cy.get("table tbody tr")
       .first()
       .find('td[data-cy="role"]')
@@ -129,7 +125,7 @@ describe("Admin Views and Powers", () => {
   describe("emails", () => {
     beforeEach(() => {
       cy.get('a[href="/admin/email"]').click();
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded(".email");
     });
 
     it("has no emails to start", () => {
@@ -189,11 +185,7 @@ describe("Admin Views and Powers", () => {
     beforeEach(() => {
       resetTest();
       cy.get('a[href="/admin/organization_management"]').click();
-      cy.get('[data-cy="organization-table"]').should(
-        "not.contain",
-        "No organizations found"
-      );
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded(".org-management");
     });
 
     after(() => {
@@ -244,7 +236,7 @@ describe("Admin Views and Powers", () => {
 
       cy.get("button").contains("Submit").click();
       cy.get('[data-cy="active-form-modal"]').should("not.exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 
       // Check that it exists on the page
       cy.get('[data-cy="organization-table"]')
@@ -259,8 +251,7 @@ describe("Admin Views and Powers", () => {
       cy.login(testUser.email, testUser.password);
       // Navigate to form
       cy.get('[data-cy="forms"]').click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
 
       cy.get('[data-cy="panel-tabs"]')
         .find("a")
@@ -296,7 +287,7 @@ describe("Admin Views and Powers", () => {
 
       cy.get("button").contains("Submit").click();
       cy.get('[data-cy="active-form-modal"]').should("not.exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 
       // Check that it exists on the page
       cy.get('[data-cy="organization-table"]')
@@ -311,8 +302,7 @@ describe("Admin Views and Powers", () => {
       cy.login(testUser.email, testUser.password);
       // Navigate to forms
       cy.get('[data-cy="forms"]').click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
 
       cy.get('[data-cy="panel-tabs"]')
         .find("a")

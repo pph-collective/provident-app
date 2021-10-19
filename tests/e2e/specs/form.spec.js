@@ -2,8 +2,7 @@ describe("Form functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
   });
 
@@ -63,8 +62,7 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
         .find(".tag")
@@ -368,8 +366,7 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
 
       // Confirm that the forms are loaded prior to continuing
       cy.get('[data-cy="forms-panel-block"]').should(
@@ -529,8 +526,7 @@ describe("Forms viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
   });
 
@@ -572,8 +568,7 @@ describe("Forms viewed as a user", () => {
   beforeEach(() => {
     cy.login_by_permission("approved").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
   });
 
@@ -643,8 +638,7 @@ describe("Forms viewed as a champion", () => {
   beforeEach(() => {
     cy.login_by_permission("champion").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
   });
 
@@ -725,8 +719,7 @@ describe("Forms viewed as a champion", () => {
     cy.logout();
     cy.login_by_permission("approved").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
 
     // Find form in the organization-level area
@@ -810,8 +803,7 @@ describe("Forms viewed as a champion", () => {
     cy.logout();
     cy.login_by_permission("approved").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.get('[data-cy="form-panel"]').should("exist");
-      cy.get(".loading-icon").should("not.exist");
+      cy.waitLoaded('[data-cy="form-panel"]');
     });
 
     // Navigate to organization tab

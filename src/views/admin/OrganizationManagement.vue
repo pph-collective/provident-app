@@ -1,6 +1,6 @@
 <template>
   <Loading :loading="organizations.length === 0 || loading" />
-  <div class="container">
+  <div class="org-management container">
     <section class="section">
       <h1 class="title">Organization Management</h1>
       <div class="content">

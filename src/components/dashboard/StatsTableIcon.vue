@@ -1,19 +1,22 @@
 <template>
-  <span :class="['icon', 'has-text-' + icon.color]">
-    <i :class="icon.type"></i>
-  </span>
+  <div class="has-text-grey-dark is-family-monospace">
+    <span v-if="number">{{
+      stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
+    }}</span
+    ><span v-if="icon" class="has-text-weight-bold" :style="{ color }">{{
+      location ? "⬥" : "⬦"
+    }}</span>
+  </div>
 </template>
 
 <script>
 import { computed, toRefs } from "vue";
 
+import { tertileColorMap } from "@/utils/utils.js";
+
 export default {
   props: {
     stats: {
-      type: Object,
-      required: true,
-    },
-    previousStats: {
       type: Object,
       required: true,
     },
@@ -25,59 +28,35 @@ export default {
       type: String,
       required: true,
     },
+    formatFn: {
+      type: Function,
+      required: false,
+      default() {},
+    },
+    icon: {
+      type: Boolean,
+      default: true,
+    },
+    number: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props) {
-    const { stats, metric, location, previousStats } = toRefs(props);
+    const { stats, metric, location } = toRefs(props);
 
-    const getTertile = (s, m) => {
-      if (s[m] === undefined) {
-        return 0;
-      } else if (s[m] <= s[m + "_lower"]) {
-        return 1;
-      } else if (s[m] <= s[m + "_upper"]) {
-        return 2;
-      } else {
-        return 3;
-      }
-    };
-
-    const icon = computed(() => {
-      let color = "light";
-      let type = [];
+    const color = computed(() => {
+      let color = "hsl(0deg 0% 70%)";
       if (location.value) {
-        const currentTertile = getTertile(stats.value, metric.value);
-        switch (currentTertile) {
-          case 1:
-            color = "success";
-            break;
-          case 2:
-            color = "warning";
-            break;
-          case 3:
-            color = "danger";
-            break;
-        }
-
-        if (previousStats.value[metric.value] !== undefined) {
-          type.push("fas", "fa-arrow-alt-circle-right");
-          const previousTertile = getTertile(previousStats.value, metric.value);
-          if (currentTertile < previousTertile) {
-            type.push("rotate-down");
-          } else if (currentTertile > previousTertile) {
-            type.push("rotate-up");
-          }
-        } else {
-          type.push("fas", "fa-circle");
-        }
-      } else {
-        type.push("far", "fa-circle");
+        color =
+          tertileColorMap.get(stats.value[metric.value + "_tertile"]) ?? color;
       }
 
-      return { color, type };
+      return color;
     });
 
     return {
-      icon,
+      color,
     };
   },
 };
@@ -90,5 +69,10 @@ export default {
 
 .rotate-down {
   transform: rotate(45deg);
+}
+
+// between size 6 and 7
+.stat-icon {
+  font-size: 0.825rem;
 }
 </style>

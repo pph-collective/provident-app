@@ -8,7 +8,7 @@
       @selected="updateControls"
     />
 
-    <Card width="two-thirds" :height="4" id="map">
+    <Card width="two-thirds" :height="5" id="map">
       <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
       <template #top-right>
         <button
@@ -59,13 +59,12 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="3" id="stats">
+    <Card width="one-third" :height="5" id="stats">
       <template #title>Stats from {{ controls.model_version }}</template>
       <template #content>
-        <StatsTable
+        <StatsWidget
           v-if="dataset.length > 0"
           :dataset="dataset"
-          :previous-dataset="previousDataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
           :with-predictions="interventionArmUser"
@@ -73,8 +72,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="1" id="nra-widget">
-      <template #title>Neighborhood Rapid Assessment</template>
+    <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
       <template #content>
         <AssessmentWidget :active-geoid="activeGeoid" />
       </template>
@@ -94,7 +92,7 @@ import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
 import Map from "@/components/dashboard/Map.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
-import StatsTable from "@/components/dashboard/StatsTable.vue";
+import StatsWidget from "@/components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
 
@@ -104,7 +102,7 @@ export default {
     Map,
     BGMap,
     Card,
-    StatsTable,
+    StatsWidget,
     AssessmentWidget,
     Loading,
   },
@@ -119,7 +117,6 @@ export default {
       () => store.getters.interventionArmUser
     );
     const dataset = ref([]);
-    const previousDataset = ref([]);
     const activeGeoid = ref("");
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
@@ -180,19 +177,9 @@ export default {
 
       // update the model data if changed
       if (newControls.model_version !== controls.value.model_version) {
-        previousDataset.value = [];
         updateDataset(newControls.model_version).then((res) => {
           dataset.value = res;
         });
-        const prevPeriodIdx =
-          resultPeriods.value.findIndex(
-            (p) => p === newControls.model_version
-          ) + 1;
-        if (prevPeriodIdx < resultPeriods.value.length) {
-          updateDataset(resultPeriods.value[prevPeriodIdx]).then((res) => {
-            previousDataset.value = res;
-          });
-        }
       }
 
       // update the control selections
@@ -240,7 +227,6 @@ export default {
       dropDowns,
       interventionArmUser,
       loading,
-      previousDataset,
       resultPeriods,
       updateControls,
       zoomBg,
@@ -274,9 +260,8 @@ export default {
   row-gap: 15px;
   justify-items: stretch;
   align-items: stretch;
-  justify-content: space-between;
   align-content: start;
-  grid-auto-flow: row;
+  grid-auto-flow: row dense;
   @include mobile {
     grid-template-columns: 100%;
     column-gap: 0px;
