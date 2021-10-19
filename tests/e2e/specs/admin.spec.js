@@ -185,7 +185,7 @@ describe("Admin Views and Powers", () => {
     beforeEach(() => {
       resetTest();
       cy.get('a[href="/admin/organization_management"]').click();
-      cy.waitLoaded(".user-management");
+      cy.waitLoaded(".org-management");
     });
 
     after(() => {
