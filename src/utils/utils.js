@@ -44,6 +44,11 @@ export const tertileColorMap = new Map([
   [3, "orange"],
 ]);
 
+export const uniqueArray = (array) => {
+  const set = new Set(array);
+  return Array.from(set).sort();
+};
+
 export default {
   GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
@@ -51,5 +56,6 @@ export default {
   sortByProperty,
   tertileColorMap,
   today,
+  uniqueArray,
   uniqueId,
 };

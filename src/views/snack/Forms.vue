@@ -4,15 +4,38 @@
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-      <div class="panel-tabs" data-cy="panel-tabs">
-        <a
-          v-for="tab in Object.keys(tabs)"
-          :key="tab"
-          :class="selectedTab === tab ? 'is-active' : ''"
-          @click="selectedTab = tab"
-          >{{ tab }}</a
+      <div class="p-2">
+        <button
+          class="button is-primary is-small"
+          @click="showFilters = !showFilters"
         >
+          {{ showFilters ? "Hide" : "Show" }} Filters
+        </button>
       </div>
+
+      <div
+        v-if="showFilters"
+        class="
+          panel-block
+          pt-0
+          is-flex-wrap-wrap is-justify-content-space-around
+        "
+      >
+        <div
+          v-for="(options, filterName) in filterOptions"
+          :key="'filter-' + filterName"
+          class="column py-0 filter-field"
+        >
+          {{ filterName }}
+          <Multiselect
+            mode="tags"
+            v-model="filters[filterName]"
+            :options="options"
+            :searchable="true"
+          />
+        </div>
+      </div>
+      <div v-else class="panel-block p-0" />
 
       <div
         v-if="selectedFormResponses.length === 0"
@@ -95,10 +118,15 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
+import Multiselect from "@vueform/multiselect";
 
-import utils from "@/utils/utils.js";
+import utils, {
+  GEOID_QUESTION_MODEL,
+  MUNI_QUESTION_MODEL,
+  uniqueArray,
+} from "@/utils/utils.js";
 import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
@@ -109,6 +137,7 @@ export default {
   components: {
     FormModal,
     Loading,
+    Multiselect,
     PanelTag,
   },
   setup() {
@@ -127,21 +156,67 @@ export default {
       return store.state.user.formResponses;
     });
     const activeFormResponse = ref({});
-    const tabs = {
-      "To Do": (formResponse) =>
-        formResponse.status !== "Submitted" &&
-        (formResponse.form.type === "user" ||
-          (formResponse.form.type === "organization" &&
-            userRole.value === "champion")),
-      All: () => true,
-      Submitted: (formResponse) => formResponse.status === "Submitted",
-      "Organization-level": (formResponse) =>
-        formResponse.form.type === "organization",
-    };
-    const selectedTab = ref(Object.keys(tabs)[0]);
-    const selectedFormResponses = computed(() =>
-      formResponses.value.filter(tabs[selectedTab.value])
+
+    const filterFields = [
+      "Title",
+      "Organization Level?",
+      "Status",
+      "Municipality",
+      "Block Group",
+    ];
+    const filters = reactive(
+      filterFields.reduce((acc, v) => {
+        acc[v] = [];
+        return acc;
+      }, {})
     );
+    const showFilters = ref(true);
+
+    const filterOptions = computed(() => {
+      return {
+        Title: formResponses.value.map((f) => f.form.title).sort(),
+        "Organization Level?": ["Yes", "No"],
+        Status: ["Not Started", "Draft", "Submitted"],
+        Municipality: uniqueArray(
+          formResponses.value
+            .filter((f) => f.response[MUNI_QUESTION_MODEL])
+            .map((f) => f.response[MUNI_QUESTION_MODEL])
+        ),
+        "Block Group": uniqueArray(
+          formResponses.value
+            .filter((f) => f.response[GEOID_QUESTION_MODEL])
+            .map((f) => f.response[GEOID_QUESTION_MODEL])
+        ),
+      };
+    });
+
+    const filterFunctions = {
+      Title: (formResponse) => filters.Title.includes(formResponse.form.title),
+      "Organization Level?": (formResponse) =>
+        (filters["Organization Level?"].includes("Yes") &&
+          formResponse.form.type === "organization") ||
+        (filters["Organization Level?"].includes("No") &&
+          formResponse.form.type === "user"),
+      Status: (formResponse) => filters.Status.includes(formResponse.status),
+      Municipality: (formResponse) =>
+        filters.Municipality.includes(
+          formResponse.response[MUNI_QUESTION_MODEL]
+        ),
+      "Block Group": (formResponse) =>
+        filters["Block Group"].includes(
+          formResponse.response[GEOID_QUESTION_MODEL]
+        ),
+    };
+
+    const selectedFormResponses = computed(() => {
+      let res = formResponses.value;
+      for (const filterField of filterFields) {
+        if (filters[filterField].length > 0) {
+          res = res.filter(filterFunctions[filterField]);
+        }
+      }
+      return res;
+    });
 
     const today = utils.today();
 
@@ -151,13 +226,14 @@ export default {
     };
 
     return {
-      selectedFormResponses,
       activeFormResponse,
-      tabs,
-      selectedTab,
-      today,
+      filters,
+      filterOptions,
       formResponses,
       launchForm,
+      selectedFormResponses,
+      showFilters,
+      today,
       user,
       userRole,
     };
@@ -168,5 +244,8 @@ export default {
 <style lang="scss" scoped>
 .form-row {
   width: 100%;
+}
+.filter-field {
+  min-width: 180px;
 }
 </style>
