@@ -554,10 +554,17 @@
         "type": "organization",
         "questions": [
           {
-            "model": "neighborhood_id",
+            "model": "bg_id",
             "component": "TextInput",
             "label": "Neighborhood ID",
             "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+            "required": true
+          },
+          {
+            "model": "municipality",
+            "component": "TextInput",
+            "label": "Municipality",
+            "validations": "yup.string().required()",
             "required": true
           },
           {
