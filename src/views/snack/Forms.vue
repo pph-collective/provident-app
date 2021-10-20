@@ -26,13 +26,32 @@
           :key="'filter-' + filterName"
           class="column py-0 filter-field"
         >
-          {{ filterName }}
-          <Multiselect
-            mode="tags"
-            v-model="filters[filterName]"
-            :options="options"
-            :searchable="true"
-          />
+          <label>
+            {{ filterName }}
+            <Multiselect
+              mode="tags"
+              v-model="filters[filterName]"
+              :options="options"
+              :searchable="true"
+              :close-on-select="true"
+              :hide-selected="false"
+            >
+              <template v-slot:tag="{ option, handleTagRemove, disabled }">
+                <div class="multiselect-tag is-flex">
+                  <span class="is-flex-shrink-1 shorten-ellipsis">
+                    {{ option.label }}
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="multiselect-tag-remove"
+                    @mousedown.prevent="handleTagRemove(option, $event)"
+                  >
+                    <span class="multiselect-tag-remove-icon"></span>
+                  </span>
+                </div>
+              </template>
+            </Multiselect>
+          </label>
         </div>
       </div>
       <div v-else class="panel-block p-0" />
@@ -58,28 +77,30 @@
             </p>
           </div>
 
-          <div class="level-right has-text-centered">
-            <PanelTag
-              v-if="formResponse.form.type === 'organization'"
-              label="organization-level"
-            />
-            <PanelTag
-              v-if="user.admin"
-              :class="{
-                'is-success is-light': formResponse.release_date <= today,
-              }"
-              label="release date"
-              :value="formResponse.release_date"
-            />
-            <PanelTag
-              :class="{
-                'is-warning': formResponse.status === 'Not Started',
-                'is-info': formResponse.status === 'Draft',
-                'is-success': formResponse.status === 'Submitted',
-              }"
-              label="status"
-              :value="formResponse.status"
-            />
+          <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
+            <div class="panel-tags">
+              <PanelTag
+                v-if="formResponse.form.type === 'organization'"
+                label="organization-level"
+              />
+              <PanelTag
+                v-if="user.admin"
+                :class="{
+                  'is-success is-light': formResponse.release_date <= today,
+                }"
+                label="release date"
+                :value="formResponse.release_date"
+              />
+              <PanelTag
+                :class="{
+                  'is-warning': formResponse.status === 'Not Started',
+                  'is-info': formResponse.status === 'Draft',
+                  'is-success': formResponse.status === 'Submitted',
+                }"
+                label="status"
+                :value="formResponse.status"
+              />
+            </div>
             <div class="level-item">
               <button
                 v-if="
@@ -242,10 +263,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "bulma";
+
 .form-row {
   width: 100%;
 }
 .filter-field {
-  min-width: 180px;
+  min-width: 220px;
+  max-width: 25rem;
+}
+.panel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+
+  @include mobile {
+    justify-content: center;
+  }
 }
 </style>
