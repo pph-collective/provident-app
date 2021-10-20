@@ -78,6 +78,7 @@ async function importCsv() {
           "latitude",
           "longitude",
           "street_address",
+          "city",
           "postal_code",
           "total_visitors",
           "rank"

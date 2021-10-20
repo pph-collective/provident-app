@@ -43,6 +43,7 @@ $box-radius: 2px;
 @import '~bulma';
 
 #vg-tooltip-element.vg-tooltip {
+  white-space: pre-wrap;
   color: #333333;
   font-family: $family-sans-serif;
   h2 {

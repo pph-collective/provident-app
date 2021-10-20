@@ -13,7 +13,7 @@ const topojson = { ...ts, ...tc };
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
-import { sortByProperty } from "../../utils/utils";
+import utils from "@/utils/utils.js";
 
 export default {
   props: {
@@ -57,10 +57,10 @@ export default {
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
         g.properties.landmarks = datum.landmarks
-          ? datum.landmarks
-              .sort(sortByProperty("rank"))
-              .map((x) => x.location_name)
-              .join(", ")
+          ? `${datum.landmarks
+              .sort(utils.sortByProperty("rank"))
+              .map((x) => `${x.rank}. ${x.location_name} `)
+              .join("\n")}`
           : [];
       });
 
