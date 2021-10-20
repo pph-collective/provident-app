@@ -84,12 +84,22 @@
                 label="organization-level"
               />
               <PanelTag
-                v-if="user.admin"
+                v-if="user.admin && formResponse.release_date"
                 :class="{
                   'is-success is-light': formResponse.release_date <= today,
                 }"
                 label="release date"
                 :value="formResponse.release_date"
+              />
+              <PanelTag
+                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                label="block group"
+                :value="formResponse.response[GEOID_QUESTION_MODEL]"
+              />
+              <PanelTag
+                v-if="formResponse.response[MUNI_QUESTION_MODEL]"
+                label="municipality"
+                :value="formResponse.response[MUNI_QUESTION_MODEL]"
               />
               <PanelTag
                 :class="{
@@ -247,6 +257,8 @@ export default {
     };
 
     return {
+      GEOID_QUESTION_MODEL,
+      MUNI_QUESTION_MODEL,
       activeFormResponse,
       filters,
       filterOptions,
@@ -273,6 +285,7 @@ export default {
   max-width: 25rem;
 }
 .panel-tags {
+  padding: 0 0.75rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: end;
