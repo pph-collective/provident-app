@@ -126,7 +126,7 @@ export default {
             from: { data: "landmarks" },
             encode: {
               enter: {
-                size: { value: 300 },
+                size: { value: 100 },
                 x: { field: "x" },
                 y: { field: "y" },
                 fill: { value: "orange" },

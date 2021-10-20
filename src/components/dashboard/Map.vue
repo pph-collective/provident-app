@@ -13,6 +13,8 @@ const topojson = { ...ts, ...tc };
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
+import { sortByProperty } from "../../utils/utils";
+
 export default {
   props: {
     dataset: {
@@ -54,7 +56,12 @@ export default {
         const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
-        g.properties.landmarks = datum.landmarks ?? [];
+        g.properties.landmarks = datum.landmarks
+          ? datum.landmarks
+              .sort(sortByProperty("rank"))
+              .map((x) => x.location_name)
+              .join(", ")
+          : [];
       });
 
       const collection = {
@@ -105,7 +112,7 @@ export default {
           Municipality: datum.properties.name,
           title: 'Block Group ' + datum.properties.bg_id,
           'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
-          Landmarks: datum.properties.landmarks`;
+          'Points of Interest': datum.properties.landmarks`;
       if (withPredictions.value) {
         signal += ", 'Flag': datum.properties.flag";
       }
@@ -253,7 +260,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(false),
+      includeActions: ref(true),
     });
 
     let currentBg = "";
