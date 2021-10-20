@@ -111,12 +111,11 @@ export default {
       let signal = `{
           Municipality: datum.properties.name,
           title: 'Block Group ' + datum.properties.bg_id,
-          'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
-          'Points of Interest': datum.properties.landmarks`;
+          'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No'`;
       if (withPredictions.value) {
         signal += ", 'Flag': datum.properties.flag";
       }
-      signal += "}";
+      signal += ", 'Points of Interest': datum.properties.landmarks}";
       return signal;
     });
 
