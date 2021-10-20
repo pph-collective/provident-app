@@ -110,6 +110,15 @@
                 label="status"
                 :value="formResponse.status"
               />
+              <PanelTag
+                v-if="formResponse.status !== 'Not Started'"
+                :label="
+                  formResponse.status === 'Draft' ? 'last updated' : 'submitted'
+                "
+                :value="
+                  new Date(formResponse.last_updated).toISOString().slice(0, 10)
+                "
+              />
             </div>
             <div class="level-item">
               <button
@@ -156,6 +165,7 @@ import Multiselect from "@vueform/multiselect";
 import utils, {
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
+  sortByProperty,
   uniqueArray,
 } from "@/utils/utils.js";
 import fb from "@/firebase.js";
@@ -178,13 +188,16 @@ export default {
       user.value.data ? user.value.data.role : "user"
     );
     const formResponses = computed(() => {
+      let responses = [...store.state.user.formResponses];
       if (!user.value.admin) {
-        return store.state.user.formResponses.filter((f) => {
+        responses = responses.filter((f) => {
           return f.release_date <= today;
         });
       }
 
-      return store.state.user.formResponses;
+      return responses
+        .sort(sortByProperty("last_update"))
+        .sort(sortByProperty("status"));
     });
     const activeFormResponse = ref({});
 
@@ -262,7 +275,6 @@ export default {
       activeFormResponse,
       filters,
       filterOptions,
-      formResponses,
       launchForm,
       selectedFormResponses,
       showFilters,
