@@ -86,14 +86,6 @@ export default {
             ],
           },
         ],
-        scales: [
-          {
-            name: "size",
-            type: "linear",
-            domain: { data: "landmarks", field: "total_visitors" },
-            range: [25, 750],
-          },
-        ],
         projections: [
           {
             name: "projection",
@@ -134,17 +126,19 @@ export default {
             from: { data: "landmarks" },
             encode: {
               enter: {
-                size: { scale: "size", field: "total_visitors" },
+                size: { value: 300 },
                 x: { field: "x" },
                 y: { field: "y" },
-                fillOpacity: { value: 0.8 },
+                fill: { value: "orange" },
+                fillOpacity: { value: 0.7 },
+                stroke: { value: "#2A3465" }, // pori-blue
+                strokeWidth: { value: 1.5 },
               },
               update: {
                 tooltip: {
-                  signal: `{'Location Name': datum.location_name,
-                    'Street Address': datum.street_address + ', ' + datum.city + ', RI 0' + datum.postal_code,
+                  signal: `{'title': datum.location_name,
+                    'Address': datum.street_address + ', ' + datum.city + ', RI 0' + datum.postal_code,
                     'Category': datum.top_category,
-                    'Total Visitors': datum.total_visitors,
                     'Rank': datum.rank}`,
                 },
               },
@@ -161,7 +155,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(true),
+      includeActions: ref(false),
     });
 
     return {
