@@ -78,6 +78,14 @@ export default {
             ],
           },
         ],
+        scales: [
+          {
+            name: "size",
+            type: "linear",
+            domain: { data: "landmarks", field: "total_visitors" },
+            range: [25, 750],
+          },
+        ],
         projections: [
           {
             name: "projection",
@@ -118,7 +126,7 @@ export default {
             from: { data: "landmarks" },
             encode: {
               enter: {
-                size: { value: 50 },
+                size: { scale: "size", field: "total_visitors" },
                 x: { field: "x" },
                 y: { field: "y" },
               },
