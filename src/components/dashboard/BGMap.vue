@@ -129,9 +129,9 @@ export default {
                 size: { value: 100 },
                 x: { field: "x" },
                 y: { field: "y" },
-                fill: { value: "orange" },
-                fillOpacity: { value: 0.7 },
-                stroke: { value: "#2A3465" }, // pori-blue
+                fill: { value: "#990000" },
+                fillOpacity: { value: 0.5 },
+                stroke: { value: "#990000" }, // pori-blue
                 strokeWidth: { value: 1.5 },
               },
               update: {
@@ -155,7 +155,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(false),
+      includeActions: ref(true),
     });
 
     return {

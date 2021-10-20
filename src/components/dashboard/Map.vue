@@ -260,7 +260,7 @@ export default {
       minHeight: ref(400),
       maxHeight: ref(1280),
       maxWidth: ref(1280),
-      includeActions: ref(true),
+      includeActions: ref(false),
     });
 
     let currentBg = "";
