@@ -59,6 +59,14 @@ export default {
             name: "resolution",
             value: navigator?.connection?.downlink > 1.5 ? "@2x" : "",
           },
+          {
+            name: "hover",
+            value: null,
+            on: [
+              { events: "@landmarks:mouseover", update: "datum" },
+              { events: "mouseout", update: "null" },
+            ],
+          },
         ],
         data: [
           {
@@ -129,6 +137,16 @@ export default {
                 size: { scale: "size", field: "total_visitors" },
                 x: { field: "x" },
                 y: { field: "y" },
+                fillOpacity: { value: 0.8 },
+              },
+              update: {
+                tooltip: {
+                  signal: `{'Location Name': datum.location_name,
+                    'Street Address': datum.street_address + ', ' + datum.city + ', RI 0' + datum.postal_code,
+                    'Category': datum.top_category,
+                    'Total Visitors': datum.total_visitors,
+                    'Rank': datum.rank}`,
+                },
               },
             },
           },
