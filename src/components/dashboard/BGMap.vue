@@ -129,9 +129,9 @@ export default {
                 size: { value: 200 },
                 x: { field: "x" },
                 y: { field: "y" },
-                fill: { value: "#990000" },
+                fill: { value: "#990000" }, // pori-red
                 fillOpacity: { value: 0.5 },
-                stroke: { value: "#990000" }, // pori-blue
+                stroke: { value: "#990000" }, // pori-red
                 strokeWidth: { value: 1.5 },
               },
               update: {
