@@ -1,0 +1,245 @@
+{
+  "title": "Neighborhood Rapid Assessment",
+  "type": "organization",
+  "questions": [
+    {
+      "model": "bg_id",
+      "component": "TextInput",
+      "label": "Neighborhood ID",
+      "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+      "required": true
+    },
+    {
+      "model": "municipality",
+      "component": "TextInput",
+      "label": "Municipality",
+      "validations": "yup.string().required()",
+      "required": true
+    },
+    {
+      "model": "q1_available_services",
+      "component": "Checkbox",
+      "label": "Which of these services (from any source) are currently available in this Neighborhood/Town: (Check all that apply)",
+      "options": [
+        "Office-based needle exchange",
+        "Mobile needle exchange",
+        "Rapid HIV test",
+        "Rapid HCV test",
+        "Fentanyl test strips",
+        "Safer drug use equipment",
+        "Access to a health clinic",
+        "Access to mental health care",
+        "Harm reduction vending machine",
+        "Emergency housing or financial assistance",
+        "Food pantry/Free meals",
+        "Community-based support groups for recovery from substance use (like AA, NA)",
+        "Access to in-patient treatment for substance use",
+        "Access to Medications for Opioid use Disorder (MOUD), like buprenorphine or methadone",
+        "Linkage to care and/or case management for HIV or HCV",
+        "Other"
+      ]
+    },
+    {
+      "model": "q1_other_available_services",
+      "component": "TextInput",
+      "label": "Other",
+      "required": true,
+      "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')"
+    },
+    {
+      "model": "q2_other_related_services",
+      "component": "TextArea",
+      "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)"
+    },
+    {
+      "model": "q3_reason_for_focus",
+      "component": "Checkbox",
+      "label": "What made you choose to focus on these services in this Neighborhood/Town (check all that apply)",
+      "options": [
+        "Our organization has historically worked here",
+        "Community discussion or individual stories suggesting services are needed here",
+        "Grant funding was tied to working in this location",
+        "It is close to our main office / easily accessible",
+        "A hotspot map from RIDOH",
+        "A ROARR report from RIDOH",
+        "Prior Relationships with organizations in this Census Tract",
+        "Other"
+      ]
+    },
+    {
+      "model": "q3_other",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q3_reason_for_focus && model.q3_reason_for_focus.includes('Other')"
+    },
+    {
+      "model": "q4_outreach_services",
+      "component": "Checkbox",
+      "label": "What types of outreach services are available in this Neighborhood/Town (Check all that apply)",
+      "options": [
+        "Basic needs",
+        "Office-based needle exchange and harm reduction services",
+        "Street-based needle exchange and harm reduction services",
+        "Naloxone kit training and distribution",
+        "Harm reduction vending machine",
+        "Recovery coaching services",
+        "Faith based outreach services",
+        "Other community organizations(s)",
+        "Emergency department",
+        "Other"
+      ]
+    },
+    {
+      "model": "q4_other_community_orgs",
+      "component": "TextInput",
+      "label": "Other community organizations(s)",
+      "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other community organizations(s)')"
+    },
+    {
+      "model": "q4_other",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other')"
+    },
+    {
+      "model": "q5_sources_for_naloxone",
+      "component": "Checkbox",
+      "label": "What are the known sources for naloxone available in this Neighborhood/Town? (Check all that apply)",
+      "options": [
+        "Pharmacy location(s)",
+        "Office-based needle exchange",
+        "Street-based needle exchange (walking route w/ backpack)",
+        "Harm reduction vending machine",
+        "Other community organization(s)",
+        "Other"
+      ]
+    },
+    {
+      "model": "q5_other_community_orgs",
+      "component": "TextInput",
+      "label": "Other community organization(s)",
+      "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other community organization(s)')"
+    },
+    {
+      "model": "q5_other",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other')"
+    },
+    {
+      "model": "q5a_endorsed_sources_for_naloxone",
+      "component": "TextInput",
+      "type": "number",
+      "label": "[If 5 is endorsed] How many hours per week is this service available?",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q6_sources_for_fentanyl_test_strips",
+      "component": "Checkbox",
+      "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
+      "options": [
+        "Office-based needle exchange",
+        "Street-based needle exchange (walking route w/ backpack",
+        "Harm reduction vending machine",
+        "Other community organization(s)",
+        "Other"
+      ]
+    },
+    {
+      "model": "q6_other_community_orgs",
+      "component": "TextInput",
+      "label": "Other community organization(s)",
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')"
+    },
+    {
+      "model": "q6_other",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other')"
+    },
+    {
+      "model": "q6a_endorsed_fentanyl_test_strips",
+      "component": "TextInput",
+      "type": "number",
+      "label": "[If 6 is endorsed] How many hours per week is this service available?",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q7_sources_for_sterile_needles",
+      "component": "Checkbox",
+      "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
+      "options": [
+        "Pharmacy locations(s) (syringes only)",
+        "Office-based needle exchange",
+        "Street-based needle exchange (walking route w/ backpack)",
+        "Harm reduction vending machine",
+        "Other community organization(s)",
+        "Other"
+      ]
+    },
+    {
+      "model": "q7_other_community_orgs",
+      "component": "TextInput",
+      "label": "Other community organization(s)",
+      "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other community organization(s)')"
+    },
+    {
+      "model": "q7_other",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other')"
+    },
+    {
+      "model": "q7a_endorsed_sterile_needles",
+      "component": "TextInput",
+      "type": "number",
+      "label": "[If 7 is endorsed] How many hours per week is this service available?",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q8_barriers_to_outreach",
+      "component": "Checkbox",
+      "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
+      "options": [
+        "Limited public transportation",
+        "I don't know anyone who is familiar with this neighborhood",
+        "Limited community service organizations for partnerships",
+        "I don't know where there is a good place to distribute services",
+        "I do not have funding to distribute here",
+        "I do not have the time to go to these places",
+        "Fear of police harassment",
+        "I don't think there are people here who would benefit from our services",
+        "I do not see many barriers",
+        "Other"
+      ]
+    },
+    {
+      "model": "q8_other_barriers_to_outreach",
+      "component": "TextInput",
+      "label": "Other",
+      "condition": "(model) => model.q8_barriers_to_outreach && model.q8_barriers_to_outreach.includes('Other')"
+    },
+    {
+      "model": "q9_strengths_or_opportunities",
+      "component": "TextArea",
+      "label": "What do you see as strengths or opportunities for outreach and services in this Neighborhood/Town?"
+    },
+    {
+      "model": "q10_rate_likert_scale",
+      "component": "LikertScale",
+      "label": "Please rate how much you Disagree or Agree with each of these statements",
+      "statements": [
+        "It is easy to get sterile needles",
+        "It is easy to get new works (like cookers, cottons, sterile water)",
+        "It is easy to get fentanyl test strips",
+        "It is easy to get naloxone",
+        "It is easy to get access to healthcare services (low cost clinic, ED, free clinic)",
+        "It is easy to get to a licensed clinic/provider for methadone",
+        "It is easy to get to a licensed clinic/provider for buprenorphine",
+        "Police are visible or active here",
+        "Police are a barrier to service provision here",
+        "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
+      ]
+    }
+  ]
+}
