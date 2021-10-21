@@ -92,14 +92,14 @@
                 :value="formResponse.release_date"
               />
               <PanelTag
-                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-                label="block group"
-                :value="formResponse.response[GEOID_QUESTION_MODEL]"
-              />
-              <PanelTag
                 v-if="formResponse.response[MUNI_QUESTION_MODEL]"
                 label="municipality"
                 :value="formResponse.response[MUNI_QUESTION_MODEL]"
+              />
+              <PanelTag
+                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                label="block group"
+                :value="formResponse.response[GEOID_QUESTION_MODEL]"
               />
               <PanelTag
                 :class="{
