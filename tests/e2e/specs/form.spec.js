@@ -477,6 +477,35 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
     });
   });
+
+  describe("filters forms", () => {
+    beforeEach(() => {
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+    });
+
+    it("title", () => {
+      cy.contains("div", "Title ").click();
+      cy.contains(".multiselect-option", "My Form").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
+    });
+
+    it("organization-level", () => {
+      cy.contains("div", "Organization Level? ").click();
+      cy.contains(".multiselect-option", "Yes").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
+    });
+
+    it("status", () => {
+      cy.contains("div", "Status ").click();
+      cy.contains(".multiselect-option", "Not Started").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.contains(".multiselect-option", "Not Started").click();
+      cy.contains(".multiselect-option", "Draft").click();
+      cy.get('[data-cy="forms-panel-block"]')
+        .should("have.length", 1)
+        .should("contain", "No forms here");
+    });
+  });
 });
 
 describe("Forms viewed as an admin", () => {
