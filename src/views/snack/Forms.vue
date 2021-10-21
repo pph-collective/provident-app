@@ -202,7 +202,7 @@ export default {
     const activeFormResponse = ref({});
 
     const filterFields = [
-      "Title",
+      "Form Title",
       "Organization Level?",
       "Status",
       "Municipality",
@@ -218,7 +218,7 @@ export default {
 
     const filterOptions = computed(() => {
       return {
-        Title: formResponses.value.map((f) => f.form.title).sort(),
+        "Form Title": formResponses.value.map((f) => f.form.title).sort(),
         "Organization Level?": ["Yes", "No"],
         Status: ["Not Started", "Draft", "Submitted"],
         Municipality: uniqueArray(
@@ -235,7 +235,8 @@ export default {
     });
 
     const filterFunctions = {
-      Title: (formResponse) => filters.Title.includes(formResponse.form.title),
+      "Form Title": (formResponse) =>
+        filters["Form Title"].includes(formResponse.form.title),
       "Organization Level?": (formResponse) =>
         (filters["Organization Level?"].includes("Yes") &&
           formResponse.form.type === "organization") ||
