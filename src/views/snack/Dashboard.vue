@@ -74,7 +74,10 @@
 
     <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
       <template #content>
-        <AssessmentWidget :active-geoid="activeGeoid" />
+        <AssessmentWidget
+          :active-geoid="activeGeoid"
+          :active-muni="activeMuni"
+        />
       </template>
     </Card>
   </div>

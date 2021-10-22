@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
-    "@vueform/multiselect": "^2.1.2",
+    "@vueform/multiselect": "^2.2.0",
     "arquero": "^4.8.4",
     "bulma": "^0.9.3",
     "bulma-responsive-tables": "^1.2.3",
