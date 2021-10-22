@@ -54,7 +54,8 @@ yarn add-landmarks -f <path to csv> -p <period> [--emulator]
 Flags
 - `-f` `--file`: Path to the csv containing the data
 - `-p` `--period`: Model period of the data (ex. "2019-1")
-- `--emulator`: (optional) load the data to the emulator instead of the production database
+- `-e` `--emulator`: (optional) load the data to the emulator instead of the production database
+- `-s` `--seed`: (optional) Generates a json file with a small subset of seed data instead of uploading to firebase for testing purposes
 
 Example
 ```
