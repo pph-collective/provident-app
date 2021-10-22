@@ -4,6 +4,9 @@ export const MUNICIPALITIES = [
   ...new Set(GEO.map((g) => g.properties.name)),
 ].sort();
 
+export const GEOID_QUESTION_MODEL = "bg_id";
+export const MUNI_QUESTION_MODEL = "municipality";
+
 export const sortByProperty = (property) => (a, b) => {
   let valA = a[property];
   let valB = b[property];
@@ -41,10 +44,18 @@ export const tertileColorMap = new Map([
   [3, "orange"],
 ]);
 
+export const uniqueArray = (array) => {
+  const set = new Set(array);
+  return Array.from(set).sort();
+};
+
 export default {
+  GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
+  MUNI_QUESTION_MODEL,
   sortByProperty,
   tertileColorMap,
   today,
+  uniqueArray,
   uniqueId,
 };

@@ -107,6 +107,20 @@ $box-radius: 2px;
   --ms-option-bg-selected-pointed: #{$link};
 }
 
+.multiselect-tag {
+  max-width: 95%;
+}
+.shorten-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.multiselect-tags {
+  // fullwidth minus size of x and caret
+  max-width: calc(100% - 3rem);
+}
+
 fieldset[disabled] {
   .multiselect {
     pointer-events: none;

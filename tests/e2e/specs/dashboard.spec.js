@@ -159,7 +159,7 @@ describe("Dashboard viewed as a user", () => {
       "Neighborhood Rapid Assessment"
     );
 
-    cy.get("[model='neighborhood_id']")
+    cy.get("[model='bg_id']")
       .find("input")
       .should("be.disabled")
       .should("have.value", "0401021");
@@ -201,7 +201,7 @@ describe("Dashboard viewed as a user", () => {
       .click();
 
     // still has correct id and still disabled
-    cy.get("[model='neighborhood_id']")
+    cy.get("[model='bg_id']")
       .find("input")
       .should("be.disabled")
       .should("have.value", "0401021");
