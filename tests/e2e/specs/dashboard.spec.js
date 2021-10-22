@@ -86,10 +86,17 @@ describe("Dashboard viewed as a user", () => {
         .should("have.text", "Portsmouth");
 
       cy.get("#vg-tooltip-element")
-        .find("tbody tr")
-        .last()
-        .find("td.key")
-        .should("have.text", "Flag:");
+        .contains("tbody tr", "Flag")
+        .find("td.value")
+        .should("have.text", "0");
+
+      cy.get("#vg-tooltip-element")
+        .contains("tbody tr", "Points of Interest")
+        .find("td.value")
+        .should(
+          "have.text",
+          "1. Glenn Farm \n2. Sandy Point Beach \n3. Mccorrie Point Beach \n4. Elmhurst \n5. Glen Manor House "
+        );
 
       cy.get("div#stats")
         .find("div.tags")
@@ -303,10 +310,16 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("have.text", "Tiverton");
 
     cy.get("#vg-tooltip-element")
-      .find("tbody tr")
-      .last()
-      .find("td.key")
-      .should("not.have.text", "Flag:");
+      .contains("tbody tr", "Flag")
+      .should("not.exist");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Points of Interest")
+      .find("td.value")
+      .should(
+        "have.text",
+        "1. Bulgarmarsh Recreation Area \n2. Nanaquaket Yoga Studio \n3. Wally's Tap House \n4. Sip 'N Dip Donuts \n5. Peppermint Panda "
+      );
 
     cy.get("div#stats")
       .find("div.tags")
