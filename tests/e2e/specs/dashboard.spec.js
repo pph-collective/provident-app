@@ -355,7 +355,7 @@ describe("Dashboard viewed as a control arm user", () => {
     cy.get(".zoom-button").should("not.be.disabled").click();
 
     // try to trigger tooltip
-    cy.get(".map-container #bg-zoom-map > div > svg")
+    cy.get(".map-container #bg-zoom-map svg")
       .trigger("mouseover", "center")
       .trigger("mousemove", "center");
 
@@ -363,7 +363,7 @@ describe("Dashboard viewed as a control arm user", () => {
     cy.get("#vg-tooltip-element").should("not.have.class", "visible");
 
     // find a tooltip on a specific landmark
-    cy.get(".map-container #bg-zoom-map > div > svg")
+    cy.get(".map-container #bg-zoom-map svg")
       .trigger("mouseover", 35, 280)
       .trigger("mousemove", 35, 280);
 
@@ -389,7 +389,7 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("have.text", "2");
 
     // Move the mouse back to the center
-    cy.get(".map-container #bg-zoom-map > div > svg")
+    cy.get(".map-container #bg-zoom-map svg")
       .trigger("mouseover", "center")
       .trigger("mousemove", "center");
 
