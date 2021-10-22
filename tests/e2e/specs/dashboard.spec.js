@@ -355,12 +355,43 @@ describe("Dashboard viewed as a control arm user", () => {
     cy.get(".zoom-button").should("not.be.disabled").click();
 
     // try to trigger tooltip
-    cy.get(".map-container #bg-zoom-map svg")
+    cy.get(".map-container #bg-zoom-map > div > svg")
       .trigger("mouseover", "center")
       .trigger("mousemove", "center");
 
-    // no tooltip should be visible (zoomed map is not interactive)
+    // no tooltip should be visible in the center
     cy.get("#vg-tooltip-element").should("not.have.class", "visible");
+
+    // find a tooltip on a specific landmark
+    cy.get(".map-container #bg-zoom-map > div > svg")
+      .trigger("mouseover", 35, 280)
+      .trigger("mousemove", 35, 280);
+
+    cy.get("#vg-tooltip-element").should("have.class", "visible");
+
+    cy.get("#vg-tooltip-element")
+      .contains("h2", "Nanaquaket Yoga Studio")
+      .should("exist");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Address")
+      .find("td.value")
+      .should("have.text", "2490 Main Rd, Tiverton, RI 02878");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Category")
+      .find("td.value")
+      .should("have.text", "Other Amusement and Recreation Industries");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Rank")
+      .find("td.value")
+      .should("have.text", "2");
+
+    // Move the mouse back to the center
+    cy.get(".map-container #bg-zoom-map > div > svg")
+      .trigger("mouseover", "center")
+      .trigger("mousemove", "center");
 
     // zoom back out
     cy.get(".zoom-button").should("not.be.disabled").click();
