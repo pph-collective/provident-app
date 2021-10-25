@@ -116,7 +116,7 @@ export default {
         'Flag': datum.properties.flag`;
       }
       signal +=
-        ", 'Points of Interest': datum.properties.landmarks && datum.properties.landmarks.length > 0 ? datum.properties.landmarks : ''}";
+        ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
       return signal;
     });
 
