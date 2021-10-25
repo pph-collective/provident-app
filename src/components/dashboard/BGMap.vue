@@ -41,6 +41,8 @@ export default {
     });
 
     const spec = computed(() => {
+      const data = dataset.value.find((d) => d.bg_id === blockGroup.value);
+
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "white",
@@ -70,8 +72,7 @@ export default {
           },
           {
             name: "landmarks",
-            values: dataset.value.find((d) => d.bg_id === blockGroup.value)
-              .landmarks,
+            values: data.landmarks ?? [],
             transform: [
               {
                 type: "geopoint",

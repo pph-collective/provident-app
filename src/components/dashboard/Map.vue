@@ -115,7 +115,8 @@ export default {
         signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
         'Flag': datum.properties.flag`;
       }
-      signal += ", 'Points of Interest': datum.properties.landmarks}";
+      signal +=
+        ", 'Points of Interest': datum.properties.landmarks && datum.properties.landmarks.length > 0 ? datum.properties.landmarks : ''}";
       return signal;
     });
 
