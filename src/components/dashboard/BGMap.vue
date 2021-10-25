@@ -10,6 +10,8 @@ import * as topology from "topojson-server";
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
+import { poriRed } from "@/utils/utils";
+
 export default {
   props: {
     blockGroup: {
@@ -58,14 +60,6 @@ export default {
           {
             name: "resolution",
             value: navigator?.connection?.downlink > 1.5 ? "@2x" : "",
-          },
-          {
-            name: "hover",
-            value: null,
-            on: [
-              { events: "@landmarks:mouseover", update: "datum" },
-              { events: "mouseout", update: "null" },
-            ],
           },
         ],
         data: [
@@ -129,15 +123,15 @@ export default {
                 size: { value: 200 },
                 x: { field: "x" },
                 y: { field: "y" },
-                fill: { value: "#990000" }, // pori-red
+                fill: { value: poriRed },
                 fillOpacity: { value: 0.5 },
-                stroke: { value: "#990000" }, // pori-red
+                stroke: { value: poriRed },
                 strokeWidth: { value: 1.5 },
               },
               update: {
                 tooltip: {
                   signal: `{'title': datum.location_name,
-                    'Address': datum.street_address + ', ' + datum.city + ', RI 0' + datum.postal_code,
+                    'Address': datum.street_address + ', ' + datum.city + ', RI ' + datum.postal_code,
                     'Category': datum.top_category,
                     'Rank': datum.rank}`,
                 },

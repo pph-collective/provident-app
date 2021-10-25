@@ -1,3 +1,5 @@
+// yarn add-landmarks --emulator -f ./data/provident_landmarks_launch_edition_10_06_2021.csv -p 2019-1
+
 const { ArgumentParser } = require("argparse");
 const parse = require("csv-parse");
 const fs = require("fs");
