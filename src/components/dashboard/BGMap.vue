@@ -18,13 +18,13 @@ export default {
       type: String,
       required: true,
     },
-    landmarks: {
+    dataset: {
       type: Array,
       default: () => [],
     },
   },
   setup(props) {
-    const { blockGroup, landmarks } = toRefs(props);
+    const { blockGroup, dataset } = toRefs(props);
     const el = ref(null);
 
     // filter geo data and simplify
@@ -70,7 +70,8 @@ export default {
           },
           {
             name: "landmarks",
-            values: landmarks.value,
+            values: dataset.value.find((d) => d.bg_id === blockGroup.value)
+              .landmarks,
             transform: [
               {
                 type: "geopoint",

@@ -209,24 +209,17 @@ const getModelData = async (period) => {
       .get();
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
-    // Create a landmark datatable such that each row is a block group
-    const landmarkDt = aq.from(
-      modelMeta.map((row) => {
-        return {
-          bg_id: row.bg_id,
-          geoid: row.geoid,
-          landmarks: landmarkData.filter(
-            (landmark) => landmark.bg_id === row.bg_id
-          ),
-        };
-      })
-    );
-
     return modelDt
       .join(sviDt) // joins on bg_id, geoid
-      .join(landmarkDt)
       .filter((d) => d.municipality !== "")
-      .objects();
+      .objects()
+      .map((row) => {
+        // Filter the landmarks data into a list and save into the landmarks key
+        row.landmarks = landmarkData.filter(
+          (landmark) => landmark.bg_id === row.bg_id
+        );
+        return row;
+      });
   } catch (err) {
     console.log(err);
     return [];

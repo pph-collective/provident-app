@@ -110,10 +110,10 @@ export default {
     const tooltipSignal = computed(() => {
       let signal = `{
           Municipality: datum.properties.name,
-          title: 'Block Group ' + datum.properties.bg_id,
-          'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No'`;
+          title: 'Block Group ' + datum.properties.bg_id`;
       if (withPredictions.value) {
-        signal += ", 'Flag': datum.properties.flag";
+        signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
+        'Flag': datum.properties.flag`;
       }
       signal += ", 'Points of Interest': datum.properties.landmarks}";
       return signal;

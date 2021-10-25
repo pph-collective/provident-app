@@ -53,7 +53,7 @@
             id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
             :block-group="activeGeoid"
-            :landmarks="activeLandmarks"
+            :dataset="dataset"
             class="is-absolute"
           />
         </div>
@@ -125,15 +125,6 @@ export default {
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
     const zoomed = ref(false);
-
-    const activeLandmarks = computed(() => {
-      if (dataset.value.length === 0 || activeGeoid.value === "") {
-        return [];
-      }
-
-      const data = dataset.value.find((d) => d.bg_id === activeGeoid.value);
-      return data.landmarks ?? [];
-    });
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -233,7 +224,6 @@ export default {
     return {
       activeClickedStatus,
       activeGeoid,
-      activeLandmarks,
       activeMuni,
       clickMap,
       controls,
