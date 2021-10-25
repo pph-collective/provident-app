@@ -214,7 +214,7 @@ const getModelData = async (period) => {
       .filter((d) => d.municipality !== "")
       .objects()
       .map((row) => {
-        // Filter the landmarks data into a list and save into the landmarks key
+        // Filters the landmark data based on the block group and save it into the landmarks key for each block group
         row.landmarks = landmarkData.filter(
           (landmark) => landmark.bg_id === row.bg_id
         );
