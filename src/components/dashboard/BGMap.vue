@@ -122,7 +122,7 @@ export default {
             from: { data: "landmarks" },
             encode: {
               enter: {
-                size: { value: 200 },
+                size: { value: 300 },
                 x: { field: "x" },
                 y: { field: "y" },
                 fill: { value: poriRed },
