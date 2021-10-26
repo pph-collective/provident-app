@@ -499,7 +499,9 @@ describe("Form functionality", () => {
       cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
       cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
+      cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Draft").click();
       cy.get('[data-cy="forms-panel-block"]')
         .should("have.length", 1)
