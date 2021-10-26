@@ -62,10 +62,6 @@ $box-radius: 2px;
       }
     }
   }
-
-  @include mobile {
-    display: none;
-  }
 }
 
 // Modal Card Styling
