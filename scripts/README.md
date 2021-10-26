@@ -42,6 +42,27 @@ The `add-svi` script reads in a csv with svi data for a single period, and loads
 yarn add-svi -p 2019-2 -f <path to csv> [--emulator]
 ```
 
+## `add-landmarks`
+
+The `add-landmarks` script reads in a csv with landmark data for a single period and loads it into the firestore "landmark_data" document.
+
+### Usage
+```
+yarn add-landmarks -f <path to csv> -p <period> [--emulator]
+```
+
+Flags
+- `-f` `--file`: Path to the csv containing the data
+- `-p` `--period`: Model period of the data (ex. "2019-1")
+- `-e` `--emulator`: (optional) load the data to the emulator instead of the production database
+- `-s` `--seed`: (optional) Generates a json file with a small subset of seed data instead of uploading to firebase for testing purposes
+
+Example
+```
+yarn add-landmarks --emulator -f ./data/provident_landmarks_launch_edition_10_06_2021.csv -p 2019-1
+```
+
+
 ## `shp2topo`
 
 The `shp2topo` script downloads shp file data from the census wibsite and processes it into the format needed fot the `Map.vue` component.

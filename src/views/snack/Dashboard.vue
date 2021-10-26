@@ -53,6 +53,7 @@
             id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
             :block-group="activeGeoid"
+            :dataset="dataset"
             class="is-absolute"
           />
         </div>

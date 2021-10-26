@@ -49,6 +49,8 @@ export const uniqueArray = (array) => {
   return Array.from(set).sort();
 };
 
+export const poriRed = "#990000";
+
 export default {
   GEOID_QUESTION_MODEL,
   MUNICIPALITIES,

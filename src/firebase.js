@@ -203,10 +203,23 @@ const getModelData = async (period) => {
     const sviData = getDataFromDoc(sviDataDoc);
     const sviDt = aq.from(sviData);
 
+    const landmarkDataDoc = await db
+      .collection("landmark_data")
+      .doc(period)
+      .get();
+    const landmarkData = getDataFromDoc(landmarkDataDoc);
+
     return modelDt
       .join(sviDt) // joins on bg_id, geoid
       .filter((d) => d.municipality !== "")
-      .objects();
+      .objects()
+      .map((row) => {
+        // Filters the landmark data based on the block group and save it into the landmarks key for each block group
+        row.landmarks = landmarkData.filter(
+          (landmark) => landmark.bg_id === row.bg_id
+        );
+        return row;
+      });
   } catch (err) {
     console.log(err);
     return [];

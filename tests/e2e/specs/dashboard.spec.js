@@ -86,10 +86,17 @@ describe("Dashboard viewed as a user", () => {
         .should("have.text", "Portsmouth");
 
       cy.get("#vg-tooltip-element")
-        .find("tbody tr")
-        .last()
-        .find("td.key")
-        .should("have.text", "Flag:");
+        .contains("tbody tr", "Flag")
+        .find("td.value")
+        .should("have.text", "0");
+
+      cy.get("#vg-tooltip-element")
+        .contains("tbody tr", "Points of Interest")
+        .find("td.value")
+        .should(
+          "have.text",
+          "1. Glenn Farm \n2. Sandy Point Beach \n3. Mccorrie Point Beach \n4. Elmhurst \n5. Glen Manor House "
+        );
 
       cy.get("div#stats")
         .find("div.tags")
@@ -303,10 +310,16 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("have.text", "Tiverton");
 
     cy.get("#vg-tooltip-element")
-      .find("tbody tr")
-      .last()
-      .find("td.key")
-      .should("not.have.text", "Flag:");
+      .contains("tbody tr", "Flag")
+      .should("not.exist");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Points of Interest")
+      .find("td.value")
+      .should(
+        "have.text",
+        "1. Bulgarmarsh Recreation Area \n2. Nanaquaket Yoga Studio \n3. Wally's Tap House \n4. Sip 'N Dip Donuts \n5. Peppermint Panda "
+      );
 
     cy.get("div#stats")
       .find("div.tags")
@@ -346,8 +359,39 @@ describe("Dashboard viewed as a control arm user", () => {
       .trigger("mouseover", "center")
       .trigger("mousemove", "center");
 
-    // no tooltip should be visible (zoomed map is not interactive)
+    // no tooltip should be visible in the center
     cy.get("#vg-tooltip-element").should("not.have.class", "visible");
+
+    // find a tooltip on a specific landmark
+    cy.get(".map-container #bg-zoom-map svg")
+      .trigger("mouseover", 35, 280)
+      .trigger("mousemove", 35, 280);
+
+    cy.get("#vg-tooltip-element").should("have.class", "visible");
+
+    cy.get("#vg-tooltip-element")
+      .contains("h2", "Nanaquaket Yoga Studio")
+      .should("exist");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Address")
+      .find("td.value")
+      .should("have.text", "2490 Main Rd, Tiverton, RI 02878");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Category")
+      .find("td.value")
+      .should("have.text", "Other Amusement and Recreation Industries");
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Rank")
+      .find("td.value")
+      .should("have.text", "2");
+
+    // Move the mouse back to the center
+    cy.get(".map-container #bg-zoom-map svg")
+      .trigger("mouseover", "center")
+      .trigger("mousemove", "center");
 
     // zoom back out
     cy.get(".zoom-button").should("not.be.disabled").click();

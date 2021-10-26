@@ -10,16 +10,21 @@ import * as topology from "topojson-server";
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
+import { poriRed } from "@/utils/utils";
+
 export default {
   props: {
     blockGroup: {
       type: String,
       required: true,
     },
+    dataset: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup(props) {
-    const { blockGroup } = toRefs(props);
-
+    const { blockGroup, dataset } = toRefs(props);
     const el = ref(null);
 
     // filter geo data and simplify
@@ -36,6 +41,8 @@ export default {
     });
 
     const spec = computed(() => {
+      const data = dataset.value.find((d) => d.bg_id === blockGroup.value);
+
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "white",
@@ -62,6 +69,17 @@ export default {
             name: "bg_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" },
+          },
+          {
+            name: "landmarks",
+            values: data?.landmarks ?? [],
+            transform: [
+              {
+                type: "geopoint",
+                projection: "projection",
+                fields: ["longitude", "latitude"],
+              },
+            ],
           },
         ],
         projections: [
@@ -98,6 +116,29 @@ export default {
               },
             },
             transform: [{ type: "geoshape", projection: "projection" }],
+          },
+          {
+            type: "symbol",
+            from: { data: "landmarks" },
+            encode: {
+              enter: {
+                size: { value: 300 },
+                x: { field: "x" },
+                y: { field: "y" },
+                fill: { value: poriRed },
+                fillOpacity: { value: 0.5 },
+                stroke: { value: poriRed },
+                strokeWidth: { value: 1.5 },
+              },
+              update: {
+                tooltip: {
+                  signal: `{'title': datum.location_name,
+                    'Address': datum.street_address + ', ' + datum.city + ', RI ' + datum.postal_code,
+                    'Category': datum.top_category,
+                    'Rank': datum.rank}`,
+                },
+              },
+            },
           },
         ],
       };
