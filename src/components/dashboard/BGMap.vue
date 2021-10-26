@@ -72,7 +72,7 @@ export default {
           },
           {
             name: "landmarks",
-            values: data.landmarks ?? [],
+            values: data?.landmarks ?? [],
             transform: [
               {
                 type: "geopoint",
