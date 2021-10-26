@@ -64,7 +64,7 @@
             <div>
               {{ metric.title }}
             </div>
-            <a class="tooltip has-text-info">
+            <a class="tooltip has-text-info" onclick="">
               <i class="fas fa-xs fa-info-circle" />
               <span class="tooltiptext">{{ metric.info }}</span>
             </a>
