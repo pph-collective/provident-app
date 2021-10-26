@@ -56,6 +56,9 @@
             :dataset="dataset"
             class="is-absolute"
           />
+          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+            Click on a landmark to copy the address to your clipboard
+          </div>
         </div>
       </template>
     </Card>
@@ -276,5 +279,13 @@ export default {
 
 .zoom-button {
   min-width: 220px;
+}
+
+.instructions {
+  position: absolute;
+  top: 0;
+  padding: 4px 2px;
+  margin: 6px 6px 0px;
+  background-color: hsl(0deg 0% 100% / 60%);
 }
 </style>
