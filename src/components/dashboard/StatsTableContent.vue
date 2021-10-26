@@ -64,10 +64,10 @@
             <div>
               {{ metric.title }}
             </div>
-            <div class="tooltip has-text-info">
+            <a class="tooltip has-text-info">
               <i class="fas fa-xs fa-info-circle" />
               <span class="tooltiptext">{{ metric.info }}</span>
-            </div>
+            </a>
           </th>
           <td class="data-column has-text-center">
             <StatsTableIcon
