@@ -51,7 +51,7 @@ export default {
 .icon-link {
   color: inherit;
   &:hover {
-    opacity: 70%;
+    color: $link;
   }
 }
 </style>
