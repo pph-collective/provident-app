@@ -64,10 +64,10 @@
             <div>
               {{ metric.title }}
             </div>
-            <a class="tooltip has-text-info" onclick="">
+            <div class="tooltip has-text-info">
               <i class="fas fa-xs fa-info-circle" />
               <span class="tooltiptext">{{ metric.info }}</span>
-            </a>
+            </div>
           </th>
           <td class="data-column has-text-center">
             <StatsTableIcon
@@ -202,6 +202,7 @@ table tbody tr.header-row {
   text-align: center;
   padding: 5px 5px;
   border-radius: 3px;
+  cursor: pointer;
 
   /* Position the tooltip text - see examples below! */
   position: absolute;
