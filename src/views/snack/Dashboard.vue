@@ -14,7 +14,7 @@
         <button
           v-if="!zoomed"
           :disabled="!activeGeoid || !activeClickedStatus"
-          class="zoom-button button is-family-secondary is-info is-light"
+          class="zoom-button button is-family-secondary is-secondary is-light"
           @click="zoomBg"
         >
           <span class="icon">
@@ -24,7 +24,7 @@
         </button>
         <button
           v-else
-          class="zoom-button button is-family-secondary is-info is-light"
+          class="zoom-button button is-family-secondary is-secondary is-light"
           @click="zoomed = false"
         >
           <span class="icon">
@@ -33,7 +33,9 @@
           <span>Zoom Back Out</span>
         </button>
       </template>
-      <template #subtitle>Some really great insights</template>
+      <template #subtitle
+        >Click on a block group to see more details or zoom in</template
+      >
       <template #content>
         <div v-if="controls.geography" class="map-container">
           <Map
