@@ -202,7 +202,6 @@ table tbody tr.header-row {
   text-align: center;
   padding: 5px 5px;
   border-radius: 3px;
-  cursor: pointer;
 
   /* Position the tooltip text - see examples below! */
   position: absolute;
