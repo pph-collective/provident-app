@@ -25,7 +25,7 @@ export default {
       {
         symbol: "⬥",
         color: tertileColorMap.get(1),
-        text: "Lower third",
+        text: "More Protective",
       },
       {
         symbol: "⬥",
@@ -35,7 +35,7 @@ export default {
       {
         symbol: "⬥",
         color: tertileColorMap.get(3),
-        text: "Upper third",
+        text: "More Risk",
       },
       {
         symbol: "⬦",

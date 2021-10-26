@@ -1,6 +1,16 @@
 import { computed } from "vue";
 import * as aq from "arquero";
 
+aq.addFunction("round_tertile", (x) => {
+  if (x <= 1.5) {
+    return 1;
+  } else if (x >= 2.5) {
+    return 3;
+  } else {
+    return 2;
+  }
+});
+
 export function useStats({
   metrics,
   groupedMetrics = {},
@@ -47,7 +57,7 @@ export function useStats({
   if (withTertiles) {
     for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
       const meanString =
-        "aq.op.round((" +
+        "aq.op.round_tertile((" +
         groupMetrics.map((m) => `d['${m.field}_tertile']`).join(" + ") +
         `) / ${groupMetrics.length})`;
       groupTertile[group + "_tertile"] = `d => ${meanString}`;
