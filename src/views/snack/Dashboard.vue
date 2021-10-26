@@ -266,7 +266,7 @@ export default {
   align-items: stretch;
   align-content: start;
   grid-auto-flow: row dense;
-  @include mobile {
+  @include touch {
     grid-template-columns: 100%;
     column-gap: 0px;
     padding: 5px;

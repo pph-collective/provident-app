@@ -8,7 +8,7 @@
     "
   >
     <div>
-      <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+      <div class="is-flex is-flex-wrap-wrap is-justify-content-start">
         <LabelledTag
           label="Municipality"
           :value="municipality"
@@ -29,9 +29,9 @@
         <thead>
           <tr>
             <th></th>
-            <th class="py-1"><abbr :title="geoid">BG</abbr></th>
-            <th class="py-1"><abbr :title="municipality">Town</abbr></th>
-            <th class="py-1"><abbr title="Rhode Island">RI</abbr></th>
+            <th class="py-1 px-0"><abbr :title="geoid">BG</abbr></th>
+            <th class="py-1 px-0"><abbr :title="municipality">Town</abbr></th>
+            <th class="py-1 px-0"><abbr title="Rhode Island">RI</abbr></th>
           </tr>
         </thead>
         <!-- community cmposition statistics -->
