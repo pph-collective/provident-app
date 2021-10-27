@@ -84,6 +84,10 @@ export default {
     // evaluate strings that are really methods
     const evalSchema = (s, yup) => {
       s.forEach((q) => {
+        if (q.component === "SubForm" || q.component === "FormSubForm") {
+          evalSchema(q.schema, yup);
+        }
+
         for (const key in q) {
           if (["condition", "validations"].includes(key)) {
             q[key] = eval(q[key]);

@@ -9,12 +9,8 @@
 </template>
 
 <script>
-// import { ref } from "vue"
 import { SchemaFormFactory } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
-// import * as yup from "yup";
-
-// import { cloneDeep } from "@/utils/utils.js"
 
 const factory = SchemaFormFactory([VeeValidatePlugin()]);
 
@@ -49,3 +45,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.control {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  padding: 20px;
+  border-radius: 6px;
+}
+</style>

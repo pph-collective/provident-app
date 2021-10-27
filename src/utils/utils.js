@@ -51,16 +51,12 @@ export const uniqueArray = (array) => {
 
 export const poriRed = "#990000";
 
-const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
-
 export default {
   GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
   MUNI_QUESTION_MODEL,
-  poriRed,
-  tertileColorMap,
-  cloneDeep,
   sortByProperty,
+  tertileColorMap,
   today,
   uniqueArray,
   uniqueId,
