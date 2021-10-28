@@ -73,7 +73,7 @@ $box-radius: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
 }
 
 @include mobile {

@@ -7,11 +7,14 @@
         data-cy="active-form-modal"
       >
         <div class="modal-background"></div>
-        <div class="modal-card is-family-secondary">
+        <div class="modal-card is-family-secondary" ref="formPage">
           <header class="modal-card-head">
             <p class="modal-card-title" data-cy="active-form-title">
               {{ formResponse.form.title }}
             </p>
+            <button class="button is-small is-primary mx-1" v-print="printOpts">
+              Print
+            </button>
             <button
               class="delete"
               data-cy="close-form"
@@ -19,7 +22,7 @@
               @click="closeFormRequest += 1"
             ></button>
           </header>
-          <section class="modal-card-body" data-cy="form-body">
+          <section id="formPage" class="modal-card-body" data-cy="form-body">
             <JSONForm
               :init-schema="formResponse.form.questions"
               :read-only="
@@ -50,6 +53,7 @@
 <script>
 import { ref, computed, toRefs } from "vue";
 import { useStore } from "vuex";
+import print from "vue3-print-nb";
 
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
@@ -60,6 +64,7 @@ export default {
   },
   directives: {
     ...esc,
+    print,
   },
   props: {
     formResponse: {
@@ -70,6 +75,8 @@ export default {
   emits: ["update-form-response"],
   setup(props, { emit }) {
     const { formResponse } = toRefs(props);
+
+    const formPage = ref(null);
 
     const store = useStore();
     const user = computed(() => store.state.user);
@@ -128,9 +135,21 @@ export default {
       formMessage.value = "";
     };
 
+    const printOpts = computed(() => {
+      return {
+        id: "#formPage",
+        preview: true,
+        previewTitle: formResponse.value.form.title + "- Print Prview",
+        popTitle: formResponse.value.form.title,
+        previewPrintBtnLabel: "Print",
+      };
+    });
+
     return {
       closeFormRequest,
       formMessage,
+      formPage,
+      printOpts,
       updateFormResponse,
       userRole,
       closeForm,
