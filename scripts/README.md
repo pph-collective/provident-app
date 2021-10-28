@@ -30,7 +30,7 @@ The `add-results` script reads in a csv with results, and loads them to the fire
 
 ### Usage
 ```
-yarn add-results -f <path to csv> [--emulator] [--seeed]
+yarn add-results -f <path to csv> [--emulator] [--seed]
 ```
 
 ## `add-svi`
