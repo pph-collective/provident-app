@@ -7,7 +7,7 @@
         data-cy="active-form-modal"
       >
         <div class="modal-background"></div>
-        <div class="modal-card is-family-secondary" ref="formPage">
+        <div class="modal-card is-family-secondary">
           <header class="modal-card-head">
             <p class="modal-card-title" data-cy="active-form-title">
               {{ formResponse.form.title }}
@@ -76,8 +76,6 @@ export default {
   setup(props, { emit }) {
     const { formResponse } = toRefs(props);
 
-    const formPage = ref(null);
-
     const store = useStore();
     const user = computed(() => store.state.user);
     const userEmail = computed(() =>
@@ -145,7 +143,6 @@ export default {
     return {
       closeFormRequest,
       formMessage,
-      formPage,
       printOpts,
       updateFormResponse,
       userRole,
