@@ -130,3 +130,11 @@ fieldset[disabled] {
     cursor: not-allowed;
   }
 }
+
+// when printing forms, don't break page in the middle of a question
+@media print {
+  .field {
+    page-break-before: auto;
+    page-break-inside: avoid;
+  }
+}
