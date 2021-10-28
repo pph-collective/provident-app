@@ -6,10 +6,11 @@
         <p class="control has-icons-left has-icons-right">
           <input
             class="input"
+            name="email"
             type="email"
             placeholder="Email"
             v-model="form.email"
-            autocomplete="username"
+            autocomplete="email"
             required
           />
           <span class="icon is-small is-left">
@@ -21,6 +22,7 @@
         <p class="control has-icons-left">
           <input
             class="input"
+            name="password"
             type="password"
             placeholder="Password"
             v-model="form.password"
