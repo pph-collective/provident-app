@@ -23,7 +23,6 @@
             ></button>
           </header>
           <section id="formPage" class="modal-card-body" data-cy="form-body">
-            <h1 class="only-printed">{{ formResponse.form.title }}</h1>
             <JSONForm
               :init-schema="formResponse.form.questions"
               :read-only="
@@ -32,6 +31,8 @@
                   userRole !== 'champion')
               "
               :init-value="formResponse.response"
+              :form-title="formResponse.form.title"
+              :last-updated="formResponse.last_updated"
               :close-request="closeFormRequest"
               @alt="updateFormResponse($event, 'Draft')"
               @submitted="updateFormResponse($event, 'Submitted')"
@@ -152,16 +153,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.only-printed {
-  display: none;
-  font-size: 2rem;
-}
-
-@media print {
-  .only-printed {
-    display: inline;
-  }
-}
-</style>

@@ -1,5 +1,11 @@
 <template>
   <div class="container is-fluid">
+    <div class="only-printed">
+      <span
+        ><span class="is-size-2">{{ formTitle }}</span>
+        <span>(Last updated: {{ lastUpdatedValue }})</span></span
+      >
+    </div>
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
         <template v-slot:afterForm>
@@ -71,6 +77,16 @@ export default {
       type: String,
       default: "Save",
     },
+    lastUpdated: {
+      type: Number,
+      required: false,
+      default: undefined,
+    },
+    formTitle: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
   emits: ["alt", "submitted", "close"],
   setup(props, { emit }) {
@@ -133,11 +149,22 @@ export default {
       }
     });
 
+    const lastUpdatedValue = computed(() => {
+      if (formUpdated.value) {
+        return new Date().toLocaleString();
+      } else {
+        return props.lastUpdated
+          ? new Date(props.lastUpdated).toLocaleString()
+          : "N/A";
+      }
+    });
+
     return {
       value,
       schema,
       cloneDeep,
       formUpdated,
+      lastUpdatedValue,
     };
   },
 };
@@ -151,5 +178,17 @@ export default {
 
 .schema-row {
   margin-bottom: #{$block-spacing};
+}
+</style>
+
+<style scoped>
+.only-printed {
+  display: none;
+}
+
+@media print {
+  .only-printed {
+    display: inline;
+  }
 }
 </style>

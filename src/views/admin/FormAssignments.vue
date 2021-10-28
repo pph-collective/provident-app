@@ -270,9 +270,9 @@ export default {
       form,
       release_date,
       expire_date,
-      target_users,
-      target_organizations,
-      target_groups,
+      target_users = [],
+      target_organizations = [],
+      target_groups = [],
       send_email,
     }) => {
       formLoading.value = true;
