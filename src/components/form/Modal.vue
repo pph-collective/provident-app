@@ -138,10 +138,7 @@ export default {
     const printOpts = computed(() => {
       return {
         id: "#formPage",
-        preview: true,
-        previewTitle: formResponse.value.form.title + "- Print Prview",
         popTitle: formResponse.value.form.title,
-        previewPrintBtnLabel: "Print",
       };
     });
 
