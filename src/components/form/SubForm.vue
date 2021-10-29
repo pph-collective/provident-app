@@ -3,21 +3,28 @@
     <label class="label" :for="uuid">{{ label }}</label>
     <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control" :id="uuid">
-      <SchemaForm :schema="schema" />
+      <SchemaForm :schema="questions" />
+
+      Model Value: {{ modelValue }} Value: {{ formModel }}
     </div>
   </div>
 </template>
 
 <script>
-import { SchemaFormFactory } from "formvuelate";
+import { useSchemaForm, SchemaFormFactory } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
+import { ref, watch } from "vue";
+import { cloneDeep } from "@/utils/utils";
 
 const factory = SchemaFormFactory([VeeValidatePlugin()]);
 
 export default {
   components: { SchemaForm: factory },
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: Object,
+      default: () => {},
+    },
     required: {
       type: Boolean,
       default: false,
@@ -34,7 +41,7 @@ export default {
       type: Number,
       default: 0,
     },
-    schema: {
+    questions: {
       type: Array,
       required: true,
     },
@@ -42,6 +49,24 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  setup(props, { emit }) {
+    const formModel = ref(
+      props.modelValue !== undefined ? cloneDeep(props.modelValue) : {}
+    );
+    useSchemaForm(formModel);
+
+    watch(
+      () => formModel.value,
+      () => {
+        emit("update:modelValue", formModel);
+      },
+      { deep: true }
+    );
+
+    return {
+      formModel,
+    };
   },
 };
 </script>
