@@ -243,7 +243,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .map-container {
   max-width: 90vw;

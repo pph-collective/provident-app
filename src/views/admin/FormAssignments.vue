@@ -391,7 +391,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .form-assignment-row {
   width: 100%;

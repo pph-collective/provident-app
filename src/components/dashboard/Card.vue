@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .dashboard-card-container {
   margin-bottom: 0 !important;
