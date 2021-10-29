@@ -11,7 +11,7 @@
         <template v-slot:afterForm>
           <div
             v-if="!readOnly"
-            class="field is-grouped is-grouped-centered my-3"
+            class="field is-grouped is-grouped-centered sticky-bottom"
           >
             <div class="control">
               <button type="submit" class="button is-link">Submit</button>
@@ -181,7 +181,9 @@ export default {
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
+
 .only-printed {
   display: none;
 }
@@ -190,5 +192,20 @@ export default {
   .only-printed {
     display: inline;
   }
+}
+
+.is-relative {
+  position: relative;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: -20px;
+  padding: 16px 0;
+  margin-bottom: -20px; /* modal-card-body is relative and has padding */
+  margin-left: -52px;
+  margin-right: -52px;
+  background-color: $light;
+  border-top: solid hsl(0deg 0% 86%) 1px;
 }
 </style>
