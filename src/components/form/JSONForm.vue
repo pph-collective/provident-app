@@ -1,10 +1,9 @@
 <template>
   <div class="container is-fluid">
     <div class="only-printed">
-      <span
-        ><span class="is-size-2">{{ formTitle }}</span>
-        <span>(Last updated: {{ lastUpdatedValue }})</span></span
-      >
+      <h2 class="is-size-2">{{ formTitle }}</h2>
+      <p>Last updated: {{ lastUpdatedValue }}</p>
+      <hr />
     </div>
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
