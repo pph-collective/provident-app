@@ -3,27 +3,36 @@
     <label class="label" :for="uuid">{{ label }}</label>
     <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control" :id="uuid">
-      <SchemaForm :schema="questions" />
+      <div v-for="(value, index) in modelValue" :key="index">
+        Index: {{ index }}
+        <NestedSchema
+          :model-value="value"
+          :init-schema="questions"
+          @update-model-value="updateValue($event, index)"
+        />
+      </div>
+      Model Value: {{ modelValue }}
 
-      Model Value: {{ modelValue }} Value: {{ formModel }}
+      <button type="button" class="button is-link" @click="pushValue">
+        + Task
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { useSchemaForm, SchemaFormFactory } from "formvuelate";
-import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
-import { ref, watch } from "vue";
+import NestedSchema from "./NestedSchema";
 import { cloneDeep } from "@/utils/utils";
-
-const factory = SchemaFormFactory([VeeValidatePlugin()]);
+import { ref, toRefs } from "vue";
 
 export default {
-  components: { SchemaForm: factory },
+  components: {
+    NestedSchema,
+  },
   props: {
     modelValue: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [{}],
     },
     required: {
       type: Boolean,
@@ -51,21 +60,23 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const formModel = ref(
-      props.modelValue !== undefined ? cloneDeep(props.modelValue) : {}
-    );
-    useSchemaForm(formModel);
+    const { modelValue } = toRefs(props);
+    const value = ref(cloneDeep(modelValue.value));
 
-    watch(
-      () => formModel.value,
-      () => {
-        emit("update:modelValue", formModel);
-      },
-      { deep: true }
-    );
+    const updateValue = (updatedValue, index) => {
+      value.value[index] = updatedValue;
+      emit("update:modelValue", value.value);
+    };
+
+    const pushValue = () => {
+      value.value.push({});
+      emit("update:modelValue", value.value);
+    };
 
     return {
-      formModel,
+      pushValue,
+      updateValue,
+      value,
     };
   },
 };
