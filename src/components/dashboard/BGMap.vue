@@ -22,9 +22,17 @@ export default {
       type: Array,
       default: () => [],
     },
+    minHeight: {
+      type: Number,
+      default: 400,
+    },
+    maxHeight: {
+      type: Number,
+      default: 1280,
+    },
   },
   setup(props) {
-    const { blockGroup, dataset } = toRefs(props);
+    const { blockGroup, dataset, minHeight, maxHeight } = toRefs(props);
     const el = ref(null);
 
     // filter geo data and simplify
@@ -148,8 +156,8 @@ export default {
     useVega({
       spec,
       el,
-      minHeight: ref(400),
-      maxHeight: ref(1280),
+      minHeight,
+      maxHeight,
       maxWidth: ref(1280),
       includeActions: ref(false),
     });
