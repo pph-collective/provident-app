@@ -21,14 +21,13 @@
     {
       "model": "goal_form",
       "component": "SubForm",
-      "label": "Plan",
+      "label": "Goal",
       "repeat_button_title": "+ Goal",
       "questions": [
         {
           "model":  "goal",
           "component": "TextArea",
-          "help_text": "Description of goal",
-          "label": "Goal",
+          "label": "Description",
           "required": true
         },
         {

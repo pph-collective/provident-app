@@ -1,9 +1,22 @@
 <template>
   <div class="field">
-    <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control" :id="uuid">
       <div v-for="(value, index) in modelValue" :key="index">
+        <div
+          class="is-flex is-justify-content-space-between is-align-items-center"
+        >
+          <label class="label" :for="uuid">{{ label }}</label>
+          <span v-if="deleteErrorMessage" class="has-text-danger">{{
+            deleteErrorMessage
+          }}</span>
+          <button
+            class="button is-link is-inverted"
+            @click="deleteValue($event, index)"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <p v-if="help_text" class="help">{{ help_text }}</p>
         <div class="debug">Index: {{ index }}</div>
         <NestedSchema
           :model-value="value"
@@ -83,7 +96,22 @@ export default {
       emit("update:modelValue", value.value);
     };
 
+    const deleteErrorMessage = ref("");
+    const deleteValue = (event, index) => {
+      event.preventDefault();
+
+      if (value.value.length > 1) {
+        value.value.splice(index, 1);
+        emit("update:modelValue", value.value);
+      } else {
+        deleteErrorMessage.value = "Cannot delete last one";
+        setTimeout(() => (deleteErrorMessage.value = ""), 6000);
+      }
+    };
+
     return {
+      deleteErrorMessage,
+      deleteValue,
       pushValue,
       updateValue,
       value,
