@@ -166,6 +166,9 @@ describe("Dashboard viewed as a user", () => {
       "Neighborhood Rapid Assessment"
     );
 
+    // block group map should be rendered
+    cy.get(".vega-embed").should("exist");
+
     cy.get("[model='bg_id']")
       .find("input")
       .should("be.disabled")

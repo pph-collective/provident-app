@@ -5,10 +5,12 @@
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input
+            name="email"
             class="input"
             type="email"
             placeholder="Email"
             v-model="form.email"
+            autocomplete="email"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
@@ -18,6 +20,7 @@
       <div class="field">
         <p class="control has-icons-left">
           <input
+            name="name"
             class="input"
             type="text"
             data-cy="form-name"
@@ -83,7 +86,12 @@
           <label class="checkbox">
             <input type="checkbox" v-model="form.terms" data-cy="form-terms" />
             I agree to the
-            <a @click.prevent="showTerms = true">terms and conditions</a>
+            <a
+              @click.prevent="showTerms = true"
+              @keyup.enter.prevent="showTerms = true"
+              tabindex="0"
+              >terms and conditions</a
+            >
           </label>
         </div>
       </div>
@@ -222,7 +230,7 @@ export default {
         try {
           await fb.createEmail({
             subject: "PROVIDENT User Request",
-            body: `<p>${form.name} has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
+            body: `<p>${form.name} (${form.email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
             to: [process.env.VUE_APP_ADMIN_EMAIL],
           });
           await fb.createEmail({

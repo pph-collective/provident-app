@@ -1,0 +1,87 @@
+{
+  "title": "My Form",
+  "type": "user",
+  "questions": [
+    {
+      "model": "age",
+      "component": "TextInput",
+      "type": "number",
+      "label": "What is your age?",
+      "validations": "yup.number().min(13).max(110).required()",
+      "required": true
+    },
+    {
+      "model": "old",
+      "component": "Radio",
+      "label": "Do you feel old?",
+      "condition": "(model) => model.age > 100",
+      "options": [
+        "Yes",
+        "No",
+        "Get off my lawn"
+      ]
+    },
+    {
+      "model": "favorite_color",
+      "component": "Select",
+      "label": "What is your favorite color?",
+      "required": true,
+      "options": [
+        "Green",
+        "Rainbow",
+        "Sparkles",
+        "Other"
+      ]
+    },
+    {
+      "model": "other_favorite_color",
+      "component": "TextInput",
+      "label": "Favorite Color",
+      "required": true,
+      "condition": "(model) => model.favorite_color === 'Other'"
+    },
+    {
+      "model": "color_essay",
+      "component": "TextArea",
+      "label": "Please write an essay about your favorite color."
+    },
+    {
+      "model": "checkbox_mammals",
+      "component": "Checkbox",
+      "label": "Which of the following are mammals?",
+      "options": [
+        "Cat",
+        "Elephant",
+        "Salmon",
+        "Hummingbird"
+      ]
+    },
+    {
+      "model": "likert_scale_food_debates",
+      "component": "LikertScale",
+      "label": "Please rate how much you Disagree or Agree with the following statements",
+      "statements": [
+        "Waffles are better than pancakes",
+        "Pineapple belongs on pizza"
+      ],
+      "required": true
+    },
+    {
+      "model": "likert_scale_activities",
+      "component": "LikertScale",
+      "label": "How often do you the following?",
+      "statements": [
+        "Exercise",
+        "Watch a movie"
+      ],
+      "options": [
+        "Always",
+        "Often",
+        "Sometimes",
+        "Rarely",
+        "Never"
+      ],
+      "required": true
+    }
+  ]
+}

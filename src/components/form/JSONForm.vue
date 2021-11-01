@@ -1,11 +1,16 @@
 <template>
   <div class="container is-fluid">
+    <div class="only-printed">
+      <h2 class="is-size-2">{{ formTitle }}</h2>
+      <p>Last updated: {{ lastUpdatedValue }}</p>
+      <hr />
+    </div>
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
         <template v-slot:afterForm>
           <div
             v-if="!readOnly"
-            class="field is-grouped is-grouped-centered my-3"
+            class="field is-grouped is-grouped-centered sticky-bottom"
           >
             <div class="control">
               <button type="submit" class="button is-link">Submit</button>
@@ -71,6 +76,16 @@ export default {
       type: String,
       default: "Save",
     },
+    lastUpdated: {
+      type: Number,
+      required: false,
+      default: undefined,
+    },
+    formTitle: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
   emits: ["alt", "submitted", "close"],
   setup(props, { emit }) {
@@ -133,11 +148,22 @@ export default {
       }
     });
 
+    const lastUpdatedValue = computed(() => {
+      if (formUpdated.value) {
+        return new Date().toLocaleString();
+      } else {
+        return props.lastUpdated
+          ? new Date(props.lastUpdated).toLocaleString()
+          : "N/A";
+      }
+    });
+
     return {
       value,
       schema,
       cloneDeep,
       formUpdated,
+      lastUpdatedValue,
     };
   },
 };
@@ -147,9 +173,38 @@ export default {
 // This style element isn't scoped because the following styles affects those within the SchemaForm component which
 // would be out of scope.
 
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .schema-row {
   margin-bottom: #{$block-spacing};
+}
+</style>
+
+<style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
+
+.only-printed {
+  display: none;
+}
+
+@media print {
+  .only-printed {
+    display: inline;
+  }
+}
+
+.is-relative {
+  position: relative;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: -20px;
+  padding: 16px 0;
+  margin-bottom: -20px; /* modal-card-body is relative and has padding */
+  margin-left: -52px;
+  margin-right: -52px;
+  background-color: $light;
+  border-top: solid hsl(0deg 0% 86%) 1px;
 }
 </style>
