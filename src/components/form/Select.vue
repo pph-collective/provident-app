@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { onMounted, toRefs } from "vue";
 import Multiselect from "@vueform/multiselect";
 
 export default {
@@ -44,16 +43,9 @@ export default {
       type: String,
       default: "",
     },
-    type: {
-      type: String,
-      default: "text",
-    },
     uuid: {
       type: Number,
       default: 0,
-    },
-    placeholder: {
-      default: "",
     },
     multiple: {
       type: Boolean,
@@ -67,16 +59,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-  },
-  setup(props, { emit }) {
-    const { multiple, modelValue } = toRefs(props);
-
-    onMounted(() => {
-      // Initialize modelValue
-      if (modelValue.value === undefined) {
-        emit("update:modelValue", multiple.value ? [] : "");
-      }
-    });
   },
 };
 </script>

@@ -43,6 +43,8 @@ describe("Form functionality", () => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
+    // block group map should not be rendered since form doesn't have block group
+    cy.get(".vega-embed").should("not.exist");
 
     // Try to submit the form
     cy.get('[data-cy="active-form-modal"]')
@@ -499,7 +501,9 @@ describe("Form functionality", () => {
       cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
       cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
+      cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Draft").click();
       cy.get('[data-cy="forms-panel-block"]')
         .should("have.length", 1)

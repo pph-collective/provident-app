@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .sidebar {
   background-color: whitesmoke;

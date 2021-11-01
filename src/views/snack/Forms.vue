@@ -32,7 +32,7 @@
               mode="tags"
               v-model="filters[filterName]"
               :options="options"
-              :searchable="true"
+              :searchable="false"
               :close-on-select="true"
               :hide-selected="false"
             >
@@ -288,7 +288,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .form-row {
   width: 100%;
