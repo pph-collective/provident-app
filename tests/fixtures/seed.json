@@ -558,14 +558,16 @@
             "component": "TextInput",
             "label": "Neighborhood ID",
             "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
-            "required": true
+            "required": true,
+            "read_only": true
           },
           {
             "model": "municipality",
             "component": "TextInput",
             "label": "Municipality",
             "validations": "yup.string().required()",
-            "required": true
+            "required": true,
+            "read_only": true
           },
           {
             "model": "q1_available_services",

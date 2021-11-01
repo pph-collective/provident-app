@@ -142,7 +142,7 @@ describe("Dashboard viewed as a user", () => {
   it("has a neighborhood rapid assessment widget", () => {
     // when nothing is selected, the correct message is shown, no table
     cy.get("#nra-widget .form-response-container p").contains(
-      /Select a block group on the map to see its completed assessments or start a new one/
+      /Select a block group on the map to see its completed assessments and plans or start a new one/
     );
 
     // when something is selected with no assessments, correct message is shown, no table
@@ -155,7 +155,7 @@ describe("Dashboard viewed as a user", () => {
 
     cy.get("#nra-widget .form-response-container p").should(
       "contain",
-      "No Assessments Found for 0401021"
+      "No Assessments or Plans Found for 0401021"
     );
 
     // fill out a form partially, save, table shown

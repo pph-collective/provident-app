@@ -1,25 +1,29 @@
 <template>
   <div class="is-fullheight is-flex is-flex-direction-column">
     <div class="form-response-container is-flex-grow-1">
-      <table v-if="bgAssessments.length > 0" class="table is-fullwidth">
+      <table
+        v-if="bgFormResponses.length > 0"
+        class="table is-fullwidth is-narrow"
+      >
         <tbody>
-          <tr v-for="assessment in bgAssessments" :key="assessment._id">
+          <tr v-for="formResponse in bgFormResponses" :key="formResponse._id">
             <th class="has-text-centered">
-              {{ formatDate(assessment.last_updated) }}
+              {{ FORM_ID_TO_DISPLAY[formResponse.form._id] }},
+              {{ formatDate(formResponse.last_updated) }}
             </th>
-            <td class="is-flex is-justify-content-center">
+            <td class="has-text-centered">
               <button
                 class="button is-primary is-small"
                 :class="[
-                  assessment.status === 'Submitted' || userRole === 'user'
+                  formResponse.status === 'Submitted' || userRole === 'user'
                     ? 'is-light'
                     : '',
                 ]"
                 type="button"
-                @click="launchForm(assessment)"
+                @click="launchForm(formResponse)"
               >
                 {{
-                  assessment.status === "Submitted" || userRole === "user"
+                  formResponse.status === "Submitted" || userRole === "user"
                     ? "Review"
                     : "Continue"
                 }}
@@ -28,24 +32,36 @@
           </tr>
         </tbody>
       </table>
-      <p v-else-if="activeGeoid" class="assessment-message">
-        No Assessments Found for {{ activeGeoid }}
+      <p v-else-if="activeGeoid" class="widget-message">
+        No Assessments or Plans Found for {{ activeGeoid }}
       </p>
-      <p v-else class="assessment-message">
-        Select a block group on the map to see its completed assessments
+      <p v-else class="widget-message">
+        Select a block group on the map to see its completed assessments and
+        plans
         {{ userRole === "champion" ? "or start a new one" : "" }}
       </p>
     </div>
-    <div class="is-flex is-justify-content-center">
+    <div
+      v-if="userRole === 'champion'"
+      class="is-flex is-justify-content-center is-flex-wrap-wrap"
+    >
       <button
-        v-if="userRole === 'champion'"
         id="new-assessment"
-        class="button is-primary mt-4"
+        class="button is-primary mt-2 mx-1"
         type="button"
         :disabled="!activeGeoid"
-        @click="createNewAssessment"
+        @click="createNewBGForm(ASSESSMENT_FORM_ID)"
       >
         Start New Assessment
+      </button>
+      <button
+        id="new-plan"
+        class="button is-success mt-2 mx-1"
+        type="button"
+        :disabled="!activeGeoid"
+        @click="createNewBGForm(PLAN_FORM_ID)"
+      >
+        Start New Plan
       </button>
     </div>
   </div>
@@ -69,7 +85,13 @@ import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
-const FORM_ID = "neighborhood_rapid_assessment";
+const ASSESSMENT_FORM_ID = "neighborhood_rapid_assessment";
+const PLAN_FORM_ID = "resource_plan";
+
+const FORM_ID_TO_DISPLAY = {
+  [ASSESSMENT_FORM_ID]: "Assessment",
+  [PLAN_FORM_ID]: "Plan",
+};
 
 export default {
   components: {
@@ -95,42 +117,27 @@ export default {
 
     const activeFormResponse = ref({});
 
-    const assessmentForm = computed(() => {
-      const form = store.state.forms[FORM_ID];
-
-      if (form) {
-        const geoidQuestion = form.questions.find(
-          (question) => question.model === GEOID_QUESTION_MODEL
-        );
-        geoidQuestion.readOnly = true;
-        const muniQuestion = form.questions.find(
-          (question) => question.model === MUNI_QUESTION_MODEL
-        );
-        muniQuestion.readOnly = true;
-      }
-
-      return form ?? {};
-    });
-
-    const completedAssessments = computed(() => {
+    const completedForms = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
-        .filter((response) => response.form._id === FORM_ID)
+        .filter((response) =>
+          Object.keys(FORM_ID_TO_DISPLAY).includes(response.form._id)
+        )
         .sort(sortByProperty("last_updated"))
         .reverse();
     });
 
-    const bgAssessments = computed(() => {
-      return completedAssessments.value.filter(
+    const bgFormResponses = computed(() => {
+      return completedForms.value.filter(
         (assessment) =>
           assessment.response[GEOID_QUESTION_MODEL] === activeGeoid.value &&
           assessment.response[MUNI_QUESTION_MODEL] === activeMuni.value
       );
     });
 
-    const createNewAssessment = () => {
+    const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
-        form: assessmentForm.value,
+        form: store.state.forms[form_id],
         status: "Not Started",
         response: {
           [GEOID_QUESTION_MODEL]: activeGeoid.value,
@@ -159,13 +166,15 @@ export default {
     };
 
     return {
+      ASSESSMENT_FORM_ID,
+      FORM_ID_TO_DISPLAY,
+      PLAN_FORM_ID,
       activeFormResponse,
-      assessmentForm,
-      bgAssessments,
-      createNewAssessment,
+      bgFormResponses,
+      userRole,
+      createNewBGForm,
       formatDate,
       launchForm,
-      userRole,
     };
   },
 };
@@ -173,7 +182,7 @@ export default {
 
 <style lang="scss" scoped>
 .form-response-container {
-  min-height: 150px;
+  height: min(20vh, 150px);
   border-style: solid;
   border-color: grey;
   border-width: 1px;
@@ -186,7 +195,11 @@ table {
   border-radius: 6px;
 }
 
-.assessment-message {
+table td {
+  vertical-align: middle;
+}
+
+.widget-message {
   font-style: italic;
   text-align: center;
   padding: 0 1em;

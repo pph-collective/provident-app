@@ -3,6 +3,22 @@
   "type": "organization",
   "questions": [
     {
+      "model": "bg_id",
+      "component": "TextInput",
+      "label": "Neighborhood ID",
+      "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+      "required": true,
+      "read_only": true
+    },
+    {
+      "model": "municipality",
+      "component": "TextInput",
+      "label": "Municipality",
+      "validations": "yup.string().required()",
+      "required": true,
+      "read_only": true
+    },
+    {
       "model": "goal_form",
       "component": "SubForm",
       "label": "Plan",

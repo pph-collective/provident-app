@@ -10,7 +10,7 @@
         :required="required"
         :id="uuid"
         :placeholder="placeholder"
-        :disabled="readOnly"
+        :disabled="read_only"
         @input="$emit('update:modelValue', $event.target.value)"
       />
       <span class="has-text-danger is-size-7">{{
@@ -51,7 +51,7 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    readOnly: {
+    read_only: {
       type: Boolean,
       default: false,
     },

@@ -12,14 +12,16 @@
         />
       </div>
       <div class="debug">Model Value: {{ modelValue }}</div>
-      <button
-        v-if="repeat_button_title"
-        type="button"
-        class="button is-link"
-        @click="pushValue"
-      >
-        {{ repeat_button_title }}
-      </button>
+      <div class="has-text-centered">
+        <button
+          v-if="repeat_button_title"
+          type="button"
+          class="button is-link"
+          @click="pushValue"
+        >
+          {{ repeat_button_title }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
