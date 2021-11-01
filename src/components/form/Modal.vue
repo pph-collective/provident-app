@@ -20,6 +20,14 @@
             ></button>
           </header>
           <section class="modal-card-body" data-cy="form-body">
+            <div>
+              <BGMap
+                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
+                :min-height="200"
+                :max-height="350"
+              />
+            </div>
             <JSONForm
               :init-schema="formResponse.form.questions"
               :read-only="
@@ -53,9 +61,12 @@ import { useStore } from "vuex";
 
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
+import BGMap from "@/components/dashboard/BGMap.vue";
+import { GEOID_QUESTION_MODEL } from "@/utils/utils.js";
 
 export default {
   components: {
+    BGMap,
     JSONForm,
   },
   directives: {
@@ -129,6 +140,7 @@ export default {
     };
 
     return {
+      GEOID_QUESTION_MODEL,
       closeFormRequest,
       formMessage,
       updateFormResponse,
