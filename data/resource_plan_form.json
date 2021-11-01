@@ -1,0 +1,82 @@
+{
+  "title": "Six Month Resource Planning",
+  "type": "organization",
+  "questions": [
+    {
+      "model": "goal_form",
+      "component": "SubForm",
+      "label": "Plan",
+      "repeat_button_title": "+ Goal",
+      "questions": [
+        {
+          "model":  "goal",
+          "component": "TextArea",
+          "help_text": "Description of goal",
+          "label": "Goal",
+          "required": true
+        },
+        {
+          "model": "task_form",
+          "component": "SubForm",
+          "label": "Task",
+          "repeat_button_title": "+ Task",
+          "questions": [
+            {
+              "model": "plan",
+              "component": "TextArea",
+              "label": "Plan",
+              "required": true
+            },
+            {
+              "model": "person",
+              "component": "TextInput",
+              "label": "Directly Responsible Person",
+              "required": true
+            },
+            {
+              "model": "start_date",
+              "component": "Date",
+              "label": "Start Date"
+            },
+            {
+              "model": "end_date",
+              "component": "Select",
+              "label": "Planned End Date",
+              "options": [
+                "1 month",
+                "3 months",
+                "6 months"
+              ]
+            },
+            {
+              "model": "measure_progress",
+              "component": "TextArea",
+              "label": "How to measure progress?"
+            },
+            {
+              "model": "task_goal",
+              "component": "TextArea",
+              "label": "Goal (ex. # of hours, types of new services)"
+            },
+            {
+              "model": "status",
+              "component": "Select",
+              "label": "Status",
+              "options": [
+                "Not Started",
+                "In Progress",
+                "On Hold",
+                "Completed"
+              ]
+            },
+            {
+              "model": "outcome",
+              "component": "TextArea",
+              "label": "Outcome"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

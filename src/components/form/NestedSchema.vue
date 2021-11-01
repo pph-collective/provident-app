@@ -1,7 +1,7 @@
 <template>
   <div class="nested-schema">
     <SchemaForm :schema="schema" :initial-values="value" />
-    Value: {{ value }}
+    <div class="debug">Value: {{ value }}</div>
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
     watch(
       () => value.value,
       () => {
-        emit("updateModelValue", value);
+        emit("updateModelValue", value.value);
       },
       { deep: true }
     );
@@ -57,6 +57,7 @@ export default {
   border-color: grey;
   border-width: 1px;
   padding: 20px;
+  margin: 20px 0px;
   border-radius: 6px;
 }
 </style>

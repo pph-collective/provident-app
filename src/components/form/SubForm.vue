@@ -4,14 +4,14 @@
     <p v-if="help_text" class="help">{{ help_text }}</p>
     <div class="control" :id="uuid">
       <div v-for="(value, index) in modelValue" :key="index">
-        Index: {{ index }}
+        <div class="debug">Index: {{ index }}</div>
         <NestedSchema
           :model-value="value"
           :init-schema="questions"
           @update-model-value="updateValue($event, index)"
         />
       </div>
-      Model Value: {{ modelValue }}
+      <div class="debug">Model Value: {{ modelValue }}</div>
       <button
         v-if="repeat_button_title"
         type="button"
