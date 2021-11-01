@@ -1,6 +1,6 @@
 <template>
   <div class="nested-schema">
-    <SchemaForm :schema="schema" />
+    <SchemaForm :schema="schema" :initial-values="value" />
     Value: {{ value }}
   </div>
 </template>
@@ -8,8 +8,9 @@
 <script>
 import { useSchemaForm, SchemaFormFactory } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
+import * as yup from "yup";
 import { ref, toRefs, watch } from "vue";
-import { cloneDeep } from "@/utils/utils";
+import { cloneDeep, evalSchema } from "@/utils/utils";
 
 const factory = SchemaFormFactory([VeeValidatePlugin()]);
 
@@ -28,9 +29,11 @@ export default {
   setup(props, { emit }) {
     const { modelValue, initSchema } = toRefs(props);
 
-    const schema = ref(cloneDeep(initSchema.value));
     const value = ref(cloneDeep(modelValue.value));
     useSchemaForm(value);
+
+    const schema = ref(cloneDeep(initSchema.value));
+    evalSchema(schema.value, yup);
 
     watch(
       () => value.value,

@@ -53,6 +53,20 @@ export const poriRed = "#990000";
 
 export const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
+export const evalSchema = (s, yup) => {
+  s.forEach((q) => {
+    for (const key in q) {
+      if (["condition", "validations"].includes(key)) {
+        q[key] = eval(q[key]);
+      } else if (key === "component" && !q[key].startsWith("Form")) {
+        q[key] = "Form" + q[key];
+      }
+    }
+  });
+
+  return yup;
+};
+
 export default {
   GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
@@ -60,6 +74,7 @@ export default {
   poriRed,
   tertileColorMap,
   cloneDeep,
+  evalSchema,
   sortByProperty,
   today,
   uniqueArray,

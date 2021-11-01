@@ -12,9 +12,13 @@
         />
       </div>
       Model Value: {{ modelValue }}
-
-      <button type="button" class="button is-link" @click="pushValue">
-        + Task
+      <button
+        v-if="repeat_button_title"
+        type="button"
+        class="button is-link"
+        @click="pushValue"
+      >
+        {{ repeat_button_title }}
       </button>
     </div>
   </div>
@@ -54,6 +58,10 @@ export default {
       type: Array,
       required: true,
     },
+    repeat_button_title: {
+      type: String,
+      default: "",
+    },
     validation: {
       type: Object,
       default: () => ({}),
@@ -81,13 +89,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.control {
-  border-style: solid;
-  border-color: grey;
-  border-width: 1px;
-  padding: 20px;
-  border-radius: 6px;
-}
-</style>

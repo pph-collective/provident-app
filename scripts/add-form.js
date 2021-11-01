@@ -75,6 +75,7 @@ const validateForm = (form) => {
           break;
         case "TextArea":
         case "TextInput":
+        case "SubForm":
           break;
         case "Select":
         case "Radio":
