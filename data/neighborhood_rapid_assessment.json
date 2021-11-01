@@ -17,9 +17,19 @@
       "required": true
     },
     {
+      "model": "q1_available_services_logic",
+      "component": "Radio",
+      "label": "Do you know what services (from any source) are currently available in this Neighborhood/Town?",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
       "model": "q1_available_services",
       "component": "Checkbox",
       "label": "Which of these services (from any source) are currently available in this Neighborhood/Town: (Check all that apply)",
+      "condition": "(model) => model.q1_available_services_logic && model.q1_available_services_logic.includes('Yes')",
       "options": [
         "Office-based needle exchange",
         "Mobile needle exchange",
@@ -27,8 +37,8 @@
         "Rapid HCV test",
         "Fentanyl test strips",
         "Safer drug use equipment",
-        "Access to a health clinic",
-        "Access to mental health care",
+        "Access to a free or low cost health clinic",
+        "Access to free or low cost mental health care",
         "Harm reduction vending machine",
         "Emergency housing or financial assistance",
         "Food pantry/Free meals",
@@ -44,17 +54,19 @@
       "component": "TextInput",
       "label": "Other",
       "required": true,
-      "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')"
+      "condition": "(model) => model.q1_available_services && model.q1_available_services.includes('Other')" 
     },
     {
       "model": "q2_other_related_services",
       "component": "TextArea",
-      "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)"
+      "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)",
+      "condition": "(model) => model.q1_available_services_logic && model.q1_available_services_logic.includes('Yes')"
     },
     {
       "model": "q3_reason_for_focus",
       "component": "Checkbox",
-      "label": "What made you choose to focus on these services in this Neighborhood/Town (check all that apply)",
+      "label": "What made you choose to focus on these services in this Neighborhood/Town?",
+      "required": true,
       "options": [
         "Our organization has historically worked here",
         "Community discussion or individual stories suggesting services are needed here",
@@ -70,46 +82,31 @@
       "model": "q3_other",
       "component": "TextInput",
       "label": "Other",
+      "required": true,
       "condition": "(model) => model.q3_reason_for_focus && model.q3_reason_for_focus.includes('Other')"
     },
     {
-      "model": "q4_outreach_services",
-      "component": "Checkbox",
-      "label": "What types of outreach services are available in this Neighborhood/Town (Check all that apply)",
+      "model": "q5_sources_for_naloxone_logic",
+      "component": "Radio",
+      "label": "Do you know any sources for naloxone currently available in this Neighborhood/Town?",
+      "required": true,
       "options": [
-        "Basic needs",
-        "Office-based needle exchange and harm reduction services",
-        "Street-based needle exchange and harm reduction services",
-        "Naloxone kit training and distribution",
-        "Harm reduction vending machine",
-        "Recovery coaching services",
-        "Faith based outreach services",
-        "Other community organizations(s)",
-        "Emergency department",
-        "Other"
+        "Yes",
+        "No"
       ]
-    },
-    {
-      "model": "q4_other_community_orgs",
-      "component": "TextInput",
-      "label": "Other community organizations(s)",
-      "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other community organizations(s)')"
-    },
-    {
-      "model": "q4_other",
-      "component": "TextInput",
-      "label": "Other",
-      "condition": "(model) => model.q4_outreach_services && model.q4_outreach_services.includes('Other')"
     },
     {
       "model": "q5_sources_for_naloxone",
       "component": "Checkbox",
       "label": "What are the known sources for naloxone available in this Neighborhood/Town? (Check all that apply)",
+      "required": true,
+      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic.includes('Yes')",
       "options": [
         "Pharmacy location(s)",
         "Office-based needle exchange",
         "Street-based needle exchange (walking route w/ backpack)",
         "Harm reduction vending machine",
+        "Mobile needle exchange (like a car or van)",
         "Other community organization(s)",
         "Other"
       ]
@@ -118,28 +115,53 @@
       "model": "q5_other_community_orgs",
       "component": "TextInput",
       "label": "Other community organization(s)",
+      "required": true,
       "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other community organization(s)')"
     },
     {
       "model": "q5_other",
       "component": "TextInput",
       "label": "Other",
+      "required": true,
       "condition": "(model) => model.q5_sources_for_naloxone && model.q5_sources_for_naloxone.includes('Other')"
     },
     {
       "model": "q5a_endorsed_sources_for_naloxone",
       "component": "TextInput",
       "type": "number",
-      "label": "[If 5 is endorsed] How many hours per week is this service available?",
+      "label": "Please fill out the number of days naloxone is available each week. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic('Yes')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'Must be an number less than 8 since that is the maximum number of days in a week')"
+    },
+    {
+      "model": "q5b_endorsed_sources_for_naloxone",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of hours naloxone is available each week. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic('Yes')",
       "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q6_sources_for_fentanyl_test_strips_logic",
+      "component": "Radio",
+      "label": "Do you know any sources for fentanyl test strips currently available in this Neighborhood/Town?",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
     },
     {
       "model": "q6_sources_for_fentanyl_test_strips",
       "component": "Checkbox",
       "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
+      "required": true,
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips_logic && model.q6_sources_for_fentanyl_test_strips_logic.includes('Yes')",
       "options": [
         "Office-based needle exchange",
-        "Street-based needle exchange (walking route w/ backpack",
+        "Street-based needle exchange (walking route w/ backpack)",
         "Harm reduction vending machine",
         "Other community organization(s)",
         "Other"
@@ -149,25 +171,68 @@
       "model": "q6_other_community_orgs",
       "component": "TextInput",
       "label": "Other community organization(s)",
+      "required": true,
       "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other community organization(s)')"
     },
     {
       "model": "q6_other",
       "component": "TextInput",
       "label": "Other",
+      "required": true,
       "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips.includes('Other')"
     },
     {
-      "model": "q6a_endorsed_fentanyl_test_strips",
+      "model": "q6a_endorsed_sources_for_fentanyl_test_strips",
       "component": "TextInput",
       "type": "number",
-      "label": "[If 6 is endorsed] How many hours per week is this service available?",
+      "label": "Please fill out the number of days fentanyl test strips are available each week from an office-based needle exchange. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && q6_sources_for_fentanyl_test_strips('Office-based needle exchange')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'Must be an number less than 8 since that is the maximum number of days in a week')"
+    },
+    {
+      "model": "q6b_endorsed_sources_for_fentanyl_test_strips",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of hours fentanyl test strips are available each week from an office-based needle exchange. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips('Office-based needle exchange')",
       "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q6c_endorsed_sources_for_fentanyl_test_strips",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of days fentanyl test strips are available each week from a street-based needle exchange (walking route w/ backpack). If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && q6_sources_for_fentanyl_test_strips('Street-based needle exchange (walking route w/ backpack)')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'Must be an number less than 8 since that is the maximum number of days in a week')"
+    },
+    {
+      "model": "q6d_endorsed_sources_for_fentanyl_test_strips",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of hours fentanyl test strips are available each week from a street-based needle exchange (walking route w/ backpack). If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips('Street-based needle exchange (walking route w/ backpack)')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q7_sources_for_sterile_needles_logic",
+      "component": "Radio",
+      "label": "Do you know any sources for sterile needles and works currently available in this Neighborhood/Town?",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
     },
     {
       "model": "q7_sources_for_sterile_needles",
       "component": "Checkbox",
       "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
+      "required": true,
+      "condition": "(model) => model.q7_sources_for_sterile_needles_logic && model.q7_sources_for_sterile_needles_logic.includes('Yes')",
       "options": [
         "Pharmacy locations(s) (syringes only)",
         "Office-based needle exchange",
@@ -181,25 +246,68 @@
       "model": "q7_other_community_orgs",
       "component": "TextInput",
       "label": "Other community organization(s)",
+      "required": true,
       "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other community organization(s)')"
     },
     {
       "model": "q7_other",
       "component": "TextInput",
       "label": "Other",
+      "required": true,
       "condition": "(model) => model.q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles.includes('Other')"
     },
     {
-      "model": "q7a_endorsed_sterile_needles",
+      "model": "q7a_endorsed_sources_for_sterile_needles",
       "component": "TextInput",
       "type": "number",
-      "label": "[If 7 is endorsed] How many hours per week is this service available?",
+      "label": "Please fill out the number of days fentanyl test strips are available each week from an office-based needle exchange. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q7_sources_for_sterile_needles && q7_sources_for_sterile_needles('Office-based needle exchange')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'Must be an number less than 8 since that is the maximum number of days in a week')"
+    },
+    {
+      "model": "q7b_endorsed_sources_for_sterile_needles",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of hours fentanyl test strips are available each week from an office-based needle exchange. If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => q6_q7_sources_for_sterile_needles && model.q7_sources_for_sterile_needles('Office-based needle exchange')",
       "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q7c_endorsed_sources_for_sterile_needles",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of days fentanyl test strips are available each week from a street-based needle exchange (walking route w/ backpack). If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips && q6_sources_for_fentanyl_test_strips('Street-based needle exchange (walking route w/ backpack)')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'Must be an number less than 8 since that is the maximum number of days in a week')"
+    },
+    {
+      "model": "q7d_endorsed_sources_for_sterile_needles",
+      "component": "TextInput",
+      "type": "number",
+      "label": "Please fill out the number of hours fentanyl test strips are available each week from a street-based needle exchange (walking route w/ backpack). If you are not sure, you can put zero, or give a rough guess.",
+      "required": true,
+      "condition": "(model) => q6_sources_for_fentanyl_test_strips && model.q6_sources_for_fentanyl_test_strips('Street-based needle exchange (walking route w/ backpack)')",
+      "validations": "yup.number().min(0, 'Must be a non-negative number').max(168, 'Must be an number less than 168 since that is the maximum number of hours in a week')"
+    },
+    {
+      "model": "q8_barriers_to_outreach_logic",
+      "component": "Radio",
+      "label": "Do you see any barriers to outreach in this Neighborhood/Town?",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
     },
     {
       "model": "q8_barriers_to_outreach",
       "component": "Checkbox",
       "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
+      "required": true,
+      "condition": "(model) => model.q8_barriers_to_outreach_logic && model.q8_barriers_to_outreach_logic.includes('Yes')",
       "options": [
         "Limited public transportation",
         "I don't know anyone who is familiar with this neighborhood",
@@ -209,7 +317,6 @@
         "I do not have the time to go to these places",
         "Fear of police harassment",
         "I don't think there are people here who would benefit from our services",
-        "I do not see many barriers",
         "Other"
       ]
     },
@@ -217,17 +324,20 @@
       "model": "q8_other_barriers_to_outreach",
       "component": "TextInput",
       "label": "Other",
+      "required": true,
       "condition": "(model) => model.q8_barriers_to_outreach && model.q8_barriers_to_outreach.includes('Other')"
     },
     {
       "model": "q9_strengths_or_opportunities",
       "component": "TextArea",
-      "label": "What do you see as strengths or opportunities for outreach and services in this Neighborhood/Town?"
+      "label": "What do you see as strengths or opportunities for outreach and services in this Neighborhood/Town?",
+      "required": true
     },
     {
       "model": "q10_rate_likert_scale",
       "component": "LikertScale",
       "label": "Please rate how much you Disagree or Agree with each of these statements",
+      "required": true,
       "statements": [
         "It is easy to get sterile needles",
         "It is easy to get new works (like cookers, cottons, sterile water)",
@@ -240,6 +350,11 @@
         "Police are a barrier to service provision here",
         "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
       ]
+    },
+    {
+      "model": "q11_thoughts",
+      "component": "TextArea",
+      "label": "Is there anything else you would like to share about the availability of services in this Neighborhood/Town?"
     }
   ]
 }
