@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 .table {
   line-height: 1;
 
