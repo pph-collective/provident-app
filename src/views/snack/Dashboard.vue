@@ -57,7 +57,7 @@
             class="is-absolute"
           />
           <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
-            Click on a landmark to copy the address to your clipboard
+            Click on a point of interest to copy the address to your clipboard
           </div>
         </div>
       </template>
