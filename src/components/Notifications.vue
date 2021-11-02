@@ -4,7 +4,7 @@
       <div
         v-for="notification in notifications"
         :key="notification.id"
-        class="m-2 notification list-item"
+        class="my-2 notification list-item"
         :class="[`is-${notification.color}`]"
       >
         <button
@@ -40,14 +40,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "bulma";
+
 #notification-container {
   position: fixed;
-  right: 0px;
+  right: 0;
   z-index: 30;
+  max-width: calc(max(25vw, 250px));
+
+  @include mobile {
+    max-width: 100%;
+    width: 100%;
+  }
 }
 
 .notification {
-  max-width: 250px;
+  line-height: 1.1;
+  padding: 8px 28px 8px 12px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .list-item {

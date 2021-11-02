@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import { ref, toRefs, computed } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
+import { useStore } from "vuex";
 
 import * as topology from "topojson-server";
 
@@ -34,6 +35,7 @@ export default {
   setup(props) {
     const { blockGroup, dataset, minHeight, maxHeight } = toRefs(props);
     const el = ref(null);
+    const store = useStore();
 
     // filter geo data and simplify
     const filteredGeo = computed(() => {
@@ -70,6 +72,16 @@ export default {
           {
             name: "resolution",
             value: navigator?.connection?.downlink > 1.5 ? "@2x" : "",
+          },
+          {
+            name: "clicked",
+            value: null,
+            on: [
+              {
+                events: "@landmark_symbols:click",
+                update: "datum",
+              },
+            ],
           },
         ],
         data: [
@@ -127,6 +139,7 @@ export default {
           },
           {
             type: "symbol",
+            name: "landmark_symbols",
             from: { data: "landmarks" },
             encode: {
               enter: {
@@ -137,6 +150,7 @@ export default {
                 fillOpacity: { value: 0.5 },
                 stroke: { value: poriRed },
                 strokeWidth: { value: 1.5 },
+                cursor: { value: "pointer" },
               },
               update: {
                 tooltip: {
@@ -153,13 +167,36 @@ export default {
     });
 
     // max width and height set due to mapbox static image limits
-    useVega({
+    const { view } = useVega({
       spec,
       el,
       minHeight,
       maxHeight,
       maxWidth: ref(1280),
       includeActions: ref(false),
+    });
+
+    const composeAddress = (datum) => {
+      return (
+        datum.street_address + ", " + datum.city + ", RI " + datum.postal_code
+      );
+    };
+
+    watch(view, () => {
+      if (view.value) {
+        view.value.addSignalListener("clicked", (name, value) => {
+          if (value) {
+            navigator.clipboard
+              .writeText(composeAddress(value))
+              .then(() => {
+                store.dispatch("addNotification", {
+                  message: `Address copied to clipboard: ${value.location_name}`,
+                });
+              })
+              .catch((err) => console.log(err));
+          }
+        });
+      }
     });
 
     return {
