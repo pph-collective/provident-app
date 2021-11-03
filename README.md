@@ -114,6 +114,7 @@ The fields currently supported (component in `src/components/forms`) are:
 * `LikertScale`: A table of radio buttons to rate statements
 * `Radio`: Radio button group
 * `Select`: Drop down menu
+* `SubForm`: A component that acts as a form. Typically used to repeat a group of components.
 * `TextArea`: A multi-line text input
 * `TextInput`: A one line text input
 
@@ -181,6 +182,14 @@ Required additional keys:
 Required additional keys:
 
 - `options`: an array of strings which the user can select.
+
+#### SubForm
+
+Required additional keys:
+- `questions`: an array of the component dictionaries
+
+Optional keys: 
+- `repeat_button_title`: a string. If supplied, a button to repeat this sub form will appear at the bottom. For example `"+ Task"`
 
 #### TextArea
 
