@@ -158,7 +158,7 @@ export default {
         tertile_direction: "ascending",
       },
       {
-        field: "no_internet",
+        field: "internet",
         title: "Internet Access",
         info: "People without Internet access might have trouble finding resources or making appointments online.",
         aggregate: "median",
