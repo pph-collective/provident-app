@@ -12,16 +12,16 @@ The `add-admin` script accepts a user's email and upgrades them to an admin user
 
 ### Usage
 ```
-yarn add-admin <email address>
+yarn add-admin -e <email address>
 ```
 
 ## `add-form`
 
-The `add-form` script takes a form specification (see the main README for details) as a json file and an id for the form, validates the keys are nominally correct, and uploads the form to firebase.
+The `add-form` script takes a form specification (see the main README for details) as a json file and an id for the form, validates the keys are nominally correct, and uploads the form to firebase. If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--overwrite` flag is passed, the script will overwrite an existing form instead of erroring.
 
 ### Usage
 ```
-yarn add-form <form id> <path to form>
+yarn add-form --id <form id> -f <path to form> [--emulator] [--overwrite]
 ```
 
 ## `add-results`
@@ -30,7 +30,7 @@ The `add-results` script reads in a csv with results, and loads them to the fire
 
 ### Usage
 ```
-yarn add-results <path to csv> [--emulator]
+yarn add-results -f <path to csv> [--emulator] [--seed]
 ```
 
 ## `add-svi`
@@ -41,6 +41,27 @@ The `add-svi` script reads in a csv with svi data for a single period, and loads
 ```
 yarn add-svi -p 2019-2 -f <path to csv> [--emulator]
 ```
+
+## `add-landmarks`
+
+The `add-landmarks` script reads in a csv with landmark data for a single period and loads it into the firestore "landmark_data" document.
+
+### Usage
+```
+yarn add-landmarks -f <path to csv> -p <period> [--emulator]
+```
+
+Flags
+- `-f` `--file`: Path to the csv containing the data
+- `-p` `--period`: Model period of the data (ex. "2019-1")
+- `-e` `--emulator`: (optional) load the data to the emulator instead of the production database
+- `-s` `--seed`: (optional) Generates a json file with a small subset of seed data instead of uploading to firebase for testing purposes
+
+Example
+```
+yarn add-landmarks --emulator -f ./data/provident_landmarks_launch_edition_10_06_2021.csv -p 2019-1
+```
+
 
 ## `shp2topo`
 

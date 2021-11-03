@@ -2,11 +2,9 @@ const selectForm = (formTitle) => {
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
   cy.get('[data-cy="create-button"]').should("exist").click();
 
-  cy.get('[model="form"]')
-    .find(".multiselect")
-    .click()
-    .contains(".multiselect-option", formTitle)
-    .click();
+  cy.get('[model="form"]').find(".multiselect-search").click();
+
+  cy.get('[model="form"]').contains(".multiselect-option", formTitle).click();
 };
 
 /**
@@ -128,9 +126,9 @@ describe("Form Assignment functionality", () => {
     // Cannot be assigned to users
     cy.get('[model="target_users"]').should("not.exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "all")
       .click();
 
@@ -149,14 +147,18 @@ describe("Form Assignment functionality", () => {
     cy.get('[model="target_users"]').should("not.exist");
 
     cy.get('[model="target_organizations"]')
-      .find(".multiselect")
-      .click()
+      .find(".multiselect-tags-search")
+      .click();
+
+    cy.get('[model="target_organizations"]')
       .contains(".multiselect-option", "RI 4 Us")
       .click();
 
     cy.get('[model="target_organizations"]')
-      .find(".multiselect")
-      .click()
+      .find(".multiselect-tags-search")
+      .click();
+
+    cy.get('[model="target_organizations"]')
       .contains(".multiselect-option", "Good Doers")
       .click();
 
@@ -174,15 +176,15 @@ describe("Form Assignment functionality", () => {
     // Cannot be assigned to users
     cy.get('[model="target_users"]').should("not.exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "intervention")
       .click();
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "control")
       .click();
 
@@ -200,15 +202,17 @@ describe("Form Assignment functionality", () => {
     // Cannot be assigned to users
     cy.get('[model="target_users"]').should("not.exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "intervention")
       .click();
 
     cy.get('[model="target_organizations"]')
-      .find(".multiselect")
-      .click()
+      .find(".multiselect-tags-search")
+      .click();
+
+    cy.get('[model="target_organizations"]')
       .contains(".multiselect-option", "RI 4 Us")
       .click();
 
@@ -226,9 +230,9 @@ describe("Form Assignment functionality", () => {
     // Cannot be assigned to users
     cy.get('[model="target_users"]').should("not.exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "control")
       .click();
 
@@ -257,9 +261,9 @@ describe("Form Assignment functionality", () => {
     // Can be assigned to users
     cy.get('[model="target_users"]').should("exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "all")
       .click();
 
@@ -276,15 +280,15 @@ describe("Form Assignment functionality", () => {
     // Can be assigned to users
     cy.get('[model="target_users"]').should("exist");
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "intervention")
       .click();
 
+    cy.get('[model="target_groups"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_groups"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "control")
       .click();
 
@@ -302,21 +306,23 @@ describe("Form Assignment functionality", () => {
     // Can be assigned to users
     cy.get('[model="target_users"]').should("exist");
 
+    cy.get('[model="target_users"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_users"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "(user@user.com)")
       .click();
 
+    cy.get('[model="target_users"]').find(".multiselect-tags-search").click();
+
     cy.get('[model="target_users"]')
-      .find(".multiselect")
-      .click()
       .contains(".multiselect-option", "(admin@admin.com)")
       .click();
 
     cy.get('[model="target_organizations"]')
-      .find(".multiselect")
-      .click()
+      .find(".multiselect-tags-search")
+      .click();
+
+    cy.get('[model="target_organizations"]')
       .contains(".multiselect-option", "RI 4 Us")
       .click();
 

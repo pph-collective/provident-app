@@ -234,9 +234,9 @@ export default {
     });
 
     const submitEmail = async ({
-      target_groups,
-      target_organizations,
-      target_users,
+      target_groups = [],
+      target_organizations = [],
+      target_users = [],
       send_date,
       subject,
       body,

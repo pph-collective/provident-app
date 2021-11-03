@@ -253,11 +253,6 @@ describe("Admin Views and Powers", () => {
       cy.get('[data-cy="forms"]').click();
       cy.waitLoaded('[data-cy="form-panel"]');
 
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("Organization-level")
-        .click();
-
       cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
         .find('[data-cy="review-form-button"]')
         .should("exist")
@@ -303,11 +298,6 @@ describe("Admin Views and Powers", () => {
       // Navigate to forms
       cy.get('[data-cy="forms"]').click();
       cy.waitLoaded('[data-cy="form-panel"]');
-
-      cy.get('[data-cy="panel-tabs"]')
-        .find("a")
-        .contains("Organization-level")
-        .click();
 
       cy.get('[data-cy="forms-panel-block"]')
         .find("Sample Organization Form")

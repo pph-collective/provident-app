@@ -3,12 +3,15 @@
 </template>
 
 <script>
-import { ref, toRefs, computed } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
+import { useStore } from "vuex";
 
 import * as topology from "topojson-server";
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
+
+import { poriRed } from "@/utils/utils";
 
 export default {
   props: {
@@ -16,11 +19,23 @@ export default {
       type: String,
       required: true,
     },
+    dataset: {
+      type: Array,
+      default: () => [],
+    },
+    minHeight: {
+      type: Number,
+      default: 400,
+    },
+    maxHeight: {
+      type: Number,
+      default: 1280,
+    },
   },
   setup(props) {
-    const { blockGroup } = toRefs(props);
-
+    const { blockGroup, dataset, minHeight, maxHeight } = toRefs(props);
     const el = ref(null);
+    const store = useStore();
 
     // filter geo data and simplify
     const filteredGeo = computed(() => {
@@ -36,6 +51,8 @@ export default {
     });
 
     const spec = computed(() => {
+      const data = dataset.value.find((d) => d.bg_id === blockGroup.value);
+
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "white",
@@ -56,12 +73,33 @@ export default {
             name: "resolution",
             value: navigator?.connection?.downlink > 1.5 ? "@2x" : "",
           },
+          {
+            name: "clicked",
+            value: null,
+            on: [
+              {
+                events: "@landmark_symbols:click",
+                update: "datum",
+              },
+            ],
+          },
         ],
         data: [
           {
             name: "bg_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" },
+          },
+          {
+            name: "landmarks",
+            values: data?.landmarks ?? [],
+            transform: [
+              {
+                type: "geopoint",
+                projection: "projection",
+                fields: ["longitude", "latitude"],
+              },
+            ],
           },
         ],
         projections: [
@@ -99,18 +137,66 @@ export default {
             },
             transform: [{ type: "geoshape", projection: "projection" }],
           },
+          {
+            type: "symbol",
+            name: "landmark_symbols",
+            from: { data: "landmarks" },
+            encode: {
+              enter: {
+                size: { value: 300 },
+                x: { field: "x" },
+                y: { field: "y" },
+                fill: { value: poriRed },
+                fillOpacity: { value: 0.5 },
+                stroke: { value: poriRed },
+                strokeWidth: { value: 1.5 },
+                cursor: { value: "pointer" },
+              },
+              update: {
+                tooltip: {
+                  signal: `{'title': datum.location_name,
+                    'Address': datum.street_address + ', ' + datum.city + ', RI ' + datum.postal_code,
+                    'Category': datum.top_category,
+                    'Rank': datum.rank}`,
+                },
+              },
+            },
+          },
         ],
       };
     });
 
     // max width and height set due to mapbox static image limits
-    useVega({
+    const { view } = useVega({
       spec,
       el,
-      minHeight: ref(400),
-      maxHeight: ref(1280),
+      minHeight,
+      maxHeight,
       maxWidth: ref(1280),
       includeActions: ref(false),
+    });
+
+    const composeAddress = (datum) => {
+      return (
+        datum.street_address + ", " + datum.city + ", RI " + datum.postal_code
+      );
+    };
+
+    watch(view, () => {
+      if (view.value) {
+        view.value.addSignalListener("clicked", (name, value) => {
+          if (value) {
+            navigator.clipboard
+              .writeText(composeAddress(value))
+              .then(() => {
+                store.dispatch("addNotification", {
+                  message: `Address copied to clipboard: ${value.location_name}`,
+                });
+              })
+              .catch((err) => console.log(err));
+          }
+        });
+      }
     });
 
     return {

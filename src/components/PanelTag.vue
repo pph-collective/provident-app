@@ -1,5 +1,5 @@
 <template>
-  <span class="level-item tag is-light"
+  <span class="level-item tag is-light p-1 m-1"
     ><p>
       <strong>{{ label.toUpperCase() }}{{ value && ":" }}</strong> {{ value }}
     </p></span

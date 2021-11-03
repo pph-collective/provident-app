@@ -43,6 +43,7 @@ $box-radius: 2px;
 @import '~bulma';
 
 #vg-tooltip-element.vg-tooltip {
+  white-space: pre-wrap;
   color: #333333;
   font-family: $family-sans-serif;
   h2 {
@@ -72,7 +73,7 @@ $box-radius: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
 }
 
 @include mobile {
@@ -106,6 +107,20 @@ $box-radius: 2px;
   --ms-option-bg-selected-pointed: #{$link};
 }
 
+.multiselect-tag {
+  max-width: 95%;
+}
+.shorten-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.multiselect-tags {
+  // fullwidth minus size of x and caret
+  max-width: calc(100% - 3rem);
+}
+
 fieldset[disabled] {
   .multiselect {
     pointer-events: none;
@@ -113,5 +128,13 @@ fieldset[disabled] {
 
   .control {
     cursor: not-allowed;
+  }
+}
+
+// when printing forms, don't break page in the middle of a question
+@media print {
+  .field {
+    page-break-before: auto;
+    page-break-inside: avoid;
   }
 }

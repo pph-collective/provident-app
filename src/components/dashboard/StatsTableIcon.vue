@@ -1,11 +1,14 @@
 <template>
-  <div class="has-text-grey-dark is-family-monospace">
+  <div class="stat-table-icon has-text-grey-dark is-family-monospace">
     <span v-if="number">{{
       stats[metric] !== undefined ? formatFn(stats[metric]) : "-"
     }}</span
-    ><span v-if="icon" class="has-text-weight-bold" :style="{ color }">{{
-      location ? "⬥" : "⬦"
-    }}</span>
+    ><span
+      v-if="icon"
+      class="has-text-weight-bold is-size-5"
+      :style="{ color }"
+      >{{ location ? "⬥" : "⬦" }}</span
+    >
   </div>
 </template>
 
@@ -63,16 +66,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rotate-up {
-  transform: rotate(-45deg);
-}
-
-.rotate-down {
-  transform: rotate(45deg);
-}
-
-// between size 6 and 7
-.stat-icon {
-  font-size: 0.825rem;
+.stat-table-icon {
+  line-height: 1;
 }
 </style>

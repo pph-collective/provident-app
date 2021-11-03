@@ -1,7 +1,7 @@
 // PORI styles:
 $family-serif: "lora", serif;
 $family-sans-serif: "proxima-nova", sans-serif;
-$family-monospace: "novel-mono-pro-compressed", "novel-mono-pro-extra-compres", monospace;
+$family-monospace: "novel-mono-pro-compressed", monospace;
 $family-primary: $family-serif;
 $family-secondary: $family-sans-serif;
 
@@ -28,3 +28,6 @@ $info: #777777;
 $fullhd: 1728px;
 
 $modal-content-width: 800px;
+
+// allows user preference to take precedence on font-size
+$body-size: 1rem;
