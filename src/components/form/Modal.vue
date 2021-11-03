@@ -12,7 +12,7 @@
             <p class="modal-card-title" data-cy="active-form-title">
               {{ formResponse.form.title }}
             </p>
-            <button class="button is-small is-primary mx-1" v-print="printOpts">
+            <button class="button is-small is-primary mx-2" @click="print">
               Print
             </button>
             <button
@@ -22,11 +22,7 @@
               @click="closeFormRequest += 1"
             ></button>
           </header>
-          <section
-            id="formPage"
-            class="print-section modal-card-body"
-            data-cy="form-body"
-          >
+          <section class="modal-card-body" data-cy="form-body">
             <PrintSection>
               <div>
                 <BGMap
@@ -69,7 +65,6 @@
 <script>
 import { ref, computed, toRefs } from "vue";
 import { useStore } from "vuex";
-import print from "vue3-print-nb";
 
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
@@ -85,7 +80,6 @@ export default {
   },
   directives: {
     ...esc,
-    print,
   },
   props: {
     formResponse: {
@@ -154,30 +148,19 @@ export default {
       formMessage.value = "";
     };
 
-    const printOpts = computed(() => {
-      return {
-        id: "#formPage",
-        popTitle: formResponse.value.form.title,
-        preview: false,
-        previewTitle: `Print Preview - ${formResponse.value.form.title}`,
-        previewPrintBtnLabel: "print",
-        beforeOpenCallback() {
-          console.log("before");
-        },
-        openCallback() {
-          console.log("open");
-        },
-        closeCallback() {
-          console.log("close");
-        },
-      };
-    });
+    const print = () => {
+      if (document.queryCommandSupported("print")) {
+        document.execCommand("print", true, null);
+      } else {
+        window.print();
+      }
+    };
 
     return {
       GEOID_QUESTION_MODEL,
       closeFormRequest,
       formMessage,
-      printOpts,
+      print,
       updateFormResponse,
       userRole,
       closeForm,
