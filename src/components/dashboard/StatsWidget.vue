@@ -107,7 +107,6 @@ export default {
 
     // number formatters
     const pct = (x) => (x > 0 && x < 0.01 ? "<1%" : format(".0%")(x));
-    const dollar = (x) => (x > 100000 ? format("$.3s")(x) : format("$.2s")(x));
 
     const metrics = [
       {
@@ -133,7 +132,7 @@ export default {
         title: "Housing Cost Burden",
         info: "Households that put more than 30% of their income towards rent will have very little money left over.",
         aggregate: "median",
-        formatter: dollar,
+        formatter: pct,
         group: "Economic Resources",
         tertile_direction: "descending",
       },
@@ -258,7 +257,9 @@ export default {
     });
 
     const prediction = computed(
-      () => dataset.value.find((row) => row.bg_id === geoid)?.prediction ?? "-"
+      () =>
+        dataset.value.find((row) => row.bg_id === geoid.value)?.prediction ??
+        "-"
     );
 
     const hyphenate = (val) => {

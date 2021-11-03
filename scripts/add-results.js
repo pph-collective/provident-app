@@ -116,10 +116,10 @@ async function importCsv(csvFileName) {
               let dt = aq
                 .from(records)
                 .select("GEOID")
-                .derive({ prediction: 1 })
+                .derive({ prediction: () => "1" })
                 .join_right(lookupDt)
                 .select("bg_id", "prediction")
-                .impute({ prediction: () => 0 })
+                .impute({ prediction: () => "0" })
                 .objects();
 
               console.log(`loading data for period ${period}`);
