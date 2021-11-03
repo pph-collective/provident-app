@@ -1,94 +1,92 @@
 <template>
   <Loading :loading="loading" />
-  <PrintSection>
-    <div class="dashboard container is-fullhd">
-      <ControlPanel
-        v-if="resultPeriods.length > 0"
-        id="dashboard-control-panel"
-        :drop-downs="dropDowns"
-        @selected="updateControls"
-      />
+  <div class="dashboard container is-fullhd">
+    <ControlPanel
+      v-if="resultPeriods.length > 0"
+      id="dashboard-control-panel"
+      :drop-downs="dropDowns"
+      @selected="updateControls"
+    />
 
-      <Card width="two-thirds" :height="5" id="map">
-        <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
-        <template #top-right>
-          <button
-            v-if="!zoomed"
-            :disabled="!activeGeoid || !activeClickedStatus"
-            class="zoom-button button is-family-secondary is-secondary is-light"
-            @click="zoomBg"
-          >
-            <span class="icon">
-              <i class="fas fa-search-plus"></i>
-            </span>
-            <span>Zoom to Block Group</span>
-          </button>
-          <button
-            v-else
-            class="zoom-button button is-family-secondary is-secondary is-light"
-            @click="zoomed = false"
-          >
-            <span class="icon">
-              <i class="fas fa-search-minus"></i>
-            </span>
-            <span>Zoom Back Out</span>
-          </button>
-        </template>
-        <template #subtitle
-          >Click on a block group to see more details or zoom in</template
+    <Card width="two-thirds" :height="5" id="map">
+      <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
+      <template #top-right>
+        <button
+          v-if="!zoomed"
+          :disabled="!activeGeoid || !activeClickedStatus"
+          class="zoom-button button is-family-secondary is-secondary is-light"
+          @click="zoomBg"
         >
-        <template #content>
-          <div v-if="controls.geography" class="map-container">
-            <Map
-              id="main-map"
-              v-if="dataset.length > 0"
-              class="is-absolute"
-              :dataset="dataset"
-              :filter-municipalities="controls.geography.municipalities"
-              flag-property="flag_1"
-              :with-predictions="interventionArmUser"
-              @new-active-municipality="activeMuni = $event"
-              @new-active-bg="activeGeoid = $event"
-              @active-clicked-status="clickMap"
-              :data-cy="controls.geography.name"
-            />
-            <BGMap
-              id="bg-zoom-map"
-              v-if="activeGeoid && zoomed"
-              :block-group="activeGeoid"
-              :dataset="dataset"
-              class="is-absolute"
-            />
-            <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
-              Click on a point of interest to copy the address to your clipboard
-            </div>
-          </div>
-        </template>
-      </Card>
-
-      <Card width="one-third" :height="5" id="stats">
-        <template #title>Stats from {{ controls.model_version }}</template>
-        <template #content>
-          <StatsWidget
+          <span class="icon">
+            <i class="fas fa-search-plus"></i>
+          </span>
+          <span>Zoom to Block Group</span>
+        </button>
+        <button
+          v-else
+          class="zoom-button button is-family-secondary is-secondary is-light"
+          @click="zoomed = false"
+        >
+          <span class="icon">
+            <i class="fas fa-search-minus"></i>
+          </span>
+          <span>Zoom Back Out</span>
+        </button>
+      </template>
+      <template #subtitle
+        >Click on a block group to see more details or zoom in</template
+      >
+      <template #content>
+        <div v-if="controls.geography" class="map-container">
+          <Map
+            id="main-map"
             v-if="dataset.length > 0"
+            class="is-absolute"
             :dataset="dataset"
-            :municipality="activeMuni"
-            :geoid="activeGeoid"
+            :filter-municipalities="controls.geography.municipalities"
+            flag-property="flag_1"
             :with-predictions="interventionArmUser"
+            @new-active-municipality="activeMuni = $event"
+            @new-active-bg="activeGeoid = $event"
+            @active-clicked-status="clickMap"
+            :data-cy="controls.geography.name"
           />
-        </template>
-      </Card>
+          <BGMap
+            id="bg-zoom-map"
+            v-if="activeGeoid && zoomed"
+            :block-group="activeGeoid"
+            :dataset="dataset"
+            class="is-absolute"
+          />
+          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+            Click on a point of interest to copy the address to your clipboard
+          </div>
+        </div>
+      </template>
+    </Card>
 
-      <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
-        <template #content>
-          <AssessmentWidget
-            :active-geoid="activeGeoid"
-            :active-muni="activeMuni"
-          />
-        </template>
-      </Card>
-    </div>
-  </PrintSection>
+    <Card width="one-third" :height="5" id="stats">
+      <template #title>Stats from {{ controls.model_version }}</template>
+      <template #content>
+        <StatsWidget
+          v-if="dataset.length > 0"
+          :dataset="dataset"
+          :municipality="activeMuni"
+          :geoid="activeGeoid"
+          :with-predictions="interventionArmUser"
+        />
+      </template>
+    </Card>
+
+    <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
+      <template #content>
+        <AssessmentWidget
+          :active-geoid="activeGeoid"
+          :active-muni="activeMuni"
+        />
+      </template>
+    </Card>
+  </div>
 </template>
 
 <script>
@@ -106,7 +104,6 @@ import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsWidget from "@/components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
-import PrintSection from "@/components/PrintSection.vue";
 
 export default {
   components: {
@@ -117,7 +114,6 @@ export default {
     StatsWidget,
     AssessmentWidget,
     Loading,
-    PrintSection,
   },
   setup() {
     const towns = utils.MUNICIPALITIES.map((m) => ({

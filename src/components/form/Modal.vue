@@ -12,7 +12,11 @@
             <p class="modal-card-title" data-cy="active-form-title">
               {{ formResponse.form.title }}
             </p>
-            <button class="button is-small is-primary mx-2" @click="print">
+            <button
+              v-if="printable"
+              class="button is-small is-primary mx-2"
+              @click="print"
+            >
               Print
             </button>
             <button
@@ -23,7 +27,7 @@
             ></button>
           </header>
           <section class="modal-card-body" data-cy="form-body">
-            <PrintSection>
+            <PrintSection :printable="printable">
               <div>
                 <BGMap
                   v-if="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -156,11 +160,14 @@ export default {
       }
     };
 
+    const printable = computed(() => formResponse.value.status === "Submitted");
+
     return {
       GEOID_QUESTION_MODEL,
       closeFormRequest,
       formMessage,
       print,
+      printable,
       updateFormResponse,
       userRole,
       closeForm,
