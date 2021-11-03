@@ -6,7 +6,11 @@
         class="table is-fullwidth is-narrow"
       >
         <tbody>
-          <tr v-for="formResponse in bgFormResponses" :key="formResponse._id">
+          <tr
+            v-for="formResponse in bgFormResponses"
+            :key="formResponse._id"
+            data-cy="form-response-row"
+          >
             <th class="has-text-centered">
               {{ FORM_ID_TO_DISPLAY[formResponse.form._id] }},
               {{ formatDate(formResponse.last_updated) }}
@@ -146,7 +150,7 @@ export default {
       };
       fb.logActivity(
         store.state.user.data.email,
-        "create NRA",
+        `create ${form_id} form`,
         activeGeoid.value
       );
     };
@@ -160,7 +164,7 @@ export default {
       activeFormResponse.value = formResponse;
       fb.logActivity(
         store.state.user.data.email,
-        "launch NRA form",
+        `launch ${formResponse.form._id} form`,
         formResponse._id
       );
     };
@@ -182,7 +186,8 @@ export default {
 
 <style lang="scss" scoped>
 .form-response-container {
-  height: min(20vh, 150px);
+  min-height: 150px;
+  max-height: 300px;
   border-style: solid;
   border-color: grey;
   border-width: 1px;

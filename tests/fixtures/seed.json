@@ -797,6 +797,105 @@
         ]
       }
     },
+    "resource_plan": {
+      "data": {
+        "title": "Six Month Resource Planning",
+        "type": "organization",
+        "questions": [
+          {
+            "model": "bg_id",
+            "component": "TextInput",
+            "label": "Neighborhood ID",
+            "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+            "required": true,
+            "read_only": true
+          },
+          {
+            "model": "municipality",
+            "component": "TextInput",
+            "label": "Municipality",
+            "validations": "yup.string().required()",
+            "required": true,
+            "read_only": true
+          },
+          {
+            "model": "goal_form",
+            "component": "SubForm",
+            "label": "Goal",
+            "repeat_button_title": "+ Goal",
+            "questions": [
+              {
+                "model":  "goal",
+                "component": "TextArea",
+                "label": "Description",
+                "required": true
+              },
+              {
+                "model": "task_form",
+                "component": "SubForm",
+                "label": "Task",
+                "repeat_button_title": "+ Task",
+                "questions": [
+                  {
+                    "model": "plan",
+                    "component": "TextArea",
+                    "label": "Plan",
+                    "required": true
+                  },
+                  {
+                    "model": "person",
+                    "component": "TextInput",
+                    "label": "Directly Responsible Person",
+                    "required": true
+                  },
+                  {
+                    "model": "start_date",
+                    "component": "Date",
+                    "label": "Start Date"
+                  },
+                  {
+                    "model": "end_date",
+                    "component": "Select",
+                    "label": "Planned End Date",
+                    "options": [
+                      "1 month",
+                      "3 months",
+                      "6 months"
+                    ]
+                  },
+                  {
+                    "model": "measure_progress",
+                    "component": "TextArea",
+                    "label": "How to measure progress?"
+                  },
+                  {
+                    "model": "task_goal",
+                    "component": "TextArea",
+                    "label": "Goal (ex. # of hours, types of new services)"
+                  },
+                  {
+                    "model": "status",
+                    "component": "Select",
+                    "label": "Status",
+                    "options": [
+                      "Not Started",
+                      "In Progress",
+                      "On Hold",
+                      "Completed"
+                    ]
+                  },
+                  {
+                    "model": "outcome",
+                    "component": "TextArea",
+                    "label": "Outcome"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     "sample_organization_form": {
       "data": {
         "title": "Sample Organization Form",

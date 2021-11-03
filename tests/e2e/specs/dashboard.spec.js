@@ -139,115 +139,157 @@ describe("Dashboard viewed as a user", () => {
     });
   });
 
-  it("has a neighborhood rapid assessment widget", () => {
-    // when nothing is selected, the correct message is shown, no table
-    cy.get("#nra-widget .form-response-container p").contains(
-      /Select a block group on the map to see its completed assessments and plans or start a new one/
-    );
+  describe("Assessment Widget", () => {
+    beforeEach(() => {
+      // when nothing is selected, the correct message is shown, no table
+      cy.get("#nra-widget .form-response-container p").contains(
+        /Select a block group on the map to see its completed assessments and plans or start a new one/
+      );
 
-    // when something is selected with no assessments, correct message is shown, no table
-    cy.get("select#geography").select("Good Doers");
+      // when something is selected with no assessments, correct message is shown, no table
+      cy.get("select#geography").select("Good Doers");
 
-    cy.get(".map-container [data-cy='Good Doers'] svg")
-      .trigger("mouseover", "center")
-      .trigger("mousemove", "center")
-      .trigger("click", "center");
+      cy.get(".map-container [data-cy='Good Doers'] svg")
+        .trigger("mouseover", "center")
+        .trigger("mousemove", "center")
+        .trigger("click", "center");
 
-    cy.get("#nra-widget .form-response-container p").should(
-      "contain",
-      "No Assessments or Plans Found for 0401021"
-    );
+      cy.get("#nra-widget .form-response-container p").should(
+        "contain",
+        "No Assessments or Plans Found for 0401021"
+      );
+    });
 
-    // fill out a form partially, save, table shown
-    cy.get("#nra-widget button#new-assessment").click();
+    it("has a neighborhood rapid assessment widget", () => {
+      // fill out a form partially, save, table shown
+      cy.get("#nra-widget button#new-assessment").click();
 
-    cy.get("[data-cy='active-form-title']").should(
-      "contain",
-      "Neighborhood Rapid Assessment"
-    );
+      cy.get("[data-cy='active-form-title']").should(
+        "contain",
+        "Neighborhood Rapid Assessment"
+      );
 
-    // block group map should be rendered
-    cy.get(".vega-embed").should("exist");
+      // block group map should be rendered
+      cy.get(".vega-embed").should("exist");
 
-    cy.get("[model='bg_id']")
-      .find("input")
-      .should("be.disabled")
-      .should("have.value", "0401021");
+      cy.get("[model='bg_id']")
+        .find("input")
+        .should("be.disabled")
+        .should("have.value", "0401021");
 
-    cy.get("[model='q2_other_related_services']")
-      .find("textarea")
-      .type("Lots of resources");
+      cy.get("[model='q2_other_related_services']")
+        .find("textarea")
+        .type("Lots of resources");
 
-    cy.get("button").contains("Save").click();
+      cy.get("button").contains("Save").click();
 
-    cy.get('[data-cy="close-form"]').click();
+      cy.get('[data-cy="close-form"]').click();
 
-    cy.get("#nra-widget .form-response-container table tbody tr")
-      .should("have.length", 1)
-      .find("button")
-      .should("have.text", "Continue");
+      cy.get("#nra-widget .form-response-container table tbody tr")
+        .should("have.length", 1)
+        .find("button")
+        .should("have.text", "Continue");
 
-    // fill out another form partially, save, two rows
-    cy.get("#nra-widget button#new-assessment").click();
+      // fill out another form partially, save, two rows
+      cy.get("#nra-widget button#new-assessment").click();
 
-    cy.get("[data-cy='active-form-title']").should(
-      "contain",
-      "Neighborhood Rapid Assessment"
-    );
+      cy.get("[data-cy='active-form-title']").should(
+        "contain",
+        "Neighborhood Rapid Assessment"
+      );
 
-    cy.get("[model='q2_other_related_services']")
-      .find("textarea")
-      .type("Lots of resources");
+      cy.get("[model='q2_other_related_services']")
+        .find("textarea")
+        .type("Lots of resources");
 
-    cy.get("button").contains("Save").click();
+      cy.get("button").contains("Save").click();
 
-    cy.get('[data-cy="close-form"]').click();
+      // Form message
+      cy.get('[data-cy="form-message"]').should(
+        "contain",
+        "Form successfully saved"
+      );
 
-    cy.get("#nra-widget .form-response-container table tbody tr")
-      .should("have.length", 2)
-      .find("button")
-      .first()
-      .should("have.text", "Continue")
-      .click();
+      cy.get('[data-cy="close-form"]').click();
 
-    // still has correct id and still disabled
-    cy.get("[model='bg_id']")
-      .find("input")
-      .should("be.disabled")
-      .should("have.value", "0401021");
+      cy.get("#nra-widget .form-response-container table tbody tr")
+        .should("have.length", 2)
+        .find("button")
+        .first()
+        .should("have.text", "Continue")
+        .click();
 
-    // fill out form completely, row switches to review
-    cy.get("button").contains("Submit").click();
-    cy.get("[data-cy='active-form-title']").should("not.exist");
+      // still has correct id and still disabled
+      cy.get("[model='bg_id']")
+        .find("input")
+        .should("be.disabled")
+        .should("have.value", "0401021");
 
-    cy.get("#nra-widget .form-response-container table tbody tr")
-      .should("have.length", 2)
-      .find("button")
-      .first()
-      .should("have.text", "Review");
+      // fill out form completely, row switches to review
+      cy.get("button").contains("Submit").click();
+      cy.get("[data-cy='active-form-title']").should("not.exist");
 
-    // fill out form save, then submit, only one row for this action
-    cy.get("#nra-widget button#new-assessment").click();
+      cy.get("#nra-widget .form-response-container table tbody tr")
+        .should("have.length", 2)
+        .find("button")
+        .first()
+        .should("have.text", "Review");
 
-    cy.get("[model='q2_other_related_services']")
-      .find("textarea")
-      .type("Lots of resources");
+      // fill out form save, then submit, only one row for this action
+      cy.get("#nra-widget button#new-assessment").click();
 
-    cy.get("button").contains("Save").click();
+      cy.get("[model='q2_other_related_services']")
+        .find("textarea")
+        .type("Lots of resources");
 
-    cy.get("#nra-widget .form-response-container table tbody tr")
-      .should("have.length", 3)
-      .find("button")
-      .first()
-      .should("have.text", "Continue");
+      cy.get("button").contains("Save").click();
 
-    cy.get("button").contains("Submit").click();
+      cy.get("#nra-widget .form-response-container table tbody tr")
+        .should("have.length", 3)
+        .find("button")
+        .first()
+        .should("have.text", "Continue");
 
-    cy.get("#nra-widget .form-response-container table tbody tr")
-      .should("have.length", 3)
-      .find("button")
-      .first()
-      .should("have.text", "Review");
+      cy.get("button").contains("Submit").click();
+
+      cy.get("#nra-widget .form-response-container table tbody tr")
+        .should("have.length", 3)
+        .find("button")
+        .first()
+        .should("have.text", "Review");
+    });
+
+    it("has a plan form", () => {
+      cy.get("#nra-widget button#new-plan").should("exist").click();
+
+      cy.get("[data-cy='active-form-title']").should(
+        "contain",
+        "Six Month Resource Planning"
+      );
+
+      // block group map should be rendered
+      cy.get(".vega-embed").should("exist");
+
+      cy.get("[model='bg_id']")
+        .find("input")
+        .should("be.disabled")
+        .should("have.value", "0401021");
+
+      cy.get("[model='goal']").find("textarea").type("description of my goal");
+
+      cy.get("button").contains("Save").click();
+
+      cy.get('[data-cy="close-form"]').click();
+
+      cy.get('[data-cy="form-response-row"]')
+        .should("have.length", 1)
+        .find("button")
+        .should("have.text", "Continue");
+
+      cy.get('[data-cy="form-response-row"]')
+        .find("th")
+        .should("contain", "Plan");
+    });
   });
 });
 
