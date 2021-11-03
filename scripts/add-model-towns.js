@@ -94,7 +94,7 @@ async function importCsv() {
         }
 
         writeToFirestore("model_data", "bg_meta", dt.objects());
-        writeToFirestore("model_data", "periods", ["2018-2", "2019-1"]);
+        writeToFirestore("model_data", "periods", ["2021-2"]);
       } catch (e) {
         console.error(e);
         process.exit(1);
