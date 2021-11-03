@@ -72,7 +72,11 @@ const validateForm = (form) => {
     warnAndExit("must provide questions");
   }
 
-  Object.entries(form["questions"]).forEach(([key, question]) => {
+  validateQuestions(form["questions"]);
+};
+
+const validateQuestions = (questions) => {
+  Object.entries(questions).forEach(([key, question]) => {
     // check label
     if (!question["label"]) {
       warnAndExit(`question missing label: ${key}`);
@@ -98,7 +102,6 @@ const validateForm = (form) => {
           break;
         case "TextArea":
         case "TextInput":
-        case "SubForm":
           break;
         case "Select":
         case "Radio":
@@ -112,9 +115,16 @@ const validateForm = (form) => {
             warnAndExit(`question component requires statements: ${key}`);
           }
           break;
+        case "SubForm":
+          if (!question["questions"]) {
+            warnAndExit(`question component requires questions: ${key}`);
+          } else {
+            validateQuestions(question["questions"]);
+          }
+          break;
         default:
           warnAndExit(
-            `question has unknown component: ${key} - ${question["component"]} (must be one of TextArea, TextInput, Select, Radio, Checkbox, LikertScale)`
+            `question has unknown component: ${key} - ${question["component"]} (must be one of TextArea, TextInput, Select, Radio, Checkbox, LikertScale, SubForm)`
           );
       }
     }
