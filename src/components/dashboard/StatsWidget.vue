@@ -195,56 +195,56 @@ export default {
     const communityComposition = [
       {
         field: "race_aian",
-        title: "American Indian/Alaska Native Rhode Islanders",
+        title: "American Indian / Alaska Native",
         info: "This community includes the Narragansett Indian Reservation in Charlestown, Rhode Island. Most American Indian or Alaska Native Rhode Islanders speak English at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
       {
         field: "race_asian",
-        title: "Asian Rhode Islanders",
+        title: "Asian",
         info: "Many Asian Rhode Islanders are Chinese, Cambodian, Indian, or Laotian. They may speak English, Chinese, Khmer, Hindi, or Lao at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
       {
         field: "race_black",
-        title: "Black/African American Rhode Islanders",
+        title: "Black / African American",
         info: "Many Black or African American Rhode Islanders are Cape Verdean, Dominican, and Haitian. They may speak English, Portuguese, Spanish, or Haitian Creole at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
       {
         field: "hispanic",
-        title: "Hispanic/Latino Rhode Islanders",
+        title: "Hispanic / Latino",
         info: "Many Hispanic or Latino Rhode Islanders are Dominican, Puerto Rican, or Guatemalan. They may speak English or Spanish at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
       {
         field: "race_nhpi",
-        title: "Native Hawaiian/Pacific Islander Rhode Islanders",
+        title: "Native Hawaiian / Pacific Islander",
         info: "Many Native Hawaiian or Pacific Islander Rhode Islanders are Filipino. They may speak English or Tagalog at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
       {
         field: "race_white",
-        title: "White Rhode Islanders",
+        title: "White",
         info: "Many White Rhode Islanders are Italian, Irish, Portuguese, and French/French Canadian. They may speak English, Portuguese, French, or Italian at home.",
         aggregate: "median",
         formatter: pct,
-        group: "Household Composition",
+        group: "Community Composition",
         tertile_direction: "ascending",
       },
     ];
@@ -258,7 +258,7 @@ export default {
     });
 
     const prediction = computed(
-      () => dataset.value.find((row) => row.bg_id === geoid)?.flag_1 ?? "-"
+      () => dataset.value.find((row) => row.bg_id === geoid)?.prediction ?? "-"
     );
 
     const hyphenate = (val) => {
