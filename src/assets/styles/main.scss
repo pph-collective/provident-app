@@ -163,6 +163,8 @@ fieldset[disabled] {
     width: 100%;
     height: auto;
     overflow: hidden;
+    background-color: white;
+    isolation: isolate;
   }
 
   .sticky-bottom {
