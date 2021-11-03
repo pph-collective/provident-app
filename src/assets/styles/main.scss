@@ -138,3 +138,34 @@ fieldset[disabled] {
     page-break-inside: avoid;
   }
 }
+
+.printable {
+  display: none;
+}
+
+@media print {
+  body * {
+    display: none;
+  }
+
+  .printable {
+    display: block;
+  }
+
+  .printable * {
+    display: revert;
+  }
+
+  .printable {
+    position: absolute;
+    left:0;
+    top:0;
+    width: 100vw;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .sticky-bottom {
+    position: relative !important;
+  }
+}
