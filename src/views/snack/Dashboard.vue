@@ -11,7 +11,11 @@
     <Card width="two-thirds" :height="5" id="map">
       <template #title
         >Map:
-        {{ zoomed ? activeGeoid : controls?.geography?.name ?? "" }}</template
+        {{
+          zoomed
+            ? `${activeMuni} - ${activeGeoid}`
+            : controls?.geography?.name ?? ""
+        }}</template
       >
       <template #top-right>
         <button
