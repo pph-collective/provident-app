@@ -43,6 +43,8 @@ describe("Form functionality", () => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
+    // block group map should not be rendered since form doesn't have block group
+    cy.get(".vega-embed").should("not.exist");
 
     // Try to submit the form
     cy.get('[data-cy="active-form-modal"]')
@@ -63,10 +65,6 @@ describe("Form functionality", () => {
       cy.login_by_permission(permission_level);
       cy.get("[data-cy='forms']").click();
       cy.waitLoaded('[data-cy="form-panel"]');
-
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find(".tag")
-        .should("contain", "Not Started");
 
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
         .find(".tag")
@@ -221,13 +219,7 @@ describe("Form functionality", () => {
         .should("be.enabled")
         .click();
 
-      cy.contains('[data-cy="forms-panel-block"]', "My Form").should(
-        "not.exist"
-      );
-
-      // Click All
-      // panel-tabs, contains submitted
-      cy.get('[data-cy="panel-tabs"]').find("a").contains("All").click();
+      cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
       // Check form status
       cy.contains('[data-cy="forms-panel-block"]', "My Form")
@@ -345,19 +337,6 @@ describe("Form functionality", () => {
 
       // Close form
       cy.get('[data-cy="close-form"]').click();
-
-      // Check submitted tab
-      cy.get('[data-cy="panel-tabs"]').find("a").contains("Submitted").click();
-
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .should("exist")
-        .find(".tag")
-        .should("contain", "Submitted");
-
-      // Review form
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find('[data-cy="review-form-button"]')
-        .should("exist");
     });
   });
 
@@ -476,14 +455,7 @@ describe("Form functionality", () => {
         .should("be.enabled")
         .click();
 
-      // Check no longer in to do
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form").should(
-        "not.exist"
-      );
-
-      // Click All
-      // panel-tabs, contains submitted
-      cy.get('[data-cy="panel-tabs"]').find("a").contains("All").click();
+      cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
       // Check form
       cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
@@ -505,19 +477,37 @@ describe("Form functionality", () => {
         .should("be.disabled");
 
       cy.get('[data-cy="close-form"]').click();
+    });
+  });
 
-      // Check submitted tab
-      cy.get('[data-cy="panel-tabs"]').find("a").contains("Submitted").click();
+  describe("filters forms", () => {
+    beforeEach(() => {
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+    });
 
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-        .should("exist")
-        .find(".tag")
-        .should("contain", "Submitted");
+    it("title", () => {
+      cy.contains("div", "Title ").click();
+      cy.contains(".multiselect-option", "My Form").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
+    });
 
-      // Review form
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
-        .find('[data-cy="review-form-button"]')
-        .should("exist");
+    it("organization-level", () => {
+      cy.contains("div", "Organization Level? ").click();
+      cy.contains(".multiselect-option", "Yes").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
+    });
+
+    it("status", () => {
+      cy.contains("div", "Status ").click();
+      cy.contains(".multiselect-option", "Not Started").click();
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.contains("div", "Status ").click();
+      cy.contains(".multiselect-option", "Not Started").click();
+      cy.contains("div", "Status ").click();
+      cy.contains(".multiselect-option", "Draft").click();
+      cy.get('[data-cy="forms-panel-block"]')
+        .should("have.length", 1)
+        .should("contain", "No forms here");
     });
   });
 });
@@ -598,23 +588,7 @@ describe("Forms viewed as a user", () => {
     );
   });
 
-  it("Organization-level forms are not in user to dos", () => {
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("To Do")
-      .should("have.class", "is-active");
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Sample Organization Form"
-    ).should("not.exist");
-  });
-
-  it("Organization-level forms are in the organization-level tab and are read only", () => {
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Organization-level")
-      .click();
-
+  it("Organization-level forms are are read only", () => {
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
       .find(".tag")
@@ -642,12 +616,7 @@ describe("Forms viewed as a champion", () => {
     });
   });
 
-  it("Organization-level forms are listed in to do", () => {
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("To Do")
-      .should("have.class", "is-active");
-
+  it("Organization-level forms are listed", () => {
     // wait for status tag to load before trying to launch the form
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
@@ -722,12 +691,6 @@ describe("Forms viewed as a champion", () => {
       cy.waitLoaded('[data-cy="form-panel"]');
     });
 
-    // Find form in the organization-level area
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Organization-level")
-      .click();
-
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
       .find(".tag")
@@ -769,18 +732,6 @@ describe("Forms viewed as a champion", () => {
       .contains("Submit")
       .click();
 
-    // Check no longer in to do
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Sample Organization Form"
-    ).should("not.exist");
-
-    // Navigate to organization tab
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Organization-level")
-      .click();
-
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")
       .find(".tag")
@@ -805,12 +756,6 @@ describe("Forms viewed as a champion", () => {
       cy.get("[data-cy='forms']").click();
       cy.waitLoaded('[data-cy="form-panel"]');
     });
-
-    // Navigate to organization tab
-    cy.get('[data-cy="panel-tabs"]')
-      .find("a")
-      .contains("Organization-level")
-      .click();
 
     cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
       .should("exist")

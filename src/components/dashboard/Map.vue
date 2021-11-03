@@ -13,6 +13,8 @@ const topojson = { ...ts, ...tc };
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 
+import { sortByProperty } from "@/utils/utils.js";
+
 export default {
   props: {
     dataset: {
@@ -54,6 +56,12 @@ export default {
         const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
+        g.properties.landmarks = datum.landmarks
+          ? `${datum.landmarks
+              .sort(sortByProperty("rank"))
+              .map((x) => `${x.rank}. ${x.location_name} `)
+              .join("\n")}`
+          : [];
       });
 
       const collection = {
@@ -100,12 +108,15 @@ export default {
     });
 
     const tooltipSignal = computed(() => {
-      let signal =
-        "{ Municipality: datum.properties.name, title: 'Block Group ' + datum.properties.bg_id, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No' ";
+      let signal = `{
+          Municipality: datum.properties.name,
+          title: 'Block Group ' + datum.properties.bg_id`;
       if (withPredictions.value) {
-        signal += ", 'Flag': datum.properties.flag";
+        signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
+        'Flag': datum.properties.flag`;
       }
-      signal += "}";
+      signal +=
+        ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
       return signal;
     });
 
@@ -144,7 +155,11 @@ export default {
             value: null,
             on: [
               {
-                events: "@block_groups:click",
+                events: "@block_groups:mousedown",
+                update: "clicked === datum ? null : datum",
+              },
+              {
+                events: "@block_groups:touchstart",
                 update: "clicked === datum ? null : datum",
               },
             ],

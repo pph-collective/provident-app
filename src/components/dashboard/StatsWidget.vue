@@ -12,6 +12,13 @@
         <LabelledTag
           label="Municipality"
           :value="municipality"
+          :link="
+            municipality
+              ? `https://ridoh-overdose-surveillance-rihealth.hub.arcgis.com/documents/ri-municipality-overdose-data-report-${hyphenate(
+                  municipality
+                )}/explore`
+              : ''
+          "
           min-width="110px"
         />
         <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
@@ -254,8 +261,13 @@ export default {
       () => dataset.value.find((row) => row.bg_id === geoid)?.flag_1 ?? "-"
     );
 
+    const hyphenate = (val) => {
+      return val.toLowerCase().replaceAll(" ", "-");
+    };
+
     return {
       current,
+      hyphenate,
       prediction,
       metrics,
       groupedMetrics,

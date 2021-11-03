@@ -13,8 +13,13 @@
         is-flex-grow-1
       "
       :style="{ 'min-width': minWidth }"
-      >{{ value || "-" }}</span
     >
+      <span class="icon-text is-light is-flex is-align-items-center"
+        ><span>{{ value || "-" }}</span>
+        <span v-if="link" class="icon is-small mb-1"
+          ><a class="icon-link" :href="link" target="_blank" rel="noreferrer"
+            ><i class="fas fa-xs fa-external-link-alt"></i></a></span></span
+    ></span>
   </div>
 </template>
 
@@ -29,6 +34,11 @@ export default {
       type: String,
       required: true,
     },
+    link: {
+      type: String,
+      required: false,
+      default: "",
+    },
     minWidth: {
       type: String,
       required: true,
@@ -36,3 +46,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.icon-link {
+  color: inherit;
+  &:hover {
+    color: $link;
+  }
+}
+</style>

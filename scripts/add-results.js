@@ -1,20 +1,32 @@
+const { ArgumentParser } = require("argparse");
 const parse = require("csv-parse");
 const fs = require("fs");
 const admin = require("firebase-admin");
 const aq = require("arquero");
 
-let createSeedData = false;
-const file = process.argv[2];
-if (process.argv.length > 3) {
-  // assumes --emulator is the 4th arg
+const parser = new ArgumentParser({
+  description: "PROVIDENT - add model predictions",
+  add_help: true,
+});
+
+parser.add_argument("-e", "--emulator", {
+  action: "store_true",
+  help: "upload form to the emulator instead of production DB",
+});
+parser.add_argument("-s", "--seed", {
+  action: "store_true",
+  help: "if the form already exists, overwrite it",
+});
+parser.add_argument("-f", "--file", {
+  required: true,
+  help: "Path to data file",
+});
+
+const { emulator, seed, file } = parser.parse_args();
+
+if (emulator) {
   console.log("using emulator");
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
-
-  // assume --seed is the 5th arg
-  if (process.argv.length > 4) {
-    console.log("generating seed data");
-    createSeedData = true;
-  }
 }
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 
@@ -52,7 +64,7 @@ aq.addFunction("isIntervention", (x) => INTERVENTION_TOWNS.includes(x));
 aq.addFunction("isSeed", (x) => SEED_TOWNS.includes(x));
 
 function writeToFirestore(collection, period, records) {
-  if (createSeedData) {
+  if (seed) {
     fs.writeFileSync(
       `data/${collection}_${period}.json`,
       JSON.stringify(records)
@@ -97,7 +109,7 @@ async function importCsv(csvFileName) {
                   "intervention_arm"
                 );
 
-              if (createSeedData) {
+              if (seed) {
                 lookupDt = lookupDt.filter((d) => aq.op.isSeed(d.municipality));
               }
               let dt = aq

@@ -14,7 +14,7 @@
         <button
           v-if="!zoomed"
           :disabled="!activeGeoid || !activeClickedStatus"
-          class="zoom-button button is-family-secondary is-info is-light"
+          class="zoom-button button is-family-secondary is-secondary is-light"
           @click="zoomBg"
         >
           <span class="icon">
@@ -24,7 +24,7 @@
         </button>
         <button
           v-else
-          class="zoom-button button is-family-secondary is-info is-light"
+          class="zoom-button button is-family-secondary is-secondary is-light"
           @click="zoomed = false"
         >
           <span class="icon">
@@ -33,7 +33,9 @@
           <span>Zoom Back Out</span>
         </button>
       </template>
-      <template #subtitle>Some really great insights</template>
+      <template #subtitle
+        >Click on a block group to see more details or zoom in</template
+      >
       <template #content>
         <div v-if="controls.geography" class="map-container">
           <Map
@@ -53,8 +55,12 @@
             id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
             :block-group="activeGeoid"
+            :dataset="dataset"
             class="is-absolute"
           />
+          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+            Click on a point of interest to copy the address to your clipboard
+          </div>
         </div>
       </template>
     </Card>
@@ -74,7 +80,10 @@
 
     <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
       <template #content>
-        <AssessmentWidget :active-geoid="activeGeoid" />
+        <AssessmentWidget
+          :active-geoid="activeGeoid"
+          :active-muni="activeMuni"
+        />
       </template>
     </Card>
   </div>
@@ -237,7 +246,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .map-container {
   max-width: 90vw;
@@ -272,5 +281,13 @@ export default {
 
 .zoom-button {
   min-width: 220px;
+}
+
+.instructions {
+  position: absolute;
+  top: 0;
+  padding: 4px 2px;
+  margin: 6px 6px 0px;
+  background-color: hsl(0deg 0% 100% / 60%);
 }
 </style>

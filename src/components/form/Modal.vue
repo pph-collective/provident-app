@@ -12,6 +12,9 @@
             <p class="modal-card-title" data-cy="active-form-title">
               {{ formResponse.form.title }}
             </p>
+            <button class="button is-small is-primary mx-1" v-print="printOpts">
+              Print
+            </button>
             <button
               class="delete"
               data-cy="close-form"
@@ -19,7 +22,15 @@
               @click="closeFormRequest += 1"
             ></button>
           </header>
-          <section class="modal-card-body" data-cy="form-body">
+          <section id="formPage" class="modal-card-body" data-cy="form-body">
+            <div>
+              <BGMap
+                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
+                :min-height="200"
+                :max-height="350"
+              />
+            </div>
             <JSONForm
               :init-schema="formResponse.form.questions"
               :read-only="
@@ -28,6 +39,8 @@
                   userRole !== 'champion')
               "
               :init-value="formResponse.response"
+              :form-title="formResponse.form.title"
+              :last-updated="formResponse.last_updated"
               :close-request="closeFormRequest"
               @alt="updateFormResponse($event, 'Draft')"
               @submitted="updateFormResponse($event, 'Submitted')"
@@ -50,16 +63,21 @@
 <script>
 import { ref, computed, toRefs } from "vue";
 import { useStore } from "vuex";
+import print from "vue3-print-nb";
 
 import { esc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
+import BGMap from "@/components/dashboard/BGMap.vue";
+import { GEOID_QUESTION_MODEL } from "@/utils/utils.js";
 
 export default {
   components: {
+    BGMap,
     JSONForm,
   },
   directives: {
     ...esc,
+    print,
   },
   props: {
     formResponse: {
@@ -128,9 +146,18 @@ export default {
       formMessage.value = "";
     };
 
+    const printOpts = computed(() => {
+      return {
+        id: "#formPage",
+        popTitle: formResponse.value.form.title,
+      };
+    });
+
     return {
+      GEOID_QUESTION_MODEL,
       closeFormRequest,
       formMessage,
+      printOpts,
       updateFormResponse,
       userRole,
       closeForm,

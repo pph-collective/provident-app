@@ -60,13 +60,16 @@
 import { ref, toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import utils from "@/utils/utils.js";
+import {
+  sortByProperty,
+  GEOID_QUESTION_MODEL,
+  MUNI_QUESTION_MODEL,
+} from "@/utils/utils.js";
 import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
 const FORM_ID = "neighborhood_rapid_assessment";
-const GEOID_QUESTION_MODEL = "neighborhood_id";
 
 export default {
   components: {
@@ -77,9 +80,13 @@ export default {
       type: String,
       required: true,
     },
+    activeMuni: {
+      type: String,
+      required: true,
+    },
   },
   setup(props) {
-    const { activeGeoid } = toRefs(props);
+    const { activeGeoid, activeMuni } = toRefs(props);
 
     const store = useStore();
     const userRole = computed(() =>
@@ -96,6 +103,10 @@ export default {
           (question) => question.model === GEOID_QUESTION_MODEL
         );
         geoidQuestion.readOnly = true;
+        const muniQuestion = form.questions.find(
+          (question) => question.model === MUNI_QUESTION_MODEL
+        );
+        muniQuestion.readOnly = true;
       }
 
       return form ?? {};
@@ -105,14 +116,15 @@ export default {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) => response.form._id === FORM_ID)
-        .sort(utils.sortByProperty("last_updated"))
+        .sort(sortByProperty("last_updated"))
         .reverse();
     });
 
     const bgAssessments = computed(() => {
       return completedAssessments.value.filter(
         (assessment) =>
-          assessment.response.neighborhood_id === activeGeoid.value
+          assessment.response[GEOID_QUESTION_MODEL] === activeGeoid.value &&
+          assessment.response[MUNI_QUESTION_MODEL] === activeMuni.value
       );
     });
 
@@ -120,7 +132,10 @@ export default {
       activeFormResponse.value = {
         form: assessmentForm.value,
         status: "Not Started",
-        response: { neighborhood_id: activeGeoid.value },
+        response: {
+          [GEOID_QUESTION_MODEL]: activeGeoid.value,
+          [MUNI_QUESTION_MODEL]: activeMuni.value,
+        },
       };
       fb.logActivity(
         store.state.user.data.email,

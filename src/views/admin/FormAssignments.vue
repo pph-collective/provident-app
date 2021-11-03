@@ -270,9 +270,9 @@ export default {
       form,
       release_date,
       expire_date,
-      target_users,
-      target_organizations,
-      target_groups,
+      target_users = [],
+      target_organizations = [],
+      target_groups = [],
       send_email,
     }) => {
       formLoading.value = true;
@@ -391,7 +391,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bulma";
+@import "@/assets/styles/main.scss";
 
 .form-assignment-row {
   width: 100%;
