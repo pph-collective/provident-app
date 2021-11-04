@@ -8,7 +8,7 @@
       @selected="updateControls"
     />
 
-    <Card width="two-thirds" :height="5" id="map">
+    <Card style="align-self: start" width="two-thirds" :height="5" id="map">
       <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
       <template #top-right>
         <button
@@ -78,7 +78,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="1" id="nra-widget" :no-header="true">
+    <Card width="one-third" :height="2" id="nra-widget" :no-header="true">
       <template #content>
         <AssessmentWidget
           :active-geoid="activeGeoid"

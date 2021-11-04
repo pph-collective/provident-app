@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h6 class="is-size-6-7 has-text-weight-bold">Legend:</h6>
+    <h6 class="is-size-6-7 has-text-weight-bold">Resources Available:</h6>
+    <p class="is-size-6-7">
+      A neighborhood’s resilience to overdose depends on its resources. We
+      compared each neighborhood to the median, or middle, amount of resources
+      received by Rhode Islanders.
+    </p>
     <div
       class="
         legend-item
@@ -32,17 +37,17 @@ export default {
       {
         symbol: "⬥",
         color: tertileColorMap.get(1),
-        text: "More Protective",
+        text: "More",
       },
       {
         symbol: "⬥",
         color: tertileColorMap.get(2),
-        text: "Middle third",
+        text: "Similar",
       },
       {
         symbol: "⬥",
         color: tertileColorMap.get(3),
-        text: "More Risk",
+        text: "Less",
       },
       {
         symbol: "⬦",
