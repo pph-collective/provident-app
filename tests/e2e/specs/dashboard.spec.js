@@ -162,7 +162,7 @@ describe("Dashboard viewed as a user", () => {
 
     it("has a neighborhood rapid assessment widget", () => {
       // fill out a form partially, save, table shown
-      cy.get("#nra-widget button#new-assessment").click();
+      cy.get("#nra-widget button#new-assessment").should("be.enabled").click();
 
       cy.get("[data-cy='active-form-title']").should(
         "contain",
@@ -275,20 +275,143 @@ describe("Dashboard viewed as a user", () => {
         .should("be.disabled")
         .should("have.value", "0401021");
 
-      cy.get("[model='goal']").find("textarea").type("description of my goal");
+      cy.get("[model='goal']").find("textarea").type("first goal");
 
       cy.get("button").contains("Save").click();
+
+      // Form message
+      cy.get('[data-cy="form-message"]').should(
+        "contain",
+        "Form successfully saved"
+      );
 
       cy.get('[data-cy="close-form"]').click();
 
       cy.get('[data-cy="form-response-row"]')
-        .should("have.length", 1)
-        .find("button")
-        .should("have.text", "Continue");
-
-      cy.get('[data-cy="form-response-row"]')
         .find("th")
         .should("contain", "Plan");
+
+      cy.get('[data-cy="form-response-row"]')
+        .should("have.length", 1)
+        .find("button")
+        .should("have.text", "Continue")
+        .click();
+
+      cy.get('[model="goal"]')
+        .should("have.length", 1)
+        .find("textarea")
+        .should("have.value", "first goal");
+
+      // Add a goal
+      cy.get("button").contains("+ Goal").click();
+
+      cy.get('[model="goal"]').should("have.length", 2);
+
+      // Add a 2 tasks to the first goal, check number of tasks to goal
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[data-cy="sub-form-button"]')
+        .contains("+ Task")
+        .click();
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[data-cy="sub-form-button"]')
+        .contains("+ Task")
+        .click();
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="plan"]')
+        .should("have.length", 3);
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[model="plan"]')
+        .should("have.length", 1);
+
+      // First Goal, fill out tasks
+      // Task 1
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="plan"]')
+        .first()
+        .type("This is my plan.");
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="person"]')
+        .first()
+        .type("Person 1");
+      // Task 2
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="plan"]')
+        .eq(1)
+        .type("This is my other plan.");
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="person"]')
+        .eq(1)
+        .type("Person 2.");
+
+      // Delete task 3
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[data-cy="delete-sub-form-button"]')
+        .eq(2)
+        .click();
+
+      // Second Goal
+      cy.get('[model="goal"]').eq(1).type("second goal");
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[model="plan"]')
+        .type("This is my other plan.");
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[model="person"]')
+        .type("Another person");
+      // Try to delete task
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[data-cy="delete-sub-form-button"]')
+        .click();
+
+      cy.get('[model="task_form"]')
+        .find(".has-text-danger")
+        .should("contain", "Cannot delete last one");
+
+      // Submit
+      cy.get("button").contains("Submit").click();
+
+      cy.get('[data-cy="form-response-row"]')
+        .should("have.length", 1)
+        .find("button")
+        .should("have.text", "Review")
+        .click();
+
+      // Check
+      cy.get('[model="goal"]').should("have.length", 2);
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="plan"]')
+        .should("have.length", 2);
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[model="plan"]')
+        .should("have.length", 1);
+
+      cy.get('[model="task_form"]')
+        .first()
+        .find('[model="plan"]')
+        .first()
+        .find("textarea")
+        .should("have.value", "This is my plan.");
+      cy.get('[model="task_form"]')
+        .eq(1)
+        .find('[model="plan"]')
+        .first()
+        .find("textarea")
+        .should("have.value", "This is my other plan.");
+
+      cy.get('[data-cy="close-form"]').click();
     });
   });
 });

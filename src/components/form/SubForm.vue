@@ -10,7 +10,9 @@
             deleteErrorMessage
           }}</span>
           <button
+            v-if="repeat_button_title"
             class="button is-link is-inverted"
+            data-cy="delete-sub-form-button"
             @click="deleteValue($event, index)"
           >
             <i class="fas fa-trash"></i>
@@ -30,6 +32,7 @@
           v-if="repeat_button_title"
           type="button"
           class="button is-link"
+          data-cy="sub-form-button"
           @click="pushValue"
         >
           {{ repeat_button_title }}
