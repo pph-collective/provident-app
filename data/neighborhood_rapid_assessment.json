@@ -105,7 +105,7 @@
       "label": "What are the known sources for naloxone available in this Neighborhood/Town?",
       "help_text": "Check all that apply",
       "required": true,
-      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic === 'Yes'",
+      "condition": "(model) => model.q5_sources_for_naloxone_logic === 'Yes'",
       "options": [
         "Pharmacy location(s)",
         "Office-based needle exchange",
