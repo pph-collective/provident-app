@@ -45,11 +45,11 @@
         <p class="is-uppercase has-text-weight-bold">What is this site?</p>
         <br />
         <p>
-          This website is an initiative of the Rhode Island Governor's
-          Prevention and Intervention Task Force, in collaboration with the RI
-          Department of Health (RIDOH), the RI Department of Behavioral
-          Healthcare and Developmental Disabilities and Hospitals (BHDDH), and
-          Brown University School of Public Health.
+          This five-year study is a collaboration between the Rhode Island
+          Department of Health and researchers at the Brown University School of
+          Public Health, the New York University School of Medicine, and the
+          University of California, Berkeley. PROVIDENT is funded by the
+          National Institute on Drug Abuse (NIDA) (RO1DA046620).
         </p>
         <br />
         <p>
