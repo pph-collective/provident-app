@@ -62,7 +62,7 @@
         </p>
       </div>
 
-      <p class="has-text-centered mb-6 is-size-7">©2021 Prevent Overdose, RI</p>
+      <p class="has-text-centered mb-6 is-size-7">©2021 PROVIDENT</p>
     </div>
   </footer>
 </template>
