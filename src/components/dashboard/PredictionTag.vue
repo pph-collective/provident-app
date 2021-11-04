@@ -1,19 +1,20 @@
 <template>
   <div
-    class="prediction-tag notification is-size-6-7 p-1 has-text-centered mb-0"
+    class="prediction-tag notification is-size-6-7 p-1 has-text-centered my-1"
+    :style="{ '--color': getColor(prediction) }"
   >
     <p v-if="prediction === '1'">
-      Identified by PROVIDENT as
-      <span class="has-text-weight-bold">Higher Risk</span>
+      <span class="has-text-weight-bold">Prioritized</span>
+      by PROVIDENT
     </p>
-    <p v-else-if="prediction === '0'">
-      Not Identified by PROVIDENT as Higher Risk
-    </p>
+    <p v-else-if="prediction === '0'">Not prioritized by PROVIDENT</p>
     <p v-else>No PROVIDENT Prediction Available</p>
   </div>
 </template>
 
 <script>
+import { tertileColorMap } from "@/utils/utils.js";
+
 export default {
   props: {
     prediction: {
@@ -21,11 +22,31 @@ export default {
       required: true,
     },
   },
+  setup() {
+    const getColor = (prediction) => {
+      if (prediction === "1") {
+        return tertileColorMap.get(3);
+      } else if (prediction === "0") {
+        return tertileColorMap.get(1);
+      } else {
+        return tertileColorMap.get(2);
+      }
+    };
+    return {
+      getColor,
+    };
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .prediction-tag {
-  color: red;
+  --color: lightgrey;
+  border: solid 1px var(--color);
+  background-color: var(--color);
+  background-image: linear-gradient(
+    hsla(255, 100%, 100%, 0.8) 100%,
+    transparent 100%
+  );
 }
 </style>

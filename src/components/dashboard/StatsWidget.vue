@@ -24,13 +24,6 @@
         <LabelledTag label="Block Group" :value="geoid" min-width="55px" />
       </div>
 
-      <LabelledTag
-        v-if="withPredictions"
-        class="my-2"
-        label="PROVIDENT Prediction"
-        :value="prediction"
-        min-width="55px"
-      />
       <PredictionTag v-if="withPredictions" :prediction="prediction" />
 
       <table class="table is-striped is-fullwidth my-1">
