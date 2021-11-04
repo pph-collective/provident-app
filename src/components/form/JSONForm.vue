@@ -29,8 +29,6 @@
           </div>
         </template>
       </SchemaForm>
-
-      <div class="debug">{{ value }}</div>
     </fieldset>
   </div>
 </template>

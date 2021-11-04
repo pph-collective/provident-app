@@ -19,14 +19,12 @@
           </button>
         </div>
         <p v-if="help_text" class="help">{{ help_text }}</p>
-        <div class="debug">Index: {{ index }}</div>
         <NestedSchema
           :model-value="value"
           :init-schema="questions"
           @update-model-value="updateValue($event, index)"
         />
       </div>
-      <div class="debug">Model Value: {{ modelValue }}</div>
       <div class="has-text-centered">
         <button
           v-if="repeat_button_title"

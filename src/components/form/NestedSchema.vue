@@ -1,7 +1,6 @@
 <template>
   <div class="nested-schema">
     <SchemaForm :schema="schema" :initial-values="value" />
-    <div class="debug">Value: {{ value }}</div>
   </div>
 </template>
 
