@@ -11,10 +11,27 @@
             :key="formResponse._id"
             data-cy="form-response-row"
           >
-            <th class="has-text-centered">
-              {{ FORM_ID_TO_DISPLAY[formResponse.form._id] }},
-              {{ formatDate(formResponse.last_updated) }}
-            </th>
+            <td class="has-text-centered">
+              <i
+                :class="{
+                  'fas fa-tasks': formResponse.form._id === PLAN_FORM_ID,
+                  'fas fa-clipboard':
+                    formResponse.form._id === ASSESSMENT_FORM_ID,
+                }"
+              ></i>
+            </td>
+            <td class="has-text-centered has-text-weight-bold">
+              <div
+                class="
+                  is-flex is-justify-content-space-between is-align-items-center
+                "
+              >
+                {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
+                <span class="tag">{{
+                  formatDate(formResponse.last_updated)
+                }}</span>
+              </div>
+            </td>
             <td class="has-text-centered">
               <button
                 class="button is-primary is-small"
@@ -88,11 +105,12 @@ import {
 import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
+// import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 const ASSESSMENT_FORM_ID = "neighborhood_rapid_assessment";
 const PLAN_FORM_ID = "resource_plan";
 
-const FORM_ID_TO_DISPLAY = {
+const FORM_ID_TO_SHORT_TITLE = {
   [ASSESSMENT_FORM_ID]: "Assessment",
   [PLAN_FORM_ID]: "Plan",
 };
@@ -100,6 +118,7 @@ const FORM_ID_TO_DISPLAY = {
 export default {
   components: {
     FormModal,
+    // LabelledTag,
   },
   props: {
     activeGeoid: {
@@ -125,7 +144,7 @@ export default {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) =>
-          Object.keys(FORM_ID_TO_DISPLAY).includes(response.form._id)
+          Object.keys(FORM_ID_TO_SHORT_TITLE).includes(response.form._id)
         )
         .sort(sortByProperty("last_updated"))
         .reverse();
@@ -171,7 +190,7 @@ export default {
 
     return {
       ASSESSMENT_FORM_ID,
-      FORM_ID_TO_DISPLAY,
+      FORM_ID_TO_SHORT_TITLE,
       PLAN_FORM_ID,
       activeFormResponse,
       bgFormResponses,
