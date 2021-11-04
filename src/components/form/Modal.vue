@@ -47,17 +47,11 @@
                 :form-title="formResponse.form.title"
                 :last-updated="formResponse.last_updated"
                 :close-request="closeFormRequest"
+                :form-message="formMessage"
                 @alt="updateFormResponse($event, 'Draft')"
                 @submitted="updateFormResponse($event, 'Submitted')"
                 @close="closeForm"
               />
-              <p
-                v-if="formMessage"
-                class="has-text-centered"
-                data-cy="form-message"
-              >
-                <small>{{ formMessage }}</small>
-              </p>
             </PrintSection>
           </section>
         </div>
