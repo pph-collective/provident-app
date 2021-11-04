@@ -1,6 +1,6 @@
 <template>
   <div class="is-fullheight is-flex is-flex-direction-column">
-    <div class="form-response-container is-flex-grow-1">
+    <div class="form-response-container is-flex-grow-1 table-container">
       <table
         v-if="bgFormResponses.length > 0"
         class="table is-fullwidth is-narrow"
@@ -10,8 +10,9 @@
             v-for="formResponse in bgFormResponses"
             :key="formResponse._id"
             data-cy="form-response-row"
+            class="has-text-centered"
           >
-            <td class="has-text-centered">
+            <td>
               <i
                 :class="{
                   'fas fa-tasks': formResponse.form._id === PLAN_FORM_ID,
@@ -20,19 +21,15 @@
                 }"
               ></i>
             </td>
-            <td class="has-text-centered has-text-weight-bold">
-              <div
-                class="
-                  is-flex is-justify-content-space-between is-align-items-center
-                "
-              >
-                {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
-                <span class="tag">{{
-                  formatDate(formResponse.last_updated)
-                }}</span>
-              </div>
+            <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
+              {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
             </td>
-            <td class="has-text-centered">
+            <td class="has-text-weight-bold">
+              <span class="tag">{{
+                formatDate(formResponse.last_updated)
+              }}</span>
+            </td>
+            <td>
               <button
                 class="button is-primary is-small"
                 :class="[
@@ -105,7 +102,6 @@ import {
 import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
-// import LabelledTag from "@/components/dashboard/LabelledTag.vue";
 
 const ASSESSMENT_FORM_ID = "neighborhood_rapid_assessment";
 const PLAN_FORM_ID = "resource_plan";
@@ -118,7 +114,6 @@ const FORM_ID_TO_SHORT_TITLE = {
 export default {
   components: {
     FormModal,
-    // LabelledTag,
   },
   props: {
     activeGeoid: {
@@ -176,7 +171,7 @@ export default {
 
     const formatDate = (dateNumber) => {
       const d = new Date(dateNumber);
-      return d.toDateString();
+      return d.toLocaleDateString();
     };
 
     const launchForm = (formResponse) => {
