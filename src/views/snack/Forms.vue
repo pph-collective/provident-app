@@ -301,7 +301,7 @@ export default {
   padding: 0 0.75rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: end;
+  justify-content: flex-end;
 
   @include mobile {
     justify-content: center;
