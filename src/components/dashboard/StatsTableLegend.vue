@@ -4,7 +4,7 @@
     <p class="is-size-6-7">
       A neighborhood’s resilience to overdose depends on its resources. We
       compared each neighborhood to the median, or middle, amount of resources
-      received by Rhode Islanders.
+      available to Rhode Islanders.
     </p>
     <div
       class="
