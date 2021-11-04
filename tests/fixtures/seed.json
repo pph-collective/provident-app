@@ -827,7 +827,7 @@
               {
                 "model":  "goal",
                 "component": "TextArea",
-                "label": "Description",
+                "label": "What do you plan on doing in this neighborhood?",
                 "required": true
               },
               {
@@ -838,9 +838,17 @@
                 "questions": [
                   {
                     "model": "plan",
-                    "component": "TextArea",
+                    "component": "Select",
                     "label": "Plan",
-                    "required": true
+                    "required": true,
+                    "options": [
+                      "Increasing an existing service",
+                      "Creating a new service",
+                      "Expanding infrastructure",
+                      "Expanding funding",
+                      "Capacity building",
+                      "Relationship building"
+                    ]
                   },
                   {
                     "model": "person",
@@ -862,32 +870,6 @@
                       "3 months",
                       "6 months"
                     ]
-                  },
-                  {
-                    "model": "measure_progress",
-                    "component": "TextArea",
-                    "label": "How to measure progress?"
-                  },
-                  {
-                    "model": "task_goal",
-                    "component": "TextArea",
-                    "label": "Goal (ex. # of hours, types of new services)"
-                  },
-                  {
-                    "model": "status",
-                    "component": "Select",
-                    "label": "Status",
-                    "options": [
-                      "Not Started",
-                      "In Progress",
-                      "On Hold",
-                      "Completed"
-                    ]
-                  },
-                  {
-                    "model": "outcome",
-                    "component": "TextArea",
-                    "label": "Outcome"
                   }
                 ]
               }

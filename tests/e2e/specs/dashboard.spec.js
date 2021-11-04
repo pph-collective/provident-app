@@ -333,18 +333,28 @@ describe("Dashboard viewed as a user", () => {
         .first()
         .find('[model="plan"]')
         .first()
-        .type("This is my plan.");
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .first()
+        .click();
       cy.get('[model="task_form"]')
         .first()
         .find('[model="person"]')
         .first()
         .type("Person 1");
+
       // Task 2
       cy.get('[model="task_form"]')
         .first()
         .find('[model="plan"]')
         .eq(1)
-        .type("This is my other plan.");
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .eq(1)
+        .click();
+
       cy.get('[model="task_form"]')
         .first()
         .find('[model="person"]')
@@ -363,7 +373,12 @@ describe("Dashboard viewed as a user", () => {
       cy.get('[model="task_form"]')
         .eq(1)
         .find('[model="plan"]')
-        .type("This is my other plan.");
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .eq(1)
+        .click();
+
       cy.get('[model="task_form"]')
         .eq(1)
         .find('[model="person"]')
@@ -400,14 +415,14 @@ describe("Dashboard viewed as a user", () => {
         .first()
         .find('[model="plan"]')
         .first()
-        .find("textarea")
-        .should("have.value", "This is my plan.");
+        .find(".multiselect-single-label")
+        .should("have.text", "Increasing an existing service");
       cy.get('[model="task_form"]')
         .eq(1)
         .find('[model="plan"]')
         .first()
-        .find("textarea")
-        .should("have.value", "This is my other plan.");
+        .find(".multiselect-single-label")
+        .should("have.text", "Creating a new service");
 
       cy.get('[data-cy="close-form"]').click();
     });
