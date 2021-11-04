@@ -288,7 +288,7 @@ describe("Dashboard viewed as a user", () => {
       cy.get('[data-cy="close-form"]').click();
 
       cy.get('[data-cy="form-response-row"]')
-        .find("th")
+        .find("td")
         .should("contain", "Plan");
 
       cy.get('[data-cy="form-response-row"]')
@@ -388,7 +388,9 @@ describe("Dashboard viewed as a user", () => {
         .click();
 
       // Check
-      cy.get('[model="goal"]').should("have.length", 2);
+      cy.get('[data-cy="active-form-modal"]:visible')
+        .find('[model="goal"]')
+        .should("have.length", 2);
       cy.get('[model="task_form"]')
         .first()
         .find('[model="plan"]')
