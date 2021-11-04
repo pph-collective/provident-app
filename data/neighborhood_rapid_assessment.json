@@ -136,7 +136,7 @@
       "type": "number",
       "label": "Approximately, how many hours per week is naloxone available?",
       "help_text": "If you are unsure, you can put zero, or give a rough guess",
-      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic === 'Yes'",
+      "condition": "(model) => model.q5_sources_for_naloxone_logic === 'Yes'",
       "validations": "yup.number().min(0, 'Number of hours must be a non-negative number').max(168, 'Number of hours must be less than 168 total hours in a week')"
     },
     {
