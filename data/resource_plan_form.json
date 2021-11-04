@@ -34,6 +34,7 @@
           "model": "task_form",
           "component": "SubForm",
           "label": "Task",
+          "help_text": "What steps do you need to take towards your goal?",
           "repeat_button_title": "+ Task",
           "questions": [
             {
