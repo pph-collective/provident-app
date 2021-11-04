@@ -149,7 +149,7 @@ fieldset[disabled] {
   }
 
   .printable {
-    display: block;
+    display: block !important;
   }
 
   .printable * {
