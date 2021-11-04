@@ -191,6 +191,8 @@ Required additional keys:
 Optional keys: 
 - `repeat_button_title`: a string. If supplied, a button to repeat this sub form will appear at the bottom. For example `"+ Task"`
 
+:warning: The `validations` key doesn't work as expected in the SubForm component because it looks at the whole form globally instead of scoped to just the sub form.
+
 #### TextArea
 
 The `TextArea` field only uses the standard keys.
