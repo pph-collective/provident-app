@@ -44,7 +44,7 @@
             class="is-absolute"
             :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
-            flag-property="flag_1"
+            flag-property="prediction"
             :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
@@ -66,7 +66,7 @@
     </Card>
 
     <Card width="one-third" :height="5" id="stats">
-      <template #title>Stats from {{ controls.model_version }}</template>
+      <template #title>Stats: {{ controls.model_version }}</template>
       <template #content>
         <StatsWidget
           v-if="dataset.length > 0"
