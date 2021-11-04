@@ -236,7 +236,8 @@
     {
       "model": "q7_sources_for_sterile_needles",
       "component": "Checkbox",
-      "label": "What are the sources for sterile needles and works in this Neighborhood/Town? (Check all that apply)",
+      "label": "What are the sources for sterile needles and works in this Neighborhood/Town?",
+      "help_text": "Check all that apply",
       "required": true,
       "condition": "(model) => model.q7_sources_for_sterile_needles_logic && model.q7_sources_for_sterile_needles_logic === 'Yes'",
       "options": [
