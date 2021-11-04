@@ -311,7 +311,8 @@
     {
       "model": "q8_barriers_to_outreach",
       "component": "Checkbox",
-      "label": "What do you see as barriers to outreach in this Neighborhood/Town? (Check all that apply)",
+      "label": "What do you see as barriers to outreach in this Neighborhood/Town?",
+      "help_text": "Check all that apply",
       "required": true,
       "condition": "(model) => model.q8_barriers_to_outreach_logic === 'Yes'",
       "options": [
