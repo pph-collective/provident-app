@@ -164,7 +164,7 @@
       "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town?",
       "help_text": "Check all that apply",
       "required": true,
-      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips_logic && model.q6_sources_for_fentanyl_test_strips_logic === 'Yes'",
+      "condition": "(model) => model.q6_sources_for_fentanyl_test_strips_logic === 'Yes'",
       "options": [
         "Office-based needle exchange",
         "Street-based needle exchange (walking route w/ backpack)",
