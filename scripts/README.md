@@ -33,6 +33,15 @@ The `add-results` script reads in a csv with predicted blockgroups, and loads th
 yarn add-results -f <path to csv> -p <period> [--emulator] [--seed]
 ```
 
+## `add-model-towns`
+
+The `add-model-towns` script reads in a csv with town metadata, and loads them to the firestore "model_data" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
+
+### Usage
+```
+yarn add-model-towns  [--emulator] [--seed]
+```
+
 ## `add-svi`
 
 The `add-svi` script reads in a csv with svi data for a single period, and loads it to the firestore "svi_data" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database. The `-p` `--period` flag must be passed with the model period for this data (e.g. `2019-2`).  The `-f` `--file` flag must be passed with the path to the csv containing the data.
