@@ -32,7 +32,7 @@
               mode="tags"
               v-model="filters[filterName]"
               :options="options"
-              :searchable="true"
+              :searchable="false"
               :close-on-select="true"
               :hide-selected="false"
             >

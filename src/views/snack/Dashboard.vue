@@ -51,7 +51,7 @@
             class="is-absolute"
             :dataset="dataset"
             :filter-municipalities="controls.geography.municipalities"
-            flag-property="flag_1"
+            flag-property="prediction"
             :with-predictions="interventionArmUser"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
@@ -65,12 +65,15 @@
             :dataset="dataset"
             class="is-absolute"
           />
+          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+            Click on a point of interest to copy the address to your clipboard
+          </div>
         </div>
       </template>
     </Card>
 
     <Card width="one-third" :height="5" id="stats">
-      <template #title>Stats from {{ controls.model_version }}</template>
+      <template #title>Stats: {{ controls.model_version }}</template>
       <template #content>
         <StatsWidget
           v-if="dataset.length > 0"
@@ -285,5 +288,13 @@ export default {
 
 .zoom-button {
   min-width: 220px;
+}
+
+.instructions {
+  position: absolute;
+  top: 0;
+  padding: 4px 2px;
+  margin: 6px 6px 0px;
+  background-color: hsl(0deg 0% 100% / 60%);
 }
 </style>
