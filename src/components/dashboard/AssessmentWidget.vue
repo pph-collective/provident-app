@@ -207,6 +207,7 @@ export default {
   border-width: 1px;
   border-radius: 6px;
   overflow-y: scroll;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -216,6 +217,8 @@ table {
 
 table td {
   vertical-align: middle;
+  padding-left: 1px !important;
+  padding-right: 1px !important;
 }
 
 .widget-message {
