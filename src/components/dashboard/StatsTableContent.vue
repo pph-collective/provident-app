@@ -193,7 +193,7 @@ table tbody tr.header-row {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 180px;
+  width: max(180px, 20vw);
   bottom: 100%;
   left: 50%;
   margin-left: -90px;

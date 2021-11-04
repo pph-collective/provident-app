@@ -21,8 +21,12 @@ parser.add_argument("-f", "--file", {
   required: true,
   help: "Path to data file",
 });
+parser.add_argument("-p", "--period", {
+  required: true,
+  help: "which model period should this data be attached to (e.g. '2019-2')",
+});
 
-const { emulator, seed, file } = parser.parse_args();
+const { emulator, seed, file, period } = parser.parse_args();
 
 if (emulator) {
   console.log("using emulator");
@@ -34,28 +38,26 @@ const app = admin.initializeApp();
 const db = app.firestore();
 
 const TOWN_BG_FILE = "src/assets/RI_CBG_Town.csv";
-const PREDICTION_COLUMNS = ["flag_1", "flag_2"];
 const INTERVENTION_TOWNS = [
-  "Barrington",
-  "Charlestown",
-  "Coventry",
-  "Cumberland",
-  "East Providence",
-  "Glocester",
-  "Little Compton",
-  "Middletown",
-  "Narragansett",
-  "New Shoreham",
-  "Newport",
-  "North Kingstown",
-  "North Providence",
-  "North Smithfield",
-  "Portsmouth",
-  "Scituate",
-  "Smithfield",
-  "Warren",
   "West Warwick",
-  "Westerly",
+  "Warwick",
+  "Warren",
+  "Smithfield",
+  "Providence",
+  "North Kingstown",
+  "Newport",
+  "New Shoreham",
+  "Narragansett",
+  "Little Compton",
+  "Johnston",
+  "Jamestown",
+  "East Greenwich",
+  "Cumberland",
+  "Cranston",
+  "Coventry",
+  "Charlestown",
+  "Bristol",
+  "Barrington",
 ];
 
 const SEED_TOWNS = ["Little Compton", "Tiverton", "Portsmouth"];
@@ -101,46 +103,28 @@ async function importCsv(csvFileName) {
                 .derive({ municipality: (d) => aq.op.trim(d.NAME) })
                 .derive({
                   intervention_arm: (d) => aq.op.isIntervention(d.municipality),
+                  bg_id: (d) => aq.op.substring(d.GEOID, 5),
                 })
-                .select(
-                  "GEOID",
-                  "NAMELSAD",
-                  "municipality",
-                  "intervention_arm"
-                );
+                .filter((d) => d.intervention_arm);
 
               if (seed) {
                 lookupDt = lookupDt.filter((d) => aq.op.isSeed(d.municipality));
               }
+
+              lookupDt = lookupDt.select("GEOID", "bg_id");
+
               let dt = aq
                 .from(records)
-                .select(aq.not(""))
-                .derive({
-                  id: (d) => `${d.year}-${d.period}`,
-                  bg_id: (d) => aq.op.substring(d.geoid, 5),
-                })
-                .join(lookupDt, ["geoid", "GEOID"]);
-              let periods = dt.select("id").dedupe();
-              for (const periodRow of periods) {
-                let period = periodRow.id;
-                console.log(`loading data for period ${period}`);
-                let periodRows = dt.filter(`d.id === '${period}'`);
-                // remove predictions
-                let modelData = periodRows
-                  .select(aq.not(...PREDICTION_COLUMNS))
-                  .objects();
-                await writeToFirestore("model_data", period, modelData);
-                // write predictions separately and only for intervention towns
-                let modelPredictions = periodRows
-                  .filter((d) => d.intervention_arm)
-                  .select("bg_id", ...PREDICTION_COLUMNS)
-                  .objects();
-                await writeToFirestore(
-                  "model_predictions",
-                  period,
-                  modelPredictions
-                );
-              }
+                .select("GEOID")
+                .derive({ prediction: () => "1" })
+                .join_right(lookupDt)
+                .select("bg_id", "prediction")
+                .impute({ prediction: () => "0" })
+                .objects();
+
+              console.log(`loading data for period ${period}`);
+              // write predictions separately and only for intervention towns
+              await writeToFirestore("model_predictions", period, dt);
             } catch (e) {
               console.error(e);
               process.exit(1);

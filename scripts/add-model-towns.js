@@ -31,26 +31,25 @@ const db = app.firestore();
 
 const TOWN_BG_FILE = "src/assets/RI_CBG_Town.csv";
 const INTERVENTION_TOWNS = [
-  "Barrington",
-  "Charlestown",
-  "Coventry",
-  "Cumberland",
-  "East Providence",
-  "Glocester",
-  "Little Compton",
-  "Middletown",
-  "Narragansett",
-  "New Shoreham",
-  "Newport",
-  "North Kingstown",
-  "North Providence",
-  "North Smithfield",
-  "Portsmouth",
-  "Scituate",
-  "Smithfield",
-  "Warren",
   "West Warwick",
-  "Westerly",
+  "Warwick",
+  "Warren",
+  "Smithfield",
+  "Providence",
+  "North Kingstown",
+  "Newport",
+  "New Shoreham",
+  "Narragansett",
+  "Little Compton",
+  "Johnston",
+  "Jamestown",
+  "East Greenwich",
+  "Cumberland",
+  "Cranston",
+  "Coventry",
+  "Charlestown",
+  "Bristol",
+  "Barrington",
 ];
 
 const SEED_TOWNS = ["Little Compton", "Tiverton", "Portsmouth"];
@@ -95,7 +94,7 @@ async function importCsv() {
         }
 
         writeToFirestore("model_data", "bg_meta", dt.objects());
-        writeToFirestore("model_data", "periods", ["2018-2", "2019-1"]);
+        writeToFirestore("model_data", "periods", ["2021-2"]);
       } catch (e) {
         console.error(e);
         process.exit(1);
