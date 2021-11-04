@@ -13,6 +13,7 @@
         <th
           class="
             has-text-right has-text-bold
+            px-1
             is-flex is-justify-content-space-between is-align-items-center
           "
         >
@@ -61,7 +62,7 @@
               is-flex is-justify-content-end is-align-items-center
             "
           >
-            <div>
+            <div class="is-flex-grow-1">
               {{ metric.title }}
             </div>
             <div class="tooltip has-text-info">
