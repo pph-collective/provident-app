@@ -145,7 +145,7 @@
       "type": "number",
       "label": "Over how many days per week are these hours spread?",
       "help_text": "If you are unsure, you can put zero or give a rough guess",
-      "condition": "(model) => model.q5_sources_for_naloxone_logic && model.q5_sources_for_naloxone_logic === 'Yes'",
+      "condition": "(model) => model.q5_sources_for_naloxone_logic === 'Yes'",
       "validations": "yup.number().min(0, 'Must be a non-negative number').max(7, 'The maximum number of days in a week is 7')"
     },
     {
