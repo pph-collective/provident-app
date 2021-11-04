@@ -372,11 +372,7 @@ describe("Dashboard viewed as a user", () => {
       cy.get('[model="task_form"]')
         .eq(1)
         .find('[data-cy="delete-sub-form-button"]')
-        .click();
-
-      cy.get('[model="task_form"]')
-        .find(".has-text-danger")
-        .should("contain", "Cannot delete last one");
+        .should("be.disabled");
 
       // Submit
       cy.get("button").contains("Submit").click();

@@ -6,13 +6,11 @@
           class="is-flex is-justify-content-space-between is-align-items-center"
         >
           <label class="label" :for="uuid">{{ label }}</label>
-          <span v-if="deleteErrorMessage" class="has-text-danger">{{
-            deleteErrorMessage
-          }}</span>
           <button
             v-if="repeat_button_title"
             class="button is-link is-inverted"
             data-cy="delete-sub-form-button"
+            :disabled="modelValue.length === 1"
             @click="deleteValue($event, index)"
           >
             <i class="fas fa-trash"></i>
@@ -97,21 +95,16 @@ export default {
       emit("update:modelValue", value.value);
     };
 
-    const deleteErrorMessage = ref("");
     const deleteValue = (event, index) => {
       event.preventDefault();
 
       if (value.value.length > 1) {
         value.value.splice(index, 1);
         emit("update:modelValue", value.value);
-      } else {
-        deleteErrorMessage.value = "Cannot delete last one";
-        setTimeout(() => (deleteErrorMessage.value = ""), 6000);
       }
     };
 
     return {
-      deleteErrorMessage,
       deleteValue,
       pushValue,
       updateValue,
