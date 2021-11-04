@@ -139,7 +139,7 @@ export default {
     const showModal = ref(false);
     const loading = ref(false);
 
-    const createOrganization = async ({ name, group, municipalities }) => {
+    const createOrganization = async ({ name, group, municipalities = [] }) => {
       loading.value = true;
 
       const organization = {
