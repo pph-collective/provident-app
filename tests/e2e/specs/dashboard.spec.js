@@ -77,7 +77,7 @@ describe("Dashboard viewed as a user", () => {
       cy.get('.map-container [data-cy="Good Doers"] svg')
         .trigger("mouseover", "center")
         .trigger("mousemove", "center")
-        .trigger("click", "center");
+        .trigger("mousedown", "center");
 
       cy.get("#vg-tooltip-element")
         .find("tbody tr")
@@ -151,7 +151,7 @@ describe("Dashboard viewed as a user", () => {
     cy.get(".map-container [data-cy='Good Doers'] svg")
       .trigger("mouseover", "center")
       .trigger("mousemove", "center")
-      .trigger("click", "center");
+      .trigger("mousedown", "center");
 
     cy.get("#nra-widget .form-response-container p").should(
       "contain",
@@ -304,7 +304,7 @@ describe("Dashboard viewed as a control arm user", () => {
     cy.get('.map-container [data-cy="RI 4 Us"] svg')
       .trigger("mouseover", "center")
       .trigger("mousemove", "center")
-      .trigger("click", "center");
+      .trigger("mousedown", "center");
 
     cy.get("#vg-tooltip-element")
       .find("tbody tr")

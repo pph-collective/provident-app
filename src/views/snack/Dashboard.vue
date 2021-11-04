@@ -249,7 +249,7 @@ export default {
 @import "@/assets/styles/main.scss";
 
 .map-container {
-  max-width: 90vw;
+  max-width: 95vw;
   height: 80vh;
   max-height: 1280px;
   position: relative;
@@ -274,6 +274,12 @@ export default {
   @include mobile {
     grid-template-columns: 100%;
     column-gap: 0px;
+    padding: 5px;
+    row-gap: 5px;
+  }
+  @include tablet-only {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 5px;
     padding: 5px;
     row-gap: 5px;
   }
