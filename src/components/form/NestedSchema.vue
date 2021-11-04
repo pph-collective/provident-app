@@ -35,7 +35,7 @@ export default {
     evalSchema(schema.value, yup);
 
     watch(
-      () => value.value,
+      value,
       () => {
         emit("updateModelValue", value.value);
       },

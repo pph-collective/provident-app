@@ -199,15 +199,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
+
 .form-response-container {
   min-height: 150px;
-  max-height: 300px;
+  max-height: 20vh;
+
+  @include touch {
+    max-height: 65vh;
+  }
+
   border-style: solid;
   border-color: grey;
   border-width: 1px;
   border-radius: 6px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -216,7 +224,7 @@ table {
 }
 
 table td {
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding-left: 1px !important;
   padding-right: 1px !important;
 }
