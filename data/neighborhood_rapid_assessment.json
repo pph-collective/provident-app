@@ -30,7 +30,8 @@
     {
       "model": "q1_available_services",
       "component": "Checkbox",
-      "label": "Which of these services (from any source) are currently available in this Neighborhood/Town: (Check all that apply)",
+      "label": "Which of these services (from any source) are currently available in this Neighborhood/Town?",
+      "help_text": "Check all that apply",
       "condition": "(model) => model.q1_available_services_logic && model.q1_available_services_logic === 'Yes'",
       "options": [
         "Office-based needle exchange",
