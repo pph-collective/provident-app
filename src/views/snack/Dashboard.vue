@@ -9,7 +9,14 @@
     />
 
     <Card style="align-self: start" width="two-thirds" :height="5" id="map">
-      <template #title>Map: {{ controls?.geography?.name ?? "" }}</template>
+      <template #title
+        >Map:
+        {{
+          zoomed
+            ? `${activeMuni} - ${activeGeoid}`
+            : controls?.geography?.name ?? ""
+        }}</template
+      >
       <template #top-right>
         <button
           v-if="!zoomed"
