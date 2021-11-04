@@ -31,6 +31,7 @@
         :value="prediction"
         min-width="55px"
       />
+      <PredictionTag v-if="withPredictions" :prediction="prediction" />
 
       <table class="table is-striped is-fullwidth my-1">
         <thead>
@@ -74,12 +75,14 @@ import { useStats } from "@/composables/useStats.js";
 import StatsTableContent from "@/components/dashboard/StatsTableContent.vue";
 import StatsTableLegend from "@/components/dashboard/StatsTableLegend.vue";
 import LabelledTag from "@/components/dashboard/LabelledTag.vue";
+import PredictionTag from "@/components/dashboard/PredictionTag.vue";
 
 export default {
   components: {
     StatsTableContent,
     StatsTableLegend,
     LabelledTag,
+    PredictionTag,
   },
   props: {
     dataset: {

@@ -113,7 +113,7 @@ export default {
           title: 'Block Group ' + datum.properties.bg_id`;
       if (withPredictions.value) {
         signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
-        'Flag': datum.properties.flag`;
+        'PROVIDENT Prediction': datum.properties.flag === '1' ? 'Identified' : datum.properties.flag === '0' ? 'Not Identified' : 'N/A'`;
       }
       signal +=
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";

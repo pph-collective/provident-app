@@ -12,7 +12,7 @@
       >
         <th
           class="
-            has-text-right has-text-bold
+            has-text-right
             px-1
             is-flex is-justify-content-space-between is-align-items-center
           "
