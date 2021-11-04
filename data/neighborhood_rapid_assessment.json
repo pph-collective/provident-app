@@ -63,7 +63,7 @@
       "model": "q2_other_related_services",
       "component": "TextArea",
       "label": "Are there other related services/resources in this Neighborhood/Town not listed? (List up to 3)",
-      "condition": "(model) => model.q1_available_services_logic && model.q1_available_services_logic === 'Yes'"
+      "condition": "(model) => model.q1_available_services_logic === 'Yes'"
     },
     {
       "model": "q3_reason_for_focus",
