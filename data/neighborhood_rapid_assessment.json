@@ -161,7 +161,8 @@
     {
       "model": "q6_sources_for_fentanyl_test_strips",
       "component": "Checkbox",
-      "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town? (Check all that apply)",
+      "label": "What are the sources for fentanyl test strips available in this Neighborhood/Town?",
+      "help_text": "Check all that apply",
       "required": true,
       "condition": "(model) => model.q6_sources_for_fentanyl_test_strips_logic && model.q6_sources_for_fentanyl_test_strips_logic === 'Yes'",
       "options": [
