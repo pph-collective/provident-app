@@ -29,16 +29,20 @@
           />
         </nav>
         <div
-          class="
-            is-flex is-flex-direction-row is-align-items-center is-flex-grow-5
-          "
+          class="is-flex-grow-5 is-flex-shrink-1"
+          style="flex: 1; min-height: 0"
         >
-          <div class="is-clickable pr-2" @click="decrementBiteId">
-            <i class="fas fa-2x my-5 fa-chevron-left" />
-          </div>
-          <BiteBody v-bind="activeBite" />
-          <div class="is-clickable pl-2" @click="incrementBiteId">
-            <i class="fas fa-2x my-5 fa-chevron-right" />
+          <div
+            class="is-flex is-flex-direction-row is-align-items-center"
+            style="height: 100%"
+          >
+            <div class="is-clickable pr-2" @click="decrementBiteId">
+              <i class="fas fa-2x my-5 fa-chevron-left" />
+            </div>
+            <BiteBody v-bind="activeBite" />
+            <div class="is-clickable pl-2" @click="incrementBiteId">
+              <i class="fas fa-2x my-5 fa-chevron-right" />
+            </div>
           </div>
         </div>
       </div>
@@ -93,3 +97,5 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped></style>
