@@ -35,22 +35,8 @@
             :location="geoid"
           />
         </td>
-        <td class="data-column has-text-center">
-          <StatsTableIcon
-            :metric="group"
-            :stats="stats.municipality"
-            :number="false"
-            :location="municipality"
-          />
-        </td>
-        <td class="data-column has-text-center">
-          <StatsTableIcon
-            :metric="group"
-            :stats="stats.ri"
-            :number="false"
-            location="RI"
-          />
-        </td>
+        <td class="data-column has-text-center"></td>
+        <td class="data-column has-text-center"></td>
       </tr>
 
       <!-- group detail rows -->
@@ -196,7 +182,7 @@ table tbody tr.header-row {
   width: max(180px, 20vw);
   bottom: 100%;
   left: 50%;
-  margin-left: -90px;
+  margin-left: calc(-1 * max(180px, 20vw) / 2);
   background-color: $grey-dark;
   color: #fff;
   text-align: center;

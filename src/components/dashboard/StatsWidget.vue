@@ -125,12 +125,12 @@ export default {
       },
       {
         field: "housing_burden",
-        title: "Housing Cost Burden",
+        title: "Rent Burden",
         info: "Households that put more than 30% of their income towards rent will have very little money left over.",
         aggregate: "median",
         formatter: pct,
         group: "Economic Resources",
-        tertile_direction: "descending",
+        tertile_direction: "ascending",
       },
       {
         field: "no_vehicle",
@@ -166,7 +166,7 @@ export default {
         aggregate: "median",
         formatter: pct,
         group: "Housing Environments",
-        tertile_direction: "ascending",
+        tertile_direction: "descending",
       },
     ];
 
