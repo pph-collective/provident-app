@@ -8,7 +8,7 @@
       by PROVIDENT model
     </p>
     <p v-else-if="prediction === '0'">Not prioritized by PROVIDENT model</p>
-    <p v-else-if="prediction === '-'">Not elibgible for PROVIDENT prediction</p>
+    <p v-else-if="prediction === '-'">Not eligible for PROVIDENT prediction</p>
     <p v-else>No block group selected</p>
   </div>
 </template>
