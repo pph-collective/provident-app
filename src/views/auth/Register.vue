@@ -146,8 +146,35 @@
             v-esc="() => (showTerms = false)"
           ></button>
         </header>
-        <section class="modal-card-body">
-          <p>Lorem ipsum...</p>
+        <section class="modal-card-body content">
+          <h3>Welcome to the PROVIDENT Web Tool!</h3>
+
+          <p>
+            We are so thankful for your participation in this research study.
+            Our goal is to reduce overdose in our state and we hope that this
+            new tool can help us in that fight. Our study team is comprised of
+            staff members at the People, Place, and Health Collective at the
+            Brown University School of Public Health.
+          </p>
+
+          <p>
+            This is a new kind of tool for fighting overdose. And because this
+            is a research study, we need to figure out whether or not this tool
+            actually works to lower overdoses in our state. To do this, we keep
+            track of some of your data while using the Web Tool. When you use
+            the PROVIDENT Web Tool, we will be keeping track of things like how
+            often you are using the tool, and how you are using it. This
+            information is helpful for our study and can help us understand how
+            to improve the tool. Your individual data will never be shared. No
+            information from this study will be shared with law enforcement. All
+            of your information, like your name and email address, will only be
+            used within PROVIDENT and never shared or used elsewhere.
+          </p>
+
+          <p>
+            By signing up, you agree to let us collect this information. We may
+            also send you emails as part of the PROVIDENT Study.
+          </p>
         </section>
       </div>
     </div>
