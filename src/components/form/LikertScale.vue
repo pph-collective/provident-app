@@ -81,7 +81,7 @@ export default {
           "Neutral",
           "Agree",
           "Strongly Agree",
-          "N/A",
+          "Don't Know / Not Applicable",
         ];
       },
       required: false,
