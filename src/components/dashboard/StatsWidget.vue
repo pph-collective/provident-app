@@ -252,11 +252,16 @@ export default {
       withTertiles: false,
     });
 
-    const prediction = computed(
-      () =>
-        dataset.value.find((row) => row.bg_id === geoid.value)?.prediction ??
-        "-"
-    );
+    const prediction = computed(() => {
+      if (geoid.value !== "") {
+        return (
+          dataset.value.find((row) => row.bg_id === geoid.value)?.prediction ??
+          "-"
+        );
+      } else {
+        return "";
+      }
+    });
 
     const hyphenate = (val) => {
       return val.toLowerCase().replaceAll(" ", "-");

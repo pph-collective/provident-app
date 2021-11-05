@@ -5,10 +5,11 @@
   >
     <p v-if="prediction === '1'">
       <span class="has-text-weight-bold">Prioritized</span>
-      by PROVIDENT
+      by PROVIDENT model
     </p>
-    <p v-else-if="prediction === '0'">Not prioritized by PROVIDENT</p>
-    <p v-else>No PROVIDENT Prediction Available</p>
+    <p v-else-if="prediction === '0'">Not prioritized by PROVIDENT model</p>
+    <p v-else-if="prediction === '-'">Not elibgible for PROVIDENT prediction</p>
+    <p v-else>No block group selected</p>
   </div>
 </template>
 

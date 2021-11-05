@@ -112,8 +112,8 @@ export default {
           Municipality: datum.properties.name,
           title: 'Block Group ' + datum.properties.bg_id`;
       if (withPredictions.value) {
-        signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
-        'PROVIDENT Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
+        signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
+        'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
       }
       signal +=
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
