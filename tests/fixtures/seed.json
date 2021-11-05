@@ -558,14 +558,16 @@
             "component": "TextInput",
             "label": "Neighborhood ID",
             "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
-            "required": true
+            "required": true,
+            "read_only": true
           },
           {
             "model": "municipality",
             "component": "TextInput",
             "label": "Municipality",
             "validations": "yup.string().required()",
-            "required": true
+            "required": true,
+            "read_only": true
           },
           {
             "model": "q1_available_services",
@@ -790,6 +792,94 @@
               "Police are visible or active here",
               "Police are a barrier to service provision here",
               "It is easy for people who use drugs to get services for basic needs (housing, food, financial assistance)"
+            ]
+          }
+        ]
+      }
+    },
+    "resource_plan": {
+      "data": {
+        "title": "Six Month Resource Planning",
+        "type": "organization",
+        "questions": [
+          {
+            "model": "bg_id",
+            "component": "TextInput",
+            "label": "Neighborhood ID",
+            "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
+            "required": true,
+            "read_only": true
+          },
+          {
+            "model": "municipality",
+            "component": "TextInput",
+            "label": "Municipality",
+            "validations": "yup.string().required()",
+            "required": true,
+            "read_only": true
+          },
+          {
+            "model": "goal_form",
+            "component": "SubForm",
+            "label": "Goal",
+            "repeat_button_title": "+ Goal",
+            "questions": [
+              {
+                "model":  "goal",
+                "component": "TextArea",
+                "label": "What do you plan on doing in this neighborhood?",
+                "required": true
+              },
+              {
+                "model": "task_form",
+                "component": "SubForm",
+                "label": "Task",
+                "help_text": "What steps do you need to take towards your goal?",
+                "repeat_button_title": "+ Task",
+                "questions": [
+                  {
+                    "model": "plan",
+                    "component": "Select",
+                    "label": "Plan",
+                    "required": true,
+                    "options": [
+                      "Increasing an existing service",
+                      "Creating a new service",
+                      "Expanding infrastructure",
+                      "Expanding funding",
+                      "Capacity building",
+                      "Relationship building"
+                    ]
+                  },
+                  {
+                    "model": "plan_description",
+                    "component": "TextArea",
+                    "label": "Plan Description",
+                    "help_text": "(Optional)"
+                  },
+                  {
+                    "model": "person",
+                    "component": "TextInput",
+                    "label": "Directly Responsible Person",
+                    "required": true
+                  },
+                  {
+                    "model": "start_date",
+                    "component": "Date",
+                    "label": "Start Date"
+                  },
+                  {
+                    "model": "end_date",
+                    "component": "Select",
+                    "label": "Planned End Date",
+                    "options": [
+                      "1 month",
+                      "3 months",
+                      "6 months"
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]

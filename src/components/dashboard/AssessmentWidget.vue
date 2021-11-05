@@ -1,25 +1,47 @@
 <template>
   <div class="is-fullheight is-flex is-flex-direction-column">
     <div class="form-response-container is-flex-grow-1">
-      <table v-if="bgAssessments.length > 0" class="table is-fullwidth">
+      <table
+        v-if="bgFormResponses.length > 0"
+        class="table is-fullwidth is-narrow"
+      >
         <tbody>
-          <tr v-for="assessment in bgAssessments" :key="assessment._id">
-            <th class="has-text-centered">
-              {{ formatDate(assessment.last_updated) }}
-            </th>
-            <td class="is-flex is-justify-content-center">
+          <tr
+            v-for="formResponse in bgFormResponses"
+            :key="formResponse._id"
+            data-cy="form-response-row"
+            class="has-text-centered"
+          >
+            <td>
+              <i
+                :class="{
+                  'fas fa-tasks': formResponse.form._id === PLAN_FORM_ID,
+                  'fas fa-clipboard':
+                    formResponse.form._id === ASSESSMENT_FORM_ID,
+                }"
+              ></i>
+            </td>
+            <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
+              {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
+            </td>
+            <td class="has-text-weight-bold">
+              <span class="tag">{{
+                formatDate(formResponse.last_updated)
+              }}</span>
+            </td>
+            <td>
               <button
                 class="button is-primary is-small"
                 :class="[
-                  assessment.status === 'Submitted' || userRole === 'user'
+                  formResponse.status === 'Submitted' || userRole === 'user'
                     ? 'is-light'
                     : '',
                 ]"
                 type="button"
-                @click="launchForm(assessment)"
+                @click="launchForm(formResponse)"
               >
                 {{
-                  assessment.status === "Submitted" || userRole === "user"
+                  formResponse.status === "Submitted" || userRole === "user"
                     ? "Review"
                     : "Continue"
                 }}
@@ -28,24 +50,36 @@
           </tr>
         </tbody>
       </table>
-      <p v-else-if="activeGeoid" class="assessment-message">
-        No Assessments Found for {{ activeGeoid }}
+      <p v-else-if="activeGeoid" class="widget-message">
+        No Assessments or Plans Found for {{ activeGeoid }}
       </p>
-      <p v-else class="assessment-message">
-        Select a block group on the map to see its completed assessments
+      <p v-else class="widget-message">
+        Select a block group on the map to see its completed assessments and
+        plans
         {{ userRole === "champion" ? "or start a new one" : "" }}
       </p>
     </div>
-    <div class="is-flex is-justify-content-center">
+    <div
+      v-if="userRole === 'champion'"
+      class="is-flex is-justify-content-center is-flex-wrap-wrap"
+    >
       <button
-        v-if="userRole === 'champion'"
         id="new-assessment"
-        class="button is-primary mt-4"
+        class="button is-primary mt-2 mx-1"
         type="button"
         :disabled="!activeGeoid"
-        @click="createNewAssessment"
+        @click="createNewBGForm(ASSESSMENT_FORM_ID)"
       >
         Start New Assessment
+      </button>
+      <button
+        id="new-plan"
+        class="button is-success mt-2 mx-1"
+        type="button"
+        :disabled="!activeGeoid"
+        @click="createNewBGForm(PLAN_FORM_ID)"
+      >
+        Start New Plan
       </button>
     </div>
   </div>
@@ -69,7 +103,13 @@ import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
-const FORM_ID = "neighborhood_rapid_assessment";
+const ASSESSMENT_FORM_ID = "neighborhood_rapid_assessment";
+const PLAN_FORM_ID = "resource_plan";
+
+const FORM_ID_TO_SHORT_TITLE = {
+  [ASSESSMENT_FORM_ID]: "Assessment",
+  [PLAN_FORM_ID]: "Plan",
+};
 
 export default {
   components: {
@@ -95,42 +135,27 @@ export default {
 
     const activeFormResponse = ref({});
 
-    const assessmentForm = computed(() => {
-      const form = store.state.forms[FORM_ID];
-
-      if (form) {
-        const geoidQuestion = form.questions.find(
-          (question) => question.model === GEOID_QUESTION_MODEL
-        );
-        geoidQuestion.readOnly = true;
-        const muniQuestion = form.questions.find(
-          (question) => question.model === MUNI_QUESTION_MODEL
-        );
-        muniQuestion.readOnly = true;
-      }
-
-      return form ?? {};
-    });
-
-    const completedAssessments = computed(() => {
+    const completedForms = computed(() => {
       const formResponses = store.state.user.formResponses;
       return formResponses
-        .filter((response) => response.form._id === FORM_ID)
+        .filter((response) =>
+          Object.keys(FORM_ID_TO_SHORT_TITLE).includes(response.form._id)
+        )
         .sort(sortByProperty("last_updated"))
         .reverse();
     });
 
-    const bgAssessments = computed(() => {
-      return completedAssessments.value.filter(
+    const bgFormResponses = computed(() => {
+      return completedForms.value.filter(
         (assessment) =>
           assessment.response[GEOID_QUESTION_MODEL] === activeGeoid.value &&
           assessment.response[MUNI_QUESTION_MODEL] === activeMuni.value
       );
     });
 
-    const createNewAssessment = () => {
+    const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
-        form: assessmentForm.value,
+        form: store.state.forms[form_id],
         status: "Not Started",
         response: {
           [GEOID_QUESTION_MODEL]: activeGeoid.value,
@@ -139,46 +164,59 @@ export default {
       };
       fb.logActivity(
         store.state.user.data.email,
-        "create NRA",
+        `create ${form_id} form`,
         activeGeoid.value
       );
     };
 
     const formatDate = (dateNumber) => {
       const d = new Date(dateNumber);
-      return d.toDateString();
+      return d.toLocaleDateString();
     };
 
     const launchForm = (formResponse) => {
       activeFormResponse.value = formResponse;
       fb.logActivity(
         store.state.user.data.email,
-        "launch NRA form",
+        `launch ${formResponse.form._id} form`,
         formResponse._id
       );
     };
 
     return {
+      ASSESSMENT_FORM_ID,
+      FORM_ID_TO_SHORT_TITLE,
+      PLAN_FORM_ID,
       activeFormResponse,
-      assessmentForm,
-      bgAssessments,
-      createNewAssessment,
+      bgFormResponses,
+      userRole,
+      createNewBGForm,
       formatDate,
       launchForm,
-      userRole,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
+
 .form-response-container {
   min-height: 150px;
+  max-height: 20vh;
+
+  @include touch {
+    max-height: 65vh;
+  }
+
+  max-width: 100%;
   border-style: solid;
   border-color: grey;
   border-width: 1px;
   border-radius: 6px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -186,7 +224,13 @@ table {
   border-radius: 6px;
 }
 
-.assessment-message {
+table td {
+  vertical-align: middle !important;
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+}
+
+.widget-message {
   font-style: italic;
   text-align: center;
   padding: 0 1em;

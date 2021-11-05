@@ -44,6 +44,7 @@ import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
 import { computed, ref, watch } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
+import { cloneDeep, evalSchema } from "@/utils/utils";
 
 // form components declared globally in main.js
 
@@ -99,27 +100,10 @@ export default {
   },
   emits: ["alt", "submitted", "close"],
   setup(props, { emit }) {
-    const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
-
     const value = ref(cloneDeep(props.initValue));
     useSchemaForm(value);
 
-    const schema = ref([...cloneDeep(props.initSchema)]);
-
-    // evaluate strings that are really methods
-    const evalSchema = (s, yup) => {
-      s.forEach((q) => {
-        for (const key in q) {
-          if (["condition", "validations"].includes(key)) {
-            q[key] = eval(q[key]);
-          } else if (key === "component" && !q[key].startsWith("Form")) {
-            q[key] = "Form" + q[key];
-          }
-        }
-      });
-
-      return yup;
-    };
+    const schema = ref(cloneDeep(props.initSchema));
     evalSchema(schema.value, yup);
 
     const formUpdated = computed(

@@ -1,0 +1,113 @@
+<template>
+  <div class="field">
+    <div class="control" :id="uuid">
+      <div v-for="(value, index) in modelValue" :key="index">
+        <div
+          class="is-flex is-justify-content-space-between is-align-items-center"
+        >
+          <label class="label" :for="uuid">{{ label }}</label>
+          <button
+            v-if="repeat_button_title"
+            class="button is-link is-inverted"
+            data-cy="delete-sub-form-button"
+            :disabled="modelValue.length === 1"
+            @click="deleteValue(index)"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <p v-if="help_text" class="help">{{ help_text }}</p>
+        <NestedSchema
+          :model-value="value"
+          :init-schema="questions"
+          @update-model-value="updateValue($event, index)"
+        />
+      </div>
+      <div class="has-text-centered">
+        <button
+          v-if="repeat_button_title"
+          type="button"
+          class="button is-link"
+          data-cy="sub-form-button"
+          @click="pushValue"
+        >
+          {{ repeat_button_title }}
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import NestedSchema from "./NestedSchema";
+import { cloneDeep } from "@/utils/utils";
+import { ref, toRefs } from "vue";
+
+export default {
+  components: {
+    NestedSchema,
+  },
+  props: {
+    modelValue: {
+      type: Array,
+      default: () => [{}],
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+    help_text: {
+      type: String,
+      default: "",
+    },
+    uuid: {
+      type: Number,
+      default: 0,
+    },
+    questions: {
+      type: Array,
+      required: true,
+    },
+    repeat_button_title: {
+      type: String,
+      default: "",
+    },
+    validation: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props, { emit }) {
+    const { modelValue } = toRefs(props);
+    const value = ref(cloneDeep(modelValue.value));
+
+    const updateValue = (updatedValue, index) => {
+      value.value[index] = updatedValue;
+      emit("update:modelValue", value.value);
+    };
+
+    const pushValue = () => {
+      value.value.push({});
+      emit("update:modelValue", value.value);
+    };
+
+    const deleteValue = (index) => {
+      if (value.value.length > 1) {
+        value.value.splice(index, 1);
+        emit("update:modelValue", value.value);
+      }
+    };
+
+    return {
+      deleteValue,
+      pushValue,
+      updateValue,
+      value,
+    };
+  },
+};
+</script>
