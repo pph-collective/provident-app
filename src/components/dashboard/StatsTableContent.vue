@@ -12,7 +12,7 @@
       >
         <th
           class="
-            has-text-right has-text-bold
+            has-text-right
             px-1
             is-flex is-justify-content-space-between is-align-items-center
           "
@@ -162,13 +162,12 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/styles/main.scss";
 .table {
-  line-height: 1;
-
   th,
   td {
     vertical-align: middle;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
+    padding-top: 0.32em;
+    padding-bottom: 0.32em;
+    line-height: 1.2;
   }
 }
 
