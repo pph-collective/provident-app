@@ -112,8 +112,8 @@ export default {
           Municipality: datum.properties.name,
           title: 'Block Group ' + datum.properties.bg_id`;
       if (withPredictions.value) {
-        signal += `, 'Intervention Arm?': datum.properties.intervention_arm ? 'Yes' : 'No',
-        'Flag': datum.properties.flag`;
+        signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
+        'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
       }
       signal +=
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
@@ -134,7 +134,7 @@ export default {
           {
             name: "mapboxToken",
             value:
-              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ",
+              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja3ZsY2JzMHY2ZGRiMm9xMTQ0eW1nZTJsIn0.uydOaXlX1uQfxPrKfucB2A",
           },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },

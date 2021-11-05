@@ -86,9 +86,9 @@ describe("Dashboard viewed as a user", () => {
         .should("have.text", "Portsmouth");
 
       cy.get("#vg-tooltip-element")
-        .contains("tbody tr", "Flag")
+        .contains("tbody tr", "Prediction:")
         .find("td.value")
-        .should("have.text", "0");
+        .should("have.text", "Not Prioritized");
 
       cy.get("#vg-tooltip-element")
         .contains("tbody tr", "Points of Interest")
@@ -491,7 +491,7 @@ describe("Dashboard viewed as a control arm user", () => {
       .should("have.text", "Tiverton");
 
     cy.get("#vg-tooltip-element")
-      .contains("tbody tr", "Flag")
+      .contains("tbody tr", "Prediction:")
       .should("not.exist");
 
     cy.get("#vg-tooltip-element")

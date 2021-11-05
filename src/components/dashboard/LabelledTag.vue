@@ -1,5 +1,5 @@
 <template>
-  <div class="tags has-addons m-1">
+  <div class="tags has-addons my-1 mr-1">
     <span class="tag is-dark px-1 is-size-6-7 has-text-weight-semibold mb-0">{{
       label
     }}</span>
