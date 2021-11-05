@@ -3,7 +3,7 @@ import embed from "vega-embed";
 
 export function useVega({
   spec,
-  minWidth = ref(200),
+  minWidth = ref(180),
   minHeight = ref(200),
   maxWidth = ref(4000),
   maxHeight = ref(4000),

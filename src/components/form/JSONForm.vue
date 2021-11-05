@@ -1,5 +1,5 @@
 <template>
-  <div class="container is-fluid">
+  <div class="container is-static is-fluid">
     <div class="only-printed">
       <h2 class="is-size-2">{{ formTitle }}</h2>
       <p>Last updated: {{ lastUpdatedValue }}</p>
@@ -8,24 +8,29 @@
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
         <template v-slot:afterForm>
-          <div
-            v-if="!readOnly"
-            class="field is-grouped is-grouped-centered sticky-bottom"
-          >
-            <div class="control">
-              <button type="submit" class="button is-link">Submit</button>
+          <div class="sticky-bottom">
+            <div
+              v-if="!readOnly"
+              class="field is-grouped is-grouped-centered mb-1"
+            >
+              <div class="control">
+                <button type="submit" class="button is-link">Submit</button>
+              </div>
+              <div class="control">
+                <button
+                  v-if="showAltButton"
+                  type="button"
+                  class="button is-info"
+                  :disabled="!formUpdated"
+                  @click="$emit('alt', cloneDeep(value))"
+                >
+                  {{ altButtonLabel }}
+                </button>
+              </div>
             </div>
-            <div class="control">
-              <button
-                v-if="showAltButton"
-                type="button"
-                class="button is-info"
-                :disabled="!formUpdated"
-                @click="$emit('alt', cloneDeep(value))"
-              >
-                {{ altButtonLabel }}
-              </button>
-            </div>
+            <p class="has-text-centered" data-cy="form-message">
+              <small>{{ formMessage }}</small>
+            </p>
           </div>
         </template>
       </SchemaForm>
@@ -82,6 +87,11 @@ export default {
       default: undefined,
     },
     formTitle: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    formMessage: {
       type: String,
       required: false,
       default: "",
@@ -193,8 +203,8 @@ export default {
   }
 }
 
-.is-relative {
-  position: relative;
+.is-static {
+  position: static;
 }
 
 .sticky-bottom {
@@ -206,5 +216,10 @@ export default {
   margin-right: -52px;
   background-color: $light;
   border-top: solid hsl(0deg 0% 86%) 1px;
+
+  @include mobile {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
 }
 </style>

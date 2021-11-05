@@ -134,7 +134,7 @@ export default {
           {
             name: "mapboxToken",
             value:
-              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja2psa25za3EyZnQzMnVwOGppMGdsZzJrIn0.D_PRajmte3m3XXebngMMpQ",
+              "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja3ZsY2JzMHY2ZGRiMm9xMTQ0eW1nZTJsIn0.uydOaXlX1uQfxPrKfucB2A",
           },
           { name: "basePoint", update: "invert('projection',[0,0])" },
           { name: "maxPoint", update: "invert('projection', [width, height])" },
