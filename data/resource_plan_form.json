@@ -52,6 +52,12 @@
               ]
             },
             {
+              "model": "plan_description",
+              "component": "TextArea",
+              "label": "Plan Description",
+              "help_text": "(Optional)"
+            },
+            {
               "model": "person",
               "component": "TextInput",
               "label": "Directly Responsible Person",
