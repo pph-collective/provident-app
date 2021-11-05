@@ -1,6 +1,6 @@
 <template>
   <div class="is-fullheight is-flex is-flex-direction-column">
-    <div class="form-response-container is-flex-grow-1 table-container">
+    <div class="form-response-container is-flex-grow-1">
       <table
         v-if="bgFormResponses.length > 0"
         class="table is-fullwidth is-narrow"
@@ -209,6 +209,7 @@ export default {
     max-height: 65vh;
   }
 
+  max-width: 100%;
   border-style: solid;
   border-color: grey;
   border-width: 1px;

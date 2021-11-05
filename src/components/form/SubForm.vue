@@ -96,8 +96,6 @@ export default {
     };
 
     const deleteValue = (event, index) => {
-      event.preventDefault();
-
       if (value.value.length > 1) {
         value.value.splice(index, 1);
         emit("update:modelValue", value.value);
