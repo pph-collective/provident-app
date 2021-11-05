@@ -11,7 +11,7 @@
             class="button is-link is-inverted"
             data-cy="delete-sub-form-button"
             :disabled="modelValue.length === 1"
-            @click="deleteValue($event, index)"
+            @click="deleteValue(index)"
           >
             <i class="fas fa-trash"></i>
           </button>
@@ -95,7 +95,7 @@ export default {
       emit("update:modelValue", value.value);
     };
 
-    const deleteValue = (event, index) => {
+    const deleteValue = (index) => {
       if (value.value.length > 1) {
         value.value.splice(index, 1);
         emit("update:modelValue", value.value);
