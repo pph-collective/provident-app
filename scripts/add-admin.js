@@ -2,9 +2,7 @@
 // usage: `node add-admin.js admin@email.com`
 // the admin must already be a user
 const { ArgumentParser } = require("argparse");
-
 const admin = require("firebase-admin");
-const app = admin.initializeApp();
 
 const parser = new ArgumentParser({
   description: "PROVIDENT - add admin user",
@@ -19,6 +17,8 @@ parser.add_argument("-e", "--email", {
 const { email } = parser.parse_args();
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
+
+const app = admin.initializeApp();
 
 app
   .auth()
