@@ -17,7 +17,10 @@ const routes = [
     path: "/login",
     name: "Login",
     beforeEnter: async (to, from) => {
-      if (!to.query.redirect && from.name !== "ResetPassword") {
+      if (
+        !to.query.redirect &&
+        !["ResetPassword", "Register"].includes(from.name)
+      ) {
         return { path: to.path, query: { redirect: from.path } };
       }
     },

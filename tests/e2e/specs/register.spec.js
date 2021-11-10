@@ -1,3 +1,5 @@
+import ACCOUNTS from "../../fixtures/accounts.json";
+
 describe("Register User", () => {
   const testUser = {
     email: "register@register.com",
@@ -33,9 +35,6 @@ describe("Register User", () => {
   });
 
   it("Email is already in use", () => {
-    cy.get("[data-cy='login-button']").click();
-    cy.get("[data-cy='request-access-button']").click();
-
     cy.get('[type="email"]').type("user@user.com");
     cy.get('[data-cy="form-name"]').type("First Last");
     cy.get('[data-cy="form-organization"]').select("Good Doers");
@@ -49,5 +48,21 @@ describe("Register User", () => {
       "contain",
       "The email address is already in use by another account."
     );
+  });
+
+  it("Logging in from the register page", () => {
+    // Navigate to login
+    cy.get("[data-cy='login-button']").click();
+
+    // Assert that the url doesn't have a redirect back to the register page
+    cy.url().should("eq", `${Cypress.config().baseUrl}login`);
+
+    // Log in
+    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
+    cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
+
+    // Assert logged in
+    cy.url().should("eq", Cypress.config().baseUrl);
+    cy.get('[data-cy="logout-button"]').should("exist");
   });
 });
