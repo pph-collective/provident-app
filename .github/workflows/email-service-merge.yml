@@ -32,14 +32,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Firebase Credentials
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: provident-ri
-          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}
-          export_default_credentials: true
-          credentials_file_path: email_service/credentials/serviceAccount.json
-
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
