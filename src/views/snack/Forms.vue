@@ -218,7 +218,7 @@ export default {
 
     const filterOptions = computed(() => {
       return {
-        "Form Title": formResponses.value.map((f) => f.form.title).sort(),
+        "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
         "Organization Level?": ["Yes", "No"],
         Status: ["Not Started", "Draft", "Submitted"],
         Municipality: uniqueArray(
