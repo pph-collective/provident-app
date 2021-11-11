@@ -8,6 +8,7 @@ on:
       - .github/workflows/email-service-merge.yml
     branches:
       - main
+      - ci-bke-deploy
 
 env:
   REGISTRY: ghcr.io
