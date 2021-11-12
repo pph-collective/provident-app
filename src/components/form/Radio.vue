@@ -10,6 +10,7 @@
           :value="modelValue"
           :required="required"
           :checked="modelValue === option"
+          :disabled="read_only"
           @input="$emit('update:modelValue', option)"
         />
         {{ option }}
@@ -48,6 +49,10 @@ export default {
     validation: {
       type: Object,
       default: () => ({}),
+    },
+    read_only: {
+      type: Boolean,
+      default: false,
     },
   },
 };

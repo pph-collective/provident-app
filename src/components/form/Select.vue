@@ -11,6 +11,7 @@
           :id="uuid"
           :options="options"
           :searchable="true"
+          :disabled="read_only"
           @change="$emit('update:modelValue', $event)"
         >
         </Multiselect>
@@ -58,6 +59,10 @@ export default {
     validation: {
       type: Object,
       default: () => ({}),
+    },
+    read_only: {
+      type: Boolean,
+      default: false,
     },
   },
 };

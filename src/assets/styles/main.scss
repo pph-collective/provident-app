@@ -121,6 +121,14 @@ $box-radius: 2px;
   max-width: calc(100% - 3rem);
 }
 
+input:disabled {
+  cursor: not-allowed;
+}
+
+.multiselect.is-disabled {
+  cursor: not-allowed;
+}
+
 fieldset[disabled] {
   .multiselect {
     pointer-events: none;
