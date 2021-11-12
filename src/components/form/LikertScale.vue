@@ -20,7 +20,6 @@
                 v-for="(option, j) in options"
                 :key="'options-' + j"
                 :data-label="option"
-                :disabled="read_only"
                 @click.self="checkRadio($event, modelValue)"
               >
                 <!--
