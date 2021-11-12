@@ -105,6 +105,9 @@ $box-radius: 2px;
 
   --ms-option-bg-selected: #{$primary};
   --ms-option-bg-selected-pointed: #{$link};
+
+  // match with the rest of the disabled fields
+  --ms-bg-disabled: whitesmoke;
 }
 
 .multiselect-tag {
@@ -130,8 +133,10 @@ input:disabled {
 }
 
 fieldset[disabled] {
+  pointer-events: none;
+
   .multiselect {
-    pointer-events: none;
+    --ms-bg: whitesmoke;
   }
 
   .control {

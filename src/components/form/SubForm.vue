@@ -7,7 +7,7 @@
         >
           <label class="label" :for="uuid">{{ label }}</label>
           <button
-            v-if="repeat_button_title"
+            v-if="!read_only && repeat_button_title"
             class="button is-link is-inverted"
             data-cy="delete-sub-form-button"
             :disabled="modelValue.length === 1"
@@ -20,6 +20,7 @@
         <NestedSchema
           :model-value="value"
           :init-schema="questions"
+          :disabled="read_only"
           @update-model-value="updateValue($event, index)"
         />
       </div>
@@ -29,6 +30,7 @@
           type="button"
           class="button is-link"
           data-cy="sub-form-button"
+          :disabled="read_only"
           @click="pushValue"
         >
           {{ repeat_button_title }}
@@ -79,6 +81,10 @@ export default {
     validation: {
       type: Object,
       default: () => ({}),
+    },
+    read_only: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { emit }) {
