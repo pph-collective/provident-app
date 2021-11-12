@@ -133,9 +133,10 @@ input:disabled {
 }
 
 fieldset[disabled] {
-  pointer-events: none;
-
+  // Setting the disabled attribute on fieldset doesn't set it for the @vueform/multiselect component
+  // because it isn't a standard form field. Therefore, add disabled style for multiselect here as well
   .multiselect {
+    pointer-events: none;
     --ms-bg: whitesmoke;
   }
 
