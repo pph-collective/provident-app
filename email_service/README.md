@@ -1,6 +1,6 @@
 # PROVIDENT Email Service
 
-As part of the provident web app, we need to send semi-realtime email notifications to admins and users to alert them to forms/requests that require their attention.  This script (index.js) is run in a cron job on the C3 cluster every 15 minutes.  It finds the email requests in the database that haven't been sent and have a `sendTime` before now, then sends those emails via the Brown mail relay.
+As part of the provident web app, we need to send semi-realtime email notifications to admins and users to alert them to forms/requests that require their attention.  This script (index.js) is run in a cron job on the BKE cluster every 15 minutes.  It finds the email requests in the database that haven't been sent and have a `sendTime` before now, then sends those emails via the Brown mail relay.
 
 ## Getting Started
 
@@ -31,9 +31,9 @@ node index.js
 
 ## Deployment
 
-A docker container on the C3 cluster is run every 15 minutes.  The container is from github container register (ghcr.io) and is automatically built by GitHub actions when changes to this directory are pushed to `main`.
+A docker container on the BKE cluster is run every 15 minutes.  The container is from github container register (ghcr.io) and is automatically built by GitHub actions when changes to this directory are pushed to `main`.
 
-See [brown-ccv/k8s-c3-deploy](https://github.com/brown-ccv/k8s-deploy-c3#5-configuring-kubectl-connection-to-c3) for instructions on how to connect to the cluster.  The namespace for this project is `pphc-provident`.
+See [brown-ccv/k8s-bke-deploy](https://github.com/brown-ccv/k8s-deploy-bke) for instructions on how to connect to the cluster.  The namespace for this project is `pphc-provident`.
 
 The `cronjob.yml` file specifies where to pull the docker container from, how frequently to run the job, and where on the cluster to run it (prod internal).  To deploy any changes to this file, connect to the cluster, then run:
 ```
