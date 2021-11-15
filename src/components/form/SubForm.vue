@@ -20,7 +20,7 @@
         <NestedSchema
           :model-value="value"
           :init-schema="questions"
-          :disabled="read_only"
+          :read-only="read_only"
           @update-model-value="updateValue($event, index)"
         />
       </div>
