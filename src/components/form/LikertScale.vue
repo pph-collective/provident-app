@@ -107,7 +107,7 @@ export default {
 
     const checkRadio = (event, modelValue) => {
       const fieldset = event.target.closest("fieldset");
-      if (!fieldset.disabled && !read_only) {
+      if (!fieldset.disabled && !read_only.value) {
         const radioButton = event.target.querySelector("input[type=radio]");
         radioButton.checked = true;
 
