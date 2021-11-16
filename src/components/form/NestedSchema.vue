@@ -1,6 +1,8 @@
 <template>
   <div class="nested-schema">
-    <SchemaForm :schema="schema" :initial-values="value" />
+    <fieldset :disabled="readOnly">
+      <SchemaForm :schema="schema" :initial-values="value" />
+    </fieldset>
   </div>
 </template>
 
@@ -23,6 +25,10 @@ export default {
     initSchema: {
       type: Array,
       required: true,
+    },
+    readOnly: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { emit }) {

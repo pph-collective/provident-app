@@ -11,6 +11,7 @@
               :name="uuid"
               :value="option"
               :checked="modelValue ? modelValue.includes(option) : false"
+              :disabled="read_only"
               @input="updateValue($event, modelValue)"
             />
             {{ option }}
@@ -51,6 +52,10 @@ export default {
     validation: {
       type: Object,
       default: () => ({}),
+    },
+    read_only: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(_, { emit }) {

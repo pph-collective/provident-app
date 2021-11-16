@@ -105,6 +105,9 @@ $box-radius: 2px;
 
   --ms-option-bg-selected: #{$primary};
   --ms-option-bg-selected-pointed: #{$link};
+
+  // match with the rest of the disabled fields
+  --ms-bg-disabled: whitesmoke;
 }
 
 .multiselect-tag {
@@ -121,9 +124,20 @@ $box-radius: 2px;
   max-width: calc(100% - 3rem);
 }
 
+input:disabled {
+  cursor: not-allowed;
+}
+
+.multiselect.is-disabled {
+  cursor: not-allowed;
+}
+
 fieldset[disabled] {
+  // Setting the disabled attribute on fieldset doesn't set it for the @vueform/multiselect component
+  // because it isn't a standard form field. Therefore, add disabled style for multiselect here as well
   .multiselect {
     pointer-events: none;
+    --ms-bg: whitesmoke;
   }
 
   .control {

@@ -41,6 +41,7 @@
                       : false
                   "
                   :required="required"
+                  :disabled="read_only"
                   @input="updateValue($event.target, modelValue)"
                 />
               </td>
@@ -53,6 +54,8 @@
 </template>
 
 <script>
+import { toRefs } from "vue";
+
 export default {
   props: {
     modelValue: { required: true },
@@ -94,11 +97,17 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    read_only: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup(_, { emit }) {
+  setup(props, { emit }) {
+    const { read_only } = toRefs(props);
+
     const checkRadio = (event, modelValue) => {
       const fieldset = event.target.closest("fieldset");
-      if (!fieldset.disabled) {
+      if (!fieldset.disabled && !read_only.value) {
         const radioButton = event.target.querySelector("input[type=radio]");
         radioButton.checked = true;
 

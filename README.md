@@ -128,6 +128,7 @@ Optional keys supported on all fields:
 * `help_text` : A string containing help text displayed for the user to see.
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
+* `read_only`: A boolean (true/false) indicating if the field is read only.
 
 #### Checkbox
 
