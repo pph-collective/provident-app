@@ -85,27 +85,42 @@ const store = createStore({
         with: [organization, ...state.organizations],
       });
     },
-    async updateFormResponse({ commit, state }, updatedFormResponse) {
-      const _id = await fb.updateFormResponse(updatedFormResponse, {
+    async updateFormResponse({ commit, state }, formResponse) {
+      formResponse._id = await fb.updateFormResponse(formResponse, {
         email: state.user.data.email,
         organization: state.user.data.organization,
       });
+
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
-          formResponse._id === _id &&
-          formResponse.type === updatedFormResponse.type
+          formResponse._id === formResponse._id &&
+          formResponse.type === formResponse.type
       );
 
       if (formResponseIndex >= 0) {
-        formResponses[formResponseIndex] = updatedFormResponse;
+        formResponses[formResponseIndex] = formResponse;
       } else {
-        formResponses.push({ _id, ...updatedFormResponse });
+        formResponses.push(formResponse);
+      }
+
+      // Follow up form
+      if (
+        formResponse.status === "Submitted" &&
+        formResponse.form.followup_form !== undefined
+      ) {
+        const followupFormResponse = await fb.createFollowupFormResponse(
+          formResponse,
+          {
+            email: state.user.data.email,
+            organization: state.user.data.organization,
+          }
+        );
+        formResponses.push(followupFormResponse);
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
-
-      return _id;
+      return formResponse._id;
     },
     updateUsers({ commit }, users) {
       commit("mutate", { property: "users", with: users });

@@ -4,6 +4,8 @@ import "firebase/auth";
 
 import * as aq from "arquero";
 
+import utils from "@/utils/utils.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
   authDomain: "provident-ri.firebaseapp.com",
@@ -181,6 +183,62 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
+const createFollowupFormResponse = async (
+  formResponse,
+  { email, organization }
+) => {
+  const { _id, form, response } = utils.cloneDeep(formResponse);
+  const { followup_form, questions } = form;
+
+  const followupForm = {
+    ...followup_form,
+    type: form.type,
+  };
+  const followupResponse = {};
+
+  followupForm.questions = followupForm.questions.map((question) => {
+    const { source_model, model } = question;
+
+    if (source_model !== undefined) {
+      const source = questions.find((q) => source_model === q.model);
+
+      // Copy answer
+      if (response[source_model] !== undefined)
+        followupResponse[model] = response[source_model];
+
+      // Merge followup and source questions
+      return {
+        // Get the source question
+        ...source,
+
+        // Reset
+        condition: "",
+        read_only: false,
+        required: false,
+
+        // Overwrite fields with the followup question
+        ...question,
+      };
+    } else {
+      return question;
+    }
+  });
+
+  const followupFormResponse = {
+    previous_id: _id,
+    form: followupForm,
+    response: followupResponse,
+    status: "Not Started",
+    last_updated: Date.now(),
+  };
+
+  const followup_id = await updateFormResponse(followupFormResponse, {
+    email,
+    organization,
+  });
+  return { _id: followup_id, ...followupFormResponse };
+};
+
 const getModelDataPeriods = async () => {
   const res = [];
   try {
@@ -271,6 +329,7 @@ export default {
   addOrg,
   batchAddFormResponses,
   createEmail,
+  createFollowupFormResponse,
   getCollection,
   getFormResponses,
   getForms,
