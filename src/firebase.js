@@ -4,8 +4,6 @@ import "firebase/auth";
 
 import * as aq from "arquero";
 
-import utils from "@/utils/utils.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
   authDomain: "provident-ri.firebaseapp.com",
@@ -183,11 +181,14 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
+// Copied from @/utils/utils.js
+const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
+
 const createFollowupFormResponse = async (
   formResponse,
   { email, organization }
 ) => {
-  const { _id, form, response } = utils.cloneDeep(formResponse);
+  const { _id, form, response } = cloneDeep(formResponse);
   const { followup_form, questions } = form;
 
   const followupForm = {
