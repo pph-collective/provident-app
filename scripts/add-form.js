@@ -49,40 +49,34 @@ const warnAndExit = (warning) => {
   process.exit(1);
 };
 
-const validateForm = (form) => {
+const validateForm = ({ title, type, questions, followup_form }) => {
   const warnings = {};
 
   // check title
-  if (!form["title"]) {
+  if (!title) {
     warnings.title = "Required field, a string";
   }
 
   // check type
   const validFormTypes = ["user", "organization"];
-  if (!form["type"]) {
+  if (!type) {
     warnings.type = "Required field, 'user' or 'organization'";
-  } else if (!validFormTypes.includes(form["type"])) {
-    warnings.type = `Invalid form type entered: ${form["type"]}. Required field, 'user' or 'organization`;
+  } else if (!validFormTypes.includes(type)) {
+    warnings.type = `Invalid form type entered: ${type}. Required field, 'user' or 'organization`;
   }
 
   // check questions
-  if (!form["questions"]) {
+  if (!questions) {
     warnings.questions = "Required field, list of questions";
   } else {
-    const questionsWarnings = validateQuestions(form["questions"]);
-    if (Object.keys(questionsWarnings).length > 0) {
-      warnings.questions = questionsWarnings;
-    }
+    warnings.questions = validateQuestions(questions);
   }
 
-  if (form["followup_form"]) {
-    const followupFormWarnings = validateFollowupForm(form["followup_form"]);
-
-    if (Object.keys(followupFormWarnings).length > 0) {
-      warnings.followup_form = followupFormWarnings;
-    }
+  if (followup_form) {
+    warnings.followup_form = validateFollowupForm(followup_form);
   }
 
+  deleteEmptyObjects(warnings);
   if (Object.keys(warnings).length > 0) {
     warnAndExit(JSON.stringify(warnings, null, 4));
   }
@@ -103,39 +97,31 @@ const validateFollowupForm = (followup_form) => {
   if (!followup_form["questions"]) {
     warnings.questions = "Required field, list of questions";
   } else {
-    const questionsWarnings = {};
+    warnings.questions = {};
 
     Object.entries(followup_form["questions"]).forEach(([key, question]) => {
-      let tempWarnings = {};
+      let questionWarnings = {};
       if (question["source_model"]) {
         // TODO: source_model exists as model in regular form
 
         if (!question["label"]) {
-          tempWarnings["label"] = "Required field, a string";
+          questionWarnings["label"] = "Required field, a string";
         }
 
         if (!question["model"]) {
-          tempWarnings["model"] = "Required field, a string";
+          questionWarnings["model"] = "Required field, a string";
         }
 
         if (question["component"]) {
-          tempWarnings["component"] =
+          questionWarnings["component"] =
             "Invalid field: source_model was provided. We'll pull the component field from the source_model question.";
         }
       } else {
         // Regular question
-        tempWarnings = validateQuestion(question);
+        questionWarnings = validateQuestion(question);
       }
-
-      // Add warnings to
-      if (Object.keys(tempWarnings).length > 0) {
-        questionsWarnings[key] = tempWarnings;
-      }
+      warnings.questions[key] = questionWarnings;
     });
-
-    if (Object.keys(questionsWarnings).length > 0) {
-      warnings.questions = questionsWarnings;
-    }
   }
 
   return warnings;
@@ -190,12 +176,7 @@ const validateQuestion = (question) => {
         if (!question["questions"]) {
           warnings["questions"] = "Required field, list of questions";
         } else {
-          const subFormQuestionsWarnings = validateQuestions(
-            question["questions"]
-          );
-          if (Object.keys(subFormQuestionsWarnings).length > 0) {
-            warnings["questions"] = subFormQuestionsWarnings;
-          }
+          warnings.questions = validateQuestions(question["questions"]);
         }
         break;
       default:
@@ -212,11 +193,7 @@ const validateQuestions = (questions) => {
   const warnings = {};
 
   Object.entries(questions).forEach(([key, question]) => {
-    const questionWarnings = validateQuestion(question);
-
-    if (Object.keys(questionWarnings).length > 0) {
-      warnings[key] = questionWarnings;
-    }
+    warnings[key] = validateQuestion(question);
   });
 
   return warnings;
@@ -237,6 +214,19 @@ const addVersion = (oldForm, newForm) => {
     form.version = Date.now();
   }
 };
+
+function deleteEmptyObjects(obj) {
+  for (const key in obj) {
+    if (!obj[key] || typeof obj[key] !== "object") {
+      continue;
+    }
+
+    deleteEmptyObjects(obj[key]);
+    if (Object.keys(obj[key]).length === 0) {
+      delete obj[key];
+    }
+  }
+}
 
 // check id isn't already in use
 db.collection("forms")
