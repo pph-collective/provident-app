@@ -116,9 +116,11 @@ const validateFollowupForm = (followup_form) => {
           questionWarnings["component"] =
             "Invalid field: source_model was provided. We'll pull the component field from the source_model question.";
         }
-      } else {
+      } else if (question["model"]) {
         // Regular question
         questionWarnings = validateQuestion(question);
+      } else {
+        questionWarnings = "`source_model` or `model` fields are required";
       }
       warnings.questions[key] = questionWarnings;
     });
