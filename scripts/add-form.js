@@ -1,5 +1,5 @@
 // env GOOGLE_APPLICATION_CREDENTIALS must contain the path to your firebase credentials
-// usage: `node add-form.js form_id form.json`
+// usage: `node add-form.js -i form_id -f form.json`
 const { ArgumentParser } = require("argparse");
 const admin = require("firebase-admin");
 const fs = require("fs");
@@ -73,7 +73,7 @@ const validateForm = ({ title, type, questions, followup_form }) => {
   }
 
   if (followup_form) {
-    warnings.followup_form = validateFollowupForm(followup_form);
+    warnings.followup_form = validateFollowupForm(followup_form, questions);
   }
 
   deleteEmptyObjects(warnings);
@@ -82,8 +82,10 @@ const validateForm = ({ title, type, questions, followup_form }) => {
   }
 };
 
-const validateFollowupForm = (followup_form) => {
+const validateFollowupForm = (followup_form, questions) => {
   const warnings = {};
+
+  const sourceModels = questions.map((q) => q.model);
 
   if (!followup_form["title"]) {
     warnings.title = "Required field, a string";
@@ -94,6 +96,18 @@ const validateFollowupForm = (followup_form) => {
       "Remove field, it gets overwritten to match the original form type";
   }
 
+  if (!followup_form["date_count"]) {
+    warnings.date_count = "Required field, integer.";
+  }
+
+  if (
+    !followup_form["date_unit"] ||
+    !["day", "week", "month"].includes(followup_form["date_unit"])
+  ) {
+    warnings.date_unit =
+      "Required field, string. Must be either 'day', 'week', or 'month'.";
+  }
+
   if (!followup_form["questions"]) {
     warnings.questions = "Required field, list of questions";
   } else {
@@ -102,14 +116,19 @@ const validateFollowupForm = (followup_form) => {
     Object.entries(followup_form["questions"]).forEach(([key, question]) => {
       let questionWarnings = {};
       if (question["source_model"]) {
-        // TODO: source_model exists as model in regular form
+        if (!sourceModels.includes(question["source_model"])) {
+          questionWarnings[
+            "source_model"
+          ] = `model, '${question["source_model"]}', not found in the form this one follows`;
+        }
 
         if (!question["label"]) {
           questionWarnings["label"] = "Required field, a string";
         }
 
         if (!question["model"]) {
-          questionWarnings["model"] = "Required field, a string";
+          questionWarnings["model"] =
+            "Required field, a string. This is the new model for the question.";
         }
 
         if (question["component"]) {
@@ -124,6 +143,13 @@ const validateFollowupForm = (followup_form) => {
       }
       warnings.questions[key] = questionWarnings;
     });
+  }
+
+  if (followup_form["followup_form"]) {
+    warnings.followup_form = validateFollowupForm(
+      followup_form["followup_form"],
+      followup_form["questions"]
+    );
   }
 
   return warnings;
@@ -244,5 +270,5 @@ db.collection("forms")
     // validate the form and upload
     validateForm(form);
     addVersion(oldForm, form);
-    // db.collection("forms").doc(id).set(form);
+    db.collection("forms").doc(id).set(form);
   });

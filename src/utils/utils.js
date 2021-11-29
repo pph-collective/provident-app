@@ -1,4 +1,4 @@
-import GEO from "@/assets/geojson/ri.json";
+import GEO from "../assets/geojson/ri.json";
 
 export const MUNICIPALITIES = [
   ...new Set(GEO.map((g) => g.properties.name)),
@@ -30,6 +30,27 @@ export const sortByProperty = (property) => (a, b) => {
 
 export const today = () => {
   return new Date().toISOString().split("T")[0];
+};
+
+export const getFollowupDate = (date, count, unit) => {
+  const oldDate = new Date(date);
+
+  switch (unit) {
+    case "month":
+      return new Date(oldDate.setMonth(oldDate.getMonth() + count))
+        .toISOString()
+        .split("T")[0];
+    case "week":
+      return new Date(oldDate.setDate(oldDate.getDate() + 7 * count))
+        .toISOString()
+        .split("T")[0];
+    case "day":
+      return new Date(oldDate.setDate(oldDate.getDate() + count))
+        .toISOString()
+        .split("T")[0];
+    default:
+      return date;
+  }
 };
 
 export const uniqueId = () => {
@@ -75,6 +96,7 @@ export default {
   tertileColorMap,
   cloneDeep,
   evalSchema,
+  getFollowupDate,
   sortByProperty,
   today,
   uniqueArray,

@@ -3,6 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import * as aq from "arquero";
+import { cloneDeep, getFollowupDate } from "./utils/utils";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
@@ -181,23 +182,26 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
-// Copied from @/utils/utils.js
-const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
-
 const createFollowupFormResponse = async (
   formResponse,
   { email, organization }
 ) => {
-  const { _id, form, response } = cloneDeep(formResponse);
+  const { _id, form, response, last_updated } = cloneDeep(formResponse);
   const { followup_form, questions } = form;
+  const { title, date_count, date_unit } = followup_form;
 
-  const followupForm = {
-    ...followup_form,
+  const newForm = {
+    title,
     type: form.type,
   };
-  const followupResponse = {};
 
-  followupForm.questions = followupForm.questions.map((question) => {
+  if ("followup_form" in followup_form) {
+    newForm["followup_form"] = followup_form["followup_form"];
+  }
+
+  const newResponse = {};
+
+  newForm.questions = followup_form.questions.map((question) => {
     const { source_model, model } = question;
 
     if (source_model !== undefined) {
@@ -205,7 +209,7 @@ const createFollowupFormResponse = async (
 
       // Copy answer
       if (response[source_model] !== undefined)
-        followupResponse[model] = response[source_model];
+        newResponse[model] = response[source_model];
 
       // Merge followup and source questions
       return {
@@ -227,9 +231,10 @@ const createFollowupFormResponse = async (
 
   const followupFormResponse = {
     previous_id: _id,
-    form: followupForm,
-    response: followupResponse,
+    form: newForm,
+    response: newResponse,
     status: "Not Started",
+    release_date: getFollowupDate(last_updated, date_count, date_unit),
     last_updated: Date.now(),
   };
 
