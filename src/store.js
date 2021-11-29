@@ -85,32 +85,35 @@ const store = createStore({
         with: [organization, ...state.organizations],
       });
     },
-    async updateFormResponse({ commit, state }, formResponse) {
-      formResponse._id = await fb.updateFormResponse(formResponse, {
-        email: state.user.data.email,
-        organization: state.user.data.organization,
-      });
+    async updateFormResponse({ commit, state }, updatedFormResponse) {
+      updatedFormResponse._id = await fb.updateFormResponse(
+        updatedFormResponse,
+        {
+          email: state.user.data.email,
+          organization: state.user.data.organization,
+        }
+      );
 
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
-          formResponse._id === formResponse._id &&
-          formResponse.type === formResponse.type
+          formResponse._id === updatedFormResponse._id &&
+          formResponse.type === updatedFormResponse.type
       );
 
       if (formResponseIndex >= 0) {
-        formResponses[formResponseIndex] = formResponse;
+        formResponses[formResponseIndex] = updatedFormResponse;
       } else {
-        formResponses.push(formResponse);
+        formResponses.push(updatedFormResponse);
       }
 
       // Follow up form
       if (
-        formResponse.status === "Submitted" &&
-        formResponse.form.followup_form !== undefined
+        updatedFormResponse.status === "Submitted" &&
+        updatedFormResponse.form.followup_form !== undefined
       ) {
         const followupFormResponse = await fb.createFollowupFormResponse(
-          formResponse,
+          updatedFormResponse,
           {
             email: state.user.data.email,
             organization: state.user.data.organization,
@@ -120,7 +123,7 @@ const store = createStore({
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
-      return formResponse._id;
+      return updatedFormResponse._id;
     },
     updateUsers({ commit }, users) {
       commit("mutate", { property: "users", with: users });
