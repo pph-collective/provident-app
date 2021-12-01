@@ -85,40 +85,40 @@ const validateForm = ({ title, type, questions, followup_form }) => {
 const validateFollowupForm = (followupForm, sourceQuestions) => {
   const warnings = {};
 
-  if (!followupForm["title"]) {
+  if (!followupForm.title) {
     warnings.title = "Required field, a string";
   }
 
-  if (followupForm["type"]) {
+  if (followupForm.type) {
     warnings.type =
       "Remove field, it gets overwritten to match the original form type";
   }
 
-  if (!followupForm["date_count"]) {
+  if (!followupForm.date_count) {
     warnings.date_count = "Required field, integer.";
   }
 
   if (
-    !followupForm["date_unit"] ||
-    !["day", "week", "month"].includes(followupForm["date_unit"])
+    !followupForm.date_unit ||
+    !["day", "week", "month"].includes(followupForm.date_unit)
   ) {
     warnings.date_unit =
       "Required field, string. Must be either 'day', 'week', or 'month'.";
   }
 
-  if (!followupForm["questions"]) {
+  if (!followupForm.questions) {
     warnings.questions = "Required field, list of questions";
   } else {
     warnings.questions = validateFollowupQuestions(
       sourceQuestions,
-      followupForm["questions"]
+      followupForm.questions
     );
   }
 
-  if (followupForm["followup_form"]) {
+  if (followupForm.followup_form) {
     warnings.followup_form = validateFollowupForm(
-      followupForm["followup_form"],
-      followupForm["questions"]
+      followupForm.followup_form,
+      followupForm.questions
     );
   }
 
@@ -131,24 +131,22 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
 
   Object.entries(followupQuestions).forEach(([key, question]) => {
     let questionWarnings = {};
-    if (question["source_model"]) {
-      if (!sourceModels.includes(question["source_model"])) {
-        questionWarnings[
-          "source_model"
-        ] = `model, '${question["source_model"]}', not found in parent form's list of models: ${sourceModels}`;
+    if (question.source_model) {
+      if (!sourceModels.includes(question.source_model)) {
+        questionWarnings.source_model = `model, '${question.source_model}', not found in parent form's list of models: ${sourceModels}`;
       }
 
-      if (!question["label"]) {
-        questionWarnings["label"] = "Required field, a string";
+      if (!question.label) {
+        questionWarnings.label = "Required field, a string";
       }
 
-      if (!question["model"]) {
-        questionWarnings["model"] =
+      if (!question.model) {
+        questionWarnings.model =
           "Required field, a string. This is the new model for the question.";
       }
 
-      if (question["component"]) {
-        questionWarnings["component"] =
+      if (question.component) {
+        questionWarnings.component =
           "Invalid field: source_model was provided. We'll pull the component field from the source_model question.";
       }
 
@@ -156,14 +154,14 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
       // We can't check directly that the component is a SubForm because followup questions that have a source_model
       // inherit the component rather than explicitly saying what it is.
       // However, we can check if the question has questions.
-      if (question["questions"]) {
-        questionWarnings["questions"] = validateFollowupQuestions(
+      if (question.questions) {
+        questionWarnings.questions = validateFollowupQuestions(
           sourceQuestions.find((q) => q.model === question.source_model)
             .questions,
-          question["questions"]
+          question.questions
         );
       }
-    } else if (question["model"]) {
+    } else if (question.model) {
       // Regular question
       questionWarnings = validateQuestion(question);
     } else {
@@ -179,20 +177,20 @@ const validateQuestion = (question) => {
   const warnings = {};
 
   // check label
-  if (!question["label"]) {
-    warnings["label"] = "Required field, a string for the question label";
+  if (!question.label) {
+    warnings.label = "Required field, a string for the question label";
   }
 
-  if (question["source_model"]) {
-    warnings["source_model"] =
+  if (question.source_model) {
+    warnings.source_model =
       "Invalid field, source_model exists on followup_form questions only";
   }
 
   // check component
-  if (!question["component"]) {
-    warnings["component"] = "Required field";
+  if (!question.component) {
+    warnings.component = "Required field";
   } else {
-    switch (question["component"]) {
+    switch (question.component) {
       case "Date":
         ["max_date", "min_date"].forEach((field) => {
           if (
@@ -211,26 +209,24 @@ const validateQuestion = (question) => {
       case "Select":
       case "Radio":
       case "Checkbox":
-        if (!question["options"]) {
-          warnings["options"] = "Required field, list of options";
+        if (!question.options) {
+          warnings.options = "Required field, list of options";
         }
         break;
       case "LikertScale":
-        if (!question["statements"]) {
-          warnings["statements"] = "Required field, list of statements";
+        if (!question.statements) {
+          warnings.statements = "Required field, list of statements";
         }
         break;
       case "SubForm":
-        if (!question["questions"]) {
-          warnings["questions"] = "Required field, list of questions";
+        if (!question.questions) {
+          warnings.questions = "Required field, list of questions";
         } else {
-          warnings.questions = validateQuestions(question["questions"]);
+          warnings.questions = validateQuestions(question.questions);
         }
         break;
       default:
-        warnings[
-          "component"
-        ] = `Invalid component, must be of the following: Checkbox, Date, LikertScale, Radio, Select, SubForm, TextArea, TextInput`;
+        warnings.component = `Invalid component, must be of the following: Checkbox, Date, LikertScale, Radio, Select, SubForm, TextArea, TextInput`;
     }
   }
 
