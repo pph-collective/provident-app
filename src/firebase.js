@@ -4,6 +4,7 @@ import "firebase/auth";
 
 import * as aq from "arquero";
 import { cloneDeep, getFollowupDate } from "./utils/utils";
+import followupFormUtils from "./utils/followupForm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
@@ -182,74 +183,6 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
-const mergeQuestions = (sourceQuestions, followupQuestions) => {
-  return followupQuestions.map((followupQuestion) => {
-    const { source_model } = followupQuestion;
-
-    if (source_model !== undefined) {
-      const sourceQuestion = sourceQuestions.find(
-        (q) => source_model === q.model
-      );
-
-      // DEEP COPY SOURCE QUESTION
-      let result = cloneDeep(sourceQuestion);
-
-      // RESET
-      delete result.condition;
-      delete result.help_text;
-      delete result.read_only;
-      delete result.required;
-
-      // Reset for SubForm
-      if (sourceQuestion.component === "SubForm") {
-        delete result.repeat_button_title;
-      }
-
-      // OVERWRITE
-      result = {
-        ...result,
-
-        // Overwrite fields with the followup question
-        ...followupQuestion,
-      };
-
-      if (
-        sourceQuestion.component === "SubForm" &&
-        "questions" in followupQuestion
-      ) {
-        result.questions = mergeQuestions(
-          sourceQuestion.questions,
-          followupQuestion.questions
-        );
-      }
-
-      return result;
-    } else {
-      return followupQuestion;
-    }
-  });
-};
-
-const mergeResponses = (questions, sourceResponse) => {
-  const result = {};
-
-  for (const question of questions) {
-    const { source_model, model } = question;
-
-    if (sourceResponse[source_model] !== undefined) {
-      if (question.component === "SubForm" && "questions" in question) {
-        result[question.model] = sourceResponse[source_model].map((response) =>
-          mergeResponses(question.questions, response)
-        );
-      } else {
-        result[model] = sourceResponse[source_model];
-      }
-    }
-  }
-
-  return result;
-};
-
 const createFollowupFormResponse = async (
   formResponse,
   { email, organization }
@@ -268,8 +201,14 @@ const createFollowupFormResponse = async (
     newForm["followup_form"] = followup_form["followup_form"];
   }
 
-  newForm.questions = mergeQuestions(questions, followup_form.questions);
-  const newResponse = mergeResponses(newForm.questions, response ?? {});
+  newForm.questions = followupFormUtils.mergeQuestions(
+    questions,
+    followup_form.questions
+  );
+  const newResponse = followupFormUtils.mergeResponses(
+    newForm.questions,
+    response ?? {}
+  );
 
   const followupFormResponse = {
     previous_id: _id,
