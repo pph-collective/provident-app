@@ -82,38 +82,37 @@ const validateForm = ({ title, type, questions, followup_form }) => {
   }
 };
 
-const validateFollowupForm = (followup_form, questions) => {
+const validateFollowupForm = (followupForm, sourceQuestions) => {
   const warnings = {};
+  const sourceModels = sourceQuestions.map((q) => q.model);
 
-  const sourceModels = questions.map((q) => q.model);
-
-  if (!followup_form["title"]) {
+  if (!followupForm["title"]) {
     warnings.title = "Required field, a string";
   }
 
-  if (followup_form["type"]) {
+  if (followupForm["type"]) {
     warnings.type =
       "Remove field, it gets overwritten to match the original form type";
   }
 
-  if (!followup_form["date_count"]) {
+  if (!followupForm["date_count"]) {
     warnings.date_count = "Required field, integer.";
   }
 
   if (
-    !followup_form["date_unit"] ||
-    !["day", "week", "month"].includes(followup_form["date_unit"])
+    !followupForm["date_unit"] ||
+    !["day", "week", "month"].includes(followupForm["date_unit"])
   ) {
     warnings.date_unit =
       "Required field, string. Must be either 'day', 'week', or 'month'.";
   }
 
-  if (!followup_form["questions"]) {
+  if (!followupForm["questions"]) {
     warnings.questions = "Required field, list of questions";
   } else {
     warnings.questions = {};
 
-    Object.entries(followup_form["questions"]).forEach(([key, question]) => {
+    Object.entries(followupForm["questions"]).forEach(([key, question]) => {
       let questionWarnings = {};
       if (question["source_model"]) {
         if (!sourceModels.includes(question["source_model"])) {
@@ -145,10 +144,10 @@ const validateFollowupForm = (followup_form, questions) => {
     });
   }
 
-  if (followup_form["followup_form"]) {
+  if (followupForm["followup_form"]) {
     warnings.followup_form = validateFollowupForm(
-      followup_form["followup_form"],
-      followup_form["questions"]
+      followupForm["followup_form"],
+      followupForm["questions"]
     );
   }
 
