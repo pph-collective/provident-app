@@ -3,7 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import * as aq from "arquero";
-import { cloneDeep, getFollowupDate } from "./utils/utils";
+import { cloneDeep } from "./utils/utils";
 import followupFormUtils from "./utils/followupForm";
 
 const firebaseConfig = {
@@ -215,7 +215,11 @@ const createFollowupFormResponse = async (
     form: newForm,
     response: newResponse,
     status: "Not Started",
-    release_date: getFollowupDate(last_updated, date_count, date_unit),
+    release_date: followupFormUtils.getFollowupDate(
+      last_updated,
+      date_count,
+      date_unit
+    ),
     last_updated: Date.now(),
   };
 

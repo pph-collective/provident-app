@@ -32,27 +32,6 @@ export const today = () => {
   return new Date().toISOString().split("T")[0];
 };
 
-export const getFollowupDate = (date, count, unit) => {
-  const oldDate = new Date(date);
-
-  switch (unit) {
-    case "month":
-      return new Date(oldDate.setMonth(oldDate.getMonth() + count))
-        .toISOString()
-        .split("T")[0];
-    case "week":
-      return new Date(oldDate.setDate(oldDate.getDate() + 7 * count))
-        .toISOString()
-        .split("T")[0];
-    case "day":
-      return new Date(oldDate.setDate(oldDate.getDate() + count))
-        .toISOString()
-        .split("T")[0];
-    default:
-      return date;
-  }
-};
-
 export const uniqueId = () => {
   const dateString = Date.now().toString(36);
   const randomness = Math.random().toString(36).substr(2);
@@ -96,7 +75,6 @@ export default {
   tertileColorMap,
   cloneDeep,
   evalSchema,
-  getFollowupDate,
   sortByProperty,
   today,
   uniqueArray,

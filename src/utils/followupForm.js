@@ -1,5 +1,26 @@
 import { cloneDeep } from "./utils";
 
+export const getFollowupDate = (date, count, unit) => {
+  const oldDate = new Date(date);
+
+  switch (unit) {
+    case "month":
+      return new Date(oldDate.setMonth(oldDate.getMonth() + count))
+        .toISOString()
+        .split("T")[0];
+    case "week":
+      return new Date(oldDate.setDate(oldDate.getDate() + 7 * count))
+        .toISOString()
+        .split("T")[0];
+    case "day":
+      return new Date(oldDate.setDate(oldDate.getDate() + count))
+        .toISOString()
+        .split("T")[0];
+    default:
+      return date;
+  }
+};
+
 const mergeQuestions = (sourceQuestions, followupQuestions) => {
   return followupQuestions.map((followupQuestion) => {
     const { source_model } = followupQuestion;
@@ -69,6 +90,7 @@ const mergeResponses = (newQuestions, sourceResponse) => {
 };
 
 export default {
+  getFollowupDate,
   mergeQuestions,
   mergeResponses,
 };
