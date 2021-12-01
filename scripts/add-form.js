@@ -84,7 +84,6 @@ const validateForm = ({ title, type, questions, followup_form }) => {
 
 const validateFollowupForm = (followupForm, sourceQuestions) => {
   const warnings = {};
-  const sourceModels = sourceQuestions.map((q) => q.model);
 
   if (!followupForm["title"]) {
     warnings.title = "Required field, a string";
@@ -110,38 +109,10 @@ const validateFollowupForm = (followupForm, sourceQuestions) => {
   if (!followupForm["questions"]) {
     warnings.questions = "Required field, list of questions";
   } else {
-    warnings.questions = {};
-
-    Object.entries(followupForm["questions"]).forEach(([key, question]) => {
-      let questionWarnings = {};
-      if (question["source_model"]) {
-        if (!sourceModels.includes(question["source_model"])) {
-          questionWarnings[
-            "source_model"
-          ] = `model, '${question["source_model"]}', not found in the form this one follows`;
-        }
-
-        if (!question["label"]) {
-          questionWarnings["label"] = "Required field, a string";
-        }
-
-        if (!question["model"]) {
-          questionWarnings["model"] =
-            "Required field, a string. This is the new model for the question.";
-        }
-
-        if (question["component"]) {
-          questionWarnings["component"] =
-            "Invalid field: source_model was provided. We'll pull the component field from the source_model question.";
-        }
-      } else if (question["model"]) {
-        // Regular question
-        questionWarnings = validateQuestion(question);
-      } else {
-        questionWarnings = "`source_model` or `model` fields are required";
-      }
-      warnings.questions[key] = questionWarnings;
-    });
+    warnings.questions = validateFollowupQuestions(
+      sourceQuestions,
+      followupForm["questions"]
+    );
   }
 
   if (followupForm["followup_form"]) {
@@ -150,6 +121,56 @@ const validateFollowupForm = (followupForm, sourceQuestions) => {
       followupForm["questions"]
     );
   }
+
+  return warnings;
+};
+
+const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
+  const warnings = {};
+  const sourceModels = sourceQuestions.map((q) => q.model);
+
+  Object.entries(followupQuestions).forEach(([key, question]) => {
+    let questionWarnings = {};
+    if (question["source_model"]) {
+      if (!sourceModels.includes(question["source_model"])) {
+        questionWarnings[
+          "source_model"
+        ] = `model, '${question["source_model"]}', not found in parent form's list of models: ${sourceModels}`;
+      }
+
+      if (!question["label"]) {
+        questionWarnings["label"] = "Required field, a string";
+      }
+
+      if (!question["model"]) {
+        questionWarnings["model"] =
+          "Required field, a string. This is the new model for the question.";
+      }
+
+      if (question["component"]) {
+        questionWarnings["component"] =
+          "Invalid field: source_model was provided. We'll pull the component field from the source_model question.";
+      }
+
+      // SubForm
+      // We can't check directly that the component is a SubForm because followup questions that have a source_model
+      // inherit the component rather than explicitly saying what it is.
+      // However, we can check if the question has questions.
+      if (question["questions"]) {
+        questionWarnings["questions"] = validateFollowupQuestions(
+          sourceQuestions.find((q) => q.model === question.source_model)
+            .questions,
+          question["questions"]
+        );
+      }
+    } else if (question["model"]) {
+      // Regular question
+      questionWarnings = validateQuestion(question);
+    } else {
+      questionWarnings = "`source_model` or `model` fields are required";
+    }
+    warnings[key] = questionWarnings;
+  });
 
   return warnings;
 };
