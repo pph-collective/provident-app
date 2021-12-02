@@ -53,7 +53,7 @@ const validateForm = ({ title, type, questions, followup_form }) => {
   const warnings = {};
 
   // check title
-  if (!title) {
+  if (typeof title !== "string") {
     warnings.title = "Required field, a string";
   }
 
@@ -62,7 +62,7 @@ const validateForm = ({ title, type, questions, followup_form }) => {
   if (!type) {
     warnings.type = "Required field, 'user' or 'organization'";
   } else if (!validFormTypes.includes(type)) {
-    warnings.type = `Invalid form type entered: ${type}. Required field, 'user' or 'organization`;
+    warnings.type = `Invalid form type entered: '${type}'. Required field, 'user' or 'organization'`;
   }
 
   // check questions

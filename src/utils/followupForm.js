@@ -26,27 +26,25 @@ const mergeQuestions = (sourceQuestions, followupQuestions) => {
     const { source_model } = followupQuestion;
 
     if (source_model !== undefined) {
-      const sourceQuestion = sourceQuestions.find(
-        (q) => source_model === q.model
+      // DEEP COPY SOURCE QUESTION
+      const sourceQuestion = cloneDeep(
+        sourceQuestions.find((q) => source_model === q.model)
       );
 
-      // DEEP COPY SOURCE QUESTION
-      let result = cloneDeep(sourceQuestion);
-
       // RESET
-      delete result.condition;
-      delete result.help_text;
-      delete result.read_only;
-      delete result.required;
+      delete sourceQuestion.condition;
+      delete sourceQuestion.help_text;
+      delete sourceQuestion.read_only;
+      delete sourceQuestion.required;
 
       // Reset for SubForm
       if (sourceQuestion.component === "SubForm") {
-        delete result.repeat_button_title;
+        delete sourceQuestion.repeat_button_title;
       }
 
       // OVERWRITE
-      result = {
-        ...result,
+      const result = {
+        ...sourceQuestion,
 
         // Overwrite fields with the followup question
         ...followupQuestion,
@@ -75,9 +73,9 @@ const mergeResponses = (newQuestions, sourceResponse) => {
   for (const question of newQuestions) {
     const { source_model, model } = question;
 
-    if (sourceResponse[source_model] !== undefined) {
-      if (question.component === "SubForm" && "questions" in question) {
-        result[question.model] = sourceResponse[source_model].map((response) =>
+    if (sourceResponse[source_model]) {
+      if (question.component === "SubForm" && question.questions) {
+        result[model] = sourceResponse[source_model].map((response) =>
           mergeResponses(question.questions, response)
         );
       } else {
