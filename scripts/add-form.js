@@ -4,6 +4,7 @@ const { ArgumentParser } = require("argparse");
 const admin = require("firebase-admin");
 const fs = require("fs");
 const hash = require("object-hash");
+const parseDuration = require("parse-duration");
 
 const parser = new ArgumentParser({
   description: "PROVIDENT - add/overwrite form",
@@ -94,16 +95,12 @@ const validateFollowupForm = (followupForm, sourceQuestions) => {
       "Remove field, it gets overwritten to match the original form type";
   }
 
-  if (!followupForm.date_count) {
-    warnings.date_count = "Required field, integer.";
-  }
-
-  if (
-    !followupForm.date_unit ||
-    !["day", "week", "month"].includes(followupForm.date_unit)
-  ) {
-    warnings.date_unit =
-      "Required field, string. Must be either 'day', 'week', or 'month'.";
+  if (!followupForm.followup_interval) {
+    warnings.followup_interval =
+      "Required field. Ex. '3 months'. See https://github.com/jkroso/parse-duration for documentation";
+  } else if (!parseDuration(followupForm.followup_interval)) {
+    warnings.followup_interval =
+      "Invalid value, unable to parse formatting. See https://github.com/jkroso/parse-duration for documentation";
   }
 
   if (!followupForm.questions) {

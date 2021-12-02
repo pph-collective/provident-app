@@ -1,24 +1,16 @@
 import { cloneDeep } from "./utils";
+import parse from "parse-duration";
 
-export const getFollowupDate = (date, count, unit) => {
-  const oldDate = new Date(date);
+export const getFollowupDate = (lastUpdated, followupInterval) => {
+  const ms = parse(followupInterval);
 
-  switch (unit) {
-    case "month":
-      return new Date(oldDate.setMonth(oldDate.getMonth() + count))
-        .toISOString()
-        .split("T")[0];
-    case "week":
-      return new Date(oldDate.setDate(oldDate.getDate() + 7 * count))
-        .toISOString()
-        .split("T")[0];
-    case "day":
-      return new Date(oldDate.setDate(oldDate.getDate() + count))
-        .toISOString()
-        .split("T")[0];
-    default:
-      return date;
+  if (ms) {
+    return new Date(lastUpdated + parse(followupInterval))
+      .toISOString()
+      .split("T")[0];
   }
+
+  return lastUpdated;
 };
 
 const mergeQuestions = (sourceQuestions, followupQuestions) => {

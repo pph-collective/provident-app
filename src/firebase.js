@@ -189,7 +189,7 @@ const createFollowupFormResponse = async (
 ) => {
   const { _id, form, response, last_updated } = cloneDeep(formResponse);
   const { followup_form, questions } = form;
-  const { title, date_count, date_unit } = followup_form;
+  const { title, followup_interval } = followup_form;
 
   const newForm = {
     title,
@@ -217,8 +217,7 @@ const createFollowupFormResponse = async (
     status: "Not Started",
     release_date: followupFormUtils.getFollowupDate(
       last_updated,
-      date_count,
-      date_unit
+      followup_interval
     ),
     last_updated: Date.now(),
   };
