@@ -72,14 +72,15 @@ const mergeResponses = (newQuestions, sourceResponse) => {
 
   for (const question of newQuestions) {
     const { source_model, model } = question;
+    const sourceQuestionResponse = sourceResponse[source_model];
 
-    if (sourceResponse[source_model]) {
+    if (sourceQuestionResponse) {
       if (question.component === "SubForm" && question.questions) {
-        result[model] = sourceResponse[source_model].map((response) =>
+        result[model] = sourceQuestionResponse.map((response) =>
           mergeResponses(question.questions, response)
         );
       } else {
-        result[model] = sourceResponse[source_model];
+        result[model] = sourceQuestionResponse;
       }
     }
   }
