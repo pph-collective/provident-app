@@ -1,13 +1,39 @@
 import { cloneDeep } from "./utils";
 import parse from "parse-duration";
 
-export const getFollowupDate = (lastUpdated, followupInterval) => {
+export const createFollowupFormResponse = (formResponse) => {
+  const { _id, form, response, last_updated } = cloneDeep(formResponse);
+  const { followup_form, questions } = form;
+  const { title, followup_interval } = followup_form;
+
+  const newForm = {
+    title,
+    type: form.type,
+  };
+
+  if ("followup_form" in followup_form) {
+    // If there is a follow up form, move that up a layer
+    newForm["followup_form"] = followup_form["followup_form"];
+  }
+
+  newForm.questions = mergeQuestions(questions, followup_form.questions);
+  const newResponse = mergeResponses(newForm.questions, response ?? {});
+
+  return {
+    previous_id: _id,
+    form: newForm,
+    response: newResponse,
+    status: "Not Started",
+    release_date: getFollowupDate(last_updated, followup_interval),
+    last_updated: Date.now(),
+  };
+};
+
+const getFollowupDate = (lastUpdated, followupInterval) => {
   const ms = parse(followupInterval);
 
   if (ms) {
-    return new Date(lastUpdated + parse(followupInterval))
-      .toISOString()
-      .split("T")[0];
+    return new Date(lastUpdated + ms).toISOString().split("T")[0];
   }
 
   return lastUpdated;
@@ -81,6 +107,7 @@ const mergeResponses = (newQuestions, sourceResponse) => {
 };
 
 export default {
+  createFollowupFormResponse,
   getFollowupDate,
   mergeQuestions,
   mergeResponses,

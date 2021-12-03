@@ -1,4 +1,4 @@
-import GEO from "../assets/geojson/ri.json";
+import GEO from "@/assets/geojson/ri.json";
 
 export const MUNICIPALITIES = [
   ...new Set(GEO.map((g) => g.properties.name)),

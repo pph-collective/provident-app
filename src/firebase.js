@@ -3,8 +3,6 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import * as aq from "arquero";
-import { cloneDeep } from "./utils/utils";
-import followupFormUtils from "./utils/followupForm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
@@ -183,51 +181,16 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
-const createFollowupFormResponse = async (
-  formResponse,
-  { email, organization }
-) => {
-  const { _id, form, response, last_updated } = cloneDeep(formResponse);
-  const { followup_form, questions } = form;
-  const { title, followup_interval } = followup_form;
-
-  const newForm = {
-    title,
-    type: form.type,
-  };
-
-  if ("followup_form" in followup_form) {
-    // If there is a follow up form, move that up a layer
-    newForm["followup_form"] = followup_form["followup_form"];
-  }
-
-  newForm.questions = followupFormUtils.mergeQuestions(
-    questions,
-    followup_form.questions
-  );
-  const newResponse = followupFormUtils.mergeResponses(
-    newForm.questions,
-    response ?? {}
-  );
-
-  const followupFormResponse = {
-    previous_id: _id,
-    form: newForm,
-    response: newResponse,
-    status: "Not Started",
-    release_date: followupFormUtils.getFollowupDate(
-      last_updated,
-      followup_interval
-    ),
-    last_updated: Date.now(),
-  };
-
-  const followup_id = await updateFormResponse(followupFormResponse, {
-    email,
-    organization,
-  });
-  return { _id: followup_id, ...followupFormResponse };
-};
+// const createFollowupFormResponse = async (
+//   formResponse,
+//   { email, organization }
+// ) => {
+//   const followup_id = await updateFormResponse(followupFormResponse, {
+//     email,
+//     organization,
+//   });
+//   return { _id: followup_id, ...followupFormResponse };
+// };
 
 const getModelDataPeriods = async () => {
   const res = [];
@@ -319,7 +282,6 @@ export default {
   addOrg,
   batchAddFormResponses,
   createEmail,
-  createFollowupFormResponse,
   getCollection,
   getFormResponses,
   getForms,

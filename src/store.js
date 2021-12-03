@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import fb from "@/firebase.js";
 import utils from "@/utils/utils.js";
+import { createFollowupFormResponse } from "@/utils/followupForm.js";
 
 const store = createStore({
   state() {
@@ -112,8 +113,10 @@ const store = createStore({
         updatedFormResponse.status === "Submitted" &&
         updatedFormResponse.form.followup_form !== undefined
       ) {
-        const followupFormResponse = await fb.createFollowupFormResponse(
-          updatedFormResponse,
+        const followupFormResponse =
+          createFollowupFormResponse(updatedFormResponse);
+        followupFormResponse._id = await fb.updateFormResponse(
+          followupFormResponse,
           {
             email: state.user.data.email,
             organization: state.user.data.organization,
