@@ -31,7 +31,6 @@ parser.add_argument("-i", "--id", {
 const { emulator, overwrite, id, file } = parser.parse_args();
 
 if (emulator) {
-  // assumes --emulator is the 5th arg
   console.log("using emulator");
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
 }
@@ -123,7 +122,7 @@ const validateFollowupForm = (followupForm, sourceQuestions) => {
 };
 
 const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
-  const warnings = {};
+  const warnings = [];
   const sourceModels = sourceQuestions.map((q) => q.model);
 
   Object.entries(followupQuestions).forEach(([key, question]) => {
@@ -152,11 +151,16 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
       // inherit the component rather than explicitly saying what it is.
       // However, we can check if the question has questions.
       if (question.questions) {
-        questionWarnings.questions = validateFollowupQuestions(
+        const nestedQuestionsWarnings = validateFollowupQuestions(
           sourceQuestions.find((q) => q.model === question.source_model)
             .questions,
           question.questions
         );
+
+        // If there are warnings append
+        if (nestedQuestionsWarnings.length > 0) {
+          questionWarnings.questions = nestedQuestionsWarnings;
+        }
       }
     } else if (question.model) {
       // Regular question
@@ -164,7 +168,18 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
     } else {
       questionWarnings = "`source_model` or `model` fields are required";
     }
-    warnings[key] = questionWarnings;
+
+    // Push to warnings
+    if (Object.keys(questionWarnings).length > 0) {
+      questionWarnings.question_number = key;
+
+      // If there wasn't a warning on model, include model for reference
+      if (!questionWarnings.model) {
+        questionWarnings.model = question.model;
+      }
+
+      warnings.push(questionWarnings);
+    }
   });
 
   return warnings;
@@ -219,7 +234,12 @@ const validateQuestion = (question) => {
         if (!question.questions) {
           warnings.questions = "Required field, list of questions";
         } else {
-          warnings.questions = validateQuestions(question.questions);
+          const nestedSubFormWarnings = validateQuestions(question.questions);
+
+          // If there are warnings append
+          if (nestedSubFormWarnings.length > 0) {
+            warnings.questions = nestedSubFormWarnings;
+          }
         }
         break;
       default:
@@ -231,10 +251,21 @@ const validateQuestion = (question) => {
 };
 
 const validateQuestions = (questions) => {
-  const warnings = {};
+  const warnings = [];
 
   Object.entries(questions).forEach(([key, question]) => {
-    warnings[key] = validateQuestion(question);
+    const questionWarnings = validateQuestion(question);
+
+    if (Object.keys(questionWarnings).length > 0) {
+      questionWarnings.question_number = key;
+
+      // If there wasn't a warning on model, include model for reference
+      if (!questionWarnings.model) {
+        questionWarnings.model = question.model;
+      }
+
+      warnings.push(questionWarnings);
+    }
   });
 
   return warnings;
