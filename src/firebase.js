@@ -181,17 +181,6 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   }
 };
 
-// const createFollowupFormResponse = async (
-//   formResponse,
-//   { email, organization }
-// ) => {
-//   const followup_id = await updateFormResponse(followupFormResponse, {
-//     email,
-//     organization,
-//   });
-//   return { _id: followup_id, ...followupFormResponse };
-// };
-
 const getModelDataPeriods = async () => {
   const res = [];
   try {
