@@ -144,6 +144,101 @@
           "response": {},
           "expire_date": "4000-09-09",
           "form_assignment_id": "yWBEOQTgyzi6xvcQ0l4q"
+        },
+        "test_followup_form_response": {
+          "status": "Not Started",
+          "last_updated": 1634139937447,
+          "release_date": "3000-09-09",
+          "response": {},
+          "expire_date": "4000-09-09",
+          "form": {
+            "title": "Original Form",
+            "type": "user",
+            "questions": [
+              {
+                "model": "favorite_color",
+                "component": "TextArea",
+                "label": "What is your favorite color?"
+              },
+              {
+                "model": "sub_form",
+                "component": "SubForm",
+                "label": "Sub Form",
+                "questions": [
+                  {
+                    "model": "favorite_animal",
+                    "component": "TextArea",
+                    "label": "What is your favorite animal?"
+                  }
+                ]
+              }
+            ],
+            "followup_form": {
+              "title": "Followup Form",
+              "followup_interval": "1 day",
+              "questions": [
+                {
+                  "source_model": "favorite_color",
+                  "model": "favorite_color",
+                  "label": "Last time, your favorite color was...",
+                  "read_only": true
+                },
+                {
+                  "model": "second_favorite_color",
+                  "label": "What is your second favorite color?",
+                  "component": "TextArea"
+                },
+                {
+                  "source_model": "sub_form",
+                  "model": "sub_form",
+                  "label": "Followup Sub Form",
+                  "questions": [
+                    {
+                      "source_model": "favorite_animal",
+                      "model": "favorite_animal",
+                      "label": "Last time, your favorite animal was...",
+                      "read_only": true
+                    },
+                    {
+                      "model": "second_favorite_animal",
+                      "label": "What is your second favorite animal?",
+                      "component": "TextArea"
+                    }
+                  ]
+                }
+              ],
+              "followup_form": {
+                "title": "Followup to the followup form",
+                "followup_interval": "2 day",
+                "questions": [
+                  {
+                    "source_model": "second_favorite_color",
+                    "model": "second_favorite_color",
+                    "label": "Your second favorite color was...",
+                    "read_only": true
+                  },
+                  {
+                    "source_model": "sub_form",
+                    "model": "sub_form",
+                    "label": "Followup to the followup",
+                    "questions": [
+                      {
+                        "source_model": "second_favorite_animal",
+                        "model": "second_favorite_animal",
+                        "label": "Your second favorite animal was...",
+                        "read_only": true
+                      }
+                    ]
+                  },
+                  {
+                    "model": "favorite_movie",
+                    "component": "TextArea",
+                    "label": "What's your favorite movie?"
+                  }
+                ]
+              }
+            }
+          }
         }
       }
     },
@@ -922,6 +1017,96 @@
             "label": "How's the organization?"
           }
         ]
+      }
+    },
+    "test_followup_form": {
+      "data": {
+        "title": "Original Form",
+        "type": "user",
+        "questions": [
+          {
+            "model": "favorite_color",
+            "component": "TextArea",
+            "label": "What is your favorite color?"
+          },
+          {
+            "model": "sub_form",
+            "component": "SubForm",
+            "label": "Sub Form",
+            "questions": [
+              {
+                "model": "favorite_animal",
+                "component": "TextArea",
+                "label": "What is your favorite animal?"
+              }
+            ]
+          }
+        ],
+        "followup_form": {
+          "title": "Followup Form",
+          "followup_interval": "1 day",
+          "questions": [
+            {
+              "source_model": "favorite_color",
+              "model": "favorite_color",
+              "label": "Last time, your favorite color was...",
+              "read_only": true
+            },
+            {
+              "model": "second_favorite_color",
+              "label": "What is your second favorite color?",
+              "component": "TextArea"
+            },
+            {
+              "source_model": "sub_form",
+              "model": "sub_form",
+              "label": "Followup Sub Form",
+              "questions": [
+                {
+                  "source_model": "favorite_animal",
+                  "model": "favorite_animal",
+                  "label": "Last time, your favorite animal was...",
+                  "read_only": true
+                },
+                {
+                  "model": "second_favorite_animal",
+                  "label": "What is your second favorite animal?",
+                  "component": "TextArea"
+                }
+              ]
+            }
+          ],
+          "followup_form": {
+            "title": "Followup to the followup form",
+            "followup_interval": "2 day",
+            "questions": [
+              {
+                "source_model": "second_favorite_color",
+                "model": "second_favorite_color",
+                "label": "Your second favorite color was...",
+                "read_only": true
+              },
+              {
+                "source_model": "sub_form",
+                "model": "sub_form",
+                "label": "Followup to the followup",
+                "questions": [
+                  {
+                    "source_model": "second_favorite_animal",
+                    "model": "second_favorite_animal",
+                    "label": "Your second favorite animal was...",
+                    "read_only": true
+                  }
+                ]
+              },
+              {
+                "model": "favorite_movie",
+                "component": "TextArea",
+                "label": "What's your favorite movie?"
+              }
+            ]
+          }
+        }
       }
     }
   },

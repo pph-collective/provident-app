@@ -6,23 +6,14 @@ describe("Form functionality", () => {
     });
   });
 
-  it("Form title heading", () => {
+  it("Loading forms page", () => {
     cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
-  });
 
-  it("Starting status of form", () => {
     cy.get('[data-cy="forms-panel-block"]').should(
       "not.contain",
       "No forms here"
     );
     cy.get(".tag").should("contain", "Not Started");
-  });
-
-  it("Launch form button", () => {
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
     cy.get('[data-cy="launch-form-button"]').should("exist");
   });
 
@@ -482,7 +473,7 @@ describe("Form functionality", () => {
 
   describe("filters forms", () => {
     beforeEach(() => {
-      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 5);
     });
 
     it("title", () => {
@@ -500,7 +491,7 @@ describe("Form functionality", () => {
     it("status", () => {
       cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
-      cy.get('[data-cy="forms-panel-block"]').should("have.length", 4);
+      cy.get('[data-cy="forms-panel-block"]').should("have.length", 5);
       cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
       cy.contains("div", "Status ").click();
@@ -550,6 +541,182 @@ describe("Forms viewed as an admin", () => {
       "Unreleased Form"
     );
 
+    cy.get('[data-cy="close-form"]').click();
+  });
+
+  it("Followup forms", () => {
+    const now = Date.now();
+    const day_in_ms = 86400000;
+
+    const tomorrow = new Date(now + day_in_ms).toISOString().split("T")[0];
+    const day_after_tomorrow = new Date(now + 2 * day_in_ms)
+      .toISOString()
+      .split("T")[0];
+
+    cy.contains('[data-cy="forms-panel-block"]', "Original Form")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    // Assert that this is the simple form
+    cy.get('[data-cy="active-form-title"]').should("contain", "Original Form");
+
+    // Fill out form
+    cy.get('[model="favorite_color"]')
+      .find("textarea")
+      .should("be.enabled")
+      .type("blue");
+
+    cy.get('[model="favorite_animal"]')
+      .find("textarea")
+      .should("be.enabled")
+      .type("giraffe");
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Submit")
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+
+    // Check the followup form
+    cy.contains('[data-cy="forms-panel-block"]', "Original Form")
+      .should("exist")
+      .find(".tag")
+      .should("contain", "Submitted");
+
+    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+      .should("exist")
+      .find(".tag")
+      .should("contain", "Not Started");
+
+    // Check release date
+    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+      .should("exist")
+      .find(".tag")
+      .should("contain", `RELEASE DATE: ${tomorrow}`);
+
+    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    // Assert form is the Followup Form
+    cy.get('[data-cy="active-form-title"]').should("contain", "Followup Form");
+
+    // Fill out form
+    cy.get('[model="favorite_color"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "blue");
+
+    cy.get('[model="second_favorite_color"]').find("textarea").type("green");
+
+    cy.get('[model="favorite_animal"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "giraffe");
+
+    cy.get('[model="second_favorite_animal"]').find("textarea").type("whale");
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Submit")
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+
+    // Check the followup form
+    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+      .should("exist")
+      .find(".tag")
+      .should("contain", "Submitted");
+
+    // Check the followup to the followup form
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Followup to the followup form"
+    )
+      .should("exist")
+      .find(".tag")
+      .should("contain", "Not Started");
+
+    // Check release date
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Followup to the followup form"
+    )
+      .should("exist")
+      .find(".tag")
+      .should("contain", `RELEASE DATE: ${day_after_tomorrow}`);
+
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Followup to the followup form"
+    )
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    // Assert that this is the followup to the followup form
+    cy.get('[data-cy="active-form-title"]').should(
+      "contain",
+      "Followup to the followup form"
+    );
+
+    cy.get('[model="second_favorite_color"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "green");
+
+    cy.get('[model="second_favorite_animal"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "whale");
+
+    cy.get('[model="favorite_movie"]')
+      .find("textarea")
+      .should("exist")
+      .should("be.enabled")
+      .type("all of them");
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Submit")
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+
+    // Review the followup to the followup form
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Followup to the followup form"
+    )
+      .should("exist")
+      .find(".tag")
+      .should("contain", "Submitted");
+
+    cy.contains(
+      '[data-cy="forms-panel-block"]',
+      "Followup to the followup form"
+    )
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[model="second_favorite_color"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "green");
+
+    cy.get('[model="second_favorite_animal"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "whale");
+
+    cy.get('[model="favorite_movie"]')
+      .find("textarea")
+      .should("be.disabled")
+      .should("have.value", "all of them");
+
+    // Close form
     cy.get('[data-cy="close-form"]').click();
   });
 });
