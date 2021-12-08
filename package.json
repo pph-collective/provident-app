@@ -54,7 +54,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
     "csv-parse": "^4.16.0",
-    "cypress": "8.6.0",
+    "cypress": "9.1.1",
     "cypress-firebase": "^2.0.0",
     "d3-dsv": "^3.0.1",
     "eslint": "^7.32.0",
