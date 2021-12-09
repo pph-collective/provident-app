@@ -6,6 +6,12 @@ const fs = require("fs");
 const hash = require("object-hash");
 const parseDuration = require("parse-duration");
 
+const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
+
+const { default: Ajv } = require("ajv");
+const ajv = new Ajv({ allErrors: true }); // Ajv option allErrors is required
+require("ajv-errors")(ajv);
+
 const parser = new ArgumentParser({
   description: "PROVIDENT - add/overwrite form",
   add_help: true,
@@ -42,7 +48,7 @@ const db = app.firestore();
 const rawdata = fs.readFileSync(file);
 let form = JSON.parse(rawdata);
 
-const dateRegex = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
+const dateRegex = "(^today$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$)";
 
 const warnAndExit = (warning) => {
   console.warn(warning);
@@ -151,15 +157,22 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
       // inherit the component rather than explicitly saying what it is.
       // However, we can check if the question has questions.
       if (question.questions) {
-        const nestedQuestionsWarnings = validateFollowupQuestions(
-          sourceQuestions.find((q) => q.model === question.source_model)
-            .questions,
-          question.questions
+        const subForm = sourceQuestions.find(
+          (q) => q.model === question.source_model
         );
 
-        // If there are warnings append
-        if (nestedQuestionsWarnings.length > 0) {
-          questionWarnings.questions = nestedQuestionsWarnings;
+        if (subForm) {
+          const nestedQuestionsWarnings = validateFollowupQuestions(
+            subForm.questions,
+            question.questions
+          );
+
+          // If there are warnings append
+          if (nestedQuestionsWarnings.length > 0) {
+            questionWarnings.questions = nestedQuestionsWarnings;
+          }
+        } else {
+          questionWarnings.questions = `Unable to find the source_model for the SubForm in the parent form: ${question.source_model}`;
         }
       }
     } else if (question.model) {
@@ -185,55 +198,104 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
   return warnings;
 };
 
+const questionSchema = {
+  type: "object",
+  properties: {
+    model: { type: "string" },
+    label: { type: "string" },
+    component: {
+      type: "string",
+      enum: [
+        "Date",
+        "TextArea",
+        "TextInput",
+        "Select",
+        "Radio",
+        "Checkbox",
+        "LikertScale",
+        "SubForm",
+      ],
+    },
+    required: { type: "boolean" },
+    help_text: { type: "string" },
+    validations: { type: "string" },
+    condition: { type: "string" },
+    read_only: { type: "boolean" },
+  },
+  required: ["model", "label", "component"],
+  additionalProperties: {
+    not: true,
+    errorMessage: "Invalid key",
+  },
+  errorMessage: {
+    properties: {},
+  },
+};
+
 const validateQuestion = (question) => {
   const warnings = {};
-
-  // check label
-  if (!question.label) {
-    warnings.label = "Required field, a string for the question label";
-  }
-
-  if (question.source_model) {
-    warnings.source_model =
-      "Invalid field, source_model exists on followup_form questions only";
-  }
+  const schema = cloneDeep(questionSchema);
 
   // check component
-  if (!question.component) {
-    warnings.component = "Required field";
-  } else {
+  if (question.component) {
+    // Update the schema
     switch (question.component) {
       case "Date":
-        ["max_date", "min_date"].forEach((field) => {
-          if (
-            question[field] &&
-            question[field] !== "today" &&
-            !dateRegex.test(question[field])
-          ) {
-            warnings[field] =
-              "Invalid value, should either be 'today' or in yyyy-mm-dd format";
-          }
-        });
+        schema.properties.min_date = { type: "string", pattern: dateRegex };
+        schema.properties.max_date = { type: "string", pattern: dateRegex };
+        schema.errorMessage.properties.min_date =
+          "Invalid value, should either be 'today' or in yyyy-mm-dd format: ${/min_date}";
+        schema.errorMessage.properties.max_date =
+          "Invalid value, should either be 'today' or in yyyy-mm-dd format: ${/max_date}";
         break;
       case "TextArea":
+        break;
       case "TextInput":
+        schema.properties.type = {
+          enum: [
+            "text",
+            "color",
+            "date",
+            "email",
+            "month",
+            "number",
+            "password",
+            "tel",
+            "time",
+            "url",
+            "week",
+          ],
+        };
         break;
       case "Select":
       case "Radio":
       case "Checkbox":
-        if (!question.options) {
-          warnings.options = "Required field, list of options";
-        }
+        schema.properties.options = {
+          type: "array",
+          items: { type: "string" },
+        };
+        schema.required.push("options");
         break;
       case "LikertScale":
-        if (!question.statements) {
-          warnings.statements = "Required field, list of statements";
-        }
+        schema.properties.statements = {
+          type: "array",
+          items: { type: "string" },
+        };
+        schema.required.push("statements");
+        schema.properties.options = {
+          type: "array",
+          items: { type: "string" },
+        };
         break;
       case "SubForm":
-        if (!question.questions) {
-          warnings.questions = "Required field, list of questions";
-        } else {
+        schema.properties.questions = {
+          type: "array",
+          items: { type: "object" },
+        };
+        schema.required.push("questions");
+        schema.properties.repeat_button_title = { type: "string" };
+
+        if (question.questions !== undefined) {
           const nestedSubFormWarnings = validateQuestions(question.questions);
 
           // If there are warnings append
@@ -242,9 +304,22 @@ const validateQuestion = (question) => {
           }
         }
         break;
-      default:
-        warnings.component = `Invalid component, must be of the following: Checkbox, Date, LikertScale, Radio, Select, SubForm, TextArea, TextInput`;
     }
+  }
+
+  const validate = ajv.compile(schema);
+  if (!validate(question)) {
+    validate.errors.forEach((e) => {
+      const key = e.instancePath.substring(1); // For example, "model", "component", that exist in our form
+      if (key) {
+        warnings[key] = e.message;
+      } else {
+        // The case in which we land here is when we are missing a required key.
+        // The instancePath is an empty string, "". Since there is no instance of the key. Instead we use the keyword
+        // from the error as the key. In this case "required".
+        warnings[e.keyword] = e.message;
+      }
+    });
   }
 
   return warnings;
@@ -314,5 +389,5 @@ db.collection("forms")
     // validate the form and upload
     validateForm(form);
     addVersion(oldForm, form);
-    db.collection("forms").doc(id).set(form);
+    // db.collection("forms").doc(id).set(form);
   });
