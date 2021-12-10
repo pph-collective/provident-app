@@ -156,6 +156,7 @@ export default {
     const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
         form: store.state.forms[form_id],
+        release_date: new Date().toISOString().split("T")[0],
         status: "Not Started",
         response: {
           [GEOID_QUESTION_MODEL]: activeGeoid.value,
