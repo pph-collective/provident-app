@@ -11,7 +11,7 @@ const selectForm = (formTitle) => {
  * Sets the release date to today and the expire date to 3000-01-01
  */
 const setDatesAndSubmit = () => {
-  const today = new Date().toISOString().split("T")[0]; // Date to ISO string without time
+  const today = new Date().toLocaleDateString("sv");
   cy.get('[model="release_date"]').find("input").type(today);
   cy.get('[model="expire_date"]').find("input").type("3000-01-01");
 
