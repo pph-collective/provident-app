@@ -96,6 +96,7 @@ import { useStore } from "vuex";
 
 import {
   sortByProperty,
+  today,
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
 } from "@/utils/utils.js";
@@ -156,6 +157,7 @@ export default {
     const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
         form: store.state.forms[form_id],
+        release_date: today(),
         status: "Not Started",
         response: {
           [GEOID_QUESTION_MODEL]: activeGeoid.value,

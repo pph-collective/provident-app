@@ -29,7 +29,7 @@ export const sortByProperty = (property) => (a, b) => {
 };
 
 export const today = () => {
-  return new Date().toISOString().split("T")[0];
+  return new Date().toLocaleDateString("sv");
 };
 
 export const uniqueId = () => {
