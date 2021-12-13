@@ -251,7 +251,7 @@ The `type` key, where we'd normally specify whether this is a user or organizati
 inherit the type of the form from the parent form.
 
 #### Followup question
-This is a question that refer to a question in the direct parent form. Your followup form can have new questions.
+This is a question that refers to a question in the direct parent form. Your followup form can have new questions.
 See [how to build questions](#how-to-build-questions).
 
 Required keys:

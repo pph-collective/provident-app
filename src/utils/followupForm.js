@@ -3,12 +3,12 @@ import parse from "parse-duration";
 
 export const createFollowupFormResponse = (formResponse) => {
   const { _id, form, response, last_updated } = cloneDeep(formResponse);
-  const { followup_form, questions } = form;
+  const { followup_form, questions, type } = form;
   const { title, followup_interval } = followup_form;
 
   const newForm = {
     title,
-    type: form.type,
+    type,
   };
 
   if ("followup_form" in followup_form) {
@@ -33,7 +33,7 @@ const getFollowupDate = (lastUpdated, followupInterval) => {
   const ms = parse(followupInterval);
 
   if (ms) {
-    return new Date(lastUpdated + ms).toISOString().split("T")[0];
+    return new Date(lastUpdated + ms).toLocaleDateString("sv");
   }
 
   return lastUpdated;
@@ -56,9 +56,7 @@ const mergeQuestions = (sourceQuestions, followupQuestions) => {
       delete sourceQuestion.required;
 
       // Reset for SubForm
-      if (sourceQuestion.component === "SubForm") {
-        delete sourceQuestion.repeat_button_title;
-      }
+      delete sourceQuestion.repeat_button_title;
 
       // OVERWRITE
       const result = {

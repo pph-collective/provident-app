@@ -548,7 +548,7 @@ describe("Forms viewed as an admin", () => {
     const now = Date.now();
     const day_in_ms = 86400000;
 
-    const tomorrow = new Date(now + day_in_ms).toISOString().split("T")[0];
+    const tomorrow = new Date(now + day_in_ms).toLocaleDateString("sv");
     const day_after_tomorrow = new Date(now + 2 * day_in_ms)
       .toISOString()
       .split("T")[0];
