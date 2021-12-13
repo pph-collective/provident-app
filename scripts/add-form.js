@@ -6,7 +6,7 @@ const fs = require("fs");
 const hash = require("object-hash");
 const parseDuration = require("parse-duration");
 
-const { default: Ajv } = require("ajv");
+const Ajv = require("ajv").default;
 const ajv = new Ajv({ allErrors: true }); // Ajv option allErrors is required
 require("ajv-errors")(ajv);
 
