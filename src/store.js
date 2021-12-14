@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import fb from "@/firebase.js";
 import utils from "@/utils/utils.js";
 import { createFollowupFormResponse } from "@/utils/followupForm.js";
+import { processEmailBody } from "@/utils/emails";
 
 const store = createStore({
   state() {
@@ -123,6 +124,23 @@ const store = createStore({
           }
         );
         formResponses.push(followupFormResponse);
+
+        const { release_date, form } = followupFormResponse;
+        const { title, type } = form;
+        const body = `<p>A followup form, <em>${title}</em>, has been assigned to ${
+          type === "user" ? "you" : "your organization"
+        }. Check out the form on <a href='${
+          location.origin
+        }/snack/forms'>PROVIDENT</a></p>`;
+
+        console.log(followupFormResponse);
+
+        await fb.createEmail({
+          to: updatedFormResponse.users_edited,
+          send_date: release_date,
+          subject: `PROVIDENT Followup Form: ${title}`,
+          body: processEmailBody(body),
+        });
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });

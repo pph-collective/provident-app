@@ -36,7 +36,7 @@ const getFollowupDate = (lastUpdated, followupInterval) => {
     return new Date(lastUpdated + ms).toLocaleDateString("sv");
   }
 
-  return lastUpdated;
+  return new Date(lastUpdated).toLocaleDateString("sv");
 };
 
 const mergeQuestions = (sourceQuestions, followupQuestions) => {

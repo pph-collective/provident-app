@@ -48,13 +48,18 @@ const getEmails = async () => {
 };
 
 // send an email request out to the correct recipients, mark as sent
-const sendEmail = async (transport, { id, subject, to, body }) => {
+const sendEmail = async (transport, { id, subject, to, body }, users) => {
   // if all the emails failed to send, don't mark the message as sent
   let all_failed = true;
 
   // send mail with defined transport object
   for (const email of to) {
     try {
+      if (!users.includes(email)) {
+        console.log(`User doesn't exist in our database: ${email}`);
+        continue;
+      }
+
       const info = await transport.sendMail({
         from: '"PROVIDENT RI" <noreply@brown.edu>', // sender address
         to: email, // list of receivers
@@ -78,6 +83,20 @@ const sendEmail = async (transport, { id, subject, to, body }) => {
   if (!all_failed && !test) {
     await db.collection("emails").doc(id).update({ sent: true });
   }
+};
+
+// Copied from firebase.js
+const getCollection = async (collection) => {
+  let res = [];
+  try {
+    const docs = await db.collection(collection).get();
+    res = docs.docs.map((doc) => {
+      return { _id: doc.id, ...doc.data() };
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return res;
 };
 
 // get the emails to be sent, set up the transporter, send all emails
@@ -106,8 +125,10 @@ const main = async () => {
     console.debug("initialized ethereal email smtp server");
   }
 
+  const users = (await getCollection("users")).map((u) => u.email);
+
   for (let email of emails) {
-    await sendEmail(transport, email);
+    await sendEmail(transport, email, users);
   }
 
   console.log("Done sending emails.");

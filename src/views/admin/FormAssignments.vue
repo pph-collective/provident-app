@@ -141,6 +141,7 @@ import fb from "@/firebase";
 import { esc } from "@/directives/escape";
 import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
+import { processEmailBody } from "@/utils/emails";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
@@ -321,13 +322,15 @@ export default {
 
         // add an email to the queue
         if (send_email.length > 0) {
+          const body = `<p>A form, <em>${title}</em>, has been assigned to ${
+            type === "user" ? "you" : "your organization"
+          }. Check out the form on <a href='${
+            location.origin
+          }/snack/forms'>PROVIDENT</a></p>`;
+
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${title}`,
-            body: `<p>A form, <em>${title}</em>, has been assigned to ${
-              type === "user" ? "you" : "your organization"
-            }. Check out the form on <a href='${
-              location.origin
-            }/snack/forms'>PROVIDENT</a></p>`,
+            body: processEmailBody(body),
             to: emails,
             sendDate: release_date,
           });
