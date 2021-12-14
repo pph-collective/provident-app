@@ -140,7 +140,7 @@ describe("Admin Views and Powers", () => {
         .click()
         .contains(".multiselect-option", "control")
         .click();
-      cy.get("[model='send_date']").find("input").type("2021-12-12");
+      cy.get("[model='send_date']").find("input").type("3000-12-12");
       cy.get("[model='subject']").find("input").type("A test email");
       cy.get("[model='body']").find("textarea").type("<p>Hello, world</p>");
 
@@ -161,7 +161,7 @@ describe("Admin Views and Powers", () => {
       cy.get("button").contains("Submit").click();
 
       cy.get(".email-row").contains("A test email").should("exist");
-      cy.get(".email-row").contains("span", "2021-12-12").should("exist");
+      cy.get(".email-row").contains("span", "3000-12-12").should("exist");
       cy.get(".email-row")
         .find(".tag")
         .should("have.length", 3)

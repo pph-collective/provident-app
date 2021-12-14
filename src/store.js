@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import fb from "@/firebase.js";
 import utils from "@/utils/utils.js";
+import { createFollowupFormResponse } from "@/utils/followupForm.js";
 
 const store = createStore({
   state() {
@@ -86,26 +87,46 @@ const store = createStore({
       });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
-      const _id = await fb.updateFormResponse(updatedFormResponse, {
-        email: state.user.data.email,
-        organization: state.user.data.organization,
-      });
+      updatedFormResponse._id = await fb.updateFormResponse(
+        updatedFormResponse,
+        {
+          email: state.user.data.email,
+          organization: state.user.data.organization,
+        }
+      );
+
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
-          formResponse._id === _id &&
+          formResponse._id === updatedFormResponse._id &&
           formResponse.type === updatedFormResponse.type
       );
 
       if (formResponseIndex >= 0) {
         formResponses[formResponseIndex] = updatedFormResponse;
       } else {
-        formResponses.push({ _id, ...updatedFormResponse });
+        formResponses.push(updatedFormResponse);
+      }
+
+      // Follow up form
+      if (
+        updatedFormResponse.status === "Submitted" &&
+        updatedFormResponse.form.followup_form !== undefined
+      ) {
+        const followupFormResponse =
+          createFollowupFormResponse(updatedFormResponse);
+        followupFormResponse._id = await fb.updateFormResponse(
+          followupFormResponse,
+          {
+            email: state.user.data.email,
+            organization: state.user.data.organization,
+          }
+        );
+        formResponses.push(followupFormResponse);
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
-
-      return _id;
+      return updatedFormResponse._id;
     },
     updateUsers({ commit }, users) {
       commit("mutate", { property: "users", with: users });

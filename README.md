@@ -42,12 +42,7 @@ yarn lint
 ## Forms
 
 As part of this web app, forms can be specified using JSON and added to the firebase store. There is support for a variety of field types, validation, and conditional fields.
-
-The form has the following keys at the root level:
-
-* `title`: The title of the form (will display to the end user)
-* `type`: The type of the form which can be either `user` or `organization`
-* `questions`: An object specifying the fields and logic (all below sections refer to questions)
+We're using [formvuelate](https://formvuelate.js.org/guide/#installation) to build and validate our forms.  The validation is done using [VeeValidate](https://formvuelate.js.org/guide/veevalidate.html) and [yup](https://github.com/jquense/yup#api).
 
 A sample JSON:
 ```json
@@ -102,21 +97,20 @@ A sample JSON:
 }
 ```
 
-We're using [formvuelate](https://formvuelate.js.org/guide/#installation) to build and validate our forms.  The validation is done using [VeeValidate](https://formvuelate.js.org/guide/veevalidate.html) and [yup](https://github.com/jquense/yup#api).
-
+See the data folder for [sample forms](https://github.com/pph-collective/provident-app/tree/main/data) 
 See [scripts](scripts/README.md) for info on how to upload a JSON form to firebase
 
-### Field Types
+### How to Build a Form
+Required keys at the root level:
 
-The fields currently supported (component in `src/components/forms`) are:
-* `Checkbox`: A list of checkboxes to check
-* `Date`: A calendar date picker
-* `LikertScale`: A table of radio buttons to rate statements
-* `Radio`: Radio button group
-* `Select`: Drop down menu
-* `SubForm`: A component that acts as a form. Typically used to repeat a group of questions.
-* `TextArea`: A multi-line text input
-* `TextInput`: A one line text input
+* `title`: The title of the form (will display to the end user)
+* `type`: The type of the form which can be either `user` or `organization`
+* `questions`: A list of question fields (See [How to Build Questions](#how-to-build-questions))
+
+Optional keys at the root level:
+* `followup_form`: A form that follows up with the form. (See [How to Build a Followup Form](#how-to-build-a-followup-form))
+
+### How to Build Questions
 
 Required keys for all fields:
 * `model`: The identifier for the question result (e.g. `"age"`)
@@ -129,6 +123,17 @@ Optional keys supported on all fields:
 * `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
 * `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
 * `read_only`: A boolean (true/false) indicating if the field is read only.
+
+The fields currently supported (component in `src/components/forms`) are:
+* `Checkbox`: A list of checkboxes to check
+* `Date`: A calendar date picker
+* `LikertScale`: A table of radio buttons to rate statements
+* `Radio`: Radio button group
+* `Select`: Drop down menu
+* `SubForm`: A component that acts as a form. Typically used to repeat a group of questions.
+* `TextArea`: A multi-line text input
+* `TextInput`: A one line text input
+
 
 #### Checkbox
 
@@ -215,6 +220,56 @@ Not all of these will work out of the box, common ones that will are:
 * `time`
 * `url`
 * `week`
+
+### How to Build a Followup Form
+At the root level of your form you need to add the key `'followup_form'`
+
+For example
+```json
+{
+  "title": "Example Form",
+  "type": "user",
+  "questions": [...],
+  "followup_form": {
+    // Here is were you'll add the keys for a followup form
+  }
+}
+```
+
+Required keys:
+* `title`: The title of the followup form (will display to the end user)
+* `followup_interval`: When to followup with a user from the time they submit the parent form, for example 
+`"3 months"`. See docs for [parse-duration](https://github.com/jkroso/parse-duration) for how to format this field. 
+* `questions`: A list of question fields which can either be [followup questions](#followup-questions) or regular
+questions (See [how to build questions](#how-to-build-questions)).
+
+Optional keys:
+* `followup_form`: You can add in another followup form which will release after the parent followup form
+
+Notes:
+The `type` key, where we'd normally specify whether this is a user or organization form, is invalid here. We instead
+inherit the type of the form from the parent form.
+
+#### Followup question
+This is a question that refers to a question in the direct parent form. Your followup form can have new questions.
+See [how to build questions](#how-to-build-questions).
+
+Required keys:
+* `source_model` : The identifier for the parent question `model`. This is how we refer to the parent.
+* `model`: The identifier for the question result (e.g. `"age"`)
+* `label`: The question to display with the input (e.g. `"How old are you?"`)
+
+Optional keys:
+* `required`: A boolean (true/false) indicating if the field is required
+* `help_text` : A string containing help text displayed for the user to see.
+* `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
+* `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
+* `read_only`: A boolean (true/false) indicating if the field is read only.
+
+Notes:
+- The `component` key is invalid here since we inherit this from the parent field.
+- The `condition`, `help_text`, `read_only`, and `required` field are not taken from the parent field and can be reset
+here.
 
 ## Authentication
 
