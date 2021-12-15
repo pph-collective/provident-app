@@ -325,7 +325,7 @@ export default {
             type === "user" ? "you" : "your organization"
           }. Check out the form on <a href='${
             location.origin
-          }/snack/forms'>PROVIDENT</a></p>`;
+          }/snack/forms'>PROVIDENT</a>.</p>`;
 
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${title}`,
