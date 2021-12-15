@@ -84,23 +84,19 @@
     }
   ],
   "followup_form": {
-    "title": "Mid-way followup to the Six Month Resource Plan",
+    "title": "Mid-way Followup to the Six Month Resource Plan",
     "followup_interval": "3 months",
     "questions": [
       {
         "source_model": "bg_id",
         "model": "bg_id",
         "label": "Neighborhood ID",
-        "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
-        "required": true,
         "read_only": true
       },
       {
         "source_model": "municipality",
         "model": "municipality",
         "label": "Municipality",
-        "validations": "yup.string().required()",
-        "required": true,
         "read_only": true
       },
       {
@@ -154,16 +150,12 @@
           "source_model": "bg_id",
           "model": "bg_id",
           "label": "Neighborhood ID",
-          "validations": "yup.string().length(7, 'Must be exactly 7 digits').matches(/^[0-9]+$/, 'Must be only digits: 0-9').required()",
-          "required": true,
           "read_only": true
         },
         {
           "source_model": "municipality",
           "model": "municipality",
           "label": "Municipality",
-          "validations": "yup.string().required()",
-          "required": true,
           "read_only": true
         },
         {
