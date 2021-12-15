@@ -1,5 +1,5 @@
 {
-  "title": "Six Month Resource Planning",
+  "title": "Six Month Resource Plan",
   "type": "organization",
   "questions": [
     {
@@ -82,5 +82,129 @@
         }
       ]
     }
-  ]
+  ],
+  "followup_form": {
+    "title": "Mid-way Followup to the Six Month Resource Plan",
+    "followup_interval": "3 months",
+    "questions": [
+      {
+        "source_model": "bg_id",
+        "model": "bg_id",
+        "label": "Neighborhood ID",
+        "read_only": true
+      },
+      {
+        "source_model": "municipality",
+        "model": "municipality",
+        "label": "Municipality",
+        "read_only": true
+      },
+      {
+        "label": "Previously, your goals were the following",
+        "source_model": "goal_form",
+        "model": "goal_form",
+        "questions": [
+          {
+            "label": "Goal",
+            "source_model": "goal",
+            "model": "goal",
+            "read_only": true
+          },
+          {
+            "label": "What progress have you made towards this goal?",
+            "model": "progress",
+            "component": "TextArea",
+            "required": true
+          },
+          {
+            "label": "Last time, your tasks were the following",
+            "source_model": "task_form",
+            "model": "task_form",
+            "questions": [
+              {
+                "source_model": "plan",
+                "model": "plan",
+                "label": "Plan",
+                "read_only": true
+              },
+              {
+                "source_model": "plan_description",
+                "model": "plan_description",
+                "label": "Description",
+                "read_only": true
+              },
+              {
+                "model": "plan_progress",
+                "label": "What progress have you made towards this plan?",
+                "component": "TextArea",
+                "required": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "followup_form": {
+      "title": "Followup to Six Month Resource Plan",
+      "followup_interval": "3 months",
+      "questions": [
+        {
+          "source_model": "bg_id",
+          "model": "bg_id",
+          "label": "Neighborhood ID",
+          "read_only": true
+        },
+        {
+          "source_model": "municipality",
+          "model": "municipality",
+          "label": "Municipality",
+          "read_only": true
+        },
+        {
+          "label": "Previously, your goals were the following:",
+          "source_model": "goal_form",
+          "model": "goal_form",
+          "questions": [
+            {
+              "label": "Goal",
+              "source_model": "goal",
+              "model": "goal",
+              "read_only": true
+            },
+            {
+              "label": "What outcomes did you have from this goal?",
+              "model": "outcome",
+              "component": "TextArea",
+              "required": true
+            },
+            {
+              "label": "Previously, your tasks were the following:",
+              "source_model": "task_form",
+              "model": "task_form",
+              "questions": [
+                {
+                  "source_model": "plan",
+                  "model": "plan",
+                  "label": "Plan",
+                  "read_only": true
+                },
+                {
+                  "source_model": "plan_description",
+                  "model": "plan_description",
+                  "label": "Description",
+                  "read_only": true
+                },
+                {
+                  "model": "plan_outcome",
+                  "label": "What outcomes did you have from this plan?",
+                  "component": "TextArea",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
 }
