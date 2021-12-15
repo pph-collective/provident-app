@@ -123,6 +123,21 @@ const store = createStore({
           }
         );
         formResponses.push(followupFormResponse);
+
+        const { release_date, form } = followupFormResponse;
+        const { title, type } = form;
+        const body = `<p>A followup form, <em>${title}</em>, has been assigned to ${
+          type === "user" ? "you" : "your organization"
+        }. Check out the form on <a href='${
+          location.origin
+        }/snack/forms'>PROVIDENT</a>.</p>`;
+
+        await fb.createEmail({
+          to: updatedFormResponse.users_edited,
+          send_date: release_date,
+          subject: `PROVIDENT Followup Form: ${title}`,
+          body,
+        });
       }
 
       commit("mutateUser", { property: "formResponses", with: formResponses });

@@ -125,9 +125,9 @@
 <script>
 import { computed, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
-import sanitizeHtml from "sanitize-html";
 
 import fb from "@/firebase.js";
+import { processEmailBody } from "@/utils/emails";
 import formAssignmentUtils from "@/utils/formAssignment";
 import utils from "@/utils/utils.js";
 import { esc } from "@/directives/escape";
@@ -151,7 +151,7 @@ export default {
     const loading = ref(true);
     const closeFormRequest = ref(0);
     const preview = ref({
-      body: "[body of the email...]",
+      body: processEmailBody("[body of the email...]"),
       subject: "[subject...]",
     });
     const today = utils.today();
@@ -257,7 +257,7 @@ export default {
       try {
         await fb.createEmail({
           subject,
-          body: processEmailBody(body),
+          body,
           to,
           sendDate: send_date,
         });
@@ -267,16 +267,9 @@ export default {
       }
     };
 
-    // add the fancier template around the content and sanitize the html
-    const processEmailBody = (body) => {
-      const sanitized = sanitizeHtml(body);
-      const prettyBody = `<table><tr><td>${sanitized}</td></tr><tr><td><div style="max-width: 175px; margin-top: 20px; margin-bottom: 5px;"><img style="width: 100%" src="https://provident.preventoverdoseri.org/assets/images/pori-provident-text-logo.png" alt="PROVIDENT logo"></img></div><a href="https://join.slack.com/t/dataacademytalk/shared_invite/zt-yv25w5bq-d6xR3SCXjjR0XoJi__mdmg">Join our Slack!</a></td></tr></table>`;
-      return prettyBody;
-    };
-
     const updatePreview = ({ body, subject }) => {
       subject = subject || "No subject";
-      preview.value = { body: sanitizeHtml(body), subject };
+      preview.value = { body: processEmailBody(body), subject };
     };
 
     return {

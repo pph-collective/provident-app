@@ -32,6 +32,11 @@ export const today = () => {
   return new Date().toLocaleDateString("sv");
 };
 
+// Returns date in "yyyy-mm-dd" format in local timezone
+export const toISODateString = (dateNumber) => {
+  return new Date(dateNumber).toLocaleDateString("sv");
+};
+
 export const uniqueId = () => {
   const dateString = Date.now().toString(36);
   const randomness = Math.random().toString(36).substr(2);
@@ -77,6 +82,7 @@ export default {
   evalSchema,
   sortByProperty,
   today,
+  toISODateString,
   uniqueArray,
   uniqueId,
 };

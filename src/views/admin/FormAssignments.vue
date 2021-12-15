@@ -321,13 +321,15 @@ export default {
 
         // add an email to the queue
         if (send_email.length > 0) {
+          const body = `<p>A form, <em>${title}</em>, has been assigned to ${
+            type === "user" ? "you" : "your organization"
+          }. Check out the form on <a href='${
+            location.origin
+          }/snack/forms'>PROVIDENT</a>.</p>`;
+
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${title}`,
-            body: `<p>A form, <em>${title}</em>, has been assigned to ${
-              type === "user" ? "you" : "your organization"
-            }. Check out the form on <a href='${
-              location.origin
-            }/snack/forms'>PROVIDENT</a></p>`,
+            body,
             to: emails,
             sendDate: release_date,
           });
