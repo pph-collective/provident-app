@@ -32,7 +32,7 @@ export const today = () => {
   return new Date().toLocaleDateString("sv");
 };
 
-// Returns date in "yyyy-mm-dd" format
+// Returns date in "yyyy-mm-dd" format in local timezone
 export const toISODateString = (dateNumber) => {
   return new Date(dateNumber).toLocaleDateString("sv");
 };
