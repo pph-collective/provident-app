@@ -113,7 +113,8 @@
           {
             "label": "What progress have you made towards this goal?",
             "model": "progress",
-            "component": "TextArea"
+            "component": "TextArea",
+            "required": true
           },
           {
             "label": "Last time, your tasks were the following",
@@ -135,7 +136,8 @@
               {
                 "model": "plan_progress",
                 "label": "What progress have you made towards this plan?",
-                "component": "TextArea"
+                "component": "TextArea",
+                "required": true
               }
             ]
           }
@@ -172,7 +174,8 @@
             {
               "label": "What outcomes did you have from this goal?",
               "model": "outcome",
-              "component": "TextArea"
+              "component": "TextArea",
+              "required": true
             },
             {
               "label": "Previously, your tasks were the following:",
@@ -194,7 +197,8 @@
                 {
                   "model": "plan_outcome",
                   "label": "What outcomes did you have from this plan?",
-                  "component": "TextArea"
+                  "component": "TextArea",
+                  "required": true
                 }
               ]
             }
