@@ -1,4 +1,4 @@
-import { cloneDeep } from "./utils";
+import { cloneDeep, toISODateString } from "./utils";
 import parse from "parse-duration";
 
 export const createFollowupFormResponse = (formResponse) => {
@@ -33,10 +33,10 @@ const getFollowupDate = (lastUpdated, followupInterval) => {
   const ms = parse(followupInterval);
 
   if (ms) {
-    return new Date(lastUpdated + ms).toLocaleDateString("sv");
+    return toISODateString(lastUpdated + ms);
   }
 
-  return new Date(lastUpdated).toLocaleDateString("sv");
+  return toISODateString(lastUpdated);
 };
 
 const mergeQuestions = (sourceQuestions, followupQuestions) => {
