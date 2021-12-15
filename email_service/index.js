@@ -85,14 +85,11 @@ const sendEmail = async (transport, { id, subject, to, body }, users) => {
   }
 };
 
-// Copied from firebase.js
-const getCollection = async (collection) => {
+const getCollectionKeys = async (collection) => {
   let res = [];
   try {
     const docs = await db.collection(collection).get();
-    res = docs.docs.map((doc) => {
-      return { _id: doc.id, ...doc.data() };
-    });
+    res = docs.docs.map((doc) => doc.id);
   } catch (err) {
     console.log(err);
   }
@@ -125,7 +122,7 @@ const main = async () => {
     console.debug("initialized ethereal email smtp server");
   }
 
-  const users = (await getCollection("users")).map((u) => u.email);
+  const users = await getCollectionKeys("users");
 
   for (let email of emails) {
     await sendEmail(transport, email, users);

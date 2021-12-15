@@ -3,6 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import * as aq from "arquero";
+import { processEmailBody } from "./utils/emails";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyBC7oCAphc1j-h1SROiyH_mqONLFvHHQ",
@@ -246,7 +247,7 @@ const createEmail = async ({
     const doc = {
       subject: emailSubjectPrefix + subject,
       to,
-      body,
+      body: processEmailBody(body),
       sendDate,
       sent: false,
     };

@@ -53,7 +53,6 @@ import { useStore } from "vuex";
 
 import fb from "@/firebase";
 import formAssignmentUtils from "@/utils/formAssignment";
-import { processEmailBody } from "@/utils/emails";
 
 import Loading from "@/components/Loading.vue";
 
@@ -87,7 +86,7 @@ export default {
 
         await fb.createEmail({
           subject: `PROVIDENT Access Approved`,
-          body: processEmailBody(body),
+          body,
           to: [user.email],
         });
 
@@ -112,7 +111,7 @@ export default {
 
       await fb.createEmail({
         subject: "PROVIDENT Access Denied",
-        body: processEmailBody(body),
+        body,
         to: [user.email],
       });
 

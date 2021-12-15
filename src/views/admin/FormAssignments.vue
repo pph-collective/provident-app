@@ -141,7 +141,6 @@ import fb from "@/firebase";
 import { esc } from "@/directives/escape";
 import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
-import { processEmailBody } from "@/utils/emails";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import Loading from "@/components/Loading.vue";
@@ -330,7 +329,7 @@ export default {
 
           await fb.createEmail({
             subject: `PROVIDENT New Form: ${title}`,
-            body: processEmailBody(body),
+            body,
             to: emails,
             sendDate: release_date,
           });

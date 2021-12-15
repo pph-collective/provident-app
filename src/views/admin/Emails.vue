@@ -257,7 +257,7 @@ export default {
       try {
         await fb.createEmail({
           subject,
-          body: processEmailBody(body),
+          body,
           to,
           sendDate: send_date,
         });
