@@ -211,6 +211,18 @@
                   "read_only": true
                 },
                 {
+                  "model": "status",
+                  "component": "Select",
+                  "label": "What is the current status of this task?",
+                  "options": [
+                    "Not started",
+                    "In progress",
+                    "On hold",
+                    "Completed"
+                  ],
+                  "required": true
+                },
+                {
                   "source_model": "plan_description",
                   "model": "plan_description",
                   "label": "Description",
@@ -221,6 +233,17 @@
                   "label": "What outcomes did you have from this plan?",
                   "component": "TextArea",
                   "required": true
+                },
+                {
+                  "model": "next",
+                  "component": "Select",
+                  "label": "What would you like to do next with this task?",
+                  "options": [
+                    "Continue as planned",
+                    "Edit the goal/task",
+                    "Close task (completed)",
+                    "Close task (unable to complete)"
+                  ]
                 }
               ]
             }
