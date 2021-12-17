@@ -100,7 +100,7 @@
         "read_only": true
       },
       {
-        "label": "Previously, your goals were the following",
+        "label": "Goal",
         "source_model": "goal_form",
         "model": "goal_form",
         "questions": [
@@ -117,7 +117,7 @@
             "required": true
           },
           {
-            "label": "Last time, your tasks were the following",
+            "label": "Task",
             "source_model": "task_form",
             "model": "task_form",
             "repeat_button_title": "+ Task",
@@ -183,7 +183,7 @@
           "read_only": true
         },
         {
-          "label": "Previously, your goals were the following:",
+          "label": "Goal",
           "source_model": "goal_form",
           "model": "goal_form",
           "questions": [
@@ -200,7 +200,7 @@
               "required": true
             },
             {
-              "label": "Previously, your tasks were the following:",
+              "label": "Task",
               "source_model": "task_form",
               "model": "task_form",
               "questions": [
