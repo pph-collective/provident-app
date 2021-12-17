@@ -211,15 +211,9 @@
                   "read_only": true
                 },
                 {
+                  "source_model": "status",
                   "model": "status",
-                  "component": "Select",
                   "label": "What is the current status of this task?",
-                  "options": [
-                    "Not started",
-                    "In progress",
-                    "On hold",
-                    "Completed"
-                  ],
                   "required": true
                 },
                 {
@@ -235,15 +229,9 @@
                   "required": true
                 },
                 {
+                  "source_model": "next",
                   "model": "next",
-                  "component": "Select",
-                  "label": "What would you like to do next with this task?",
-                  "options": [
-                    "Continue as planned",
-                    "Edit the goal/task",
-                    "Close task (completed)",
-                    "Close task (unable to complete)"
-                  ]
+                  "label": "What would you like to do next with this task?"
                 }
               ]
             }
