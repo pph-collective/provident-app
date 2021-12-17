@@ -105,7 +105,7 @@
         "model": "goal_form",
         "questions": [
           {
-            "label": "Goal",
+            "label": "What do you plan on doing in this neighborhood?",
             "source_model": "goal",
             "model": "goal",
             "read_only": true
@@ -188,7 +188,7 @@
           "model": "goal_form",
           "questions": [
             {
-              "label": "Goal",
+              "label": "What do you plan on doing in this neighborhood?",
               "source_model": "goal",
               "model": "goal",
               "read_only": true
