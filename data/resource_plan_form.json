@@ -125,7 +125,8 @@
               {
                 "source_model": "plan",
                 "model": "plan",
-                "label": "Plan"
+                "label": "Plan",
+                "required": true
               },
               {
                 "source_model": "plan_description",
@@ -159,7 +160,8 @@
                   "Edit the goal/task",
                   "Close task (completed)",
                   "Close task (unable to complete)"
-                ]
+                ],
+                "required": true
               }
             ]
           }
@@ -195,8 +197,9 @@
             },
             {
               "label": "What outcomes did you have from this goal?",
+              "help_text": "To help with answering, we've pre-filled this answer with your progress updates where possible.",
+              "source_model": "progress",
               "model": "outcome",
-              "component": "TextArea",
               "required": true
             },
             {
@@ -208,7 +211,12 @@
                   "source_model": "plan",
                   "model": "plan",
                   "label": "Plan",
-                  "read_only": true
+                  "required": true
+                },
+                {
+                  "source_model": "plan_description",
+                  "model": "plan_description",
+                  "label": "Description"
                 },
                 {
                   "source_model": "status",
@@ -217,21 +225,17 @@
                   "required": true
                 },
                 {
-                  "source_model": "plan_description",
-                  "model": "plan_description",
-                  "label": "Description",
-                  "read_only": true
-                },
-                {
-                  "model": "plan_outcome",
-                  "label": "What outcomes did you have from this plan?",
-                  "component": "TextArea",
+                  "source_model": "progress",
+                  "model": "outcome",
+                  "label": "What were your outcomes?",
+                  "help_text": "To help with answering, we've pre-filled this answer with your progress updates where possible.",
                   "required": true
                 },
                 {
                   "source_model": "next",
                   "model": "next",
-                  "label": "What would you like to do next with this task?"
+                  "label": "What would you like to do next with this task?",
+                  "required": true
                 }
               ]
             }
