@@ -122,6 +122,7 @@ const followupQuestionSchema = {
     help_text: { type: "string" },
     validations: { type: "string" },
     read_only: { type: "boolean" },
+    repeat_button_title: { type: "string" },
   },
   required: ["source_model", "model", "label"],
   additionalProperties: {

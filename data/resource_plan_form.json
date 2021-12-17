@@ -120,6 +120,7 @@
             "label": "Last time, your tasks were the following",
             "source_model": "task_form",
             "model": "task_form",
+            "repeat_button_title": "+ Task",
             "questions": [
               {
                 "source_model": "plan",
