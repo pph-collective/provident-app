@@ -120,6 +120,7 @@ const followupQuestionSchema = {
     questions: { type: "array", items: { type: "object" } },
     required: { type: "boolean" },
     help_text: { type: "string" },
+    condition: { type: "string" },
     validations: { type: "string" },
     read_only: { type: "boolean" },
     repeat_button_title: { type: "string" },

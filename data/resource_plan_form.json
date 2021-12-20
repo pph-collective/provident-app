@@ -149,7 +149,8 @@
                 "model": "progress",
                 "label": "What progress have you made towards this task?",
                 "component": "TextArea",
-                "required": true
+                "required": true,
+                "condition": "(model) => model.status && model.status !== 'Not started'"
               },
               {
                 "model": "next",
@@ -196,10 +197,17 @@
               "read_only": true
             },
             {
-              "label": "What outcomes did you have from this goal?",
-              "help_text": "To help with answering, we've pre-filled this answer with your progress updates where possible.",
+              "label": "What progress have you made towards this goal?",
+              "help_text": "To help with answering the next question, we've brought forward your progress updates from the previous form.",
               "source_model": "progress",
+              "model": "progress",
+              "read_only": true,
+              "condition": "(model) => model.progress !== undefined"
+            },
+            {
+              "label": "What outcomes did you have from this goal?",
               "model": "outcome",
+              "component": "TextArea",
               "required": true
             },
             {
@@ -226,10 +234,15 @@
                 },
                 {
                   "source_model": "progress",
+                  "model": "progress",
+                  "label": "What progress have you made towards this task?",
+                  "help_text": "We've brought forward your progress updates from the previous form where available.",
+                  "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')"
+                },
+                {
                   "model": "outcome",
                   "label": "What were your outcomes?",
-                  "help_text": "To help with answering, we've pre-filled this answer with your progress updates where possible.",
-                  "required": true
+                  "component": "TextArea"
                 },
                 {
                   "source_model": "next",
