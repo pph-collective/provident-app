@@ -271,6 +271,11 @@ Notes:
 - The `condition`, `help_text`, `read_only`, and `required` field are not taken from the parent field and can be reset
 here.
 
+#### Advanced
+
+##### Read Only
+The `read_only` key for any question in a followup form (new vanilla questions or sourced followup questions), can be set to a string containing a function that evaluates to true/false similar to what you can write in `condition`. It takes `model` as an argument and returns true if the question should be read only or false if not. (e.g. `"(model) => model.status === 'Completed'"`)
+
 ## Authentication
 
 This web app uses firebase auth to restrict access to the `snacks` and `admin` paths.

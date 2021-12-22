@@ -7,7 +7,10 @@ const hash = require("object-hash");
 const parseDuration = require("parse-duration");
 
 const Ajv = require("ajv").default;
-const ajv = new Ajv({ allErrors: true }); // Ajv option allErrors is required
+const ajv = new Ajv({
+  allErrors: true, // Ajv option allErrors is required for ajv-errors
+  allowUnionTypes: true,
+});
 require("ajv-errors")(ajv);
 
 /**
@@ -99,7 +102,7 @@ const questionSchema = {
     help_text: { type: "string" },
     validations: { type: "string" },
     condition: { type: "string" },
-    read_only: { type: "boolean" },
+    read_only: { type: ["boolean", "string"] },
   },
   required: ["model", "label", "component"],
   additionalProperties: {
@@ -122,7 +125,7 @@ const followupQuestionSchema = {
     help_text: { type: "string" },
     condition: { type: "string" },
     validations: { type: "string" },
-    read_only: { type: "boolean" },
+    read_only: { type: ["boolean", "string"] },
     repeat_button_title: { type: "string" },
   },
   required: ["source_model", "model", "label"],

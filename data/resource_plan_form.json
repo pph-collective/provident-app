@@ -153,16 +153,11 @@
                 "condition": "(model) => model.status && model.status !== 'Not started'"
               },
               {
-                "model": "next",
-                "component": "Select",
-                "label": "What would you like to do next with this task?",
-                "options": [
-                  "Continue as planned",
-                  "Edit the goal/task",
-                  "Close task (completed)",
-                  "Close task (unable to complete)"
-                ],
-                "required": true
+                "model": "outcome",
+                "label": "What were your outcomes?",
+                "component": "TextArea",
+                "required": true,
+                "condition": "(model) => model.status && model.status === 'Completed'"
               }
             ]
           }
@@ -219,36 +214,36 @@
                   "source_model": "plan",
                   "model": "plan",
                   "label": "Plan",
-                  "required": true
+                  "required": true,
+                  "read_only": "(model) => model.status === 'Completed'"
                 },
                 {
                   "source_model": "plan_description",
                   "model": "plan_description",
-                  "label": "Description"
+                  "label": "Description",
+                  "read_only": "(model) => model.status === 'Completed'"
                 },
                 {
                   "source_model": "status",
                   "model": "status",
                   "label": "What is the current status of this task?",
-                  "required": true
+                  "required": true,
+                  "read_only": "(model) => model.status === 'Completed'"
                 },
                 {
                   "source_model": "progress",
                   "model": "progress",
                   "label": "What progress have you made towards this task?",
                   "help_text": "We've brought forward your progress updates from the previous form where available.",
-                  "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')"
+                  "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')",
+                  "read_only": "(model) => model.status === 'Completed'"
                 },
                 {
+                  "source_model": "outcome",
                   "model": "outcome",
                   "label": "What were your outcomes?",
-                  "component": "TextArea"
-                },
-                {
-                  "source_model": "next",
-                  "model": "next",
-                  "label": "What would you like to do next with this task?",
-                  "required": true
+                  "condition": "(model) => model.outcome !== undefined || (model.status && model.status === 'Completed')",
+                  "read_only": "(model) => model.status === 'Completed'"
                 }
               ]
             }
