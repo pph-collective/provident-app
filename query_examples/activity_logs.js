@@ -6,13 +6,14 @@
 
 const admin = require("firebase-admin");
 const fs = require("fs");
+const os = require("os");
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 
 const app = admin.initializeApp();
 const db = app.firestore();
 
-const FILE_PATH = "~/downloads/activity_logs.json";
+const FILE_PATH = `${os.homedir()}/Downloads/activity_logs.json`;
 
 db.collectionGroup("activity_log")
   .get()
