@@ -22,5 +22,5 @@ db.collectionGroup("form_responses")
       results.push({ id: doc.id, ...doc.data() });
     });
 
-    fs.writeFileSync(FILE_PATH, JSON.stringify(results));
+    fs.writeFileSync(FILE_PATH, JSON.stringify(results, null, 2));
   });
