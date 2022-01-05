@@ -6,13 +6,14 @@
 
 const admin = require("firebase-admin");
 const fs = require("fs");
+const os = require("os");
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "serviceAccount.json";
 
 const app = admin.initializeApp();
 const db = app.firestore();
 
-const FILE_PATH = "~/downloads/form_responses.json";
+const FILE_PATH = `${os.homedir()}/Downloads/form_responses.json`;
 
 db.collectionGroup("form_responses")
   .get()
@@ -22,5 +23,5 @@ db.collectionGroup("form_responses")
       results.push({ id: doc.id, ...doc.data() });
     });
 
-    fs.writeFileSync(FILE_PATH, JSON.stringify(results));
+    fs.writeFileSync(FILE_PATH, JSON.stringify(results, null, 2));
   });
