@@ -158,7 +158,7 @@
                 "label": "What were your outcomes?",
                 "component": "TextArea",
                 "required": true,
-                "condition": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                "condition": "(model) => model.status === 'Completed'"
               }
             ]
           }
@@ -237,14 +237,16 @@
                   "label": "What progress have you made towards this task?",
                   "help_text": "We've brought forward your progress updates from the previous form where available.",
                   "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')",
-                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')",
+                  "required": true
                 },
                 {
                   "source_model": "outcome",
                   "model": "outcome",
                   "label": "What were your outcomes?",
-                  "condition": "(model) => model.outcome !== undefined || (model.status && model.status.toUpperCase().includes('COMPLETE'))",
-                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                  "condition": "(model) => model.outcome !== undefined || model.status === 'Completed'",
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')",
+                  "required": true
                 }
               ]
             }
