@@ -141,6 +141,7 @@
                   "Not started",
                   "In progress",
                   "On hold",
+                  "Unable to Complete",
                   "Completed"
                 ],
                 "required": true
@@ -157,7 +158,7 @@
                 "label": "What were your outcomes?",
                 "component": "TextArea",
                 "required": true,
-                "condition": "(model) => model.status && model.status === 'Completed'"
+                "condition": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
               }
             ]
           }
@@ -215,20 +216,20 @@
                   "model": "plan",
                   "label": "Plan",
                   "required": true,
-                  "read_only": "(model) => model.status === 'Completed'"
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
                 },
                 {
                   "source_model": "plan_description",
                   "model": "plan_description",
                   "label": "Description",
-                  "read_only": "(model) => model.status === 'Completed'"
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
                 },
                 {
                   "source_model": "status",
                   "model": "status",
                   "label": "What is the current status of this task?",
                   "required": true,
-                  "read_only": "(model) => model.status === 'Completed'"
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
                 },
                 {
                   "source_model": "progress",
@@ -236,14 +237,14 @@
                   "label": "What progress have you made towards this task?",
                   "help_text": "We've brought forward your progress updates from the previous form where available.",
                   "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')",
-                  "read_only": "(model) => model.status === 'Completed'"
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
                 },
                 {
                   "source_model": "outcome",
                   "model": "outcome",
                   "label": "What were your outcomes?",
-                  "condition": "(model) => model.outcome !== undefined || (model.status && model.status === 'Completed')",
-                  "read_only": "(model) => model.status === 'Completed'"
+                  "condition": "(model) => model.outcome !== undefined || (model.status && model.status.toUpperCase().includes('COMPLETE'))",
+                  "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
                 }
               ]
             }
