@@ -61,7 +61,7 @@ export const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 export const evalSchema = (s, yup) => {
   s.forEach((q) => {
     for (const key in q) {
-      if (["condition", "validations"].includes(key)) {
+      if (["condition", "validations", "read_only"].includes(key)) {
         q[key] = eval(q[key]);
       } else if (key === "component" && !q[key].startsWith("Form")) {
         q[key] = "Form" + q[key];

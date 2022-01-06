@@ -39,6 +39,11 @@ export default {
 
     const schema = ref(cloneDeep(initSchema.value));
     evalSchema(schema.value, yup);
+    schema.value.forEach((q) => {
+      if (typeof q.read_only === "function") {
+        q.read_only = q.read_only(modelValue.value);
+      }
+    });
 
     watch(
       value,
