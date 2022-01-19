@@ -45,15 +45,17 @@
           <th
             class="
               has-text-right has-text-weight-medium
-              is-flex is-justify-content-end is-align-items-center
+              is-justify-content-end is-align-items-center
             "
           >
-            <div class="is-flex-grow-1">
-              {{ metric.title }}
-            </div>
-            <div class="tooltip has-text-info">
-              <i class="fas fa-xs fa-info-circle" />
-              <span class="tooltiptext">{{ metric.info }}</span>
+            <div class="is-flex">
+              <div class="is-flex-grow-1">
+                {{ metric.title }}
+              </div>
+              <div class="tooltip has-text-info">
+                <i class="fas fa-xs fa-info-circle" />
+                <span class="tooltiptext">{{ metric.info }}</span>
+              </div>
             </div>
           </th>
           <td class="data-column has-text-center">
