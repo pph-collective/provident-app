@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "yarn firebase:dev & node ./tests/fixtures/seedDatabase.js & vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:e2e": "cypress open",
     "lint": "vue-cli-service lint",
