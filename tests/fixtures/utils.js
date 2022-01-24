@@ -20,18 +20,13 @@ const writeBatch = (batch, firestoreRef, data) => {
     let collection = firestoreRef.collection(collectionName);
 
     for (const [documentPath, documentData] of Object.entries(documents)) {
-      const subCollections = documentData["subCollections"];
+      const { subCollections, ...data } = documentData;
       if (subCollections) {
-        writeBatch(
-          batch,
-          collection.doc(documentPath),
-          documentData["subCollections"]
-        );
+        writeBatch(batch, collection.doc(documentPath), subCollections);
       }
 
-      delete documentData["subCollections"];
       if (documentData) {
-        batch.set(collection.doc(documentPath), documentData);
+        batch.set(collection.doc(documentPath), data);
       }
     }
   }
