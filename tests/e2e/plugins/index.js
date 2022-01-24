@@ -46,9 +46,9 @@ module.exports = (on, config) => {
       const success = await seedDatabase(admin);
 
       if (success) {
-        console.log("SUCCESS db:seed -- Seeded Database");
+        return "SUCCESS db:seed -- Seeded Database";
       } else {
-        console.log("SKIPPING db:seed -- admin is not on localhost");
+        return "SKIPPING db:seed -- admin is not on localhost";
       }
     },
     "auth:deleteUserByEmail": (email) => {
