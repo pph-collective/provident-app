@@ -15,7 +15,8 @@ yarn serve
 
 ### Save updated firebase data
 
-For database changes, edit the seed json file located at `./tests/fixtures/seed.json`
+For database changes, edit the seed json file located at `./tests/fixtures/seed.json`. Use the `subCollections` key to 
+identify sub-collections.
 
 For authentication changes
 - Edit authentications changes through the firebase console or through the web app (registering, user management page,
