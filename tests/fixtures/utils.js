@@ -2,42 +2,39 @@ const SEED = require("./seed.json");
 
 const seedDatabase = async (admin) => {
   if (admin.firestore()._settings.servicePath === "localhost") {
-    const writeBatch = admin.firestore().batch();
+    const batch = admin.firestore().batch();
 
     if (SEED) {
-      for (const [collectionName, documents] of Object.entries(SEED)) {
-        let collection = admin.firestore().collection(collectionName);
-        for (const [documentPath, subCollections] of Object.entries(
-          documents
-        )) {
-          for (const [subCollectionPath, subDocuments] of Object.entries(
-            subCollections
-          )) {
-            if (subCollectionPath === "data") {
-              writeBatch.set(collection.doc(documentPath), subDocuments);
-            } else {
-              for (const [subDocumentPath, data] of Object.entries(
-                subDocuments
-              )) {
-                writeBatch.set(
-                  collection
-                    .doc(documentPath)
-                    .collection(subCollectionPath)
-                    .doc(subDocumentPath),
-                  data
-                );
-              }
-            }
-          }
-        }
-      }
+      writeBatch(batch, admin.firestore(), SEED);
     }
 
-    await writeBatch.commit();
+    await batch.commit();
     return true;
   }
 
   return false;
+};
+
+const writeBatch = (batch, firestoreRef, data) => {
+  for (const [collectionName, documents] of Object.entries(data)) {
+    let collection = firestoreRef.collection(collectionName);
+
+    for (const [documentPath, documentData] of Object.entries(documents)) {
+      const subCollections = documentData["subCollections"];
+      if (subCollections) {
+        writeBatch(
+          batch,
+          collection.doc(documentPath),
+          documentData["subCollections"]
+        );
+      }
+
+      delete documentData["subCollections"];
+      if (documentData) {
+        batch.set(collection.doc(documentPath), documentData);
+      }
+    }
+  }
 };
 
 module.exports = {
