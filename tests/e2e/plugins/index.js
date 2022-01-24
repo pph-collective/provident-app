@@ -18,7 +18,7 @@ const cypressFirebasePlugin = require("cypress-firebase").plugin;
 const { startDevServer } = require("@cypress/webpack-dev-server");
 const webpackConfig = require("@vue/cli-service/webpack.config.js");
 
-const SEED = require("../../fixtures/seed.json");
+const { seedDatabase } = require("../../fixtures/utils");
 
 module.exports = (on, config) => {
   on("dev-server:start", (options) =>
@@ -42,40 +42,13 @@ module.exports = (on, config) => {
           return false;
         });
     },
-    "db:seed": () => {
-      if (admin.firestore()._settings.servicePath === "localhost") {
-        const writeBatch = admin.firestore().batch();
-        if (SEED) {
-          for (const [collectionName, documents] of Object.entries(SEED)) {
-            let collection = admin.firestore().collection(collectionName);
-            for (const [documentPath, subCollections] of Object.entries(
-              documents
-            )) {
-              for (const [subCollectionPath, subDocuments] of Object.entries(
-                subCollections
-              )) {
-                if (subCollectionPath === "data") {
-                  writeBatch.set(collection.doc(documentPath), subDocuments);
-                } else {
-                  for (const [subDocumentPath, data] of Object.entries(
-                    subDocuments
-                  )) {
-                    writeBatch.set(
-                      collection
-                        .doc(documentPath)
-                        .collection(subCollectionPath)
-                        .doc(subDocumentPath),
-                      data
-                    );
-                  }
-                }
-              }
-            }
-          }
-        }
-        return writeBatch.commit();
+    "db:seed": async () => {
+      const success = await seedDatabase(admin);
+
+      if (success) {
+        console.log("SUCCESS db:seed -- Seeded Database");
       } else {
-        return "SKIPPING db:seed -- admin is not on localhost";
+        console.log("SKIPPING db:seed -- admin is not on localhost");
       }
     },
     "auth:deleteUserByEmail": (email) => {
