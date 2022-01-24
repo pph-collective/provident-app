@@ -2,7 +2,9 @@ const admin = require("firebase-admin");
 const { seedDatabase } = require("./utils");
 const FIREBASECONFIG = require("../../src/utils/firebaseConfig.json");
 
-process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
+const firebaseJSON = require("../../firebase.json");
+process.env.FIRESTORE_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.firestore.port}`;
+process.env.FIREBASE_AUTH_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.auth.port}`;
 admin.initializeApp(FIREBASECONFIG);
 
 seedDatabase(admin).then((success) => {
