@@ -10,14 +10,19 @@ yarn firebase login
 
 ### Compiles and hot-reloads for development
 ```
-yarn firebase:dev # local firebase data
-yarn serve # in separate terminal
+yarn serve
 ```
 
 ### Save updated firebase data
-```
-yarn firebase:savedev
-```
+
+For database changes, edit the seed json file located at `./tests/fixtures/seed.json`
+
+For authentication changes
+- Edit authentications changes through the firebase console or through the web app (registering, user management page,
+reset password)
+- Clear the emulator database in the emulator console, since database changes are in the seed json file (as noted 
+above).
+- Then run `yarn firebase:savedev`
 
 ### Compiles and minifies for production
 ```
