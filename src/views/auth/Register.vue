@@ -1,4 +1,5 @@
 <template>
+  <Loading :loading="loading" />
   <FormCard>
     <h1 class="is-size-3 has-text-centered pb-3">Request Access</h1>
     <form v-if="!requested" @submit.prevent="register">
@@ -100,7 +101,7 @@
           <button
             data-cy="request-access-button"
             class="button is-success"
-            :disabled="!formValid.status"
+            :disabled="!formValid.status || loading"
             type="submit"
           >
             Request Access
@@ -188,10 +189,12 @@ import { useStore } from "vuex";
 import fb from "@/firebase";
 import { esc } from "@/directives/escape";
 import FormCard from "@/components/FormCard";
+import Loading from "@/components/Loading.vue";
 
 export default {
   components: {
     FormCard,
+    Loading,
   },
   directives: {
     ...esc,
@@ -208,6 +211,7 @@ export default {
     const requested = ref(false);
     const error = ref(null);
     const showTerms = ref(false);
+    const loading = ref(false);
 
     const store = useStore();
     const organizations = computed(() => store.getters.formOrganizationOptions);
@@ -234,6 +238,8 @@ export default {
     });
 
     const register = async () => {
+      loading.value = true;
+
       try {
         await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
         //scrub out password
@@ -270,6 +276,7 @@ export default {
         }
       }
       await fb.logout();
+      loading.value = false;
     };
 
     return {
@@ -277,6 +284,7 @@ export default {
       formValid,
       requested,
       error,
+      loading,
       organizations,
       register,
       showTerms,
