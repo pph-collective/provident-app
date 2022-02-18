@@ -107,6 +107,8 @@ export default {
           } else {
             await router.push({ name: "Home" });
           }
+        } else if (status === undefined) {
+          error.value = `User account was not set up properly. Please reach out to ${process.env.VUE_APP_ADMIN_EMAIL} with the email you used to register.`;
         } else {
           error.value = `User account not approved: ${status}`;
           await fb.logout();
