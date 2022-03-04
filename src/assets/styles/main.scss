@@ -190,4 +190,5 @@ fieldset[disabled] {
 // Source: https://github.com/jgthms/bulma/issues/2355
 input:disabled, textarea:disabled {
   -webkit-text-fill-color: $input-disabled-color;
+  opacity: 1; // Required for iOS
 }
