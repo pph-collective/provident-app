@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "yarn firebase:dev & node ./tests/fixtures/seedDatabase.js & vue-cli-service serve",
-    "serve:windows": "serve:windows": "start /b yarn firebase:dev & start /b node ./tests/fixtures/seedDatabase.js & start /b vue-cli-service serve",
+    "serve:windows": "start /b yarn firebase:dev & start /b node ./tests/fixtures/seedDatabase.js & start /b vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:e2e": "cypress open",
     "lint": "vue-cli-service lint",
