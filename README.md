@@ -1,4 +1,4 @@
-# pro-found-vident-base
+# provident-app
 
 A base web application for the PROVIDENT project.
 
@@ -11,6 +11,11 @@ yarn firebase login
 ### Compiles and hot-reloads for development
 ```
 yarn serve
+```
+
+For Windows
+```
+yarn serve:windows
 ```
 
 ### Save updated firebase data
@@ -303,7 +308,7 @@ In order for `firebase-admin` to have read/write access during testing, we need 
 
 ### Running the tests
 
-In separate terminals, run `yarn firebase:dev`, `yarn serve`, and then `yarn test:e2e`.
+In separate terminals, run `yarn serve`, and then `yarn test:e2e`.
 
 ### Notes
 
