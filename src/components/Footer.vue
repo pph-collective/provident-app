@@ -24,7 +24,7 @@
           rel="noopener"
           ><img
             class="footer-logo"
-            src="https://preventoverdoseri.org/wp-content/uploads/2019/10/logo-footer-Brown.png"
+            src="@/assets/images/logo-footer-Brown.png"
             title="Brown"
             alt="Brown"
         /></a>
@@ -35,7 +35,7 @@
           rel="noopener"
           ><img
             class="footer-logo"
-            src="https://preventoverdoseri.org/wp-content/uploads/2019/10/logo-footer-RIDOH.png"
+            src="@/assets/images/logo-footer-RIDOH.png"
             title="RIDOH"
             alt="RIDOH"
         /></a>
