@@ -1,5 +1,4 @@
 // variables.scss automatically loaded by webpack
-
 @import "bulma-responsive-tables";
 
 $box-radius: 2px;
@@ -184,4 +183,11 @@ fieldset[disabled] {
   .sticky-bottom {
     position: relative !important;
   }
+}
+
+// Safari's input disabled text is hard to read
+// Source: https://github.com/jgthms/bulma/issues/2355
+input:disabled, textarea:disabled {
+  -webkit-text-fill-color: $input-disabled-color;
+  opacity: 1; // Required for iOS
 }
