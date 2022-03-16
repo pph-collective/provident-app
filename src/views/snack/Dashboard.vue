@@ -112,6 +112,8 @@ import StatsWidget from "@/components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
 
+import MUNI_TO_ZIP from "@/assets/ri_muni_to_zip.json";
+
 export default {
   components: {
     ControlPanel,
@@ -161,10 +163,30 @@ export default {
     });
 
     const dropDowns = computed(() => {
+      let zipcodes = [];
+
+      if (controls.value.geography) {
+        const { name, municipalities } = controls.value.geography;
+
+        if (name === "All of Rhode Island") {
+          zipcodes = utils.ZIPCODES;
+        } else {
+          municipalities.forEach((m) => {
+            zipcodes.push(...MUNI_TO_ZIP[m]);
+          });
+        }
+
+        zipcodes.sort();
+      }
+
       return {
         geography: {
           icon: "fas fa-globe",
           values: filteredOrgs.value,
+        },
+        zipcodes: {
+          icon: "fas fa-map",
+          values: ["All Zip Codes", ...zipcodes],
         },
         model_version: {
           icon: "fas fa-calendar-alt",
