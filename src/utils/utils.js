@@ -1,14 +1,7 @@
 import GEO from "@/assets/geojson/ri.json";
-import MUNI_TO_ZIP from "@/assets/ri_muni_to_zip.json";
 
 export const MUNICIPALITIES = [
   ...new Set(GEO.map((g) => g.properties.name)),
-].sort();
-
-export const ZIPCODES = [
-  ...new Set(
-    Object.values(MUNI_TO_ZIP).reduce((prev, curr) => [...prev, ...curr])
-  ),
 ].sort();
 
 export const GEOID_QUESTION_MODEL = "bg_id";
@@ -85,7 +78,6 @@ export default {
   MUNI_QUESTION_MODEL,
   poriRed,
   tertileColorMap,
-  ZIPCODES,
   cloneDeep,
   evalSchema,
   sortByProperty,
