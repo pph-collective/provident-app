@@ -56,7 +56,7 @@ export default {
     const filteredZip = computed(() => {
       if (zipcode.value.name === "All Zip Codes") {
         // Doesn't matter since we're zooming to the municipalities instead if the dropdown is 'All Zip Codes'
-        return zipcodesGeo;
+        return [];
       } else {
         return zipcodesGeo.find(
           (z) => zipcode.value.zip === z.properties.ZCTA5CE10
