@@ -53,7 +53,7 @@
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
             :with-predictions="interventionArmUser"
-            :zipcodes="zipcodes"
+            :zipcode="controls.zipcode"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
@@ -161,8 +161,6 @@ export default {
     onMounted(async () => {
       resultPeriods.value = await fb.getModelDataPeriods();
       zipcodes.value = await fb.getZipcodes();
-
-      console.log(zipcodes.value);
     });
 
     const dropDowns = computed(() => {
@@ -175,7 +173,7 @@ export default {
           zips = zipcodes.value;
         } else {
           municipalities.forEach((m) => {
-            zips.push(zipcodes.value.filter((z) => z.town === m));
+            zips.push(...zipcodes.value.filter((z) => z.town === m));
           });
         }
 
@@ -197,7 +195,7 @@ export default {
           icon: "fas fa-globe",
           values: filteredOrgs.value,
         },
-        zipcodes: {
+        zipcode: {
           icon: "fas fa-map",
           values: [{ name: "All Zip Codes" }, ...zips],
         },

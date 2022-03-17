@@ -36,19 +36,33 @@ export default {
       type: Boolean,
       required: true,
     },
-    zipcodes: {
-      type: Array,
-      default() {
-        return [];
-      },
+    zipcode: {
+      type: Object,
+      required: true,
     },
   },
   emits: ["new-active-bg", "new-active-municipality", "active-clicked-status"],
   setup(props, { emit }) {
-    const { filterMunicipalities, dataset, flagProperty, withPredictions } =
-      toRefs(props);
+    const {
+      filterMunicipalities,
+      dataset,
+      flagProperty,
+      withPredictions,
+      zipcode,
+    } = toRefs(props);
 
     const el = ref(null);
+
+    const filteredZip = computed(() => {
+      if (zipcode.value.name === "All Zip Codes") {
+        // Doesn't matter since we're zooming to the municipalities instead if the dropdown is 'All Zip Codes'
+        return zipcodesGeo;
+      } else {
+        return zipcodesGeo.find(
+          (z) => zipcode.value.zip === z.properties.ZCTA5CE10
+        );
+      }
+    });
 
     // filter geo data and simplify
     const filteredGeo = computed(() => {
@@ -190,7 +204,7 @@ export default {
           },
           {
             name: "zipcode_outlines",
-            values: zipcodesGeo,
+            values: filteredZip.value,
           },
         ],
         projections: [
@@ -198,7 +212,12 @@ export default {
             name: "projection",
             type: "mercator",
             size: { signal: "[width, height]" },
-            fit: { signal: 'data("town_outlines")' },
+            fit: {
+              signal:
+                zipcode.value.name === "All Zip Codes"
+                  ? 'data("town_outlines")'
+                  : 'data("zipcode_outlines")',
+            },
           },
         ],
         marks: [
@@ -261,18 +280,6 @@ export default {
                 strokeWidth: { value: 2 },
                 stroke: { value: "#393939" },
                 fillOpacity: { value: 0 },
-              },
-            },
-            transform: [{ type: "geoshape", projection: "projection" }],
-          },
-          {
-            type: "shape",
-            name: "zipcodes",
-            from: { data: "zipcode_outlines" },
-            encode: {
-              enter: {
-                strokeWidth: { value: 1 },
-                stroke: { value: "#FF0000" },
               },
             },
             transform: [{ type: "geoshape", projection: "projection" }],
