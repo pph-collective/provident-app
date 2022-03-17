@@ -12,6 +12,7 @@ const topojson = { ...ts, ...tc };
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
+import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty } from "@/utils/utils.js";
 
@@ -34,6 +35,12 @@ export default {
     withPredictions: {
       type: Boolean,
       required: true,
+    },
+    zipcodes: {
+      type: Array,
+      default() {
+        return [];
+      },
     },
   },
   emits: ["new-active-bg", "new-active-municipality", "active-clicked-status"],
@@ -125,6 +132,7 @@ export default {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "transparent",
+        autosize: "none",
         signals: [
           {
             name: "tileUrl",
@@ -179,6 +187,10 @@ export default {
             name: "bg_outlines",
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" },
+          },
+          {
+            name: "zipcode_outlines",
+            values: zipcodesGeo,
           },
         ],
         projections: [
@@ -249,6 +261,18 @@ export default {
                 strokeWidth: { value: 2 },
                 stroke: { value: "#393939" },
                 fillOpacity: { value: 0 },
+              },
+            },
+            transform: [{ type: "geoshape", projection: "projection" }],
+          },
+          {
+            type: "shape",
+            name: "zipcodes",
+            from: { data: "zipcode_outlines" },
+            encode: {
+              enter: {
+                strokeWidth: { value: 1 },
+                stroke: { value: "#FF0000" },
               },
             },
             transform: [{ type: "geoshape", projection: "projection" }],

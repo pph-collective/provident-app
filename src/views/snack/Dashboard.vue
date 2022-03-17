@@ -53,6 +53,7 @@
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
             :with-predictions="interventionArmUser"
+            :zipcodes="zipcodes"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
@@ -102,7 +103,7 @@ import { useStore } from "vuex";
 import * as aq from "arquero";
 
 import fb from "@/firebase.js";
-import utils from "@/utils/utils";
+import { MUNICIPALITIES, sortByProperty } from "@/utils/utils";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
@@ -111,8 +112,6 @@ import BGMap from "@/components/dashboard/BGMap.vue";
 import StatsWidget from "@/components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
 import Loading from "@/components/Loading.vue";
-
-import MUNI_TO_ZIP from "@/assets/ri_muni_to_zip.json";
 
 export default {
   components: {
@@ -125,7 +124,7 @@ export default {
     Loading,
   },
   setup() {
-    const towns = utils.MUNICIPALITIES.map((m) => ({
+    const towns = MUNICIPALITIES.map((m) => ({
       name: m,
       municipalities: [m],
     }));
@@ -158,25 +157,39 @@ export default {
     });
 
     const resultPeriods = ref([]);
+    const zipcodes = ref([]);
     onMounted(async () => {
       resultPeriods.value = await fb.getModelDataPeriods();
+      zipcodes.value = await fb.getZipcodes();
+
+      console.log(zipcodes.value);
     });
 
     const dropDowns = computed(() => {
-      let zipcodes = [];
+      let zips = [];
 
       if (controls.value.geography) {
         const { name, municipalities } = controls.value.geography;
 
         if (name === "All of Rhode Island") {
-          zipcodes = utils.ZIPCODES;
+          zips = zipcodes.value;
         } else {
           municipalities.forEach((m) => {
-            zipcodes.push(...MUNI_TO_ZIP[m]);
+            zips.push(zipcodes.value.filter((z) => z.town === m));
           });
         }
 
-        zipcodes.sort();
+        zips = zips
+          .map((z) => {
+            const { alias } = z;
+            const formatAlias = alias ? ` (${alias})` : "";
+
+            return {
+              ...z,
+              name: `${z.zip}${formatAlias}`,
+            };
+          })
+          .sort(sortByProperty("zip"));
       }
 
       return {
@@ -186,7 +199,7 @@ export default {
         },
         zipcodes: {
           icon: "fas fa-map",
-          values: ["All Zip Codes", ...zipcodes],
+          values: [{ name: "All Zip Codes" }, ...zips],
         },
         model_version: {
           icon: "fas fa-calendar-alt",
@@ -267,6 +280,7 @@ export default {
       loading,
       resultPeriods,
       updateControls,
+      zipcodes,
       zoomBg,
       zoomed,
     };
