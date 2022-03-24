@@ -45,12 +45,12 @@ describe("Dashboard viewed as a user", () => {
     cy.get("select#geography").select("All of Rhode Island");
 
     // Choose a zipcode
-    cy.get("select#zipcode").select("02801 (Adamsville)");
+    cy.get("select#zipcode").select("02802 (Albion)");
 
     // Wait for zipcodes dropdown to update
     cy.get("select#zipcode")
       .find("option:selected")
-      .should("have.text", "02801 (Adamsville)");
+      .should("have.text", "02802 (Albion)");
 
     // Switch to Little Compton
     cy.get("select#geography").select("Little Compton");

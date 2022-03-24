@@ -1560,15 +1560,6 @@
           "alias": ""
         },
         {
-          "zip": "02801",
-          "town": "Adamsville",
-          "county": "Newport County",
-          "city": "Little Compton",
-          "state": "RI",
-          "classification": "Rural",
-          "alias": "Adamsville"
-        },
-        {
           "zip": "02837",
           "town": "Little Compton",
           "county": "Newport County",
@@ -1741,15 +1732,6 @@
         },
         {
           "zip": "02901",
-          "town": "Providence",
-          "county": "Providence County",
-          "city": "Providence",
-          "state": "RI",
-          "classification": "Urban",
-          "alias": ""
-        },
-        {
-          "zip": "02902",
           "town": "Providence",
           "county": "Providence County",
           "city": "Providence",
