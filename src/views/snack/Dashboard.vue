@@ -160,24 +160,27 @@ export default {
     const zipcodes = ref([]);
     onMounted(async () => {
       resultPeriods.value = await fb.getModelDataPeriods();
+    });
+    onMounted(async () => {
       zipcodes.value = await fb.getZipcodes();
     });
 
-    const dropDowns = computed(() => {
-      let zips = [];
+    const zips = computed(() => {
+      let result = [];
 
       if (controls.value.geography) {
         const { name, municipalities } = controls.value.geography;
 
         if (name === "All of Rhode Island") {
-          zips = zipcodes.value;
+          // Set the result (for the dropdown) to all of the zip codes in RI
+          result = zipcodes.value;
         } else {
           municipalities.forEach((m) => {
-            zips.push(...zipcodes.value.filter((z) => z.town === m));
+            result.push(...zipcodes.value.filter((z) => z.town === m));
           });
         }
 
-        zips = zips
+        result = result
           .map((z) => {
             const { alias } = z;
             const formatAlias = alias ? ` (${alias})` : "";
@@ -190,6 +193,10 @@ export default {
           .sort(sortByProperty("zip"));
       }
 
+      return result;
+    });
+
+    const dropDowns = computed(() => {
       return {
         geography: {
           icon: "fas fa-globe",
@@ -197,7 +204,7 @@ export default {
         },
         zipcode: {
           icon: "fas fa-map",
-          values: [{ name: "All Zip Codes" }, ...zips],
+          values: [{ name: "All Zip Codes" }, ...zips.value],
         },
         model_version: {
           icon: "fas fa-calendar-alt",
