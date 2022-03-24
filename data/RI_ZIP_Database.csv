@@ -1,0 +1,90 @@
+zip,town,county,city,state,classification,alias
+02806,Barrington,Bristol County,Barrington,RI,Suburban,
+02809,Bristol,Bristol County,Bristol,RI,Suburban,
+02826,Glendale,Providence County,Burrillville,RI,Rural,Glendale
+02830,Harrisville,Providence County,Burrillville,RI,Rural,Harrisville
+02839,Mapleville,Providence County,Burrillville,RI,Rural,Mapleville
+02858,Oakland,Providence County,Burrillville,RI,Rural,Oakland
+02859,Pascoag,Providence County,Burrillville,RI,Rural,Pascoag
+02863,Central Falls,Providence County,Central Falls,RI,Urban,
+02813,Charlestown,Washington County,Charlestown,RI,Rural,
+02816,Coventry,Kent County,Coventry,RI,Rural,
+02827,Greene,Kent County,Coventry,RI,Rural,
+02910,Cranston,Providence County,Cranston,RI,Urban,
+02920,Cranston,Providence County,Cranston,RI,Urban,
+02921,Cranston,Providence County,Cranston,RI,Urban,
+02864,Cumberland,Providence County,Cumberland,RI,Suburban,
+02818,East Greenwich,Kent County,East Greenwich,RI,Suburban,
+02914,East Providence,Providence County,East Providence,RI,Urban,
+02915,Riverside,Providence County,East Providence,RI,Urban,Riverside
+02916,Rumford,Providence County,East Providence,RI,Urban,Rumford
+02822,Exeter,Washington County,Exeter,RI,Rural,
+02825,Foster,Providence County,Foster,RI,Rural,
+02814,Chepachet,Providence County,Glocester,RI,Rural,Chepachet
+02829,Harmony,Providence County,Glocester,RI,Rural,Harmony
+02804,Ashaway,Washington County,Hopkinton,RI,Rural,Ashaway
+02832,Hope Valley,Washington County,Hopkinton,RI,Rural,Hope Valley
+02833,Hopkinton,Washington County,Hopkinton,RI,Rural,
+02873,Rockville,Washington County,Hopkinton,RI,Rural,
+02835,Jamestown,Newport County,Jamestown,RI,Suburban,
+02919,Johnston,Providence County,Johnston,RI,Suburban,
+02802,Albion,Providence County,Lincoln,RI,Suburban,Albion
+02838,Manville,Providence County,Lincoln,RI,Suburban,Manville
+02865,Lincoln,Providence County,Lincoln,RI,Suburban,
+02801,Adamsville,Newport County,Little Compton,RI,Rural,Adamsville
+02837,Little Compton,Newport County,Little Compton,RI,Rural,
+02842,Middletown,Newport County,Middletown,RI,Suburban,
+02882,Narragansett,Washington County,Narragansett,RI,Suburban,
+02807,Block Island,Washington County,New Shoreham,RI,Rural,Block Island
+02840,Newport,Newport County,Newport,RI,Urban,
+02841,Newport,Newport County,Newport,RI,Urban,
+02852,North Kingstown,Washington County,North Kingstown,RI,Suburban,
+02854,North Kingstown,Washington County,North Kingstown,RI,Suburban,
+02874,Saunderstown,Washington County,North Kingstown,RI,Suburban,Saunderstown
+02877,Slocum,Washington County,North Kingstown,RI,Suburban,Slocum
+02911,North Providence,Providence County,North Providence,RI,Urban,
+02824,Forestdale,Providence County,North Smithfield,RI,Rural,Forestdale
+02876,Slatersville,Providence County,North Smithfield,RI,Rural,Slatersville
+02896,North Smithfield,Providence County,North Smithfield,RI,Rural,
+02860,Pawtucket,Providence County,Pawtucket,RI,Urban,
+02861,Pawtucket,Providence County,Pawtucket,RI,Urban,
+02862,Pawtucket,Providence County,Pawtucket,RI,Urban,
+02871,Portsmouth,Newport County,Portsmouth,RI,Suburban,
+02872,Prudence Island,Bristol County,Portsmouth,RI,Suburban,Prudence Island
+02901,Providence,Providence County,Providence,RI,Urban,
+02902,Providence,Providence County,Providence,RI,Urban,
+02903,Providence,Providence County,Providence,RI,Urban,
+02904,Providence,Providence County,Providence,RI,Urban,
+02905,Providence,Providence County,Providence,RI,Urban,
+02906,Providence,Providence County,Providence,RI,Urban,
+02907,Providence,Providence County,Providence,RI,Urban,
+02908,Providence,Providence County,Providence,RI,Urban,
+02909,Providence,Providence County,Providence,RI,Urban,
+02912,Providence,Providence County,Providence,RI,Urban,
+02918,Providence,Providence County,Providence,RI,Urban,
+02812,Carolina,Washington County,Richmond,RI,Rural,Carolina
+02836,Kenyon,Washington County,Richmond,RI,Rural,Kenyon
+02875,Shannock,Washington County,Richmond,RI,Rural,Shannock
+02894,Wood River Junction,Washington County,Richmond,RI,Rural,Wood River Junction
+02898,Wyoming,Washington County,Richmond,RI,Rural,Wyoming
+02815,Clayville,Providence County,Scituate,RI,Rural,Clayville
+02831,Hope,Providence County,Scituate,RI,Rural,Hope
+02857,North Scituate,Providence County,Scituate,RI,Rural,North Scituate
+02828,Greenville,Providence County,Smithfield,RI,Suburban,Greenville
+02917,Smithfield,Providence County,Smithfield,RI,Suburban,
+02879,Wakefield,Washington County,South Kingstown,RI,Rural,Wakefield
+02880,Wakefield,Washington County,South Kingstown,RI,Rural,Wakefield
+02881,Kingston,Washington County,South Kingstown,RI,Rural,Kingston
+02883,Peace Dale,Washington County,South Kingstown,RI,Rural,Peace Dale
+02892,West Kingston,Washington County,South Kingstown,RI,Rural,West Kingston
+02878,Tiverton,Newport County,Tiverton,RI,Rural,
+02885,Warren,Bristol County,Warren,RI,Suburban,
+02886,Warwick,Kent County,Warwick,RI,Urban,
+02887,Warwick,Kent County,Warwick,RI,Urban,
+02888,Warwick,Kent County,Warwick,RI,Urban,
+02889,Warwick,Kent County,Warwick,RI,Urban,
+02817,West Greenwich,Kent County,West Greenwich,RI,Rural,
+02893,West Warwick,Kent County,West Warwick,RI,Urban,
+02808,Bradford,Washington County,Westerly,RI,Suburban,Bradford
+02891,Westerly,Washington County,Westerly,RI,Suburban,Westerly
+02895,Woonsocket,Providence County,Woonsocket,RI,Urban,
