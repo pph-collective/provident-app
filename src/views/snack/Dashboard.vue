@@ -165,22 +165,22 @@ export default {
       zipcodes.value = await fb.getZipcodes();
     });
 
-    const zips = computed(() => {
-      let result = [];
+    const zipsDropdownOptions = computed(() => {
+      let zips = [];
 
       if (controls.value.geography) {
         const { name, municipalities } = controls.value.geography;
 
         if (name === "All of Rhode Island") {
           // Set the result (for the dropdown) to all of the zip codes in RI
-          result = zipcodes.value;
+          zips = zipcodes.value;
         } else {
           municipalities.forEach((m) => {
-            result.push(...zipcodes.value.filter((z) => z.town === m));
+            zips.push(...zipcodes.value.filter((z) => z.town === m));
           });
         }
 
-        result = result
+        zips = zips
           .map((z) => {
             const { alias } = z;
             const formatAlias = alias ? ` (${alias})` : "";
@@ -193,7 +193,7 @@ export default {
           .sort(sortByProperty("zip"));
       }
 
-      return result;
+      return [{ name: "All Zip Codes" }, ...zips];
     });
 
     const dropDowns = computed(() => {
@@ -204,7 +204,7 @@ export default {
         },
         zipcode: {
           icon: "fas fa-map",
-          values: [{ name: "All Zip Codes" }, ...zips.value],
+          values: zipsDropdownOptions.value,
         },
         model_version: {
           icon: "fas fa-calendar-alt",
@@ -236,6 +236,10 @@ export default {
         updateDataset(newControls.model_version).then((res) => {
           dataset.value = res;
         });
+      }
+
+      if (newControls.geography !== controls.value.geography) {
+        newControls.zipcode = zipsDropdownOptions.value[0];
       }
 
       // update the control selections
