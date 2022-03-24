@@ -50,6 +50,11 @@ describe("Dashboard viewed as a user", () => {
     // Switch to Little Compton
     cy.get("select#geography").select("Little Compton");
 
+    // Wait for zipcodes dropdown to reset to all zip codes
+    cy.get("select#zipcode")
+      .find("option:selected")
+      .should("have.text", "All Zip Codes");
+
     // Check Zipcode Dropdown
     cy.get("#dashboard-control-panel")
       .find("select")
