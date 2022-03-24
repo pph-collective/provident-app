@@ -47,6 +47,11 @@ describe("Dashboard viewed as a user", () => {
     // Choose a zipcode
     cy.get("select#zipcode").select("02801 (Adamsville)");
 
+    // Wait for zipcodes dropdown to update
+    cy.get("select#zipcode")
+      .find("option:selected")
+      .should("have.text", "02801 (Adamsville)");
+
     // Switch to Little Compton
     cy.get("select#geography").select("Little Compton");
 
