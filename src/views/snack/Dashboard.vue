@@ -176,7 +176,7 @@ export default {
           zips = zipcodes.value;
         } else {
           municipalities.forEach((m) => {
-            zips.push(...zipcodes.value.filter((z) => z.town === m));
+            zips.push(...zipcodes.value.filter((z) => z.city === m));
           });
         }
 

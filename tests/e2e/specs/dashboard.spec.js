@@ -28,7 +28,13 @@ describe("Dashboard viewed as a user", () => {
         const actual = [...options].map((o) => o.text);
 
         // Good Doers' zipcodes
-        expect(actual).to.deep.eq(["All Zip Codes", "02837", "02871", "02878"]);
+        expect(actual).to.deep.eq([
+          "All Zip Codes",
+          "02837",
+          "02871",
+          "02872 (Prudence Island)",
+          "02878",
+        ]);
       });
 
     cy.get("#dashboard-control-panel")
