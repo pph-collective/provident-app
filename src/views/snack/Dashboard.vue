@@ -169,9 +169,9 @@ export default {
       let zips = [];
 
       if (controls.value.geography) {
-        const { name, municipalities } = controls.value.geography;
+        const { municipalities } = controls.value.geography;
 
-        if (name === "All of Rhode Island" || municipalities.length === 0) {
+        if (municipalities.length === 0) {
           // Set the result (for the dropdown) to all of the zip codes in RI
           zips = zipcodes.value;
         } else {
