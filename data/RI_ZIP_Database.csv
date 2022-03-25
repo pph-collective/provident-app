@@ -31,7 +31,6 @@ zip,town,county,city,state,classification,alias
 02802,Albion,Providence County,Lincoln,RI,Suburban,Albion
 02838,Manville,Providence County,Lincoln,RI,Suburban,Manville
 02865,Lincoln,Providence County,Lincoln,RI,Suburban,
-02801,Adamsville,Newport County,Little Compton,RI,Rural,Adamsville
 02837,Little Compton,Newport County,Little Compton,RI,Rural,
 02842,Middletown,Newport County,Middletown,RI,Suburban,
 02882,Narragansett,Washington County,Narragansett,RI,Suburban,
@@ -52,7 +51,6 @@ zip,town,county,city,state,classification,alias
 02871,Portsmouth,Newport County,Portsmouth,RI,Suburban,
 02872,Prudence Island,Bristol County,Portsmouth,RI,Suburban,Prudence Island
 02901,Providence,Providence County,Providence,RI,Urban,
-02902,Providence,Providence County,Providence,RI,Urban,
 02903,Providence,Providence County,Providence,RI,Urban,
 02904,Providence,Providence County,Providence,RI,Urban,
 02905,Providence,Providence County,Providence,RI,Urban,
