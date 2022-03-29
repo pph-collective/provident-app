@@ -229,6 +229,16 @@ const getModelPredictions = async (period) => {
   }
 };
 
+const getZipcodes = async () => {
+  try {
+    const doc = await db.collection("map_data").doc("ri_zip_database").get();
+    return getDataFromDoc(doc);
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
 const createEmail = async ({
   subject,
   to,
@@ -271,6 +281,7 @@ export default {
   getModelDataPeriods,
   getModelPredictions,
   getUserRequest,
+  getZipcodes,
   logActivity,
   login,
   logout,

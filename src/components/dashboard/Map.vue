@@ -12,6 +12,7 @@ const topojson = { ...ts, ...tc };
 
 import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
+import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty } from "@/utils/utils.js";
 
@@ -35,13 +36,33 @@ export default {
       type: Boolean,
       required: true,
     },
+    zipcode: {
+      type: Object,
+      required: true,
+    },
   },
   emits: ["new-active-bg", "new-active-municipality", "active-clicked-status"],
   setup(props, { emit }) {
-    const { filterMunicipalities, dataset, flagProperty, withPredictions } =
-      toRefs(props);
+    const {
+      filterMunicipalities,
+      dataset,
+      flagProperty,
+      withPredictions,
+      zipcode,
+    } = toRefs(props);
 
     const el = ref(null);
+
+    const filteredZip = computed(() => {
+      if (zipcode.value.name === "All Zip Codes") {
+        // Doesn't matter since we're zooming to the municipalities instead if the dropdown is 'All Zip Codes'
+        return [];
+      } else {
+        return zipcodesGeo.find(
+          (z) => zipcode.value.zip === z.properties.ZCTA5CE10
+        );
+      }
+    });
 
     // filter geo data and simplify
     const filteredGeo = computed(() => {
@@ -125,6 +146,7 @@ export default {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",
         background: "transparent",
+        autosize: "none",
         signals: [
           {
             name: "tileUrl",
@@ -180,13 +202,22 @@ export default {
             values: filteredGeo.value,
             format: { type: "topojson", feature: "blocks" },
           },
+          {
+            name: "zipcode_outlines",
+            values: filteredZip.value,
+          },
         ],
         projections: [
           {
             name: "projection",
             type: "mercator",
             size: { signal: "[width, height]" },
-            fit: { signal: 'data("town_outlines")' },
+            fit: {
+              signal:
+                zipcode.value.name === "All Zip Codes"
+                  ? 'data("town_outlines")'
+                  : 'data("zipcode_outlines")',
+            },
           },
         ],
         marks: [

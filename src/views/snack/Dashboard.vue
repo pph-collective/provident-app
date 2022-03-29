@@ -53,6 +53,7 @@
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
             :with-predictions="interventionArmUser"
+            :zipcode="controls.zipcode"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
@@ -102,7 +103,7 @@ import { useStore } from "vuex";
 import * as aq from "arquero";
 
 import fb from "@/firebase.js";
-import utils from "@/utils/utils";
+import { MUNICIPALITIES, sortByProperty } from "@/utils/utils";
 
 import Card from "@/components/dashboard/Card.vue";
 import ControlPanel from "@/components/dashboard/ControlPanel.vue";
@@ -123,7 +124,7 @@ export default {
     Loading,
   },
   setup() {
-    const towns = utils.MUNICIPALITIES.map((m) => ({
+    const towns = MUNICIPALITIES.map((m) => ({
       name: m,
       municipalities: [m],
     }));
@@ -156,8 +157,43 @@ export default {
     });
 
     const resultPeriods = ref([]);
+    const zipcodes = ref([]);
     onMounted(async () => {
       resultPeriods.value = await fb.getModelDataPeriods();
+    });
+    onMounted(async () => {
+      zipcodes.value = await fb.getZipcodes();
+    });
+
+    const zipsDropdownOptions = computed(() => {
+      let zips = [];
+
+      if (controls.value.geography) {
+        const { municipalities } = controls.value.geography;
+
+        if (municipalities.length === 0) {
+          // Set the result (for the dropdown) to all of the zip codes in RI
+          zips = zipcodes.value;
+        } else {
+          municipalities.forEach((m) => {
+            zips.push(...zipcodes.value.filter((z) => z.city === m));
+          });
+        }
+
+        zips = zips
+          .map((z) => {
+            const { alias } = z;
+            const formatAlias = alias ? ` (${alias})` : "";
+
+            return {
+              ...z,
+              name: `${z.zip}${formatAlias}`,
+            };
+          })
+          .sort(sortByProperty("zip"));
+      }
+
+      return [{ name: "All Zip Codes" }, ...zips];
     });
 
     const dropDowns = computed(() => {
@@ -165,6 +201,10 @@ export default {
         geography: {
           icon: "fas fa-globe",
           values: filteredOrgs.value,
+        },
+        zipcode: {
+          icon: "fas fa-map",
+          values: zipsDropdownOptions.value,
         },
         model_version: {
           icon: "fas fa-calendar-alt",
@@ -196,6 +236,11 @@ export default {
         updateDataset(newControls.model_version).then((res) => {
           dataset.value = res;
         });
+      }
+
+      // resets the zipcode dropdown to All Zip Codes
+      if (newControls.geography !== controls.value.geography) {
+        newControls.zipcode = zipsDropdownOptions.value[0];
       }
 
       // update the control selections
@@ -245,6 +290,7 @@ export default {
       loading,
       resultPeriods,
       updateControls,
+      zipcodes,
       zoomBg,
       zoomed,
     };

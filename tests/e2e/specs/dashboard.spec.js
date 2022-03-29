@@ -8,7 +8,7 @@ describe("Dashboard viewed as a user", () => {
   it("Has a control panel with limited dropdowns", () => {
     cy.get("#dashboard-control-panel")
       .find("select")
-      .should("have.length", "2")
+      .should("have.length", "3")
       .eq(0)
       .find("option")
       .should("have.length", 41)
@@ -22,12 +22,58 @@ describe("Dashboard viewed as a user", () => {
 
     cy.get("#dashboard-control-panel")
       .find("select")
-      .should("have.length", "2")
       .eq(1)
       .find("option")
       .then((options) => {
         const actual = [...options].map((o) => o.text);
+
+        // Good Doers' zipcodes
+        expect(actual).to.deep.eq([
+          "All Zip Codes",
+          "02837",
+          "02871",
+          "02872 (Prudence Island)",
+          "02878",
+        ]);
+      });
+
+    cy.get("#dashboard-control-panel")
+      .find("select")
+      .eq(2)
+      .find("option")
+      .then((options) => {
+        const actual = [...options].map((o) => o.text);
         expect(actual).to.deep.eq(["2019-1", "2018-2"]);
+      });
+  });
+
+  it("Switching geography resets zipcodes", () => {
+    cy.get("select#geography").select("All of Rhode Island");
+
+    // Choose a zipcode
+    cy.get("select#zipcode").select("02802 (Albion)");
+
+    // Wait for zipcodes dropdown to update
+    cy.get("select#zipcode")
+      .find("option:selected")
+      .should("have.text", "02802 (Albion)");
+
+    // Switch to Little Compton
+    cy.get("select#geography").select("Little Compton");
+
+    // Wait for zipcodes dropdown to reset to all zip codes
+    cy.get("select#zipcode")
+      .find("option:selected")
+      .should("have.text", "All Zip Codes");
+
+    // Check Zipcode Dropdown
+    cy.get("#dashboard-control-panel")
+      .find("select")
+      .eq(1)
+      .find("option")
+      .then((options) => {
+        const actual = [...options].map((o) => o.text);
+        expect(actual).to.deep.eq(["All Zip Codes", "02837"]);
       });
   });
 
