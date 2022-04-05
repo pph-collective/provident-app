@@ -216,7 +216,7 @@ export default {
         tertile_direction: "ascending",
       },
       {
-        field: "hispanic",
+        field: "race_hispanic",
         title: "Hispanic / Latino",
         info: "Many Hispanic or Latino Rhode Islanders are Dominican, Puerto Rican, or Guatemalan. They may speak English or Spanish at home.",
         aggregate: "median",
