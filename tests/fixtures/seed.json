@@ -2688,7 +2688,7 @@
           "unemployed": "0.02733119",
           "housing_burden": "0.26369863",
           "no_vehicle": "0.032671365",
-          "living_alonne": "0.243433696",
+          "living_alone": "0.243433696",
           "crowded_housing": "0.010890455",
           "internet": "0.886611147"
         },
@@ -2704,7 +2704,7 @@
           "unemployed": "0.019991261",
           "housing_burden": "0.485609308",
           "no_vehicle": "0.04423797",
-          "living_alonne": "0.266121204",
+          "living_alone": "0.266121204",
           "crowded_housing": "0.004437665",
           "internet": "0.884343364"
         },
@@ -2720,7 +2720,7 @@
           "unemployed": "0.060958254",
           "housing_burden": "0.31557377",
           "no_vehicle": "0.039732075",
-          "living_alonne": "0.249961942",
+          "living_alone": "0.249961942",
           "crowded_housing": "0.008372659",
           "internet": "0.873192267"
         }
@@ -3115,7 +3115,7 @@
           "unemployed": "0.02733119",
           "housing_burden": "0.26369863",
           "no_vehicle": "0.032671365",
-          "living_alonne": "0.243433696",
+          "living_alone": "0.243433696",
           "crowded_housing": "0.010890455",
           "internet": "0.886611147"
         },
@@ -3131,7 +3131,7 @@
           "unemployed": "0.019991261",
           "housing_burden": "0.485609308",
           "no_vehicle": "0.04423797",
-          "living_alonne": "0.266121204",
+          "living_alone": "0.266121204",
           "crowded_housing": "0.004437665",
           "internet": "0.884343364"
         },
@@ -3147,7 +3147,7 @@
           "unemployed": "0.060958254",
           "housing_burden": "0.31557377",
           "no_vehicle": "0.039732075",
-          "living_alonne": "0.249961942",
+          "living_alone": "0.249961942",
           "crowded_housing": "0.008372659",
           "internet": "0.873192267"
         }
