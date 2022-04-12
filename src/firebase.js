@@ -194,7 +194,7 @@ const getModelData = async (period) => {
 
     const sviDataDoc = await db.collection("svi_data").doc(period).get();
     const sviData = sviDataDoc.data();
-    const sviDt = aq.from(sviData.cbg);
+    const sviDt = aq.from(sviData.cbg); // here
 
     const landmarkDataDoc = await db
       .collection("landmark_data")
@@ -202,20 +202,28 @@ const getModelData = async (period) => {
       .get();
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
-    return modelDt
-      .join(sviDt) // joins on bg_id, geoid
-      .filter((d) => d.municipality !== "")
-      .objects()
-      .map((row) => {
-        // Filters the landmark data based on the block group and save it into the landmarks key for each block group
-        row.landmarks = landmarkData.filter(
-          (landmark) => landmark.bg_id === row.bg_id
-        );
-        return row;
-      });
+    return {
+      bgData: modelDt
+        .join(sviDt) // joins on bg_id, geoid
+        .filter((d) => d.municipality !== "")
+        .objects()
+        .map((row) => {
+          // Filters the landmark data based on the block group and save it into the landmarks key for each block group
+          row.landmarks = landmarkData.filter(
+            (landmark) => landmark.bg_id === row.bg_id
+          );
+          return row;
+        }),
+      townData: sviData.town,
+      riData: sviData.ri,
+    };
   } catch (err) {
     console.log(err);
-    return [];
+    return {
+      bgData: [],
+      townData: [],
+      riData: [],
+    };
   }
 };
 

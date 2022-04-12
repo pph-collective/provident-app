@@ -47,9 +47,9 @@
         <div v-if="controls.geography" class="map-container">
           <Map
             id="main-map"
-            v-if="dataset.length > 0"
+            v-if="Object.keys(dataset).length > 0"
             class="is-absolute"
-            :dataset="dataset"
+            :dataset="dataset.bgData"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
             :with-predictions="interventionArmUser"
@@ -63,7 +63,7 @@
             id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
             :block-group="activeGeoid"
-            :dataset="dataset"
+            :dataset="dataset.bgData"
             class="is-absolute"
           />
           <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
@@ -77,7 +77,7 @@
       <template #title>Stats: {{ controls.model_version }}</template>
       <template #content>
         <StatsWidget
-          v-if="dataset.length > 0"
+          v-if="Object.keys(dataset).length > 0"
           :dataset="dataset"
           :municipality="activeMuni"
           :geoid="activeGeoid"
@@ -133,7 +133,7 @@ export default {
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
     );
-    const dataset = ref([]);
+    const dataset = ref({});
     const activeGeoid = ref("");
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
@@ -215,11 +215,18 @@ export default {
 
     const controls = ref({});
 
+    // TODO: updateDataset
     const updateDataset = async (period) => {
-      const data = await fb.getModelData(period);
+      const data = await fb.getModelData(period); // data for the block groups
       if (interventionArmUser.value) {
         const preds = await fb.getModelPredictions(period);
-        return aq.from(data).join_left(aq.from(preds), "bg_id").objects();
+        return {
+          ...data,
+          bgData: aq
+            .from(data.bgData)
+            .join_left(aq.from(preds), "bg_id")
+            .objects(),
+        };
       } else {
         return data;
       }
@@ -250,7 +257,10 @@ export default {
     };
 
     const loading = computed(() => {
-      return dataset.value.length === 0 || resultPeriods.value.length === 0;
+      return (
+        Object.keys(dataset.value).length === 0 ||
+        resultPeriods.value.length === 0
+      );
     });
 
     // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right

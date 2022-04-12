@@ -35,7 +35,7 @@
             <th class="py-1 px-0"><abbr title="Rhode Island">RI</abbr></th>
           </tr>
         </thead>
-        <!-- community cmposition statistics -->
+        <!-- community composition statistics -->
         <StatsTableContent
           :stats="communityStats"
           :grouped-metrics="{ communityComposition }"
@@ -79,7 +79,7 @@ export default {
   },
   props: {
     dataset: {
-      type: Array,
+      type: Object,
       required: true,
     },
     municipality: {
@@ -255,8 +255,8 @@ export default {
     const prediction = computed(() => {
       if (geoid.value !== "") {
         return (
-          dataset.value.find((row) => row.bg_id === geoid.value)?.prediction ??
-          "-"
+          dataset.value.bgData.find((row) => row.bg_id === geoid.value)
+            ?.prediction ?? "-"
         );
       } else {
         return "";
