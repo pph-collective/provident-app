@@ -20,15 +20,15 @@ export function useStats({
   withTertiles = true,
 }) {
   const dt = computed(() => {
-    return aq.from(dataset.value.bgData);
+    return aq.from(dataset.value.cbg);
   });
 
   const townDt = computed(() => {
-    return aq.from(dataset.value.townData);
+    return aq.from(dataset.value.town);
   });
 
   const riDt = computed(() => {
-    return aq.from([dataset.value.riData]);
+    return aq.from([dataset.value.ri]);
   });
 
   const isData = computed(() => dt.value.numRows() > 0);

@@ -193,8 +193,7 @@ const getModelData = async (period) => {
     const modelDt = aq.from(modelMeta);
 
     const sviDataDoc = await db.collection("svi_data").doc(period).get();
-    const sviData = sviDataDoc.data();
-    const sviDt = aq.from(sviData.cbg);
+    const { cbg, town, ri } = sviDataDoc.data();
 
     const landmarkDataDoc = await db
       .collection("landmark_data")
@@ -203,8 +202,8 @@ const getModelData = async (period) => {
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
     return {
-      bgData: modelDt
-        .join(sviDt) // joins on bg_id, geoid
+      cbg: modelDt
+        .join(aq.from(cbg)) // joins on bg_id, geoid
         .filter((d) => d.municipality !== "")
         .objects()
         .map((row) => {
@@ -214,15 +213,15 @@ const getModelData = async (period) => {
           );
           return row;
         }),
-      townData: sviData.town,
-      riData: sviData.ri,
+      town,
+      ri,
     };
   } catch (err) {
     console.log(err);
     return {
-      bgData: [],
-      townData: [],
-      riData: [],
+      cbg: [],
+      town: [],
+      ri: [],
     };
   }
 };

@@ -255,7 +255,7 @@ export default {
     const prediction = computed(() => {
       if (geoid.value !== "") {
         return (
-          dataset.value.bgData.find((row) => row.bg_id === geoid.value)
+          dataset.value.cbg.find((row) => row.bg_id === geoid.value)
             ?.prediction ?? "-"
         );
       } else {
