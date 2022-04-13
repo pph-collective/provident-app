@@ -119,8 +119,6 @@ export function useStats({
   });
 
   const muni = computed(() => {
-    // TODO: Change seed data to be town --> municipality
-    // TODO: hispanic --> race_hispanic
     return munis.value.find((o) => o.town === municipality.value) ?? {};
   });
 

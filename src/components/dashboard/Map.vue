@@ -141,7 +141,6 @@ export default {
       return signal;
     });
 
-    // TODO: pick a map
     const spec = computed(() => {
       return {
         $schema: "https://vega.github.io/schema/vega/v5.json",

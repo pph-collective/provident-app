@@ -215,9 +215,8 @@ export default {
 
     const controls = ref({});
 
-    // TODO: updateDataset
     const updateDataset = async (period) => {
-      const data = await fb.getModelData(period); // data for the block groups
+      const data = await fb.getModelData(period);
       if (interventionArmUser.value) {
         const preds = await fb.getModelPredictions(period);
         return {
