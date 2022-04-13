@@ -194,7 +194,7 @@ const getModelData = async (period) => {
 
     const sviDataDoc = await db.collection("svi_data").doc(period).get();
     const sviData = sviDataDoc.data();
-    const sviDt = aq.from(sviData.cbg); // here
+    const sviDt = aq.from(sviData.cbg);
 
     const landmarkDataDoc = await db
       .collection("landmark_data")
