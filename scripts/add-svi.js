@@ -62,7 +62,7 @@ function writeToFirestore(collection, period, records) {
     return;
   }
   const batchCommits = [];
-  let batch = db.batch();
+  const batch = db.batch();
   const docRef = db.collection(collection).doc(period);
   batch.set(docRef, records);
   batchCommits.push(batch.commit());
