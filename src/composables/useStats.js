@@ -20,7 +20,15 @@ export function useStats({
   withTertiles = true,
 }) {
   const dt = computed(() => {
-    return aq.from(dataset.value);
+    return aq.from(dataset.value.cbg);
+  });
+
+  const townDt = computed(() => {
+    return aq.from(dataset.value.town);
+  });
+
+  const riDt = computed(() => {
+    return aq.from([dataset.value.ri]);
   });
 
   const isData = computed(() => dt.value.numRows() > 0);
@@ -74,9 +82,7 @@ export function useStats({
 
   const ri = computed(() => {
     if (isData.value) {
-      return dt.value
-        .rollup(statFns)
-        .derive({ area: () => "RI" })
+      return riDt.value
         .cross(tertiles.value)
         .derive(calcTertile)
         .derive(groupTertile)
@@ -86,12 +92,10 @@ export function useStats({
     }
   });
 
+  // to update
   const munis = computed(() => {
     if (isData.value) {
-      return dt.value
-        .groupby("municipality")
-        .rollup(statFns)
-        .derive({ area: (d) => d.municipality })
+      return townDt.value
         .cross(tertiles.value)
         .derive(calcTertile)
         .derive(groupTertile)
@@ -115,7 +119,7 @@ export function useStats({
   });
 
   const muni = computed(() => {
-    return munis.value.find((o) => o.municipality === municipality.value) ?? {};
+    return munis.value.find((o) => o.town === municipality.value) ?? {};
   });
 
   const bg = computed(() => {
