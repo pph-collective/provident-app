@@ -2,11 +2,7 @@
   <div class="container is-static is-fluid">
     <div class="only-printed">
       <h2 class="is-size-2">{{ formTitle }}</h2>
-      <p>Last updated: {{ lastUpdatedValue }}</p>
-      <p v-if="userSubmitted">Submitted by {{ userSubmitted }}</p>
-      <p v-if="usersEdited && usersEdited.length > 0">
-        Edited by {{ usersEdited.join(", ") }}
-      </p>
+      <p>Last updated {{ lastUpdatedValue }}</p>
       <hr />
     </div>
     <fieldset :disabled="readOnly">
@@ -100,16 +96,6 @@ export default {
       type: String,
       required: false,
       default: "",
-    },
-    usersEdited: {
-      type: Array,
-      required: false,
-      default: undefined,
-    },
-    userSubmitted: {
-      type: String,
-      required: false,
-      default: undefined,
     },
   },
   emits: ["alt", "submitted", "close"],
