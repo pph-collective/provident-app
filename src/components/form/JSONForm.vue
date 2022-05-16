@@ -5,7 +5,7 @@
       <p>Last updated: {{ lastUpdatedValue }}</p>
       <p v-if="userSubmitted">Submitted by {{ userSubmitted }}</p>
       <p v-if="usersEdited && usersEdited.length > 0">
-        Edited by {{ usersEdited.join(" ,") }}
+        Edited by {{ usersEdited.join(", ") }}
       </p>
       <hr />
     </div>

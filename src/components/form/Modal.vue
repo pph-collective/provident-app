@@ -37,7 +37,7 @@
                   formResponse.users_edited.length > 0
                 "
               >
-                <em>Edited by {{ formResponse.users_edited.join(" ,") }}</em>
+                <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
               </p>
             </div>
             <PrintSection :printable="printable">
