@@ -943,3 +943,87 @@ describe("Forms viewed as a champion", () => {
     cy.get('[data-cy="close-form"]').click();
   });
 });
+
+describe("Forms edited by multiple uses", () => {
+  const formTitle = "Sample Organization Form";
+
+  beforeEach(() => {
+    cy.login_by_permission("champion").then(() => {
+      cy.get("[data-cy='forms']").click();
+      cy.waitLoaded('[data-cy="form-panel"]');
+    });
+
+    cy.contains('[data-cy="forms-panel-block"]', formTitle)
+      .should("exist")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("be.enabled")
+      .type("water");
+
+    // Save the form
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Save")
+      .should("be.enabled")
+      .click();
+
+    // Form message
+    cy.get('[data-cy="form-message"]').should(
+      "contain",
+      "Form successfully saved"
+    );
+
+    // Close form
+    cy.get('[data-cy="close-form"]').click();
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+    cy.get('[data-cy="launch-form-button"]').should("exist");
+
+    cy.logout();
+    cy.login_by_permission("championAlt").then(() => {
+      cy.get("[data-cy='forms']").click();
+      cy.waitLoaded('[data-cy="form-panel"]');
+    });
+
+    cy.contains('[data-cy="forms-panel-block"]', formTitle)
+      .should("exist")
+      .find('[data-cy="launch-form-button"]')
+      .click();
+
+    cy.get('[model="resources"]')
+      .find("textarea")
+      .should("be.enabled")
+      .should("contain", "water")
+      .type("water and fire");
+
+    // Submit the form
+    cy.get('[data-cy="active-form-modal"]')
+      .find("button")
+      .contains("Submit")
+      .should("be.enabled")
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+  });
+
+  it("Submitted by and Edited by tags", () => {
+    cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      .find(".tag")
+      .should("contain", "SUBMITTED BY: championalt@user.com");
+
+    // Review form
+    cy.contains('[data-cy="forms-panel-block"]', formTitle)
+      .find('[data-cy="review-form-button"]')
+      .should("exist")
+      .click();
+
+    cy.get('[data-cy="active-form-modal"]')
+      .find(".user-submitted")
+      .should("contain", "Edited by");
+
+    cy.get('[data-cy="close-form"]').click();
+    cy.get('[data-cy="active-form-modal"]').should("not.exist");
+  });
+});

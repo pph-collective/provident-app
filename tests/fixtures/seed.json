@@ -457,6 +457,13 @@
           }
         }
       }
+    },
+    "championalt@user.com": {
+      "email": "championalt@user.com",
+      "name": "Champion Alt",
+      "organization": "Good Doers",
+      "role": "user",
+      "status": "approved"
     }
   },
   "organizations": {
