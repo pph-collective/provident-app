@@ -27,6 +27,19 @@
             ></button>
           </header>
           <section class="modal-card-body" data-cy="form-body">
+            <div class="card-content user-submitted">
+              <p v-if="formResponse.user_submitted">
+                <em>Submitted by {{ formResponse.user_submitted }}</em>
+              </p>
+              <p
+                v-if="
+                  formResponse.users_edited &&
+                  formResponse.users_edited.length > 0
+                "
+              >
+                <em>Edited by {{ formResponse.users_edited.join(" ,") }}</em>
+              </p>
+            </div>
             <PrintSection :printable="printable">
               <div>
                 <BGMap
@@ -48,6 +61,8 @@
                 :last-updated="formResponse.last_updated"
                 :close-request="closeFormRequest"
                 :form-message="formMessage"
+                :users-edited="formResponse.users_edited"
+                :user-submitted="formResponse.user_submitted"
                 @alt="updateFormResponse($event, 'Draft')"
                 @submitted="updateFormResponse($event, 'Submitted')"
                 @close="closeForm"
@@ -169,3 +184,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.user-submitted {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  text-align: right;
+}
+</style>
