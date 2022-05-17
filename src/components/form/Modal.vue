@@ -32,11 +32,7 @@
                 <p v-if="formResponse.user_submitted">
                   <em>Submitted by {{ formResponse.user_submitted }}</em>
                 </p>
-                <p
-                  v-if="
-                    formResponse.users_edited?.length > 0
-                  "
-                >
+                <p v-if="formResponse.users_edited?.length > 0">
                   <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
                 </p>
               </div>

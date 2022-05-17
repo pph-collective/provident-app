@@ -98,7 +98,7 @@ describe("Admin Views and Powers", () => {
   it("User management", () => {
     cy.get('a[href="/admin/user_management"]').click();
     cy.waitLoaded(".user-management");
-    cy.get("table tbody tr").should("have.length", 4).first().find("i").click();
+    cy.get("table tbody tr").should("have.length", 5).first().find("i").click();
     cy.get("table tbody tr").find("select").should("have.value", "champion");
     cy.get("table tbody tr").find("select").select("user");
     cy.get("table tbody tr").first().find("i.fa-save").click();
