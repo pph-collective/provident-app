@@ -119,6 +119,11 @@
                   new Date(formResponse.last_updated).toISOString().slice(0, 10)
                 "
               />
+              <PanelTag
+                v-if="formResponse.user_submitted"
+                label="SUBMITTED BY"
+                :value="formResponse.user_submitted"
+              />
             </div>
             <div class="level-item">
               <button

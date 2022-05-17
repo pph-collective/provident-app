@@ -2,7 +2,7 @@
   <div class="container is-static is-fluid">
     <div class="only-printed">
       <h2 class="is-size-2">{{ formTitle }}</h2>
-      <p>Last updated: {{ lastUpdatedValue }}</p>
+      <p>Last updated {{ lastUpdatedValue }}</p>
       <hr />
     </div>
     <fieldset :disabled="readOnly">

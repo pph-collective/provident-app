@@ -28,6 +28,14 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <PrintSection :printable="printable">
+              <div class="card-content user-submitted">
+                <p v-if="formResponse.user_submitted">
+                  <em>Submitted by {{ formResponse.user_submitted }}</em>
+                </p>
+                <p v-if="formResponse.users_edited?.length > 0">
+                  <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
+                </p>
+              </div>
               <div>
                 <BGMap
                   v-if="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -169,3 +177,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.user-submitted {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  text-align: right;
+}
+</style>
