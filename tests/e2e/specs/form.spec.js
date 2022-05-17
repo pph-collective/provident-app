@@ -992,10 +992,16 @@ describe("Forms edited by multiple uses", () => {
       .find('[data-cy="launch-form-button"]')
       .click();
 
+    cy.get('[data-cy="active-form-modal"]')
+      .find(".user-submitted")
+      .should("not.contain", "Submitted by")
+      .should("contain", "Edited by championuser@user.com");
+
     cy.get('[model="resources"]')
       .find("textarea")
       .should("be.enabled")
-      .should("contain", "water")
+      .should("have.value", "water")
+      .clear()
       .type("water and fire");
 
     // Submit the form
@@ -1021,7 +1027,11 @@ describe("Forms edited by multiple uses", () => {
 
     cy.get('[data-cy="active-form-modal"]')
       .find(".user-submitted")
-      .should("contain", "Edited by");
+      .should("contain", "Submitted by championalt@user.com")
+      .should(
+        "contain",
+        "Edited by championuser@user.com, championalt@user.com"
+      );
 
     cy.get('[data-cy="close-form"]').click();
     cy.get('[data-cy="active-form-modal"]').should("not.exist");
