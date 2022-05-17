@@ -34,8 +34,7 @@
                 </p>
                 <p
                   v-if="
-                    formResponse.users_edited &&
-                    formResponse.users_edited.length > 0
+                    formResponse.users_edited?.length > 0
                   "
                 >
                   <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
