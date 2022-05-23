@@ -1,4 +1,4 @@
-# pro-found-vident-base
+# PROVIDENT
 
 A base web application for the PROVIDENT project.
 
@@ -9,6 +9,14 @@ yarn firebase login
 ```
 
 ### Compiles and hot-reloads for development
+Needs two terminals
+
+1. Start the firebase emulators, wait until it finishes
+```
+yarn firebase:dev
+```
+
+2. Loads the seed data into firebase and then starts the server
 ```
 yarn serve
 ```
