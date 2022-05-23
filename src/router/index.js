@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import ContentWithSidebar from "../views/ContentWithSidebar";
+import ContentWithSidebar from "../views/ContentWithSidebar.vue";
 import store from "@/store";
 
 function sleep(ms) {
@@ -24,14 +24,12 @@ const routes = [
         return { path: to.path, query: { redirect: from.path } };
       }
     },
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/auth/Login.vue"),
+    component: () => import("../views/auth/Login.vue"),
   },
   {
     path: "/register",
     name: "Register",
-    component: () =>
-      import(/* webpackChunkName: "register" */ "../views/auth/Register.vue"),
+    component: () => import("../views/auth/Register.vue"),
   },
   {
     path: "/auth",
@@ -45,8 +43,7 @@ const routes = [
   {
     path: "/updatepassword",
     name: "ResetPassword",
-    component: () =>
-      import(/* webpackChunkName: "reset" */ "../views/auth/ResetPassword.vue"),
+    component: () => import("../views/auth/ResetPassword.vue"),
   },
   {
     path: "/snack",
@@ -56,8 +53,7 @@ const routes = [
         return { name: "Login", query: { redirect: to.path } };
       }
     },
-    component: () =>
-      import(/* webpackChunkName: "snack" */ "../views/PassThrough.vue"),
+    component: () => import("../views/PassThrough.vue"),
     children: [
       {
         path: "",
@@ -65,15 +61,11 @@ const routes = [
       },
       {
         path: "forms",
-        component: () =>
-          import(/* webpackChunkName: "snack" */ "../views/snack/Forms.vue"),
+        component: () => import("../views/snack/Forms.vue"),
       },
       {
         path: "dashboard",
-        component: () =>
-          import(
-            /* webpackChunkName: "snack" */ "../views/snack/Dashboard.vue"
-          ),
+        component: () => import("../views/snack/Dashboard.vue"),
       },
     ],
   },
@@ -128,36 +120,23 @@ const routes = [
       },
       {
         path: "review_access_requests",
-        component: () =>
-          import(
-            /* webpackChunkName: "admin" */ "../views/admin/ReviewAccessRequests.vue"
-          ),
+        component: () => import("../views/admin/ReviewAccessRequests.vue"),
       },
       {
         path: "user_management",
-        component: () =>
-          import(
-            /* webpackChunkName: "admin" */ "../views/admin/UserManagement.vue"
-          ),
+        component: () => import("../views/admin/UserManagement.vue"),
       },
       {
         path: "organization_management",
-        component: () =>
-          import(
-            /* webpackChunkName: "admin" */ "../views/admin/OrganizationManagement.vue"
-          ),
+        component: () => import("../views/admin/OrganizationManagement.vue"),
       },
       {
         path: "form_assignments",
-        component: () =>
-          import(
-            /* webpackChunkName: "admin" */ "../views/admin/FormAssignments.vue"
-          ),
+        component: () => import("../views/admin/FormAssignments.vue"),
       },
       {
         path: "email",
-        component: () =>
-          import(/* webpackChunkName: "admin" */ "../views/admin/Emails.vue"),
+        component: () => import("../views/admin/Emails.vue"),
       },
     ],
   },

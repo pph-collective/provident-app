@@ -4,14 +4,7 @@
       label
     }}</span>
     <span
-      class="
-        tag
-        is-light
-        px-1
-        is-size-6-7 is-family-monospace
-        mb-0
-        is-flex-grow-1
-      "
+      class="tag is-light px-1 is-size-6-7 is-family-monospace mb-0 is-flex-grow-1"
       :style="{ 'min-width': minWidth }"
     >
       <span class="icon-text is-light is-flex is-align-items-center"
@@ -48,6 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
 .icon-link {
   color: inherit;
   &:hover {

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import NestedSchema from "./NestedSchema";
+import NestedSchema from "./NestedSchema.vue";
 import { cloneDeep } from "@/utils/utils";
 import { ref, toRefs } from "vue";
 

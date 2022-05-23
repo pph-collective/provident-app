@@ -72,7 +72,7 @@ import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 
 import fb from "@/firebase";
-import FormCard from "@/components/FormCard";
+import FormCard from "@/components/FormCard.vue";
 
 export default {
   components: {
@@ -108,7 +108,9 @@ export default {
             await router.push({ name: "Home" });
           }
         } else if (status === undefined) {
-          error.value = `User account was not set up properly. Please reach out to ${process.env.VUE_APP_ADMIN_EMAIL} with the email you used to register.`;
+          error.value = `User account was not set up properly. Please reach out to ${
+            import.meta.env.VUE_APP_ADMIN_EMAIL
+          } with the email you used to register.`;
           await fb.logout();
         } else {
           error.value = `User account not approved: ${status}`;

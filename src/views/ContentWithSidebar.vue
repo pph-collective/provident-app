@@ -18,7 +18,7 @@ import { useStore } from "vuex";
 
 import fb from "@/firebase.js";
 
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar.vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {

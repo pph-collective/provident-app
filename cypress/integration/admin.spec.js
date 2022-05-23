@@ -1,4 +1,4 @@
-import ACCOUNTS from "../../fixtures/accounts.json";
+import ACCOUNTS from "../fixtures/accounts.json";
 import { resetDatabase } from "../support";
 
 describe("Admin Views and Powers", () => {

@@ -1,4 +1,4 @@
-import ACCOUNTS from "../../fixtures/accounts.json";
+import ACCOUNTS from "../fixtures/accounts.json";
 
 describe("Login Page: Requesting an email to reset password", () => {
   beforeEach(() => {

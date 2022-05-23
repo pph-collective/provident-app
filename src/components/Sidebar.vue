@@ -109,6 +109,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
+
 .is-active {
   background-color: $primary !important;
 }

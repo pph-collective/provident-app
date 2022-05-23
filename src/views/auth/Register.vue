@@ -188,7 +188,7 @@ import { useStore } from "vuex";
 
 import fb from "@/firebase";
 import { esc } from "@/directives/escape";
-import FormCard from "@/components/FormCard";
+import FormCard from "@/components/FormCard.vue";
 import Loading from "@/components/Loading.vue";
 
 export default {
@@ -264,11 +264,15 @@ export default {
           await fb.createEmail({
             subject: "PROVIDENT User Request",
             body: `<p>${form.name} (${form.email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
-            to: [process.env.VUE_APP_ADMIN_EMAIL],
+            to: [import.meta.env.VUE_APP_ADMIN_EMAIL],
           });
           await fb.createEmail({
             subject: "PROVIDENT Access Request",
-            body: `<p>Hello ${form.name},</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${process.env.VUE_APP_ADMIN_EMAIL}'>the PROVIDENT admin</a>.</p>`,
+            body: `<p>Hello ${
+              form.name
+            },</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${
+              import.meta.env.VUE_APP_ADMIN_EMAIL
+            }'>the PROVIDENT admin</a>.</p>`,
             to: [form.email],
           });
         } catch (e) {

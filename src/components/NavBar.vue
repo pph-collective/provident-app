@@ -156,6 +156,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/main.scss";
 .navbar-start .navbar-item {
   font-size: 18px;
   font-weight: bold;

@@ -15,11 +15,7 @@
 
       <div
         v-if="showFilters"
-        class="
-          panel-block
-          pt-0
-          is-flex-wrap-wrap is-justify-content-space-around
-        "
+        class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
       >
         <div
           v-for="(options, filterName) in filterOptions"

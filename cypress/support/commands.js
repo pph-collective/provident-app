@@ -7,12 +7,13 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import fb from "../../../src/firebase";
+import firebase from "firebase/app";
+import fb from "../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
-const ACCOUNTS = require("../../fixtures/accounts.json");
+const ACCOUNTS = require("../fixtures/accounts.json");
 
-attachCustomCommands({ Cypress, cy, fb });
+attachCustomCommands({ Cypress, cy, firebase });
 
 Cypress.Commands.add("login", (email, password) => {
   cy.wrap(fb.login(email, password));

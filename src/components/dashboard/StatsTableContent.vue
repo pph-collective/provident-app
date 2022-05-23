@@ -12,11 +12,7 @@
       >
         <th>
           <div
-            class="
-              has-text-right
-              px-1
-              is-flex is-justify-content-space-between is-align-items-center
-            "
+            class="has-text-right px-1 is-flex is-justify-content-space-between is-align-items-center"
           >
             <span class="icon">
               <i
@@ -48,10 +44,7 @@
         <tr v-for="metric in metrics" :key="metric">
           <th>
             <div
-              class="
-                has-text-right has-text-weight-medium
-                is-flex is-justify-content-end is-align-items-center
-              "
+              class="has-text-right has-text-weight-medium is-flex is-justify-content-end is-align-items-center"
             >
               <div class="is-flex-grow-1">
                 {{ metric.title }}
