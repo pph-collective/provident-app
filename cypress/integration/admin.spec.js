@@ -5,6 +5,7 @@ describe("Admin Views and Powers", () => {
   beforeEach(() => {
     cy.login_by_permission("admin");
     cy.get("[data-cy='admin']").click();
+    cy.url().should("include", "/admin");
   });
 
   it("navigation bar to /admin", () => {
@@ -184,7 +185,9 @@ describe("Admin Views and Powers", () => {
 
     beforeEach(() => {
       resetTest();
-      cy.get('a[href="/admin/organization_management"]').click();
+      cy.get('a[href="/admin/organization_management"]', {
+        timeout: 10000,
+      }).click();
       cy.waitLoaded(".org-management");
     });
 

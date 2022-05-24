@@ -62,7 +62,7 @@ Cypress.Commands.add(
     cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should("not.exist");
-    cy.get('[data-cy="success-message"]')
+    cy.get('[data-cy="success-message"]', { timeout: 10000 })
       .should("exist")
       .contains("Your request has been received.");
   }
@@ -84,6 +84,6 @@ Cypress.Commands.add("approveUser", (email) => {
 });
 
 Cypress.Commands.add("waitLoaded", (selector) => {
-  cy.get(selector).should("exist");
+  cy.get(selector, { timeout: 10000 }).should("exist");
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 });
