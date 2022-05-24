@@ -47,7 +47,6 @@ jobs:
           wait-on-timeout: 120
           config: baseUrl=http://localhost:5000/
           spec: cypress/integration/*.spec.js
-          install: false
           command: yarn cypress run
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
