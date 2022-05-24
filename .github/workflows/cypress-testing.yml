@@ -17,11 +17,12 @@ jobs:
         with:
           node-version: 16
 
-      - name: Cache NPM Dependencies
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+# Don't cache for a moment
+#       - name: Cache NPM Dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: '**/node_modules'
+#           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
