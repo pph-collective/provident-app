@@ -42,6 +42,7 @@ jobs:
         with:
           browser: chrome
           build: yarn build
+          command-prefix: "--"
           start: |
              yarn firebase:dev
           wait-on: "http://localhost:5000/"
