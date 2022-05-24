@@ -17,12 +17,11 @@ jobs:
         with:
           node-version: 16
 
-# Don't cache for a moment
-#       - name: Cache NPM Dependencies
-#         uses: actions/cache@v2
-#         with:
-#           path: '**/node_modules'
-#           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Cache NPM Dependencies
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
@@ -49,5 +48,6 @@ jobs:
           config: baseUrl=http://localhost:5000/
           spec: cypress/integration/*.spec.js
         env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}
