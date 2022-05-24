@@ -45,8 +45,10 @@ jobs:
              yarn firebase:dev
           wait-on: "http://localhost:5000/"
           wait-on-timeout: 120
-          config: baseUrl=http://localhost:5000/
           spec: cypress/integration/*.spec.js
+
+          # Specify the command that is run so that it uses the node version in the environment
+          # https://github.com/cypress-io/github-action/issues/467
           command: yarn cypress run --config baseUrl=http://localhost:5000/
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
