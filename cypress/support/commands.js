@@ -52,7 +52,7 @@ Cypress.Commands.add(
     cy.get("[data-cy='login-button']").click();
     cy.get("[data-cy='request-access-button']").click();
 
-    cy.get('[type="email"]').type(email);
+    cy.get('[type="email"]').focus().type(email);
     cy.get('[data-cy="form-name"]').type(name);
     cy.get('[data-cy="form-organization"]').select(organization);
     cy.get('[data-cy="form-password"]').type(password);
