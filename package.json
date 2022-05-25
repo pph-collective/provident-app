@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "node ./tests/fixtures/seedDatabase.js & vite",
+    "serve": "node ./cypress/fixtures/seedDatabase.js & vite",
     "build": "vite build",
     "test:e2e": "cypress open",
     "lint": "eslint --ext .ts,.js,.vue src scripts cypress --fix",
