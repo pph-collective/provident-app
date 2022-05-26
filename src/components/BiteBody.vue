@@ -1,10 +1,6 @@
 <template>
   <div
-    class="
-      is-flex is-flex-direction-row is-flex-grow-5 is-align-items-center
-      has-text-dark
-      is-align-self-start
-    "
+    class="is-flex is-flex-direction-row is-flex-grow-5 is-align-items-center has-text-dark is-align-self-start"
     style="height: 100%"
   >
     <div

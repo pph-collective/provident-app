@@ -7,12 +7,13 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import fb from "../../../src/firebase";
+import firebase from "firebase/app";
+import fb from "../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
-const ACCOUNTS = require("../../fixtures/accounts.json");
+const ACCOUNTS = require("../fixtures/accounts.json");
 
-attachCustomCommands({ Cypress, cy, fb });
+attachCustomCommands({ Cypress, cy, firebase });
 
 Cypress.Commands.add("login", (email, password) => {
   cy.wrap(fb.login(email, password));
@@ -37,7 +38,7 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
 
 Cypress.Commands.add("logout", () => {
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
-  fb.logout();
+  cy.wrap(fb.logout()).should("eq", undefined);
   cy.get("[data-cy='home']").click();
   cy.get("[data-cy='login-button']").should("exist");
   cy.log("Logged out");
@@ -51,7 +52,7 @@ Cypress.Commands.add(
     cy.get("[data-cy='login-button']").click();
     cy.get("[data-cy='request-access-button']").click();
 
-    cy.get('[type="email"]').type(email);
+    cy.get('[type="email"]').focus().type(email);
     cy.get('[data-cy="form-name"]').type(name);
     cy.get('[data-cy="form-organization"]').select(organization);
     cy.get('[data-cy="form-password"]').type(password);
@@ -61,7 +62,7 @@ Cypress.Commands.add(
     cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should("not.exist");
-    cy.get('[data-cy="success-message"]')
+    cy.get('[data-cy="success-message"]', { timeout: 10000 })
       .should("exist")
       .contains("Your request has been received.");
   }
@@ -83,6 +84,6 @@ Cypress.Commands.add("approveUser", (email) => {
 });
 
 Cypress.Commands.add("waitLoaded", (selector) => {
-  cy.get(selector).should("exist");
+  cy.get(selector, { timeout: 10000 }).should("exist");
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
 });

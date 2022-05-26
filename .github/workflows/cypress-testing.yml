@@ -10,12 +10,12 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Cache NPM Dependencies
         uses: actions/cache@v2
@@ -45,8 +45,11 @@ jobs:
              yarn firebase:dev
           wait-on: "http://localhost:5000/"
           wait-on-timeout: 120
-          config: baseUrl=http://localhost:5000/
-          spec: tests/e2e/specs/*.spec.js
+          spec: cypress/integration/*.spec.js
+
+          # Specify the command that is run so that it uses the node version in the environment
+          # https://github.com/cypress-io/github-action/issues/467
+          command: yarn cypress run --config baseUrl=http://localhost:5000/
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROVIDENT_RI }}

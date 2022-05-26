@@ -1,11 +1,6 @@
 <template>
   <div
-    class="
-      is-flex
-      is-flex-direction-column
-      is-justify-content-space-between
-      is-fullheight
-    "
+    class="is-flex is-flex-direction-column is-justify-content-space-between is-fullheight"
   >
     <div>
       <div class="is-flex is-flex-wrap-wrap is-justify-content-start">

@@ -5,12 +5,7 @@
       id="top"
     >
       <div
-        class="
-          hero-body
-          is-flex-direction-column
-          is-justify-content-center
-          is-align-items-flex-end
-        "
+        class="hero-body is-flex-direction-column is-justify-content-center is-align-items-flex-end"
       >
         <h1 class="title mb-6" :class="[isMobile ? 'is-size-3' : 'is-size-1']">
           Our current methods for ending the overdose crisis are limited by

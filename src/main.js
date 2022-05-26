@@ -7,17 +7,17 @@ import router from "./router";
 import fb from "@/firebase";
 
 // general styling
-require("@/assets/styles/main.scss");
+import "@/assets/styles/main.scss";
 
 // form components - needed globally
-import FormCheckbox from "@/components/form/Checkbox";
-import FormDate from "@/components/form/Date";
-import FormLikertScale from "@/components/form/LikertScale";
-import FormRadio from "@/components/form/Radio";
-import FormSelect from "@/components/form/Select";
-import FormTextArea from "@/components/form/TextArea";
-import FormTextInput from "@/components/form/TextInput";
-import FormSubForm from "@/components/form/SubForm";
+import FormCheckbox from "@/components/form/Checkbox.vue";
+import FormDate from "@/components/form/Date.vue";
+import FormLikertScale from "@/components/form/LikertScale.vue";
+import FormRadio from "@/components/form/Radio.vue";
+import FormSelect from "@/components/form/Select.vue";
+import FormTextArea from "@/components/form/TextArea.vue";
+import FormTextInput from "@/components/form/TextInput.vue";
+import FormSubForm from "@/components/form/SubForm.vue";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {

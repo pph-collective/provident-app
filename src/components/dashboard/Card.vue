@@ -5,13 +5,7 @@
   >
     <header v-if="!noHeader" class="dashboard-card-header">
       <div
-        class="
-          is-flex
-          is-flex-direction-row
-          is-justify-content-space-between
-          is-flex-wrap-wrap
-          fullwidth
-        "
+        class="is-flex is-flex-direction-row is-justify-content-space-between is-flex-wrap-wrap fullwidth"
       >
         <h2 class="title mb-3"><slot name="title"></slot></h2>
         <div><slot name="top-right"></slot></div>

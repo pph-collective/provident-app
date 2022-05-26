@@ -10,13 +10,7 @@
 
     <div class="hero-body">
       <div
-        class="
-          desktop-container
-          container
-          has-background-light
-          p-5
-          is-flex is-flex-direction-column is-align-items-stretch
-        "
+        class="desktop-container container has-background-light p-5 is-flex is-flex-direction-column is-align-items-stretch"
       >
         <nav class="columns">
           <BiteHeader

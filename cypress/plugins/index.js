@@ -1,30 +1,27 @@
 /* eslint-disable arrow-body-style */
 // https://docs.cypress.io/guides/guides/plugins-guide.html
 
-// if you need a custom webpack configuration you can uncomment the following import
-// and then use the `file:preprocessor` event
-// as explained in the cypress docs
-// https://docs.cypress.io/api/plugins/preprocessors-api.html#Examples
-
 // /* eslint-disable import/no-extraneous-dependencies, global-require */
 const firebase = require("@firebase/rules-unit-testing");
 const admin = require("firebase-admin");
 
-const firebaseJSON = require("../../../firebase.json");
+const firebaseJSON = require("../../firebase.json");
 process.env.FIRESTORE_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.firestore.port}`;
 process.env.FIREBASE_AUTH_EMULATOR_HOST = `localhost:${firebaseJSON.emulators.auth.port}`;
 const cypressFirebasePlugin = require("cypress-firebase").plugin;
 
-const { startDevServer } = require("@cypress/webpack-dev-server");
-const webpackConfig = require("@vue/cli-service/webpack.config.js");
+const path = require("path");
+const { startDevServer } = require("@cypress/vite-dev-server");
 
-const { seedDatabase } = require("../../fixtures/utils");
+const { seedDatabase } = require("../fixtures/utils");
 
 module.exports = (on, config) => {
   on("dev-server:start", (options) =>
     startDevServer({
       options,
-      webpackConfig,
+      viteConfig: {
+        configFile: path.resolve(__dirname, "..", "..", "vite.config.js"),
+      },
     })
   );
 
@@ -95,13 +92,5 @@ module.exports = (on, config) => {
     },
   });
 
-  const extendedConfig = cypressFirebasePlugin(on, config, admin);
-
-  return Object.assign({}, extendedConfig, {
-    fixturesFolder: "tests/e2e/fixtures",
-    integrationFolder: "tests/e2e/specs",
-    screenshotsFolder: "tests/e2e/screenshots",
-    videosFolder: "tests/e2e/videos",
-    supportFile: "tests/e2e/support/index.js",
-  });
+  return cypressFirebasePlugin(on, config, admin);
 };

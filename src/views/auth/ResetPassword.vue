@@ -69,7 +69,7 @@ import { ref, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import fb from "@/firebase";
-import FormCard from "@/components/FormCard";
+import FormCard from "@/components/FormCard.vue";
 
 export default {
   components: {

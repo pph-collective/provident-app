@@ -1,4 +1,4 @@
-import ACCOUNTS from "../../fixtures/accounts.json";
+import ACCOUNTS from "../fixtures/accounts.json";
 
 describe("Log In View", () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import ACCOUNTS from "../../fixtures/accounts.json";
+import ACCOUNTS from "../fixtures/accounts.json";
 
 describe("Register User", () => {
   const testUser = {

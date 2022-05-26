@@ -1,4 +1,4 @@
-// variables.scss automatically loaded by webpack
+@import "variables.scss";
 @import "bulma-responsive-tables";
 
 $box-radius: 2px;
@@ -39,7 +39,7 @@ $box-radius: 2px;
   font-size: 0.825rem !important;
 }
 
-@import '~bulma';
+@import "../../../node_modules/bulma/bulma.sass";
 
 #vg-tooltip-element.vg-tooltip {
   white-space: pre-wrap;

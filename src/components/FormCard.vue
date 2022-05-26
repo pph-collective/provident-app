@@ -4,7 +4,7 @@
       <div class="card-image">
         <figure class="image is-128x128 provident-logo">
           <img
-            src="assets/images/pori-provident-logo.png"
+            src="/assets/images/pori-provident-logo.png"
             alt="PROVIDENT logo"
           />
         </figure>

@@ -7,10 +7,7 @@
       available to Rhode Islanders.
     </p>
     <div
-      class="
-        legend-item
-        is-size-6-7 is-flex is-flex-wrap-wrap is-justify-content-space-between
-      "
+      class="legend-item is-size-6-7 is-flex is-flex-wrap-wrap is-justify-content-space-between"
     >
       <div
         v-for="item in items"
