@@ -158,7 +158,7 @@
   />
 </template>
 
-<script>
+<script setup>
 import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
@@ -175,116 +175,91 @@ import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
 import PanelTag from "@/components/PanelTag.vue";
 
-export default {
-  components: {
-    FormModal,
-    Loading,
-    Multiselect,
-    PanelTag,
-  },
-  setup() {
-    const store = useStore();
-    const user = computed(() => store.state.user);
-    const userRole = computed(() =>
-      user.value.data ? user.value.data.role : "user"
-    );
-    const formResponses = computed(() => {
-      let responses = [...store.state.user.formResponses];
-      if (!user.value.admin) {
-        responses = responses.filter((f) => {
-          return f.release_date <= today;
-        });
-      }
+const store = useStore();
+const user = computed(() => store.state.user);
+const userRole = computed(() =>
+  user.value.data ? user.value.data.role : "user"
+);
 
-      return responses
-        .sort(sortByProperty("last_update"))
-        .sort(sortByProperty("status"));
+const formResponses = computed(() => {
+  let responses = [...store.state.user.formResponses];
+  if (!user.value.admin) {
+    responses = responses.filter((f) => {
+      return f.release_date <= today;
     });
-    const activeFormResponse = ref({});
+  }
 
-    const filterFields = [
-      "Form Title",
-      "Organization Level?",
-      "Status",
-      "Municipality",
-      "Block Group",
-    ];
-    const filters = reactive(
-      filterFields.reduce((acc, v) => {
-        acc[v] = [];
-        return acc;
-      }, {})
-    );
-    const showFilters = ref(true);
+  return responses
+    .sort(sortByProperty("last_update"))
+    .sort(sortByProperty("status"));
+});
+const activeFormResponse = ref({});
 
-    const filterOptions = computed(() => {
-      return {
-        "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
-        "Organization Level?": ["Yes", "No"],
-        Status: ["Not Started", "Draft", "Submitted"],
-        Municipality: uniqueArray(
-          formResponses.value
-            .filter((f) => f.response[MUNI_QUESTION_MODEL])
-            .map((f) => f.response[MUNI_QUESTION_MODEL])
-        ),
-        "Block Group": uniqueArray(
-          formResponses.value
-            .filter((f) => f.response[GEOID_QUESTION_MODEL])
-            .map((f) => f.response[GEOID_QUESTION_MODEL])
-        ),
-      };
-    });
+const filterFields = [
+  "Form Title",
+  "Organization Level?",
+  "Status",
+  "Municipality",
+  "Block Group",
+];
+const filters = reactive(
+  filterFields.reduce((acc, v) => {
+    acc[v] = [];
+    return acc;
+  }, {})
+);
+const showFilters = ref(true);
 
-    const filterFunctions = {
-      "Form Title": (formResponse) =>
-        filters["Form Title"].includes(formResponse.form.title),
-      "Organization Level?": (formResponse) =>
-        (filters["Organization Level?"].includes("Yes") &&
-          formResponse.form.type === "organization") ||
-        (filters["Organization Level?"].includes("No") &&
-          formResponse.form.type === "user"),
-      Status: (formResponse) => filters.Status.includes(formResponse.status),
-      Municipality: (formResponse) =>
-        filters.Municipality.includes(
-          formResponse.response[MUNI_QUESTION_MODEL]
-        ),
-      "Block Group": (formResponse) =>
-        filters["Block Group"].includes(
-          formResponse.response[GEOID_QUESTION_MODEL]
-        ),
-    };
+const filterOptions = computed(() => {
+  return {
+    "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
+    "Organization Level?": ["Yes", "No"],
+    Status: ["Not Started", "Draft", "Submitted"],
+    Municipality: uniqueArray(
+      formResponses.value
+        .filter((f) => f.response[MUNI_QUESTION_MODEL])
+        .map((f) => f.response[MUNI_QUESTION_MODEL])
+    ),
+    "Block Group": uniqueArray(
+      formResponses.value
+        .filter((f) => f.response[GEOID_QUESTION_MODEL])
+        .map((f) => f.response[GEOID_QUESTION_MODEL])
+    ),
+  };
+});
 
-    const selectedFormResponses = computed(() => {
-      let res = formResponses.value;
-      for (const filterField of filterFields) {
-        if (filters[filterField].length > 0) {
-          res = res.filter(filterFunctions[filterField]);
-        }
-      }
-      return res;
-    });
+const filterFunctions = {
+  "Form Title": (formResponse) =>
+    filters["Form Title"].includes(formResponse.form.title),
+  "Organization Level?": (formResponse) =>
+    (filters["Organization Level?"].includes("Yes") &&
+      formResponse.form.type === "organization") ||
+    (filters["Organization Level?"].includes("No") &&
+      formResponse.form.type === "user"),
+  Status: (formResponse) => filters.Status.includes(formResponse.status),
+  Municipality: (formResponse) =>
+    filters.Municipality.includes(formResponse.response[MUNI_QUESTION_MODEL]),
+  "Block Group": (formResponse) =>
+    filters["Block Group"].includes(
+      formResponse.response[GEOID_QUESTION_MODEL]
+    ),
+};
 
-    const today = utils.today();
+const selectedFormResponses = computed(() => {
+  let res = formResponses.value;
+  for (const filterField of filterFields) {
+    if (filters[filterField].length > 0) {
+      res = res.filter(filterFunctions[filterField]);
+    }
+  }
+  return res;
+});
 
-    const launchForm = (formResponse) => {
-      activeFormResponse.value = formResponse;
-      fb.logActivity(user.value.data.email, "launch form", formResponse._id);
-    };
+const today = utils.today();
 
-    return {
-      GEOID_QUESTION_MODEL,
-      MUNI_QUESTION_MODEL,
-      activeFormResponse,
-      filters,
-      filterOptions,
-      launchForm,
-      selectedFormResponses,
-      showFilters,
-      today,
-      user,
-      userRole,
-    };
-  },
+const launchForm = (formResponse) => {
+  activeFormResponse.value = formResponse;
+  fb.logActivity(user.value.data.email, "launch form", formResponse._id);
 };
 </script>
 
