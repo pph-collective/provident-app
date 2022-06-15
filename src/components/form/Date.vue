@@ -1,16 +1,18 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
     <div class="control">
       <input
+        :id="uuid"
         class="input"
         type="date"
         :min="min_date === 'today' ? today : min_date"
         :max="max_date === 'today' ? today : max_date"
         :value="modelValue"
         :required="required"
-        :id="uuid"
         :disabled="read_only"
         @input="$emit('update:modelValue', $event.target.value)"
       />
@@ -61,6 +63,7 @@ export default {
       default: false,
     },
   },
+  emits: ["update:modelValue"],
   setup() {
     const today = utils.today(); // Date to ISO string without time
 

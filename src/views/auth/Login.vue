@@ -5,36 +5,36 @@
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input
+            v-model="form.email"
             class="input"
             name="email"
             type="email"
             placeholder="Email"
-            v-model="form.email"
             autocomplete="email"
             required
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-envelope"></i>
+            <i class="fas fa-envelope" />
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.password"
             class="input"
             name="password"
             type="password"
             placeholder="Password"
-            v-model="form.password"
             autocomplete="current-password"
             required
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-lock" />
           </span>
         </p>
         <p class="has-text-right">
-          <a @click="resetRequest" data-cy="reset-password">reset password</a>
+          <a data-cy="reset-password" @click="resetRequest">reset password</a>
         </p>
       </div>
       <div class="field is-grouped is-grouped-centered">

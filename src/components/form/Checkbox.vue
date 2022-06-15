@@ -1,7 +1,9 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
     <div class="control">
       <ul class="is-flex-direction-column is-flex-wrap-wrap">
         <li v-for="(option, i) in options" :key="'option-' + i">

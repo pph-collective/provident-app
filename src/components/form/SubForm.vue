@@ -1,6 +1,6 @@
 <template>
   <div class="field">
-    <div class="control" :id="uuid">
+    <div :id="uuid" class="control">
       <div v-for="(value, index) in modelValue" :key="index">
         <div
           class="is-flex is-justify-content-space-between is-align-items-center"
@@ -13,10 +13,12 @@
             :disabled="modelValue.length === 1"
             @click="deleteValue(index)"
           >
-            <i class="fas fa-trash"></i>
+            <i class="fas fa-trash" />
           </button>
         </div>
-        <p v-if="help_text" class="help">{{ help_text }}</p>
+        <p v-if="help_text" class="help">
+          {{ help_text }}
+        </p>
         <NestedSchema
           :model-value="value"
           :init-schema="questions"
@@ -87,6 +89,7 @@ export default {
       default: false,
     },
   },
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
     const { modelValue } = toRefs(props);
     const value = ref(cloneDeep(modelValue.value));

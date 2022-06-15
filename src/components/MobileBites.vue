@@ -2,7 +2,7 @@
   <div class="container is-flex is-flex-direction-column">
     <div v-for="bite in biteData" :key="bite.id" class="hero">
       <BiteHeader v-bind="bite" :is-active="true" />
-      <div class="content is-flex-grow-4 m-3" v-html="bite.description"></div>
+      <div class="content is-flex-grow-4 m-3" v-html="bite.description" />
     </div>
   </div>
 </template>
@@ -20,17 +20,17 @@ export default {
   props: {
     biteData: Array,
   },
-  computed: {
-    activeBite() {
-      return this.biteData.find((el) => el.id === this.activeBiteId);
-    },
-  },
   setup() {
     const activeBiteId = ref(0);
 
     return {
       activeBiteId,
     };
+  },
+  computed: {
+    activeBite() {
+      return this.biteData.find((el) => el.id === this.activeBiteId);
+    },
   },
   methods: {
     incrementBiteId() {

@@ -25,14 +25,14 @@
           <label>
             {{ filterName }}
             <Multiselect
-              mode="tags"
               v-model="filters[filterName]"
+              mode="tags"
               :options="options"
               :searchable="false"
               :close-on-select="true"
               :hide-selected="false"
             >
-              <template v-slot:tag="{ option, handleTagRemove, disabled }">
+              <template #tag="{ option, handleTagRemove, disabled }">
                 <div class="multiselect-tag is-flex">
                   <span class="is-flex-shrink-1 shorten-ellipsis">
                     {{ option.label }}
@@ -42,7 +42,7 @@
                     class="multiselect-tag-remove"
                     @mousedown.prevent="handleTagRemove(option, $event)"
                   >
-                    <span class="multiselect-tag-remove-icon"></span>
+                    <span class="multiselect-tag-remove-icon" />
                   </span>
                 </div>
               </template>
@@ -60,10 +60,10 @@
         <span>No forms here</span>
       </div>
       <div
-        v-else
-        data-cy="forms-panel-block"
         v-for="(formResponse, idx) in selectedFormResponses"
+        v-else
         :key="'formResponse-' + idx"
+        data-cy="forms-panel-block"
         class="panel-block"
       >
         <div class="level form-row" data-cy="form-row">

@@ -36,8 +36,8 @@
           <span>No emails here</span>
         </div>
         <div
-          v-else
           v-for="(email, idx) in selectedEmails"
+          v-else
           :key="'email-' + idx"
           class="panel-block"
         >
@@ -60,8 +60,8 @@
             </div>
             <div class="is-flex is-flex-wrap-wrap">
               <span
-                v-for="(address, idx) in email.to"
-                :key="idx"
+                v-for="(address, addressIdx) in email.to"
+                :key="addressIdx"
                 class="tag is-info is-rounded is-light m-1"
               >
                 {{ address }}
@@ -73,11 +73,11 @@
 
       <div
         v-if="showModal && formQuestions.length > 0"
+        v-esc="() => (closeFormRequest += 1)"
         class="modal"
         :class="{ 'is-active': showModal }"
-        v-esc="() => (closeFormRequest += 1)"
       >
-        <div class="modal-background"></div>
+        <div class="modal-background" />
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">Compose Email</p>
@@ -85,7 +85,7 @@
               class="delete"
               aria-label="close"
               @click="closeFormRequest += 1"
-            ></button>
+            />
           </header>
           <section class="modal-card-body">
             <JSONForm
@@ -93,7 +93,7 @@
               :init-schema="formQuestions"
               :init-value="{}"
               :read-only="false"
-              altButtonLabel="Preview"
+              alt-button-label="Preview"
               :close-request="closeFormRequest"
               @alt="updatePreview"
               @submitted="submitEmail"
@@ -106,12 +106,13 @@
                 Note: Styling as the recipient will see it is highly dependent
                 on their email client.
               </p>
-              <article class="message" id="email-preview">
+              <article id="email-preview" class="message">
                 <div class="message-header">
                   {{ preview.subject }}
                 </div>
                 <div class="message-body">
-                  <div v-html="preview.body" class="content"></div>
+                  <!-- eslint-disable-next-line -->
+                  <div class="content" v-html="preview.body" />
                 </div>
               </article>
             </div>

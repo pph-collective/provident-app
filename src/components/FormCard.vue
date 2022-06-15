@@ -10,7 +10,7 @@
         </figure>
       </div>
       <div class="card-content">
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </div>

@@ -1,8 +1,10 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
-    <div class="control" :id="uuid">
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
+    <div :id="uuid" class="control">
       <label v-for="(option, i) in options" :key="'option-' + i" class="radio">
         <input
           type="radio"
@@ -55,5 +57,6 @@ export default {
       default: false,
     },
   },
+  emits: ["update:modelValue"],
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
-  <slot></slot>
+  <slot />
   <teleport v-if="printable" to="body">
     <div class="printable">
-      <slot></slot>
+      <slot />
     </div>
   </teleport>
 </template>

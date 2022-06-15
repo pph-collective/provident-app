@@ -5,42 +5,42 @@
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input
+            v-model="form.resetCode"
             class="input"
             type="text"
             placeholder="Reset Code"
-            v-model="form.resetCode"
             :disabled="oobCodeExists"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-shield-alt" />
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.password"
             class="input"
             type="password"
             placeholder="New password"
-            v-model="form.password"
             data-cy="new-password"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-lock" />
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.confirmPassword"
             class="input"
             type="password"
             placeholder="Confirm new password"
-            v-model="form.confirmPassword"
             data-cy="confirm-new-password"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-lock" />
           </span>
         </p>
       </div>
@@ -56,7 +56,9 @@
           </button>
         </p>
       </div>
-      <p v-if="error" class="has-text-danger">{{ error }}</p>
+      <p v-if="error" class="has-text-danger">
+        {{ error }}
+      </p>
       <p v-if="formValid.message.length > 0" class="has-text-danger">
         {{ formValid.message }}
       </p>

@@ -7,10 +7,7 @@
         class="my-2 notification list-item"
         :class="[`is-${notification.color}`]"
       >
-        <button
-          class="delete"
-          @click="dismissNotification(notification.id)"
-        ></button>
+        <button class="delete" @click="dismissNotification(notification.id)" />
         {{ notification.message }}
       </div>
     </transition-group>

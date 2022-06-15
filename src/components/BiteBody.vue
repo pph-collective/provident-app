@@ -6,7 +6,7 @@
     <div
       class="column is-two-thirds content scroll-container is-align-self-start"
     >
-      <div v-html="description"></div>
+      <div v-html="description" />
     </div>
     <div class="column has-text-centered">
       <i :class="['fas', 'fa-10x', `fa-${icon}`, 'p-2']" />

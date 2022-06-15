@@ -7,15 +7,17 @@
       <div
         class="is-flex is-flex-direction-row is-justify-content-space-between is-flex-wrap-wrap fullwidth"
       >
-        <h2 class="title mb-3"><slot name="title"></slot></h2>
-        <div><slot name="top-right"></slot></div>
+        <h2 class="title mb-3">
+          <slot name="title" />
+        </h2>
+        <div><slot name="top-right" /></div>
       </div>
       <h3 class="subtitle is-family-secondary">
-        <slot name="subtitle"></slot>
+        <slot name="subtitle" />
       </h3>
     </header>
     <section class="dashboard-card-content is-family-secondary">
-      <slot name="content"></slot>
+      <slot name="content" />
     </section>
   </div>
 </template>

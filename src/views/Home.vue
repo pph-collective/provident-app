@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <section
-      class="hero is-fullheight-with-navbar is-primary header-image"
       id="top"
+      class="hero is-fullheight-with-navbar is-primary header-image"
     >
       <div
         class="hero-body is-flex-direction-column is-justify-content-center is-align-items-flex-end"
@@ -20,9 +20,9 @@
       </div>
       <div class="hero-foot is-hidden-touch">
         <div class="container has-text-centered">
-          <router-link to="#bites"
-            ><i class="fas fa-2x my-5 fa-chevron-circle-down"
-          /></router-link>
+          <router-link to="#bites">
+            <i class="fas fa-2x my-5 fa-chevron-circle-down" />
+          </router-link>
         </div>
       </div>
     </section>

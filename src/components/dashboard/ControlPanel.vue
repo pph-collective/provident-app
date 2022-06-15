@@ -4,11 +4,11 @@
       <div class="control-panel is-family-secondary">
         <div
           v-for="(options, type) in dropDowns"
-          class="control-panel-dropdown control has-icons-left"
           :key="'control-panel-dropdown-' + type"
+          class="control-panel-dropdown control has-icons-left"
         >
           <span class="select">
-            <select v-model="selected[type]" :id="type">
+            <select :id="type" v-model="selected[type]">
               <option
                 v-for="(option, index) in options.values"
                 :key="'option-' + index"
@@ -19,7 +19,7 @@
             </select>
           </span>
           <span class="icon is-small is-left pl-1">
-            <i :class="options.icon"></i>
+            <i :class="options.icon" />
           </span>
         </div>
       </div>

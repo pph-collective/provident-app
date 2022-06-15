@@ -8,15 +8,15 @@
       @selected="updateControls"
     />
 
-    <Card style="align-self: start" width="two-thirds" :height="5" id="map">
-      <template #title
-        >Map:
+    <Card id="map" style="align-self: start" width="two-thirds" :height="5">
+      <template #title>
+        Map:
         {{
           zoomed
             ? `${activeMuni} - ${activeGeoid}`
             : controls?.geography?.name ?? ""
-        }}</template
-      >
+        }}
+      </template>
       <template #top-right>
         <button
           v-if="!zoomed"
@@ -25,7 +25,7 @@
           @click="zoomBg"
         >
           <span class="icon">
-            <i class="fas fa-search-plus"></i>
+            <i class="fas fa-search-plus" />
           </span>
           <span>Zoom to Block Group</span>
         </button>
@@ -35,33 +35,33 @@
           @click="zoomed = false"
         >
           <span class="icon">
-            <i class="fas fa-search-minus"></i>
+            <i class="fas fa-search-minus" />
           </span>
           <span>Zoom Back Out</span>
         </button>
       </template>
-      <template #subtitle
-        >Click on a block group to see more details or zoom in</template
-      >
+      <template #subtitle>
+        Click on a block group to see more details or zoom in
+      </template>
       <template #content>
         <div v-if="controls.geography" class="map-container">
           <Map
-            id="main-map"
             v-if="dataset.cbg.length > 0"
+            id="main-map"
             class="is-absolute"
             :dataset="dataset.cbg"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
             :with-predictions="interventionArmUser"
             :zipcode="controls.zipcode"
+            :data-cy="controls.geography.name"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
-            :data-cy="controls.geography.name"
           />
           <BGMap
-            id="bg-zoom-map"
             v-if="activeGeoid && zoomed"
+            id="bg-zoom-map"
             :block-group="activeGeoid"
             :dataset="dataset.cbg"
             class="is-absolute"
@@ -73,8 +73,8 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="5" id="stats">
-      <template #title>Stats: {{ controls.model_version }}</template>
+    <Card id="stats" width="one-third" :height="5">
+      <template #title> Stats: {{ controls.model_version }} </template>
       <template #content>
         <StatsWidget
           v-if="dataset.cbg.length > 0"
@@ -86,7 +86,7 @@
       </template>
     </Card>
 
-    <Card width="one-third" :height="2" id="nra-widget" :no-header="true">
+    <Card id="nra-widget" width="one-third" :height="2" :no-header="true">
       <template #content>
         <AssessmentWidget
           :active-geoid="activeGeoid"

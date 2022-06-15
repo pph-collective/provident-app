@@ -19,46 +19,50 @@
           data-target="navbar-contents"
           @click="toggleBurgerMenu"
         >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </a>
       </div>
 
       <div
         id="navbar-contents"
-        @click="toggleBurgerMenu"
         :class="['navbar-menu', { 'is-active': hamburgerActive }]"
+        @click="toggleBurgerMenu"
       >
         <div class="navbar-start">
           <router-link
             data-cy="home"
             to="/"
             class="navbar-item has-text-primary"
-            >Home</router-link
           >
+            Home
+          </router-link>
 
           <router-link
             data-cy="dashboard"
             to="/snack/dashboard"
             class="navbar-item has-text-primary"
-            >Dashboard</router-link
           >
+            Dashboard
+          </router-link>
 
           <router-link
             data-cy="forms"
             to="/snack/forms"
             class="navbar-item has-text-primary"
-            >Forms</router-link
           >
+            Forms
+          </router-link>
 
           <router-link
             v-if="user.admin"
             data-cy="admin"
             to="/admin"
             class="navbar-item has-text-primary"
-            >Admin</router-link
           >
+            Admin
+          </router-link>
         </div>
 
         <div class="navbar-end">
@@ -83,7 +87,7 @@
                       'fa-user-circle': user.data.role === 'user',
                       'fa-crown': user.data.role === 'champion',
                     }"
-                  ></i>
+                  />
                 </span>
                 <span>{{ user.data.displayName }}</span>
               </span>

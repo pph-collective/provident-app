@@ -6,7 +6,7 @@
         class="modal is-active"
         data-cy="active-form-modal"
       >
-        <div class="modal-background"></div>
+        <div class="modal-background" />
         <div class="modal-card is-family-secondary">
           <header class="modal-card-head">
             <p class="modal-card-title" data-cy="active-form-title">
@@ -24,7 +24,7 @@
               data-cy="close-form"
               aria-label="close"
               @click="closeFormRequest += 1"
-            ></button>
+            />
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <PrintSection :printable="printable">

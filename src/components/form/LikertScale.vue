@@ -1,13 +1,15 @@
 <template>
   <div class="field">
     <label class="label">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
     <div class="b-table">
       <div class="table-wrapper has-mobile-cards">
         <table class="table is-fullwidth is-striped is-fullwidth">
           <thead>
             <tr>
-              <th></th>
+              <th />
               <th v-for="(option, i) in options" :key="'options-' + i">
                 {{ option }}
               </th>
@@ -30,9 +32,9 @@
                 value: statement value for the modelValue
                 -->
                 <input
+                  :id="`${uuid}-statements-${i}-${j}`"
                   type="radio"
                   :name="`${uuid}-statements-${i}`"
-                  :id="`${uuid}-statements-${i}-${j}`"
                   :data-key="`statements-${i}`"
                   :value="option"
                   :checked="
@@ -102,6 +104,7 @@ export default {
       default: false,
     },
   },
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
     const { read_only } = toRefs(props);
 

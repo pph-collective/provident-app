@@ -2,12 +2,12 @@
   <div :class="['snack-area', sidebarCollapsed ? 'collapsed' : '']">
     <Sidebar
       :pages="pages"
-      :parentRoute="parentRoute"
+      :parent-route="parentRoute"
       :class="['sidebar', sidebarCollapsed ? 'collapsed' : '']"
       @toggle="sidebarCollapsed = !sidebarCollapsed"
     />
     <div class="snack-content">
-      <router-view></router-view>
+      <router-view />
     </div>
   </div>
 </template>
