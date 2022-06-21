@@ -101,7 +101,10 @@
 
 <script setup>
 import PanelTag from "@/components/PanelTag.vue";
-import { GEOID_QUESTION_MODEL, MUNI_QUESTION_MODEL } from "@/utils/utils.js";
+import utils, {
+  GEOID_QUESTION_MODEL,
+  MUNI_QUESTION_MODEL,
+} from "@/utils/utils.js";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
@@ -110,11 +113,15 @@ defineProps({
   readOnly: Boolean,
 });
 
+const emit = defineEmits(["launchForm", "reviewForm"]);
+
 const store = useStore();
 const user = computed(() => store.state.user);
 const userRole = computed(() =>
   user.value.data ? user.value.data.role : "user"
 );
+
+const today = utils.today();
 </script>
 
 <style lang="scss" scoped>
