@@ -52,9 +52,9 @@
       </div>
       <div v-else class="panel-block p-0" />
 
-      <FormsTable
+      <FormsPanel
         :selected-form-responses="selectedFormResponses"
-        :review-forms="true"
+        :read-only="true"
         @launch-form="launchForm"
         @review-form="reviewForm"
       />
@@ -63,7 +63,7 @@
 
   <FormModal
     :form-response="activeFormResponse"
-    :read-only="true"
+    :read-only="activeFormReadOnly"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -83,7 +83,7 @@ import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
-import FormsTable from "@/components/FormsTable.vue";
+import FormsPanel from "@/components/FormsPanel.vue";
 
 const store = useStore();
 const user = computed(() => store.state.user);
@@ -101,7 +101,7 @@ const formResponses = computed(() => {
     .sort(sortByProperty("status"));
 });
 const activeFormResponse = ref({});
-const readOnly = ref(true);
+const activeFormReadOnly = ref(true);
 
 const filterFields = [
   "Form Title",
@@ -166,13 +166,13 @@ const selectedFormResponses = computed(() => {
 const today = utils.today();
 
 const launchForm = (formResponse) => {
-  readOnly.value = false;
+  activeFormReadOnly.value = false;
   activeFormResponse.value = formResponse;
   fb.logActivity(user.value.data.email, "launch form", formResponse._id);
 };
 
 const reviewForm = (formResponse) => {
-  readOnly.value = true;
+  activeFormReadOnly.value = true;
   activeFormResponse.value = formResponse;
   fb.logActivity(user.value.data.email, "review form", formResponse._id);
 };

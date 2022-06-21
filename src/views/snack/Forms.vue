@@ -52,108 +52,18 @@
       </div>
       <div v-else class="panel-block p-0" />
 
-      <div
-        v-if="selectedFormResponses.length === 0"
-        data-cy="forms-panel-block"
-        class="panel-block is-justify-content-center"
-      >
-        <span>No forms here</span>
-      </div>
-      <div
-        v-for="(formResponse, idx) in selectedFormResponses"
-        v-else
-        :key="'formResponse-' + idx"
-        data-cy="forms-panel-block"
-        class="panel-block"
-      >
-        <div class="level form-row" data-cy="form-row">
-          <div class="level-left">
-            <p class="level-item is-size-5" data-cy="form-title">
-              {{ formResponse.form.title }}
-            </p>
-          </div>
-
-          <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
-            <div class="panel-tags">
-              <PanelTag
-                v-if="formResponse.form.type === 'organization'"
-                label="organization-level"
-              />
-              <PanelTag
-                v-if="user.admin && formResponse.release_date"
-                :class="{
-                  'is-success is-light': formResponse.release_date <= today,
-                }"
-                label="release date"
-                :value="formResponse.release_date"
-              />
-              <PanelTag
-                v-if="formResponse.response[MUNI_QUESTION_MODEL]"
-                label="municipality"
-                :value="formResponse.response[MUNI_QUESTION_MODEL]"
-              />
-              <PanelTag
-                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-                label="block group"
-                :value="formResponse.response[GEOID_QUESTION_MODEL]"
-              />
-              <PanelTag
-                :class="{
-                  'is-warning': formResponse.status === 'Not Started',
-                  'is-info': formResponse.status === 'Draft',
-                  'is-success': formResponse.status === 'Submitted',
-                }"
-                label="status"
-                :value="formResponse.status"
-              />
-              <PanelTag
-                v-if="formResponse.status !== 'Not Started'"
-                :label="
-                  formResponse.status === 'Draft' ? 'last updated' : 'submitted'
-                "
-                :value="
-                  new Date(formResponse.last_updated).toISOString().slice(0, 10)
-                "
-              />
-              <PanelTag
-                v-if="formResponse.user_submitted"
-                label="SUBMITTED BY"
-                :value="formResponse.user_submitted"
-              />
-            </div>
-            <div class="level-item">
-              <button
-                v-if="
-                  formResponse.status !== 'Submitted' &&
-                  (formResponse.form.type === 'user' ||
-                    (formResponse.form.type === 'organization' &&
-                      userRole === 'champion'))
-                "
-                class="button is-primary level-item"
-                data-cy="launch-form-button"
-                type="button"
-                @click="launchForm(formResponse)"
-              >
-                {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
-              </button>
-              <button
-                v-else
-                class="button is-primary is-light level-item"
-                data-cy="review-form-button"
-                type="button"
-                @click="launchForm(formResponse)"
-              >
-                Review Form
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <FormsPanel
+        :selected-form-responses="selectedFormResponses"
+        :read-only="false"
+        @launch-form="launchForm"
+        @review-form="reviewForm"
+      />
     </div>
   </div>
 
   <FormModal
     :form-response="activeFormResponse"
+    :read-only="activeFormReadOnly"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -172,15 +82,15 @@ import utils, {
 import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
+import FormsPanel from "@/components/FormsPanel.vue";
 import Loading from "@/components/Loading.vue";
-import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     FormModal,
+    FormsPanel,
     Loading,
     Multiselect,
-    PanelTag,
   },
   setup() {
     const store = useStore();
@@ -201,6 +111,7 @@ export default {
         .sort(sortByProperty("status"));
     });
     const activeFormResponse = ref({});
+    const activeFormReadOnly = ref(true);
 
     const filterFields = [
       "Form Title",
@@ -267,17 +178,26 @@ export default {
     const today = utils.today();
 
     const launchForm = (formResponse) => {
+      activeFormReadOnly.value = false;
       activeFormResponse.value = formResponse;
       fb.logActivity(user.value.data.email, "launch form", formResponse._id);
+    };
+
+    const reviewForm = (formResponse) => {
+      activeFormReadOnly.value = true;
+      activeFormResponse.value = formResponse;
+      fb.logActivity(user.value.data.email, "review form", formResponse._id);
     };
 
     return {
       GEOID_QUESTION_MODEL,
       MUNI_QUESTION_MODEL,
+      activeFormReadOnly,
       activeFormResponse,
       filters,
       filterOptions,
       launchForm,
+      reviewForm,
       selectedFormResponses,
       showFilters,
       today,

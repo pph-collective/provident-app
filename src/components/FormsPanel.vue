@@ -71,7 +71,7 @@
         <div class="level-item">
           <button
             v-if="
-              !reviewForms &&
+              !readOnly &&
               formResponse.status !== 'Submitted' &&
               (formResponse.form.type === 'user' ||
                 (formResponse.form.type === 'organization' &&
@@ -107,7 +107,7 @@ import { computed } from "vue";
 
 defineProps({
   selectedFormResponses: Array,
-  reviewForms: Boolean,
+  readOnly: Boolean,
 });
 
 const store = useStore();
