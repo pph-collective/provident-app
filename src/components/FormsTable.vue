@@ -71,6 +71,7 @@
         <div class="level-item">
           <button
             v-if="
+              !reviewForms &&
               formResponse.status !== 'Submitted' &&
               (formResponse.form.type === 'user' ||
                 (formResponse.form.type === 'organization' &&
@@ -88,7 +89,7 @@
             class="button is-primary is-light level-item"
             data-cy="review-form-button"
             type="button"
-            @click="$emit('launchForm', formResponse)"
+            @click="$emit('reviewForm', formResponse)"
           >
             Review Form
           </button>
@@ -106,6 +107,7 @@ import { computed } from "vue";
 
 defineProps({
   selectedFormResponses: Array,
+  reviewForms: Boolean,
 });
 
 const store = useStore();

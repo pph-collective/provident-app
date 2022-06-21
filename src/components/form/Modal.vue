@@ -46,11 +46,7 @@
               </div>
               <JSONForm
                 :init-schema="formResponse.form.questions"
-                :read-only="
-                  formResponse.status === 'Submitted' ||
-                  (formResponse.form.type === 'organization' &&
-                    userRole !== 'champion')
-                "
+                :read-only="readOnly"
                 :init-value="formResponse.response"
                 :form-title="formResponse.form.title"
                 :last-updated="formResponse.last_updated"
@@ -91,6 +87,9 @@ export default {
     formResponse: {
       type: Object,
       required: true,
+    },
+    readOnly: {
+      type: Boolean,
     },
   },
   emits: ["update-form-response"],

@@ -54,13 +54,16 @@
 
       <FormsTable
         :selected-form-responses="selectedFormResponses"
+        :review-forms="true"
         @launch-form="launchForm"
+        @review-form="reviewForm"
       />
     </div>
   </div>
 
   <FormModal
     :form-response="activeFormResponse"
+    :read-only="true"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -98,6 +101,7 @@ const formResponses = computed(() => {
     .sort(sortByProperty("status"));
 });
 const activeFormResponse = ref({});
+const readOnly = ref(true);
 
 const filterFields = [
   "Form Title",
@@ -162,8 +166,15 @@ const selectedFormResponses = computed(() => {
 const today = utils.today();
 
 const launchForm = (formResponse) => {
+  readOnly.value = false;
   activeFormResponse.value = formResponse;
   fb.logActivity(user.value.data.email, "launch form", formResponse._id);
+};
+
+const reviewForm = (formResponse) => {
+  readOnly.value = true;
+  activeFormResponse.value = formResponse;
+  fb.logActivity(user.value.data.email, "review form", formResponse._id);
 };
 </script>
 
