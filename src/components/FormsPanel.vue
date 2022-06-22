@@ -23,7 +23,17 @@
       <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
         <div class="panel-tags">
           <PanelTag
-            v-if="formResponse.form.type === 'organization'"
+            v-if="readOnly && formResponse.organization"
+            label="ORGANIZATION"
+            :value="formResponse.organization"
+          />
+          <PanelTag
+            v-if="readOnly && formResponse.user"
+            label="USER"
+            :value="formResponse.user"
+          />
+          <PanelTag
+            v-if="!readOnly && formResponse.form.type === 'organization'"
             label="organization-level"
           />
           <PanelTag

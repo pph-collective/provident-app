@@ -66,6 +66,19 @@ export default {
         });
 
         store.dispatch("getFormAssignments");
+
+        // All Form Responses
+        fb.db
+          .collectionGroup("form_responses")
+          .get()
+          .then((querySnapshot) => {
+            const allFormResponses = [];
+            querySnapshot.forEach((doc) => {
+              allFormResponses.push({ id: doc.id, ...doc.data() });
+            });
+
+            store.dispatch("updateAllFormResponses", allFormResponses);
+          });
       }
     };
 

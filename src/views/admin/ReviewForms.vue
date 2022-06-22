@@ -89,14 +89,7 @@ const store = useStore();
 const user = computed(() => store.state.user);
 
 const formResponses = computed(() => {
-  let responses = [...store.state.user.formResponses];
-  if (!user.value.admin) {
-    responses = responses.filter((f) => {
-      return f.release_date <= today;
-    });
-  }
-
-  return responses
+  return [...store.state.allFormResponses]
     .sort(sortByProperty("last_update"))
     .sort(sortByProperty("status"));
 });
