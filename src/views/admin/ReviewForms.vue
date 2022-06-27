@@ -88,6 +88,9 @@ import FormsPanel from "@/components/FormsPanel.vue";
 const store = useStore();
 const user = computed(() => store.state.user);
 
+const userOptions = store.getters.formUserOptions;
+const organizationOptions = store.getters.formOrganizationOptions;
+
 const formResponses = computed(() => {
   return [...store.state.allFormResponses]
     .sort(sortByProperty("last_update"))
@@ -98,7 +101,9 @@ const activeFormReadOnly = ref(true);
 
 const filterFields = [
   "Form Title",
-  "Organization Level?",
+  "Type",
+  "Organization",
+  "User",
   "Status",
   "Municipality",
   "Block Group",
@@ -114,7 +119,13 @@ const showFilters = ref(true);
 const filterOptions = computed(() => {
   return {
     "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
-    "Organization Level?": ["Yes", "No"],
+    Type: ["Organization", "User"],
+    Organization: organizationOptions.filter((org) =>
+      formResponses.value.find((f) => f.organization === org)
+    ),
+    User: userOptions.filter((user) =>
+      formResponses.value.find((f) => f.user === user.value)
+    ),
     Status: ["Not Started", "Draft", "Submitted"],
     Municipality: uniqueArray(
       formResponses.value
@@ -132,11 +143,13 @@ const filterOptions = computed(() => {
 const filterFunctions = {
   "Form Title": (formResponse) =>
     filters["Form Title"].includes(formResponse.form.title),
-  "Organization Level?": (formResponse) =>
-    (filters["Organization Level?"].includes("Yes") &&
+  Type: (formResponse) =>
+    (filters["Type"].includes("Organization") &&
       formResponse.form.type === "organization") ||
-    (filters["Organization Level?"].includes("No") &&
-      formResponse.form.type === "user"),
+    (filters["Type"].includes("User") && formResponse.form.type === "user"),
+  Organization: (formResponse) =>
+    filters.Organization.includes(formResponse.organization),
+  User: (formResponse) => filters.User.includes(formResponse.user),
   Status: (formResponse) => filters.Status.includes(formResponse.status),
   Municipality: (formResponse) =>
     filters.Municipality.includes(formResponse.response[MUNI_QUESTION_MODEL]),
