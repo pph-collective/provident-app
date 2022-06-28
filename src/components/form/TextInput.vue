@@ -27,7 +27,7 @@ export default {
   props: {
     modelValue: {
       type: String,
-      required: true,
+      default: "",
     },
     required: {
       type: Boolean,
