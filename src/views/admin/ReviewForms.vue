@@ -9,12 +9,6 @@
     @launch-form="launchForm"
     @review-form="reviewForm"
   />
-
-  <FormModal
-    :form-response="activeFormResponse"
-    :read-only="activeFormReadOnly"
-    @update-form-response="activeFormResponse = $event"
-  />
 </template>
 
 <script setup>
@@ -27,9 +21,7 @@ import {
   sortByProperty,
   uniqueArray,
 } from "@/utils/utils.js";
-import fb from "@/firebase.js";
 
-import FormModal from "@/components/form/Modal.vue";
 import Loading from "@/components/Loading.vue";
 import FormsPanel from "@/components/FormsPanel.vue";
 
@@ -88,25 +80,4 @@ const filterFunctions = {
   "Block Group": (formResponse, filterValue) =>
     filterValue.includes(formResponse.response[GEOID_QUESTION_MODEL]),
 };
-
-const launchForm = (formResponse) => {
-  activeFormReadOnly.value = false;
-  activeFormResponse.value = formResponse;
-  fb.logActivity(user.value.data.email, "launch form", formResponse._id);
-};
-
-const reviewForm = (formResponse) => {
-  activeFormReadOnly.value = true;
-  activeFormResponse.value = formResponse;
-  fb.logActivity(user.value.data.email, "review form", formResponse._id);
-};
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/styles/main.scss";
-
-.filter-field {
-  min-width: 220px;
-  max-width: 25rem;
-}
-</style>

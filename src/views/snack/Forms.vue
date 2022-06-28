@@ -6,19 +6,11 @@
     :filter-functions="filterFunctions"
     :form-responses="formResponses"
     :read-only="false"
-    @launch-form="launchForm"
-    @review-form="reviewForm"
-  />
-
-  <FormModal
-    :form-response="activeFormResponse"
-    :read-only="activeFormReadOnly"
-    @update-form-response="activeFormResponse = $event"
   />
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 import utils, {
@@ -27,15 +19,12 @@ import utils, {
   sortByProperty,
   uniqueArray,
 } from "@/utils/utils.js";
-import fb from "@/firebase.js";
 
-import FormModal from "@/components/form/Modal.vue";
 import FormsPanel from "@/components/FormsPanel.vue";
 import Loading from "@/components/Loading.vue";
 
 export default {
   components: {
-    FormModal,
     FormsPanel,
     Loading,
   },
@@ -59,8 +48,6 @@ export default {
         .sort(sortByProperty("last_update"))
         .sort(sortByProperty("status"));
     });
-    const activeFormResponse = ref({});
-    const activeFormReadOnly = ref(true);
 
     const filterOptions = computed(() => {
       return {
@@ -95,28 +82,12 @@ export default {
         filterValue.includes(formResponse.response[GEOID_QUESTION_MODEL]),
     };
 
-    const launchForm = (formResponse) => {
-      activeFormReadOnly.value = false;
-      activeFormResponse.value = formResponse;
-      fb.logActivity(user.value.data.email, "launch form", formResponse._id);
-    };
-
-    const reviewForm = (formResponse) => {
-      activeFormReadOnly.value = true;
-      activeFormResponse.value = formResponse;
-      fb.logActivity(user.value.data.email, "review form", formResponse._id);
-    };
-
     return {
       GEOID_QUESTION_MODEL,
       MUNI_QUESTION_MODEL,
-      activeFormReadOnly,
-      activeFormResponse,
       filterFunctions,
       filterOptions,
       formResponses,
-      launchForm,
-      reviewForm,
       user,
       userRole,
     };

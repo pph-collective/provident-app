@@ -142,7 +142,7 @@
                 class="button is-primary level-item"
                 data-cy="launch-form-button"
                 type="button"
-                @click="$emit('launchForm', formResponse)"
+                @click="launchForm(formResponse)"
               >
                 {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
               </button>
@@ -151,7 +151,7 @@
                 class="button is-primary is-light level-item"
                 data-cy="review-form-button"
                 type="button"
-                @click="$emit('reviewForm', formResponse)"
+                @click="reviewForm(formResponse)"
               >
                 Review Form
               </button>
@@ -161,13 +161,21 @@
       </div>
     </div>
   </div>
+
+  <FormModal
+    :form-response="activeFormResponse"
+    :read-only="activeFormReadOnly"
+    @update-form-response="activeFormResponse = $event"
+  />
 </template>
 
 <script setup>
 import { reactive, ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-
 import Multiselect from "@vueform/multiselect";
+
+import fb from "@/firebase.js";
+import FormModal from "@/components/form/Modal.vue";
 import PanelTag from "@/components/PanelTag.vue";
 import utils, {
   GEOID_QUESTION_MODEL,
@@ -181,7 +189,8 @@ const props = defineProps({
   readOnly: Boolean,
 });
 
-const emit = defineEmits(["launchForm", "reviewForm"]);
+const activeFormResponse = ref({});
+const activeFormReadOnly = ref(true);
 
 const store = useStore();
 const user = computed(() => store.state.user);
@@ -211,6 +220,18 @@ const selectedFormResponses = computed(() => {
   }
   return res;
 });
+
+const launchForm = (formResponse) => {
+  activeFormReadOnly.value = false;
+  activeFormResponse.value = formResponse;
+  fb.logActivity(user.value.data.email, "launch form", formResponse._id);
+};
+
+const reviewForm = (formResponse) => {
+  activeFormReadOnly.value = true;
+  activeFormResponse.value = formResponse;
+  fb.logActivity(user.value.data.email, "review form", formResponse._id);
+};
 </script>
 
 <style lang="scss" scoped>
