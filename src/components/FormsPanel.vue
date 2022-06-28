@@ -1,156 +1,162 @@
 <template>
-  <div class="p-2">
-    <button
-      class="button is-primary is-small"
-      @click="showFilters = !showFilters"
-    >
-      {{ showFilters ? "Hide" : "Show" }} Filters
-    </button>
-  </div>
+  <div class="container is-fullhd">
+    <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
+      <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-  <div
-    v-if="showFilters"
-    class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
-  >
-    <div
-      v-for="(options, filterName) in filterOptions"
-      :key="'filter-' + filterName"
-      class="column py-0 filter-field"
-    >
-      <label>
-        {{ filterName }}
-        <Multiselect
-          v-model="filters[filterName]"
-          mode="tags"
-          :options="options"
-          :searchable="false"
-          :close-on-select="true"
-          :hide-selected="false"
+      <div class="p-2">
+        <button
+          class="button is-primary is-small"
+          @click="showFilters = !showFilters"
         >
-          <template #tag="{ option, handleTagRemove, disabled }">
-            <div class="multiselect-tag is-flex">
-              <span class="is-flex-shrink-1 shorten-ellipsis">
-                {{ option.label }}
-              </span>
-              <span
-                v-if="!disabled"
-                class="multiselect-tag-remove"
-                @mousedown.prevent="handleTagRemove(option, $event)"
-              >
-                <span class="multiselect-tag-remove-icon"></span>
-              </span>
-            </div>
-          </template>
-        </Multiselect>
-      </label>
-    </div>
-  </div>
-  <div v-else class="panel-block p-0" />
-
-  <div
-    v-if="selectedFormResponses.length === 0"
-    data-cy="forms-panel-block"
-    class="panel-block is-justify-content-center"
-  >
-    <span>No forms here</span>
-  </div>
-  <div
-    v-for="(formResponse, idx) in selectedFormResponses"
-    v-else
-    :key="'formResponse-' + idx"
-    data-cy="forms-panel-block"
-    class="panel-block"
-  >
-    <div class="level form-row" data-cy="form-row">
-      <div class="level-left">
-        <p class="level-item is-size-5" data-cy="form-title">
-          {{ formResponse.form.title }}
-        </p>
+          {{ showFilters ? "Hide" : "Show" }} Filters
+        </button>
       </div>
 
-      <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
-        <div class="panel-tags">
-          <PanelTag
-            v-if="readOnly && formResponse.organization"
-            label="ORGANIZATION"
-            :value="formResponse.organization"
-          />
-          <PanelTag
-            v-if="readOnly && formResponse.user"
-            label="USER"
-            :value="formResponse.user"
-          />
-          <PanelTag
-            v-if="!readOnly && formResponse.form.type === 'organization'"
-            label="organization-level"
-          />
-          <PanelTag
-            v-if="user.admin && formResponse.release_date"
-            :class="{
-              'is-success is-light': formResponse.release_date <= today,
-            }"
-            label="release date"
-            :value="formResponse.release_date"
-          />
-          <PanelTag
-            v-if="formResponse.response[MUNI_QUESTION_MODEL]"
-            label="municipality"
-            :value="formResponse.response[MUNI_QUESTION_MODEL]"
-          />
-          <PanelTag
-            v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-            label="block group"
-            :value="formResponse.response[GEOID_QUESTION_MODEL]"
-          />
-          <PanelTag
-            :class="{
-              'is-warning': formResponse.status === 'Not Started',
-              'is-info': formResponse.status === 'Draft',
-              'is-success': formResponse.status === 'Submitted',
-            }"
-            label="status"
-            :value="formResponse.status"
-          />
-          <PanelTag
-            v-if="formResponse.status !== 'Not Started'"
-            :label="
-              formResponse.status === 'Draft' ? 'last updated' : 'submitted'
-            "
-            :value="
-              new Date(formResponse.last_updated).toISOString().slice(0, 10)
-            "
-          />
-          <PanelTag
-            v-if="formResponse.user_submitted"
-            label="SUBMITTED BY"
-            :value="formResponse.user_submitted"
-          />
+      <div
+        v-if="showFilters"
+        class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
+      >
+        <div
+          v-for="(options, filterName) in filterOptions"
+          :key="'filter-' + filterName"
+          class="column py-0 filter-field"
+        >
+          <label>
+            {{ filterName }}
+            <Multiselect
+              v-model="filters[filterName]"
+              mode="tags"
+              :options="options"
+              :searchable="false"
+              :close-on-select="true"
+              :hide-selected="false"
+            >
+              <template #tag="{ option, handleTagRemove, disabled }">
+                <div class="multiselect-tag is-flex">
+                  <span class="is-flex-shrink-1 shorten-ellipsis">
+                    {{ option.label }}
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="multiselect-tag-remove"
+                    @mousedown.prevent="handleTagRemove(option, $event)"
+                  >
+                    <span class="multiselect-tag-remove-icon"></span>
+                  </span>
+                </div>
+              </template>
+            </Multiselect>
+          </label>
         </div>
-        <div class="level-item">
-          <button
-            v-if="
-              !readOnly &&
-              formResponse.status !== 'Submitted' &&
-              (formResponse.form.type === 'user' ||
-                (formResponse.form.type === 'organization' &&
-                  userRole === 'champion'))
-            "
-            class="button is-primary level-item"
-            data-cy="launch-form-button"
-            type="button"
-            @click="$emit('launchForm', formResponse)"
-          >
-            {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
-          </button>
-          <button
-            v-else
-            class="button is-primary is-light level-item"
-            data-cy="review-form-button"
-            type="button"
-            @click="$emit('reviewForm', formResponse)"
-          >
-            Review Form
-          </button>
+      </div>
+      <div v-else class="panel-block p-0" />
+
+      <div
+        v-if="selectedFormResponses.length === 0"
+        data-cy="forms-panel-block"
+        class="panel-block is-justify-content-center"
+      >
+        <span>No forms here</span>
+      </div>
+      <div
+        v-for="(formResponse, idx) in selectedFormResponses"
+        v-else
+        :key="'formResponse-' + idx"
+        data-cy="forms-panel-block"
+        class="panel-block"
+      >
+        <div class="level form-row" data-cy="form-row">
+          <div class="level-left">
+            <p class="level-item is-size-5" data-cy="form-title">
+              {{ formResponse.form.title }}
+            </p>
+          </div>
+
+          <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
+            <div class="panel-tags">
+              <PanelTag
+                v-if="readOnly && formResponse.organization"
+                label="ORGANIZATION"
+                :value="formResponse.organization"
+              />
+              <PanelTag
+                v-if="readOnly && formResponse.user"
+                label="USER"
+                :value="formResponse.user"
+              />
+              <PanelTag
+                v-if="!readOnly && formResponse.form.type === 'organization'"
+                label="organization-level"
+              />
+              <PanelTag
+                v-if="user.admin && formResponse.release_date"
+                :class="{
+                  'is-success is-light': formResponse.release_date <= today,
+                }"
+                label="release date"
+                :value="formResponse.release_date"
+              />
+              <PanelTag
+                v-if="formResponse.response[MUNI_QUESTION_MODEL]"
+                label="municipality"
+                :value="formResponse.response[MUNI_QUESTION_MODEL]"
+              />
+              <PanelTag
+                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                label="block group"
+                :value="formResponse.response[GEOID_QUESTION_MODEL]"
+              />
+              <PanelTag
+                :class="{
+                  'is-warning': formResponse.status === 'Not Started',
+                  'is-info': formResponse.status === 'Draft',
+                  'is-success': formResponse.status === 'Submitted',
+                }"
+                label="status"
+                :value="formResponse.status"
+              />
+              <PanelTag
+                v-if="formResponse.status !== 'Not Started'"
+                :label="
+                  formResponse.status === 'Draft' ? 'last updated' : 'submitted'
+                "
+                :value="
+                  new Date(formResponse.last_updated).toISOString().slice(0, 10)
+                "
+              />
+              <PanelTag
+                v-if="formResponse.user_submitted"
+                label="SUBMITTED BY"
+                :value="formResponse.user_submitted"
+              />
+            </div>
+            <div class="level-item">
+              <button
+                v-if="
+                  !readOnly &&
+                  formResponse.status !== 'Submitted' &&
+                  (formResponse.form.type === 'user' ||
+                    (formResponse.form.type === 'organization' &&
+                      userRole === 'champion'))
+                "
+                class="button is-primary level-item"
+                data-cy="launch-form-button"
+                type="button"
+                @click="$emit('launchForm', formResponse)"
+              >
+                {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
+              </button>
+              <button
+                v-else
+                class="button is-primary is-light level-item"
+                data-cy="review-form-button"
+                type="button"
+                @click="$emit('reviewForm', formResponse)"
+              >
+                Review Form
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

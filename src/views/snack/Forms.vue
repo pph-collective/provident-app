@@ -1,19 +1,14 @@
 <template>
   <Loading :loading="!user.loaded" />
-  <div class="container is-fullhd">
-    <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-      <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-      <FormsPanel
-        :filter-options="filterOptions"
-        :filter-functions="filterFunctions"
-        :form-responses="formResponses"
-        :read-only="false"
-        @launch-form="launchForm"
-        @review-form="reviewForm"
-      />
-    </div>
-  </div>
+  <FormsPanel
+    :filter-options="filterOptions"
+    :filter-functions="filterFunctions"
+    :form-responses="formResponses"
+    :read-only="false"
+    @launch-form="launchForm"
+    @review-form="reviewForm"
+  />
 
   <FormModal
     :form-response="activeFormResponse"
@@ -128,25 +123,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/styles/main.scss";
-
-.form-row {
-  width: 100%;
-}
-.filter-field {
-  min-width: 220px;
-  max-width: 25rem;
-}
-.panel-tags {
-  padding: 0 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-
-  @include mobile {
-    justify-content: center;
-  }
-}
-</style>

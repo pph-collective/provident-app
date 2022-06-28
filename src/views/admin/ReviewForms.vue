@@ -1,19 +1,14 @@
 <template>
   <Loading :loading="!user.loaded" />
-  <div class="container is-fullhd">
-    <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-      <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-      <FormsPanel
-        :filter-options="filterOptions"
-        :filter-functions="filterFunctions"
-        :form-responses="formResponses"
-        :read-only="true"
-        @launch-form="launchForm"
-        @review-form="reviewForm"
-      />
-    </div>
-  </div>
+  <FormsPanel
+    :filter-options="filterOptions"
+    :filter-functions="filterFunctions"
+    :form-responses="formResponses"
+    :read-only="true"
+    @launch-form="launchForm"
+    @review-form="reviewForm"
+  />
 
   <FormModal
     :form-response="activeFormResponse"
