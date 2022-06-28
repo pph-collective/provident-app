@@ -4,56 +4,10 @@
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
 
-      <div class="p-2">
-        <button
-          class="button is-primary is-small"
-          @click="showFilters = !showFilters"
-        >
-          {{ showFilters ? "Hide" : "Show" }} Filters
-        </button>
-      </div>
-
-      <div
-        v-if="showFilters"
-        class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
-      >
-        <div
-          v-for="(options, filterName) in filterOptions"
-          :key="'filter-' + filterName"
-          class="column py-0 filter-field"
-        >
-          <label>
-            {{ filterName }}
-            <Multiselect
-              v-model="filters[filterName]"
-              mode="tags"
-              :options="options"
-              :searchable="false"
-              :close-on-select="true"
-              :hide-selected="false"
-            >
-              <template #tag="{ option, handleTagRemove, disabled }">
-                <div class="multiselect-tag is-flex">
-                  <span class="is-flex-shrink-1 shorten-ellipsis">
-                    {{ option.label }}
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="multiselect-tag-remove"
-                    @mousedown.prevent="handleTagRemove(option, $event)"
-                  >
-                    <span class="multiselect-tag-remove-icon" />
-                  </span>
-                </div>
-              </template>
-            </Multiselect>
-          </label>
-        </div>
-      </div>
-      <div v-else class="panel-block p-0" />
-
       <FormsPanel
-        :selected-form-responses="selectedFormResponses"
+        :filter-options="filterOptions"
+        :filter-functions="filterFunctions"
+        :form-responses="formResponses"
         :read-only="false"
         @launch-form="launchForm"
         @review-form="reviewForm"
@@ -69,9 +23,8 @@
 </template>
 
 <script>
-import { reactive, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import Multiselect from "@vueform/multiselect";
 
 import utils, {
   GEOID_QUESTION_MODEL,
@@ -90,7 +43,6 @@ export default {
     FormModal,
     FormsPanel,
     Loading,
-    Multiselect,
   },
   setup() {
     const store = useStore();
@@ -98,6 +50,8 @@ export default {
     const userRole = computed(() =>
       user.value.data ? user.value.data.role : "user"
     );
+
+    const today = utils.today();
     const formResponses = computed(() => {
       let responses = [...store.state.user.formResponses];
       if (!user.value.admin) {
@@ -112,21 +66,6 @@ export default {
     });
     const activeFormResponse = ref({});
     const activeFormReadOnly = ref(true);
-
-    const filterFields = [
-      "Form Title",
-      "Organization Level?",
-      "Status",
-      "Municipality",
-      "Block Group",
-    ];
-    const filters = reactive(
-      filterFields.reduce((acc, v) => {
-        acc[v] = [];
-        return acc;
-      }, {})
-    );
-    const showFilters = ref(true);
 
     const filterOptions = computed(() => {
       return {
@@ -147,35 +86,19 @@ export default {
     });
 
     const filterFunctions = {
-      "Form Title": (formResponse) =>
-        filters["Form Title"].includes(formResponse.form.title),
-      "Organization Level?": (formResponse) =>
-        (filters["Organization Level?"].includes("Yes") &&
+      "Form Title": (formResponse, filterValue) =>
+        filterValue.includes(formResponse.form.title),
+      "Organization Level?": (formResponse, filterValue) =>
+        (filterValue.includes("Yes") &&
           formResponse.form.type === "organization") ||
-        (filters["Organization Level?"].includes("No") &&
-          formResponse.form.type === "user"),
-      Status: (formResponse) => filters.Status.includes(formResponse.status),
-      Municipality: (formResponse) =>
-        filters.Municipality.includes(
-          formResponse.response[MUNI_QUESTION_MODEL]
-        ),
-      "Block Group": (formResponse) =>
-        filters["Block Group"].includes(
-          formResponse.response[GEOID_QUESTION_MODEL]
-        ),
+        (filterValue.includes("No") && formResponse.form.type === "user"),
+      Status: (formResponse, filterValue) =>
+        filterValue.includes(formResponse.status),
+      Municipality: (formResponse, filterValue) =>
+        filterValue.includes(formResponse.response[MUNI_QUESTION_MODEL]),
+      "Block Group": (formResponse, filterValue) =>
+        filterValue.includes(formResponse.response[GEOID_QUESTION_MODEL]),
     };
-
-    const selectedFormResponses = computed(() => {
-      let res = formResponses.value;
-      for (const filterField of filterFields) {
-        if (filters[filterField].length > 0) {
-          res = res.filter(filterFunctions[filterField]);
-        }
-      }
-      return res;
-    });
-
-    const today = utils.today();
 
     const launchForm = (formResponse) => {
       activeFormReadOnly.value = false;
@@ -194,13 +117,11 @@ export default {
       MUNI_QUESTION_MODEL,
       activeFormReadOnly,
       activeFormResponse,
-      filters,
+      filterFunctions,
       filterOptions,
+      formResponses,
       launchForm,
       reviewForm,
-      selectedFormResponses,
-      showFilters,
-      today,
       user,
       userRole,
     };

@@ -1,4 +1,52 @@
 <template>
+  <div class="p-2">
+    <button
+      class="button is-primary is-small"
+      @click="showFilters = !showFilters"
+    >
+      {{ showFilters ? "Hide" : "Show" }} Filters
+    </button>
+  </div>
+
+  <div
+    v-if="showFilters"
+    class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
+  >
+    <div
+      v-for="(options, filterName) in filterOptions"
+      :key="'filter-' + filterName"
+      class="column py-0 filter-field"
+    >
+      <label>
+        {{ filterName }}
+        <Multiselect
+          v-model="filters[filterName]"
+          mode="tags"
+          :options="options"
+          :searchable="false"
+          :close-on-select="true"
+          :hide-selected="false"
+        >
+          <template #tag="{ option, handleTagRemove, disabled }">
+            <div class="multiselect-tag is-flex">
+              <span class="is-flex-shrink-1 shorten-ellipsis">
+                {{ option.label }}
+              </span>
+              <span
+                v-if="!disabled"
+                class="multiselect-tag-remove"
+                @mousedown.prevent="handleTagRemove(option, $event)"
+              >
+                <span class="multiselect-tag-remove-icon"></span>
+              </span>
+            </div>
+          </template>
+        </Multiselect>
+      </label>
+    </div>
+  </div>
+  <div v-else class="panel-block p-0" />
+
   <div
     v-if="selectedFormResponses.length === 0"
     data-cy="forms-panel-block"
@@ -110,16 +158,20 @@
 </template>
 
 <script setup>
+import { reactive, ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+
+import Multiselect from "@vueform/multiselect";
 import PanelTag from "@/components/PanelTag.vue";
 import utils, {
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
 } from "@/utils/utils.js";
-import { useStore } from "vuex";
-import { computed } from "vue";
 
-defineProps({
-  selectedFormResponses: Array,
+const props = defineProps({
+  filterOptions: Object,
+  filterFunctions: Object,
+  formResponses: Array,
   readOnly: Boolean,
 });
 
@@ -132,6 +184,27 @@ const userRole = computed(() =>
 );
 
 const today = utils.today();
+
+const filters = reactive(
+  Object.keys(props.filterOptions).reduce((acc, v) => {
+    acc[v] = [];
+    return acc;
+  }, {})
+);
+
+const showFilters = ref(true);
+
+const selectedFormResponses = computed(() => {
+  let res = props.formResponses;
+  for (const filterField of Object.keys(props.filterOptions)) {
+    if (filters[filterField].length > 0) {
+      res = res.filter((formResponse) =>
+        props.filterFunctions[filterField](formResponse, filters[filterField])
+      );
+    }
+  }
+  return res;
+});
 </script>
 
 <style lang="scss" scoped>
