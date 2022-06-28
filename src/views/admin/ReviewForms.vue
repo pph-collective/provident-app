@@ -7,8 +7,6 @@
     :filter-functions="filterFunctions"
     :form-responses="formResponses"
     :read-only="true"
-    @launch-form="launchForm"
-    @review-form="reviewForm"
   />
 </template>
 
