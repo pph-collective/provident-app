@@ -1,7 +1,7 @@
 <template>
   <div class="container is-fullhd">
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-      <p class="panel-heading" data-cy="form-panel-heading">Forms</p>
+      <p class="panel-heading" data-cy="form-panel-heading">{{ title }}</p>
 
       <div class="p-2">
         <button
@@ -186,6 +186,7 @@ const props = defineProps({
   filterOptions: Object,
   filterFunctions: Object,
   formResponses: Array,
+  title: String,
   readOnly: Boolean,
 });
 

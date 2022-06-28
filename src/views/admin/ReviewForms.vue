@@ -2,6 +2,7 @@
   <Loading :loading="!user.loaded" />
 
   <FormsPanel
+    title="Review Forms"
     :filter-options="filterOptions"
     :filter-functions="filterFunctions"
     :form-responses="formResponses"
