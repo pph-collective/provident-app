@@ -174,13 +174,13 @@ import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
-import fb from "@/firebase.js";
-import FormModal from "@/components/form/Modal.vue";
-import PanelTag from "@/components/PanelTag.vue";
+import fb from "../firebase.js";
+import FormModal from "./form/Modal.vue";
+import PanelTag from "./PanelTag.vue";
 import utils, {
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
-} from "@/utils/utils.js";
+} from "../utils/utils.js";
 
 const props = withDefaults(
   defineProps<{
@@ -242,7 +242,7 @@ const launchForm = (formResponse, readOnly) => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/main.scss";
+@import "../assets/styles/main.scss";
 
 .form-row {
   width: 100%;
