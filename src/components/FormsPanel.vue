@@ -169,7 +169,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
@@ -182,13 +182,21 @@ import utils, {
   MUNI_QUESTION_MODEL,
 } from "@/utils/utils.js";
 
-const props = defineProps({
-  filterOptions: Object,
-  filterFunctions: Object,
-  formResponses: Array,
-  title: String,
-  readOnly: Boolean,
-});
+const props = withDefaults(
+  defineProps<{
+    filterOptions: object;
+    filterFunctions: object;
+    formResponses: object[];
+    title: string;
+    readOnly: boolean;
+  }>(),
+  {
+    filterOptions: () => ({}),
+    filterFunctions: () => ({}),
+    formResponses: () => [],
+    title: "",
+  }
+);
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
