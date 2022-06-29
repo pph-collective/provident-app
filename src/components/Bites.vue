@@ -57,7 +57,10 @@ export default {
     BiteBody,
   },
   props: {
-    biteData: Array,
+    biteData: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup() {
     const activeBiteId = ref(0);

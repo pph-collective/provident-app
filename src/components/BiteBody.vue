@@ -6,6 +6,7 @@
     <div
       class="column is-two-thirds content scroll-container is-align-self-start"
     >
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="description" />
     </div>
     <div class="column has-text-centered">
@@ -18,9 +19,18 @@
 export default {
   name: "BiteHeader",
   props: {
-    title: String,
-    icon: String,
-    description: String,
+    title: {
+      type: String,
+      default: "",
+    },
+    icon: {
+      type: String,
+      default: "",
+    },
+    description: {
+      type: String,
+      default: "",
+    },
     isActive: Boolean,
   },
 };

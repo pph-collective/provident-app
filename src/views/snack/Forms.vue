@@ -26,9 +26,6 @@ import Loading from "@/components/Loading.vue";
 
 const store = useStore();
 const user = computed(() => store.state.user);
-const userRole = computed(() =>
-  user.value.data ? user.value.data.role : "user"
-);
 
 const today = utils.today();
 const formResponses = computed(() => {

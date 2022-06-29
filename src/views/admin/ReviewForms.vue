@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 import {
@@ -35,8 +35,6 @@ const formResponses = computed(() => {
     .sort(sortByProperty("last_update"))
     .sort(sortByProperty("status"));
 });
-const activeFormResponse = ref({});
-const activeFormReadOnly = ref(true);
 
 const filterOptions = computed(() => {
   return {

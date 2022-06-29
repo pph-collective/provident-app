@@ -24,9 +24,18 @@
 export default {
   name: "BiteHeader",
   props: {
-    title: String,
-    icon: String,
-    description: String,
+    title: {
+      type: String,
+      default: "",
+    },
+    icon: {
+      type: String,
+      default: "",
+    },
+    description: {
+      type: String,
+      default: "",
+    },
     isActive: Boolean,
   },
 };
