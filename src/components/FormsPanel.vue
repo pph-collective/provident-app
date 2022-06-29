@@ -142,7 +142,7 @@
                 class="button is-primary level-item"
                 data-cy="launch-form-button"
                 type="button"
-                @click="launchForm(formResponse)"
+                @click="launchForm(formResponse, false)"
               >
                 {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
               </button>
@@ -151,7 +151,7 @@
                 class="button is-primary is-light level-item"
                 data-cy="review-form-button"
                 type="button"
-                @click="reviewForm(formResponse)"
+                @click="launchForm(formResponse, true)"
               >
                 Review Form
               </button>
@@ -170,7 +170,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
@@ -222,16 +222,14 @@ const selectedFormResponses = computed(() => {
   return res;
 });
 
-const launchForm = (formResponse) => {
-  activeFormReadOnly.value = false;
+const launchForm = (formResponse, readOnly) => {
+  activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
-  fb.logActivity(user.value.data.email, "launch form", formResponse._id);
-};
-
-const reviewForm = (formResponse) => {
-  activeFormReadOnly.value = true;
-  activeFormResponse.value = formResponse;
-  fb.logActivity(user.value.data.email, "review form", formResponse._id);
+  fb.logActivity(
+    user.value.data.email,
+    readOnly ? "review form" : "launch form",
+    formResponse._id
+  );
 };
 </script>
 
