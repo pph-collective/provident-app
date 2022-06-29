@@ -20,7 +20,6 @@
       <span class="has-text-danger is-size-7">{{
         validation.errorMessage
       }}</span>
-      {{ typeof modelValue }}
     </div>
   </div>
 </template>
@@ -34,7 +33,7 @@ export default {
   },
   props: {
     modelValue: {
-      type: [String, Object],
+      type: [String, Object, undefined],
       default: undefined,
     },
     required: {

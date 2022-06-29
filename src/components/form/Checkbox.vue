@@ -17,7 +17,6 @@
               @input="updateValue($event, modelValue)"
             />
             {{ option }}
-            {{ modelValue }}
           </label>
         </li>
       </ul>
@@ -32,7 +31,7 @@
 export default {
   props: {
     modelValue: {
-      type: Array,
+      type: [Array, undefined],
       default: undefined,
     },
     required: {

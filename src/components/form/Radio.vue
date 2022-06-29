@@ -28,7 +28,7 @@
 export default {
   props: {
     modelValue: {
-      type: String,
+      type: [String, undefined],
       default: undefined,
     },
     required: {

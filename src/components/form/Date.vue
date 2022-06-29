@@ -29,7 +29,7 @@ import utils from "@/utils/utils";
 export default {
   props: {
     modelValue: {
-      type: String,
+      type: [String, undefined],
       default: undefined,
     },
     required: {
