@@ -37,6 +37,7 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     help_text: {
       type: String,
       default: "",
@@ -49,15 +50,18 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    // eslint-disable-next-line vue/prop-name-casing
     min_date: {
       // "today" or an ISO date string like "2020-08-26"
       type: String,
       default: "",
     },
+    // eslint-disable-next-line vue/prop-name-casing
     max_date: {
       type: String,
       default: "",
     },
+    // eslint-disable-next-line vue/prop-name-casing
     read_only: {
       type: Boolean,
       default: false,
