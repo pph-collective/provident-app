@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div :id="uuid" class="control">
-      <div v-for="(value, index) in modelValue" :key="index">
+      <div v-for="(subValue, index) in modelValue" :key="index">
         <div
           class="is-flex is-justify-content-space-between is-align-items-center"
         >
@@ -20,7 +20,7 @@
           {{ help_text }}
         </p>
         <NestedSchema
-          :model-value="value"
+          :model-value="subValue"
           :init-schema="questions"
           :read-only="read_only"
           @update-model-value="updateValue($event, index)"

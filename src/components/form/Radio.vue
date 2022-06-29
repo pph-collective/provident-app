@@ -27,7 +27,10 @@
 <script>
 export default {
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: String,
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,

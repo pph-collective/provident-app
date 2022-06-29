@@ -20,6 +20,7 @@
       <span class="has-text-danger is-size-7">{{
         validation.errorMessage
       }}</span>
+      {{ typeof modelValue }}
     </div>
   </div>
 </template>
@@ -32,7 +33,10 @@ export default {
     Multiselect,
   },
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: [String, Object],
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,

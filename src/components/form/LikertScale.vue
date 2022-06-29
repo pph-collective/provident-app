@@ -46,6 +46,7 @@
                   :disabled="read_only"
                   @input="updateValue($event.target, modelValue)"
                 />
+                {{ typeof modelValue }}
               </td>
             </tr>
           </tbody>
@@ -60,7 +61,10 @@ import { toRefs } from "vue";
 
 export default {
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: Object,
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,
