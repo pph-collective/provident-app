@@ -154,8 +154,13 @@ export default {
       );
     });
 
+    const userOrganization = computed(() =>
+      store.state.user.data ? store.state.user.data.organization : ""
+    );
+
     const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
+        organization: userOrganization,
         form: store.state.forms[form_id],
         release_date: today(),
         status: "Not Started",

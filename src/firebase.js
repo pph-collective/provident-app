@@ -125,22 +125,28 @@ const addFormAssignment = async (formAssignmentData) => {
 };
 
 /**
- * @param {String} form_type - "user" | "organization"
+ * @param {String} formType - "user" | "organization"
  * @param {Object[]} formResponses - list of form response objects
  * @param {Set<String>} assigned - set of emails or organization names
  * @returns {Promise<void>}
  */
-const batchAddFormResponses = async (form_type, formResponses, assigned) => {
+const batchAddFormResponses = async (formType, formResponses, assigned) => {
   const writeBatch = db.batch();
 
   for (const formResponse of formResponses) {
     for (const assignee of assigned) {
+      const updatedFormResponse = {
+        ...formResponse,
+        ...(formType === "organization" && { organization: assignee }),
+        ...(formType === "user" && { user: assignee }),
+      };
+
       const doc = db
-        .collection(`${form_type}s`)
+        .collection(`${formType}s`)
         .doc(assignee)
         .collection("form_responses")
         .doc();
-      writeBatch.set(doc, formResponse);
+      writeBatch.set(doc, updatedFormResponse);
     }
   }
 
