@@ -23,24 +23,26 @@ describe("User Views", () => {
     cy.waitLoaded(".dashboard");
   });
 
-  it("navigating to /admin shouldn't be allowed", () => {
+  it("navigating to /admin pages shouldn't be allowed", () => {
     cy.visit("/admin");
-
-    // User should be redirected
     cy.url().should("eq", Cypress.config().baseUrl);
-  });
 
-  it("navigating to /admin/form_assignments shouldn't be allowed", () => {
     cy.visit("/admin/form_assignments");
-
-    // User should be redirected
     cy.url().should("eq", Cypress.config().baseUrl);
-  });
 
-  it("navigating to /admin/review_access_requests shouldn't be allowed", () => {
     cy.visit("/admin/review_access_requests");
+    cy.url().should("eq", Cypress.config().baseUrl);
 
-    // User should be redirected
+    cy.visit("/admin/user_management");
+    cy.url().should("eq", Cypress.config().baseUrl);
+
+    cy.visit("/admin/organization_management");
+    cy.url().should("eq", Cypress.config().baseUrl);
+
+    cy.visit("/admin/email");
+    cy.url().should("eq", Cypress.config().baseUrl);
+
+    cy.visit("/admin/review_forms");
     cy.url().should("eq", Cypress.config().baseUrl);
   });
 

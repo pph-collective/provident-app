@@ -315,7 +315,37 @@ describe("Admin Views and Powers", () => {
     });
 
     it("has all forms for all users", () => {
-      cy.get(".form-row").should("have.length", 11);
+      // All forms exist
+      const numForms = 11;
+      cy.get(".form-row").should("have.length", numForms);
+      cy.get('[data-cy="review-form-button"]').should("have.length", numForms);
+
+      // Sample organization form from Good Doers and RI 4 Us
+      cy.get(".form-row:contains('Sample Organization Form')")
+        .and("contain", "ORGANIZATION: Good Doers")
+        .and("contain", "ORGANIZATION: RI 4 Us");
+
+      // Simple form
+      cy.get(".form-row:contains('Simple Form')")
+        .and("contain", "USER: admin@admin.com")
+        .and("contain", "USER: championuser@user.com")
+        .and("contain", "USER: controluser@user.com");
+
+      // Review a form
+      cy.get(
+        ".form-row:contains('Sample Organization Form'):contains('ORGANIZATION: Good Doers')"
+      )
+        .should("have.length", 1)
+        .find('[data-cy="review-form-button"]')
+        .should("exist")
+        .click();
+
+      cy.get('[model="resources"]')
+        .find("textarea")
+        .should("exist")
+        .should("be.disabled");
+
+      cy.get('[data-cy="close-form"]').click();
     });
   });
 });
