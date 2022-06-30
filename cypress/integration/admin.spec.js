@@ -307,4 +307,15 @@ describe("Admin Views and Powers", () => {
         .should("not.exist");
     });
   });
+
+  describe("Review Forms", () => {
+    beforeEach(() => {
+      cy.get('a[href="/admin/review_forms"]').click();
+      cy.waitLoaded("[data-cy='form-panel']");
+    });
+
+    it("has all forms for all users", () => {
+      cy.get(".form-row").should("have.length", 11);
+    });
+  });
 });
