@@ -82,7 +82,7 @@ export default {
     },
     altButtonLabel: {
       type: String,
-      default: "Save",
+      default: "Save as Draft",
     },
     lastUpdated: {
       type: Number,
