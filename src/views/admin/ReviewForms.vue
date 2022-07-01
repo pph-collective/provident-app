@@ -27,24 +27,19 @@ import FormsPanel from "@/components/FormsPanel.vue";
 const store = useStore();
 const user = computed(() => store.state.user);
 
-const userOptions = store.getters.formUserOptions;
 const organizationOptions = store.getters.formOrganizationOptions;
 
 const formResponses = computed(() => {
   return [...store.state.allFormResponses]
-    .sort(sortByProperty("last_update"))
+    .sort(sortByProperty("last_updated"))
     .sort(sortByProperty("status"));
 });
 
 const filterOptions = computed(() => {
   return {
     "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
-    Type: ["Organization", "User"],
     Organization: organizationOptions.filter((org) =>
       formResponses.value.find((f) => f.organization === org)
-    ),
-    User: userOptions.filter((user) =>
-      formResponses.value.find((f) => f.user === user.value)
     ),
     Status: ["Not Started", "Draft", "Submitted"],
     Municipality: uniqueArray(
@@ -63,13 +58,8 @@ const filterOptions = computed(() => {
 const filterFunctions = {
   "Form Title": (formResponse, filterValue) =>
     filterValue.includes(formResponse.form.title),
-  Type: (formResponse, filterValue) =>
-    (filterValue.includes("Organization") &&
-      formResponse.form.type === "organization") ||
-    (filterValue.includes("User") && formResponse.form.type === "user"),
   Organization: (formResponse, filterValue) =>
     filterValue.includes(formResponse.organization),
-  User: (formResponse, filterValue) => filterValue.includes(formResponse.user),
   Status: (formResponse, filterValue) =>
     filterValue.includes(formResponse.status),
   Municipality: (formResponse, filterValue) =>

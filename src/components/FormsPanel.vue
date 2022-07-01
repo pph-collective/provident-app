@@ -117,9 +117,7 @@
               />
               <PanelTag
                 v-if="formResponse.status !== 'Not Started'"
-                :label="
-                  formResponse.status === 'Draft' ? 'last updated' : 'submitted'
-                "
+                label="last updated"
                 :value="
                   new Date(formResponse.last_updated).toISOString().slice(0, 10)
                 "
