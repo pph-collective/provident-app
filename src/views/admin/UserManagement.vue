@@ -9,8 +9,8 @@
           <tr>
             <th
               v-for="field in fields"
-              class="is-clickable"
               :key="field"
+              class="is-clickable"
               @click="updateSort(field)"
             >
               <span class="icon-text">
@@ -26,20 +26,20 @@
                 </span>
               </span>
             </th>
-            <th></th>
+            <th />
           </tr>
           <tr>
             <th>
               <input
+                v-model="filters.name"
                 type="text"
                 class="input is-small"
-                v-model="filters.name"
               />
             </th>
             <th>
               <div class="select is-small">
                 <select v-model="filters.organization">
-                  <option></option>
+                  <option />
                   <option v-for="org in organizations" :key="org.name">
                     {{ org.name }}
                   </option>
@@ -48,20 +48,22 @@
             </th>
             <th>
               <input
+                v-model="filters.email"
                 type="text"
                 class="input is-small"
-                v-model="filters.email"
               />
             </th>
             <th>
               <div class="select is-small">
                 <select v-model="filters.role">
-                  <option></option>
-                  <option v-for="role in roles" :key="role">{{ role }}</option>
+                  <option />
+                  <option v-for="role in roles" :key="role">
+                    {{ role }}
+                  </option>
                 </select>
               </div>
             </th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -70,17 +72,27 @@
             :key="user.email"
             data-cy="user-request"
           >
-            <td data-cy="name">{{ user.name }}</td>
-            <td data-cy="organization">{{ user.organization }}</td>
-            <td data-cy="email">{{ user.email }}</td>
+            <td data-cy="name">
+              {{ user.name }}
+            </td>
+            <td data-cy="organization">
+              {{ user.organization }}
+            </td>
+            <td data-cy="email">
+              {{ user.email }}
+            </td>
             <td v-if="user.edit" data-cy="role">
               <div class="select is-small">
                 <select v-model="user.role">
-                  <option v-for="role in roles" :key="role">{{ role }}</option>
+                  <option v-for="role in roles" :key="role">
+                    {{ role }}
+                  </option>
                 </select>
               </div>
             </td>
-            <td v-else data-cy="role">{{ user.role }}</td>
+            <td v-else data-cy="role">
+              {{ user.role }}
+            </td>
             <td v-if="user.edit">
               <span
                 data-cy="save"
@@ -90,7 +102,7 @@
                   saveUser(user);
                 "
               >
-                <i class="far fa-save" alt="save"></i>
+                <i class="far fa-save" alt="save" />
               </span>
             </td>
             <td v-else @click="user.edit = true">

@@ -1,13 +1,15 @@
 <template>
   <div class="container is-static is-fluid">
     <div class="only-printed">
-      <h2 class="is-size-2">{{ formTitle }}</h2>
+      <h2 class="is-size-2">
+        {{ formTitle }}
+      </h2>
       <p>Last updated {{ lastUpdatedValue }}</p>
       <hr />
     </div>
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
-        <template v-slot:afterForm>
+        <template #afterForm>
           <div class="sticky-bottom">
             <div
               v-if="!readOnly"
@@ -80,7 +82,7 @@ export default {
     },
     altButtonLabel: {
       type: String,
-      default: "Save",
+      default: "Save as Draft",
     },
     lastUpdated: {
       type: Number,

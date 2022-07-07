@@ -18,7 +18,7 @@
           <table class="table" data-cy="organization-table">
             <thead>
               <tr>
-                <th v-for="field in fields" class="is-clickable" :key="field">
+                <th v-for="field in fields" :key="field" class="is-clickable">
                   <span class="icon-text">
                     <span>{{ field }}</span>
                   </span>
@@ -27,14 +27,16 @@
             </thead>
             <tbody>
               <tr v-for="org in organizations" :key="org.name">
-                <td :data-label="fields[0]">{{ org.name }}</td>
+                <td :data-label="fields[0]">
+                  {{ org.name }}
+                </td>
                 <td :data-label="fields[1]">
                   <i
                     :class="[
                       'fas',
                       org.intervention_arm ? 'fa-check' : 'fa-times',
                     ]"
-                  ></i>
+                  />
                 </td>
                 <td :data-label="fields[2]" class="is-flex-wrap-wrap">
                   <div>
@@ -46,8 +48,8 @@
                     </span>
                     <span
                       v-for="municipality in org.municipalities.sort()"
-                      class="tag is-info is-rounded is-light m-1"
                       :key="municipality"
+                      class="tag is-info is-rounded is-light m-1"
                     >
                       {{ municipality }}
                     </span>
@@ -68,12 +70,12 @@
 
       <div
         v-if="showModal && formQuestions.length > 0"
+        v-esc="() => (closeFormRequest += 1)"
         class="modal"
         :class="{ 'is-active': showModal }"
         data-cy="active-form-modal"
-        v-esc="() => (closeFormRequest += 1)"
       >
-        <div class="modal-background"></div>
+        <div class="modal-background" />
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">Create New Organization</p>
@@ -81,7 +83,7 @@
               class="delete"
               aria-label="close"
               @click="closeFormRequest += 1"
-            ></button>
+            />
           </header>
           <section class="modal-card-body">
             <JSONForm

@@ -1,10 +1,10 @@
 <template>
-  <section class="hero is-fullheight" id="bites">
+  <section id="bites" class="hero is-fullheight">
     <div class="hero-head is-hidden-touch">
       <div class="container has-text-centered">
-        <router-link to="/"
-          ><i class="fas fa-2x my-5 fa-chevron-circle-up has-text-primary"
-        /></router-link>
+        <router-link to="/">
+          <i class="fas fa-2x my-5 fa-chevron-circle-up has-text-primary" />
+        </router-link>
       </div>
     </div>
 
@@ -18,8 +18,8 @@
             :key="bite.id"
             v-bind="bite"
             :is-active="bite.id === activeBiteId"
-            @click="activeBiteId = bite.id"
             class="is-clickable"
+            @click="activeBiteId = bite.id"
           />
         </nav>
         <div
@@ -57,11 +57,9 @@ export default {
     BiteBody,
   },
   props: {
-    biteData: Array,
-  },
-  computed: {
-    activeBite() {
-      return this.biteData.find((el) => el.id === this.activeBiteId);
+    biteData: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {
@@ -70,6 +68,11 @@ export default {
     return {
       activeBiteId,
     };
+  },
+  computed: {
+    activeBite() {
+      return this.biteData.find((el) => el.id === this.activeBiteId);
+    },
   },
   methods: {
     incrementBiteId() {

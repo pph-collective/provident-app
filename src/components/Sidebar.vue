@@ -60,7 +60,6 @@ import { ref, watch } from "vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 
 export default {
-  emits: ["toggle"],
   props: {
     parentRoute: {
       type: String,
@@ -73,6 +72,7 @@ export default {
       },
     },
   },
+  emits: ["toggle"],
   setup(_, { emit }) {
     const { isMobile } = useMobileListener();
     const collapsed = ref(false);

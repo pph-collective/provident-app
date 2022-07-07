@@ -1,7 +1,9 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
     <div class="control">
       <ul class="is-flex-direction-column is-flex-wrap-wrap">
         <li v-for="(option, i) in options" :key="'option-' + i">
@@ -28,7 +30,10 @@
 <script>
 export default {
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: [Array, undefined],
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,
@@ -37,6 +42,7 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     help_text: {
       type: String,
       default: "",
@@ -53,11 +59,13 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    // eslint-disable-next-line vue/prop-name-casing
     read_only: {
       type: Boolean,
       default: false,
     },
   },
+  emits: ["update:modelValue"],
   setup(_, { emit }) {
     const updateValue = (event, modelValue) => {
       let selected = modelValue ? [...modelValue] : [];

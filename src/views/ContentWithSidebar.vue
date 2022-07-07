@@ -2,12 +2,12 @@
   <div :class="['snack-area', sidebarCollapsed ? 'collapsed' : '']">
     <Sidebar
       :pages="pages"
-      :parentRoute="parentRoute"
+      :parent-route="parentRoute"
       :class="['sidebar', sidebarCollapsed ? 'collapsed' : '']"
       @toggle="sidebarCollapsed = !sidebarCollapsed"
     />
     <div class="snack-content">
-      <router-view></router-view>
+      <router-view />
     </div>
   </div>
 </template>
@@ -66,6 +66,19 @@ export default {
         });
 
         store.dispatch("getFormAssignments");
+
+        // All Form Responses
+        fb.db
+          .collectionGroup("form_responses")
+          .get()
+          .then((querySnapshot) => {
+            const allFormResponses = [];
+            querySnapshot.forEach((doc) => {
+              allFormResponses.push({ id: doc.id, ...doc.data() });
+            });
+
+            store.dispatch("updateAllFormResponses", allFormResponses);
+          });
       }
     };
 

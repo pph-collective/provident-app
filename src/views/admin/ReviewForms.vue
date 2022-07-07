@@ -2,11 +2,11 @@
   <Loading :loading="!user.loaded" />
 
   <FormsPanel
-    title="Forms"
+    title="Review Forms"
     :filter-options="filterOptions"
     :filter-functions="filterFunctions"
     :form-responses="formResponses"
-    :read-only="false"
+    :read-only="true"
   />
 </template>
 
@@ -14,37 +14,33 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 
-import utils, {
+import {
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
   sortByProperty,
   uniqueArray,
 } from "@/utils/utils.js";
 
-import FormsPanel from "@/components/FormsPanel.vue";
 import Loading from "@/components/Loading.vue";
+import FormsPanel from "@/components/FormsPanel.vue";
 
 const store = useStore();
 const user = computed(() => store.state.user);
 
-const today = utils.today();
-const formResponses = computed(() => {
-  let responses = [...store.state.user.formResponses];
-  if (!user.value.admin) {
-    responses = responses.filter((f) => {
-      return f.release_date <= today;
-    });
-  }
+const organizationOptions = store.getters.formOrganizationOptions;
 
-  return responses
-    .sort(sortByProperty("last_update"))
+const formResponses = computed(() => {
+  return [...store.state.allFormResponses]
+    .sort(sortByProperty("last_updated"))
     .sort(sortByProperty("status"));
 });
 
 const filterOptions = computed(() => {
   return {
     "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
-    "Organization Level?": ["Yes", "No"],
+    Organization: organizationOptions.filter((org) =>
+      formResponses.value.find((f) => f.organization === org)
+    ),
     Status: ["Not Started", "Draft", "Submitted"],
     Municipality: uniqueArray(
       formResponses.value
@@ -62,10 +58,8 @@ const filterOptions = computed(() => {
 const filterFunctions = {
   "Form Title": (formResponse, filterValue) =>
     filterValue.includes(formResponse.form.title),
-  "Organization Level?": (formResponse, filterValue) =>
-    (filterValue.includes("Yes") &&
-      formResponse.form.type === "organization") ||
-    (filterValue.includes("No") && formResponse.form.type === "user"),
+  Organization: (formResponse, filterValue) =>
+    filterValue.includes(formResponse.organization),
   Status: (formResponse, filterValue) =>
     filterValue.includes(formResponse.status),
   Municipality: (formResponse, filterValue) =>

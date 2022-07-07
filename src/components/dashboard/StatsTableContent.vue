@@ -1,14 +1,16 @@
 <template>
   <tbody class="is-size-6-7">
     <tr class="header-row">
-      <th colspan="4" class="has-text-centered has-text-light">{{ title }}</th>
+      <th colspan="4" class="has-text-centered has-text-light">
+        {{ title }}
+      </th>
     </tr>
     <template v-for="(metrics, group) in groupedMetrics" :key="group">
       <!-- group level row -->
       <tr
         v-if="grouped"
-        @click="showGroups[group] = !showGroups[group]"
         class="is-clickable"
+        @click="showGroups[group] = !showGroups[group]"
       >
         <th>
           <div
@@ -35,8 +37,8 @@
             :location="geoid"
           />
         </td>
-        <td class="data-column has-text-center"></td>
-        <td class="data-column has-text-center"></td>
+        <td class="data-column has-text-center" />
+        <td class="data-column has-text-center" />
       </tr>
 
       <!-- group detail rows -->

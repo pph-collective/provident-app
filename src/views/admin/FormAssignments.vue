@@ -37,8 +37,8 @@
           <span>No forms assignments here</span>
         </div>
         <div
-          v-else
           v-for="(assignment, idx) in selectedFormAssignments"
+          v-else
           :key="'assignment-' + idx"
           class="panel-block"
           data-cy="form-assignment-panel-block"
@@ -78,8 +78,8 @@
                     <b>{{ category }}</b>
                   </span>
                   <span
-                    v-for="(target, idx) in target_list"
-                    :key="idx"
+                    v-for="(target, targetIdx) in target_list"
+                    :key="targetIdx"
                     class="tag is-info is-rounded is-light"
                   >
                     {{ target }}
@@ -92,12 +92,12 @@
 
         <div
           v-if="showModal && formQuestions.length > 0"
+          v-esc="() => (closeFormRequest += 1)"
           class="modal"
           :class="{ 'is-active': showModal }"
           data-cy="form-assignment-modal"
-          v-esc="() => (closeFormRequest += 1)"
         >
-          <div class="modal-background"></div>
+          <div class="modal-background" />
           <div class="modal-card">
             <header class="modal-card-head">
               <p class="modal-card-title">Create New Form Assignment</p>
@@ -105,7 +105,7 @@
                 class="delete"
                 aria-label="close"
                 @click="closeFormRequest += 1"
-              ></button>
+              />
             </header>
             <section class="modal-card-body">
               <JSONForm

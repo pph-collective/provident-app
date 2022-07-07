@@ -34,7 +34,7 @@ export default {
     formatFn: {
       type: Function,
       required: false,
-      default() {},
+      default: () => ({}),
     },
     icon: {
       type: Boolean,

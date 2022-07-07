@@ -2,7 +2,8 @@
   <div class="container is-flex is-flex-direction-column">
     <div v-for="bite in biteData" :key="bite.id" class="hero">
       <BiteHeader v-bind="bite" :is-active="true" />
-      <div class="content is-flex-grow-4 m-3" v-html="bite.description"></div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div class="content is-flex-grow-4 m-3" v-html="bite.description" />
     </div>
   </div>
 </template>
@@ -18,11 +19,9 @@ export default {
     BiteHeader,
   },
   props: {
-    biteData: Array,
-  },
-  computed: {
-    activeBite() {
-      return this.biteData.find((el) => el.id === this.activeBiteId);
+    biteData: {
+      type: Array,
+      default: () => [],
     },
   },
   setup() {
@@ -31,6 +30,11 @@ export default {
     return {
       activeBiteId,
     };
+  },
+  computed: {
+    activeBite() {
+      return this.biteData.find((el) => el.id === this.activeBiteId);
+    },
   },
   methods: {
     incrementBiteId() {

@@ -19,7 +19,7 @@
                   'fas fa-clipboard':
                     formResponse.form._id === ASSESSMENT_FORM_ID,
                 }"
-              ></i>
+              />
             </td>
             <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
               {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
@@ -154,8 +154,13 @@ export default {
       );
     });
 
+    const userOrganization = computed(() =>
+      store.state.user.data ? store.state.user.data.organization : ""
+    );
+
     const createNewBGForm = (form_id) => {
       activeFormResponse.value = {
+        organization: userOrganization,
         form: store.state.forms[form_id],
         release_date: today(),
         status: "Not Started",

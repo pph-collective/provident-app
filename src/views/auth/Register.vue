@@ -6,31 +6,31 @@
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input
+            v-model="form.email"
             name="email"
             class="input"
             type="email"
             placeholder="Email"
-            v-model="form.email"
             autocomplete="email"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-envelope"></i>
+            <i class="fas fa-envelope" />
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.name"
             name="name"
             class="input"
             type="text"
             data-cy="form-name"
             placeholder="Full Name"
-            v-model="form.name"
             autocomplete="name"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-user-circle"></i>
+            <i class="fas fa-user-circle" />
           </span>
         </p>
       </div>
@@ -40,57 +40,57 @@
             <select v-model="form.organization" data-cy="form-organization">
               <option
                 v-for="organization in organizations"
-                v-bind:value="organization"
                 :key="organization"
+                :value="organization"
               >
                 {{ organization }}
               </option>
             </select>
           </div>
           <div class="icon is-small is-left">
-            <i class="fas fa-sitemap"></i>
+            <i class="fas fa-sitemap" />
           </div>
         </div>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.password"
             class="input"
             type="password"
             data-cy="form-password"
             placeholder="Password"
-            v-model="form.password"
             autocomplete="new-password"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-lock" />
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
+            v-model="form.confirmPassword"
             class="input"
             type="password"
             data-cy="form-confirm-password"
             placeholder="Confirm Password"
-            v-model="form.confirmPassword"
             autocomplete="new-password"
           />
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-lock" />
           </span>
         </p>
       </div>
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input type="checkbox" v-model="form.terms" data-cy="form-terms" />
+            <input v-model="form.terms" type="checkbox" data-cy="form-terms" />
             I agree to the
             <a
+              tabindex="0"
               @click.prevent="showTerms = true"
               @keyup.enter.prevent="showTerms = true"
-              tabindex="0"
               >terms and conditions</a
             >
           </label>
@@ -135,17 +135,17 @@
 
   <teleport to="body">
     <div v-if="showTerms" class="modal is-active">
-      <div class="modal-background"></div>
+      <div class="modal-background" />
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Terms &amp; Conditions</p>
           <button
+            v-esc="() => (showTerms = false)"
             autofocus
             class="delete"
             aria-label="close"
             @click="showTerms = false"
-            v-esc="() => (showTerms = false)"
-          ></button>
+          />
         </header>
         <section class="modal-card-body content">
           <h3>Welcome to the PROVIDENT Web Tool!</h3>

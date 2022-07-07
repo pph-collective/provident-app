@@ -20,9 +20,13 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.email == email;
     }
 
+    match /{document=**} {
+      allow read: if isAdminUser();
+    }
+
     match /users/{user} {
       allow update, delete: if isAdminUser();
-      allow read: if isLoggedInUser(user) || isAdminUser();
+      allow read: if isLoggedInUser(user);
       allow create: if isLoggedInUser(request.resource.data.email);
 
       match /form_responses/{form} {
@@ -32,7 +36,7 @@ service cloud.firestore {
       }
 
       match /activity_log/{document=**} {
-        allow read, update, delete: if isAdminUser();
+        allow update, delete: if isAdminUser();
         allow create: if isLoggedInUser(user);
       }
 
@@ -54,7 +58,7 @@ service cloud.firestore {
     }
 
     match /form_assignments/{document=**} {
-      allow create, delete, read, update: if isAdminUser();
+      allow create, delete, update: if isAdminUser();
     }
 
     match /svi_data/{document=**} {
@@ -78,7 +82,6 @@ service cloud.firestore {
     }
 
     match /emails/{email} {
-      allow read: if isAdminUser();
       allow create: if request.auth != null;
     }
   }

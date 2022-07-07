@@ -24,10 +24,16 @@
       <table class="table is-striped is-fullwidth my-1">
         <thead>
           <tr>
-            <th></th>
-            <th class="py-1 px-0"><abbr :title="geoid">BG</abbr></th>
-            <th class="py-1 px-0"><abbr :title="municipality">Town</abbr></th>
-            <th class="py-1 px-0"><abbr title="Rhode Island">RI</abbr></th>
+            <th />
+            <th class="py-1 px-0">
+              <abbr :title="geoid">BG</abbr>
+            </th>
+            <th class="py-1 px-0">
+              <abbr :title="municipality">Town</abbr>
+            </th>
+            <th class="py-1 px-0">
+              <abbr title="Rhode Island">RI</abbr>
+            </th>
           </tr>
         </thead>
         <!-- community composition statistics -->

@@ -1,14 +1,16 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
     <div class="control">
       <input
+        :id="uuid"
         class="input"
         :type="type"
         :value="modelValue"
         :required="required"
-        :id="uuid"
         :placeholder="placeholder"
         :disabled="read_only"
         @input="$emit('update:modelValue', $event.target.value)"
@@ -23,7 +25,10 @@
 <script>
 export default {
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: [String, undefined],
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,
@@ -32,6 +37,7 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     help_text: {
       type: String,
       default: "",
@@ -45,16 +51,19 @@ export default {
       default: 0,
     },
     placeholder: {
+      type: String,
       default: "",
     },
     validation: {
       type: Object,
       default: () => ({}),
     },
+    // eslint-disable-next-line vue/prop-name-casing
     read_only: {
       type: Boolean,
       default: false,
     },
   },
+  emits: ["update:modelValue"],
 };
 </script>

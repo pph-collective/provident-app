@@ -20,7 +20,7 @@ export default {
   props: {
     modelValue: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     initSchema: {
       type: Array,
@@ -31,6 +31,7 @@ export default {
       default: false,
     },
   },
+  emits: ["updateModelValue"],
   setup(props, { emit }) {
     const { modelValue, initSchema } = toRefs(props);
 

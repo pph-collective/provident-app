@@ -111,6 +111,11 @@ const routes = [
           route: "email",
           icon: "fa-paper-plane",
         },
+        {
+          name: "Review Forms",
+          route: "review_forms",
+          icon: "fa-clipboard",
+        },
       ],
     },
     children: [
@@ -137,6 +142,10 @@ const routes = [
       {
         path: "email",
         component: () => import("../views/admin/Emails.vue"),
+      },
+      {
+        path: "review_forms",
+        component: () => import("../views/admin/ReviewForms.vue"),
       },
     ],
   },

@@ -11,7 +11,7 @@
         ><span>{{ value || "-" }}</span>
         <span v-if="link" class="icon is-small mb-1"
           ><a class="icon-link" :href="link" target="_blank" rel="noreferrer"
-            ><i class="fas fa-xs fa-external-link-alt"></i></a></span></span
+            ><i class="fas fa-xs fa-external-link-alt" /></a></span></span
     ></span>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="field">
-    <div class="control" :id="uuid">
-      <div v-for="(value, index) in modelValue" :key="index">
+    <div :id="uuid" class="control">
+      <div v-for="(subValue, index) in modelValue" :key="index">
         <div
           class="is-flex is-justify-content-space-between is-align-items-center"
         >
@@ -13,12 +13,14 @@
             :disabled="modelValue.length === 1"
             @click="deleteValue(index)"
           >
-            <i class="fas fa-trash"></i>
+            <i class="fas fa-trash" />
           </button>
         </div>
-        <p v-if="help_text" class="help">{{ help_text }}</p>
+        <p v-if="help_text" class="help">
+          {{ help_text }}
+        </p>
         <NestedSchema
-          :model-value="value"
+          :model-value="subValue"
           :init-schema="questions"
           :read-only="read_only"
           @update-model-value="updateValue($event, index)"
@@ -62,6 +64,7 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     help_text: {
       type: String,
       default: "",
@@ -74,6 +77,7 @@ export default {
       type: Array,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     repeat_button_title: {
       type: String,
       default: "",
@@ -82,11 +86,13 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    // eslint-disable-next-line vue/prop-name-casing
     read_only: {
       type: Boolean,
       default: false,
     },
   },
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
     const { modelValue } = toRefs(props);
     const value = ref(cloneDeep(modelValue.value));

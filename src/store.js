@@ -19,6 +19,7 @@ const store = createStore({
       users: [],
       loaded: false,
       notifications: [],
+      allFormResponses: [],
     };
   },
 
@@ -142,6 +143,9 @@ const store = createStore({
 
       commit("mutateUser", { property: "formResponses", with: formResponses });
       return updatedFormResponse._id;
+    },
+    updateAllFormResponses({ commit }, formResponses) {
+      commit("mutate", { property: "allFormResponses", with: formResponses });
     },
     updateUsers({ commit }, users) {
       commit("mutate", { property: "users", with: users });

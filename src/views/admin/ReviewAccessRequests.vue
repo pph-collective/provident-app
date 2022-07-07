@@ -19,9 +19,15 @@
             :key="req.email"
             data-cy="user-request"
           >
-            <td data-cy="name">{{ req.name }}</td>
-            <td data-cy="organization">{{ req.organization }}</td>
-            <td data-cy="email">{{ req.email }}</td>
+            <td data-cy="name">
+              {{ req.name }}
+            </td>
+            <td data-cy="organization">
+              {{ req.organization }}
+            </td>
+            <td data-cy="email">
+              {{ req.email }}
+            </td>
             <td>
               <span class="icon-text">
                 <span
@@ -29,14 +35,14 @@
                   class="icon is-small px-3 is-clickable"
                   @click="approve(req)"
                 >
-                  <i class="fas fa-user-check has-text-success"></i>
+                  <i class="fas fa-user-check has-text-success" />
                 </span>
                 <span
                   data-cy="deny"
                   class="icon is-small px-3 is-clickable"
                   @click="deny(req)"
                 >
-                  <i class="fas fa-user-times has-text-danger"></i>
+                  <i class="fas fa-user-times has-text-danger" />
                 </span>
               </span>
             </td>

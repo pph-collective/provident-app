@@ -1,8 +1,10 @@
 <template>
   <div class="field">
     <label class="label" :for="uuid">{{ label }}</label>
-    <p v-if="help_text" class="help">{{ help_text }}</p>
-    <div class="control" :id="uuid">
+    <p v-if="help_text" class="help">
+      {{ help_text }}
+    </p>
+    <div :id="uuid" class="control">
       <label v-for="(option, i) in options" :key="'option-' + i" class="radio">
         <input
           type="radio"
@@ -25,7 +27,10 @@
 <script>
 export default {
   props: {
-    modelValue: { required: true },
+    modelValue: {
+      type: [String, undefined],
+      default: undefined,
+    },
     required: {
       type: Boolean,
       default: false,
@@ -34,6 +39,7 @@ export default {
       type: String,
       required: true,
     },
+    // eslint-disable-next-line vue/prop-name-casing
     help_text: {
       type: String,
       default: "",
@@ -50,10 +56,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    // eslint-disable-next-line vue/prop-name-casing
     read_only: {
       type: Boolean,
       default: false,
     },
   },
+  emits: ["update:modelValue"],
 };
 </script>
