@@ -26,25 +26,25 @@ fb.auth.onAuthStateChanged(async (user) => {
   if (user) {
     const { status, organization, role } = await fb.getUserRequest(user.email);
     if (status === "approved") {
-      store.dispatch("fetchUser", {
+      await store.dispatch("fetchUser", {
         ...user.toJSON(),
         status,
         organization,
         role,
       });
       let token = await user.getIdTokenResult();
-      store.dispatch("fetchAdmin", token.claims && token.claims.admin);
+      await store.dispatch("fetchAdmin", token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
-      fb.logActivity(user.email, "login");
-      store.dispatch("setLoaded");
+      await fb.logActivity(user.email, "login");
+      await store.dispatch("setLoaded");
       return;
     }
   }
 
   // fallthrough
-  store.dispatch("fetchUser", null);
-  store.dispatch("fetchAdmin", false);
-  store.dispatch("setLoaded");
+  await store.dispatch("fetchUser", null);
+  await store.dispatch("fetchAdmin", false);
+  await store.dispatch("setLoaded");
 });
 
 createApp(App)

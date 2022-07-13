@@ -2,7 +2,7 @@
   <Loading :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
-      v-if="resultPeriods.length > 0"
+      v-if="modelVersion"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
       @selected="updateControls"
@@ -74,7 +74,7 @@
     </Card>
 
     <Card id="stats" width="one-third" :height="5">
-      <template #title> Stats: {{ controls.model_version }} </template>
+      <template #title> Stats: {{ modelVersion }} </template>
       <template #content>
         <StatsWidget
           v-if="dataset.cbg.length > 0"
@@ -160,10 +160,14 @@ export default {
       }
     });
 
-    const resultPeriods = ref([]);
+    // TODO: Only get the most recent result period
+    const modelVersion = ref(null);
     const zipcodes = ref([]);
     onMounted(async () => {
-      resultPeriods.value = await fb.getModelDataPeriods();
+      modelVersion.value = (await fb.getModelDataPeriods())[0];
+      updateDataset(modelVersion.value).then((res) => {
+        dataset.value = res;
+      });
     });
     onMounted(async () => {
       zipcodes.value = await fb.getZipcodes();
@@ -210,10 +214,6 @@ export default {
           icon: "fas fa-map",
           values: zipsDropdownOptions.value,
         },
-        model_version: {
-          icon: "fas fa-calendar-alt",
-          values: resultPeriods.value,
-        },
       };
     });
 
@@ -238,13 +238,6 @@ export default {
       activeGeoid.value = "";
       zoomed.value = false;
 
-      // update the model data if changed
-      if (newControls.model_version !== controls.value.model_version) {
-        updateDataset(newControls.model_version).then((res) => {
-          dataset.value = res;
-        });
-      }
-
       // resets the zipcode dropdown to All Zip Codes
       if (newControls.geography !== controls.value.geography) {
         newControls.zipcode = zipsDropdownOptions.value[0];
@@ -257,7 +250,7 @@ export default {
     };
 
     const loading = computed(() => {
-      return dataset.value.cbg.length === 0 || resultPeriods.value.length === 0;
+      return dataset.value.cbg.length === 0 || modelVersion.value === null;
     });
 
     // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
@@ -295,7 +288,7 @@ export default {
       dropDowns,
       interventionArmUser,
       loading,
-      resultPeriods,
+      modelVersion,
       updateControls,
       zipcodes,
       zoomBg,
