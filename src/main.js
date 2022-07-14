@@ -22,6 +22,7 @@ import FormSubForm from "@/components/form/SubForm.vue";
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
   await store.dispatch("fetchOrgs");
+  await store.dispatch("fetchModelData");
 
   if (user) {
     const { status, organization, role } = await fb.getUserRequest(user.email);

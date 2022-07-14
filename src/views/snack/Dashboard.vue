@@ -100,7 +100,6 @@
 <script>
 import { ref, computed, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
-import * as aq from "arquero";
 
 import fb from "@/firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "@/utils/utils";
@@ -133,10 +132,8 @@ export default {
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
     );
-    const dataset = ref({
-      cbg: [],
-      town: [],
-      ri: [],
+    const dataset = computed(() => {
+      return store.getters.dataset;
     });
     const activeGeoid = ref("");
     const activeMuni = ref("");
@@ -160,15 +157,9 @@ export default {
       }
     });
 
-    // TODO: Only get the most recent result period
-    const modelVersion = ref(null);
+    const modelVersion = computed(() => store.getters.modelVersion);
     const zipcodes = ref([]);
-    onMounted(async () => {
-      modelVersion.value = (await fb.getModelDataPeriods())[0];
-      updateDataset(modelVersion.value).then((res) => {
-        dataset.value = res;
-      });
-    });
+
     onMounted(async () => {
       zipcodes.value = await fb.getZipcodes();
     });
@@ -218,19 +209,6 @@ export default {
     });
 
     const controls = ref({});
-
-    const updateDataset = async (period) => {
-      const data = await fb.getModelData(period);
-      if (interventionArmUser.value) {
-        const preds = await fb.getModelPredictions(period);
-        return {
-          ...data,
-          cbg: aq.from(data.cbg).join_left(aq.from(preds), "bg_id").objects(),
-        };
-      } else {
-        return data;
-      }
-    };
 
     const updateControls = (newControls) => {
       // if either drop down changes, clear out the selected block group

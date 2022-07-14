@@ -20,6 +20,12 @@ const store = createStore({
       loaded: false,
       notifications: [],
       allFormResponses: [],
+      modelVersion: null,
+      dataset: {
+        cbg: [],
+        town: [],
+        ri: [],
+      },
     };
   },
 
@@ -71,6 +77,16 @@ const store = createStore({
     },
     fetchAdmin({ commit }, admin) {
       commit("mutateUser", { property: "admin", with: admin });
+    },
+    async fetchModelData({ commit, getters }) {
+      const modelDataPeriods = await fb.getModelDataPeriods();
+      const modelVersion = modelDataPeriods[0];
+      const interventionArmUser = getters.interventionArmUser;
+
+      const dataset = await fb.getDataset(modelVersion, interventionArmUser);
+
+      commit("mutate", { property: "modelVersion", with: modelVersion });
+      commit("mutate", { property: "dataset", with: dataset });
     },
     async fetchOrgs({ commit, state }) {
       if (state.organizations.length === 0) {
@@ -211,6 +227,12 @@ const store = createStore({
     },
     formOrganizationOptions(state) {
       return state.organizations.map((org) => org.name).sort();
+    },
+    dataset(state) {
+      return state.dataset;
+    },
+    modelVersion(state) {
+      return state.modelVersion;
     },
   },
 });
