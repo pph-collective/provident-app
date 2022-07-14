@@ -21,31 +21,31 @@ import FormSubForm from "@/components/form/SubForm.vue";
 
 // listen for changes to user
 fb.auth.onAuthStateChanged(async (user) => {
-  await store.dispatch("fetchOrgs");
-  await store.dispatch("fetchModelData");
+  store.dispatch("fetchOrgs");
 
   if (user) {
     const { status, organization, role } = await fb.getUserRequest(user.email);
     if (status === "approved") {
-      await store.dispatch("fetchUser", {
+      store.dispatch("fetchUser", {
         ...user.toJSON(),
         status,
         organization,
         role,
       });
       let token = await user.getIdTokenResult();
-      await store.dispatch("fetchAdmin", token.claims && token.claims.admin);
+      store.dispatch("fetchAdmin", token.claims && token.claims.admin);
+      store.dispatch("fetchModelData");
       // purposefully not waiting for logging to complete
-      await fb.logActivity(user.email, "login");
-      await store.dispatch("setLoaded");
+      fb.logActivity(user.email, "login");
+      store.dispatch("setLoaded");
       return;
     }
   }
 
   // fallthrough
-  await store.dispatch("fetchUser", null);
-  await store.dispatch("fetchAdmin", false);
-  await store.dispatch("setLoaded");
+  store.dispatch("fetchUser", null);
+  store.dispatch("fetchAdmin", false);
+  store.dispatch("setLoaded");
 });
 
 createApp(App)
