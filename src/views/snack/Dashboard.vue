@@ -133,7 +133,7 @@ export default {
       () => store.getters.interventionArmUser
     );
     const dataset = computed(() => {
-      return store.getters.dataset;
+      return store.state.dataset;
     });
     const activeGeoid = ref("");
     const activeMuni = ref("");
@@ -157,7 +157,7 @@ export default {
       }
     });
 
-    const modelVersion = computed(() => store.getters.modelVersion);
+    const modelVersion = computed(() => store.state.modelVersion);
     const zipcodes = ref([]);
 
     onMounted(async () => {

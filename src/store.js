@@ -228,12 +228,6 @@ const store = createStore({
     formOrganizationOptions(state) {
       return state.organizations.map((org) => org.name).sort();
     },
-    dataset(state) {
-      return state.dataset;
-    },
-    modelVersion(state) {
-      return state.modelVersion;
-    },
   },
 });
 
