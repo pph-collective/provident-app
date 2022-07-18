@@ -34,7 +34,6 @@ fb.auth.onAuthStateChanged(async (user) => {
       });
       let token = await user.getIdTokenResult();
       store.dispatch("fetchAdmin", token.claims && token.claims.admin);
-      store.dispatch("fetchModelData");
       // purposefully not waiting for logging to complete
       fb.logActivity(user.email, "login");
       store.dispatch("setLoaded");

@@ -133,6 +133,10 @@ export default {
       () => store.getters.interventionArmUser
     );
     const dataset = computed(() => {
+      if (store.state.dataset.cbg.length === 0) {
+        store.dispatch("fetchModelData");
+      }
+
       return store.state.dataset;
     });
     const activeGeoid = ref("");
