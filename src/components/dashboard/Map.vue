@@ -77,12 +77,6 @@ export default {
         const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
-        g.properties.landmarks = datum.landmarks
-          ? `${datum.landmarks
-              .sort(sortByProperty("rank"))
-              .map((x) => `${x.rank}. ${x.location_name} `)
-              .join("\n")}`
-          : [];
       });
 
       const collection = {
@@ -136,8 +130,7 @@ export default {
         signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
         'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
       }
-      signal +=
-        ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
+      signal += "}";
       return signal;
     });
 
