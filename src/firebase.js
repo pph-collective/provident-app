@@ -280,6 +280,19 @@ const addOrg = async (organization) => {
   return docId;
 };
 
+const getDataset = async (period, interventionArmUser) => {
+  const data = await getModelData(period);
+  if (interventionArmUser) {
+    const predictions = await getModelPredictions(period);
+    return {
+      ...data,
+      cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
+    };
+  } else {
+    return data;
+  }
+};
+
 export default {
   auth,
   db,
@@ -291,6 +304,7 @@ export default {
   getFormResponses,
   getForms,
   getModelData,
+  getDataset,
   getModelDataPeriods,
   getModelPredictions,
   getUserRequest,
