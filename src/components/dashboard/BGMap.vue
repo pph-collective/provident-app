@@ -60,7 +60,7 @@ export default {
           {
             name: "tileUrl",
             value:
-              "https://api.mapbox.com/styles/v1/ccv-bot/ckr3rr6xu267f19ql084wgkuh/static/",
+              "https://api.mapbox.com/styles/v1/ccv-bot/cl5wvienz000o16qk2qw5n52h/static/",
           },
           {
             name: "mapboxToken",
