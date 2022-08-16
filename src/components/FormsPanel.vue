@@ -52,14 +52,14 @@
       <div v-else class="panel-block p-0" />
 
       <div
-        v-if="selectedFormResponses.length === 0"
+        v-if="filteredFormResponses.length === 0"
         data-cy="forms-panel-block"
         class="panel-block is-justify-content-center"
       >
         <span>No forms here</span>
       </div>
       <div
-        v-for="(formResponse, idx) in selectedFormResponses"
+        v-for="(formResponse, idx) in pagedFormResponses"
         v-else
         :key="'formResponse-' + idx"
         data-cy="forms-panel-block"
@@ -158,6 +158,35 @@
         </div>
       </div>
     </div>
+
+    <nav class="pagination m-4" role="navigation" aria-label="pagination">
+      <button
+        class="pagination-previous"
+        :disabled="currentPage === 1"
+        @click="onClickPage(currentPage - 1)"
+      >
+        Previous
+      </button>
+      <button
+        class="pagination-next"
+        :disabled="currentPage === totalPages"
+        @click="onClickPage(currentPage + 1)"
+      >
+        Next page
+      </button>
+      <ul class="pagination-list">
+        <li v-for="page in pages" :key="page">
+          <button
+            class="pagination-link"
+            :disabled="page.isDisabled"
+            :aria-label="`Goto page ${page.name}`"
+            @click="onClickPage(page.name)"
+          >
+            {{ page.name }}
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 
   <FormModal
@@ -213,10 +242,8 @@ const filters = reactive(
     return acc;
   }, {})
 );
-
 const showFilters = ref(true);
-
-const selectedFormResponses = computed(() => {
+const filteredFormResponses = computed(() => {
   let res = props.formResponses;
   for (const filterField of Object.keys(props.filterOptions)) {
     if (filters[filterField].length > 0) {
@@ -227,6 +254,60 @@ const selectedFormResponses = computed(() => {
   }
   return res;
 });
+
+const pagedFormResponses = computed(() => {
+  const start = maxFormResponsesPerPage * (currentPage.value - 1);
+  return filteredFormResponses.value.slice(
+    start,
+    start + maxFormResponsesPerPage
+  );
+});
+
+const currentPage = ref(1);
+const maxFormResponsesPerPage = 10;
+const maxVisiblePages = 3;
+
+const totalPages = computed(() => {
+  return Math.ceil(
+    filteredFormResponses.value.length / maxFormResponsesPerPage
+  );
+});
+
+const startPage = computed(() => {
+  // First Page
+  if (currentPage.value === 1) {
+    return 1;
+  }
+
+  // Last Page
+  if (currentPage.value === totalPages.value) {
+    return totalPages.value - maxVisiblePages;
+  }
+
+  // When in between
+  return currentPage.value - 1;
+});
+
+const pages = computed(() => {
+  const range = [];
+
+  for (
+    let i = startPage.value;
+    i <= Math.min(startPage.value + maxVisiblePages - 1, totalPages.value);
+    i++
+  ) {
+    range.push({
+      name: i,
+      isDisabled: i === currentPage.value,
+    });
+  }
+
+  return range;
+});
+
+const onClickPage = (pageNumber) => {
+  currentPage.value = pageNumber;
+};
 
 const launchForm = (formResponse, readOnly) => {
   activeFormReadOnly.value = readOnly;
