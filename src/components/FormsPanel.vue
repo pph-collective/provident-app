@@ -175,14 +175,43 @@
         Next page
       </button>
       <ul class="pagination-list">
+        <li v-if="!pages.includes(1)">
+          <button
+            class="pagination-link"
+            :disabled="currentPage === 1"
+            :aria-label="`Goto page 1`"
+            @click="onClickPage(1)"
+          >
+            1
+          </button>
+        </li>
+        <li v-if="!(pages.includes(1) || pages.includes(2))">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
         <li v-for="page in pages" :key="page">
           <button
             class="pagination-link"
-            :disabled="page.isDisabled"
-            :aria-label="`Goto page ${page.name}`"
-            @click="onClickPage(page.name)"
+            :disabled="currentPage === page"
+            :aria-label="`Goto page ${page}`"
+            @click="onClickPage(page)"
           >
-            {{ page.name }}
+            {{ page }}
+          </button>
+        </li>
+        <li
+          v-if="!(pages.includes(totalPages) || pages.includes(totalPages - 1))"
+        >
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li>
+          <button
+            v-if="!pages.includes(totalPages)"
+            class="pagination-link"
+            :disabled="currentPage === totalPages"
+            :aria-label="`Goto page ${totalPages}`"
+            @click="onClickPage(totalPages)"
+          >
+            {{ totalPages }}
           </button>
         </li>
       </ul>
@@ -244,6 +273,8 @@ const filters = reactive(
 );
 const showFilters = ref(true);
 const filteredFormResponses = computed(() => {
+  onClickPage(1);
+
   let res = props.formResponses;
   for (const filterField of Object.keys(props.filterOptions)) {
     if (filters[filterField].length > 0) {
@@ -281,7 +312,7 @@ const startPage = computed(() => {
 
   // Last Page
   if (currentPage.value === totalPages.value) {
-    return totalPages.value - maxVisiblePages;
+    return Math.max(totalPages.value - maxVisiblePages, 1);
   }
 
   // When in between
@@ -296,10 +327,7 @@ const pages = computed(() => {
     i <= Math.min(startPage.value + maxVisiblePages - 1, totalPages.value);
     i++
   ) {
-    range.push({
-      name: i,
-      isDisabled: i === currentPage.value,
-    });
+    range.push(i);
   }
 
   return range;
