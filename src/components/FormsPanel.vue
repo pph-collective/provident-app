@@ -159,57 +159,67 @@
       </div>
     </div>
 
-    <nav class="pagination m-4" role="navigation" aria-label="pagination">
+    <nav
+      v-if="filteredFormResponses.length >= 0"
+      class="pagination m-4"
+      role="navigation"
+      aria-label="pagination"
+    >
       <button
         class="pagination-previous"
         :disabled="currentPage === 1"
-        @click="onClickPage(currentPage - 1)"
+        @click="currentPage = currentPage - 1"
       >
         Previous
       </button>
       <button
         class="pagination-next"
         :disabled="currentPage === totalPages"
-        @click="onClickPage(currentPage + 1)"
+        @click="currentPage = currentPage + 1"
       >
         Next page
       </button>
       <ul class="pagination-list">
-        <li v-if="!pages.includes(1)">
+        <li v-if="!innerPageRange.includes(1)">
           <button
             class="pagination-link"
             :disabled="currentPage === 1"
             :aria-label="`Goto page 1`"
-            @click="onClickPage(1)"
+            @click="currentPage = 1"
           >
             1
           </button>
         </li>
-        <li v-if="!(pages.includes(1) || pages.includes(2))">
+        <li v-if="!(innerPageRange.includes(1) || innerPageRange.includes(2))">
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
-        <li v-for="page in pages" :key="page">
+        <li v-for="page in innerPageRange" :key="page">
           <button
             class="pagination-link"
             :disabled="currentPage === page"
             :aria-label="`Goto page ${page}`"
-            @click="onClickPage(page)"
+            @click="currentPage = page"
           >
             {{ page }}
           </button>
         </li>
         <li
-          v-if="!(pages.includes(totalPages) || pages.includes(totalPages - 1))"
+          v-if="
+            !(
+              innerPageRange.includes(totalPages) ||
+              innerPageRange.includes(totalPages - 1)
+            )
+          "
         >
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
         <li>
           <button
-            v-if="!pages.includes(totalPages)"
+            v-if="!innerPageRange.includes(totalPages)"
             class="pagination-link"
             :disabled="currentPage === totalPages"
             :aria-label="`Goto page ${totalPages}`"
-            @click="onClickPage(totalPages)"
+            @click="currentPage = totalPages"
           >
             {{ totalPages }}
           </button>
@@ -226,7 +236,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
@@ -273,8 +283,6 @@ const filters = reactive(
 );
 const showFilters = ref(true);
 const filteredFormResponses = computed(() => {
-  onClickPage(1);
-
   let res = props.formResponses;
   for (const filterField of Object.keys(props.filterOptions)) {
     if (filters[filterField].length > 0) {
@@ -286,6 +294,10 @@ const filteredFormResponses = computed(() => {
   return res;
 });
 
+watch(filteredFormResponses, () => {
+  currentPage.value = 1;
+});
+
 const pagedFormResponses = computed(() => {
   const start = maxFormResponsesPerPage * (currentPage.value - 1);
   return filteredFormResponses.value.slice(
@@ -295,8 +307,7 @@ const pagedFormResponses = computed(() => {
 });
 
 const currentPage = ref(1);
-const maxFormResponsesPerPage = 10;
-const maxVisiblePages = 3;
+const maxFormResponsesPerPage = 15;
 
 const totalPages = computed(() => {
   return Math.ceil(
@@ -304,6 +315,7 @@ const totalPages = computed(() => {
   );
 });
 
+const maxVisibleInnerPages = 3;
 const startPage = computed(() => {
   // First Page
   if (currentPage.value === 1) {
@@ -312,19 +324,18 @@ const startPage = computed(() => {
 
   // Last Page
   if (currentPage.value === totalPages.value) {
-    return Math.max(totalPages.value - maxVisiblePages, 1);
+    return Math.max(totalPages.value - maxVisibleInnerPages, 1);
   }
 
   // When in between
   return currentPage.value - 1;
 });
 
-const pages = computed(() => {
+const innerPageRange = computed(() => {
   const range = [];
-
   for (
     let i = startPage.value;
-    i <= Math.min(startPage.value + maxVisiblePages - 1, totalPages.value);
+    i <= Math.min(startPage.value + maxVisibleInnerPages - 1, totalPages.value);
     i++
   ) {
     range.push(i);
@@ -332,10 +343,6 @@ const pages = computed(() => {
 
   return range;
 });
-
-const onClickPage = (pageNumber) => {
-  currentPage.value = pageNumber;
-};
 
 const launchForm = (formResponse, readOnly) => {
   activeFormReadOnly.value = readOnly;
