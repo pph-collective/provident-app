@@ -180,6 +180,7 @@
         Next page
       </button>
       <ul class="pagination-list">
+        <!-- Show the first page if the page range doesn't include the first page -->
         <li v-if="!innerPageRange.includes(1)">
           <button
             class="pagination-link"
@@ -190,9 +191,13 @@
             1
           </button>
         </li>
+
+        <!-- Show ... between the first page and the page range -->
         <li v-if="!(innerPageRange.includes(1) || innerPageRange.includes(2))">
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
+
+        <!-- Show the page range -->
         <li v-for="page in innerPageRange" :key="page">
           <button
             class="pagination-link"
@@ -203,6 +208,8 @@
             {{ page }}
           </button>
         </li>
+
+        <!-- Show the ... between the page range and the last page -->
         <li
           v-if="
             !(
@@ -213,6 +220,8 @@
         >
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
+
+        <!-- Show the last page if the page range doesn't include the last page -->
         <li>
           <button
             v-if="!innerPageRange.includes(totalPages)"
