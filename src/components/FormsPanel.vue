@@ -170,7 +170,7 @@
         :disabled="currentPage === 1"
         @click="currentPage = currentPage - 1"
       >
-        Previous
+        Previous page
       </button>
       <button
         class="pagination-next"
