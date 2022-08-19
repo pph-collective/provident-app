@@ -2,7 +2,7 @@
   <Loading :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
-      v-if="resultPeriods.length > 0"
+      v-if="modelVersion"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
       @selected="updateControls"
@@ -74,7 +74,7 @@
     </Card>
 
     <Card id="stats" width="one-third" :height="5">
-      <template #title> Stats: {{ controls.model_version }} </template>
+      <template #title> Stats: {{ modelVersion }} </template>
       <template #content>
         <StatsWidget
           v-if="dataset.cbg.length > 0"
@@ -100,7 +100,6 @@
 <script>
 import { ref, computed, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
-import * as aq from "arquero";
 
 import fb from "@/firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "@/utils/utils";
@@ -133,10 +132,12 @@ export default {
     const interventionArmUser = computed(
       () => store.getters.interventionArmUser
     );
-    const dataset = ref({
-      cbg: [],
-      town: [],
-      ri: [],
+    const dataset = computed(() => {
+      if (store.state.dataset.cbg.length === 0) {
+        store.dispatch("fetchModelData");
+      }
+
+      return store.state.dataset;
     });
     const activeGeoid = ref("");
     const activeMuni = ref("");
@@ -160,11 +161,9 @@ export default {
       }
     });
 
-    const resultPeriods = ref([]);
+    const modelVersion = computed(() => store.state.modelVersion);
     const zipcodes = ref([]);
-    onMounted(async () => {
-      resultPeriods.value = await fb.getModelDataPeriods();
-    });
+
     onMounted(async () => {
       zipcodes.value = await fb.getZipcodes();
     });
@@ -210,40 +209,16 @@ export default {
           icon: "fas fa-map",
           values: zipsDropdownOptions.value,
         },
-        model_version: {
-          icon: "fas fa-calendar-alt",
-          values: resultPeriods.value,
-        },
       };
     });
 
     const controls = ref({});
-
-    const updateDataset = async (period) => {
-      const data = await fb.getModelData(period);
-      if (interventionArmUser.value) {
-        const preds = await fb.getModelPredictions(period);
-        return {
-          ...data,
-          cbg: aq.from(data.cbg).join_left(aq.from(preds), "bg_id").objects(),
-        };
-      } else {
-        return data;
-      }
-    };
 
     const updateControls = (newControls) => {
       // if either drop down changes, clear out the selected block group
       activeMuni.value = "";
       activeGeoid.value = "";
       zoomed.value = false;
-
-      // update the model data if changed
-      if (newControls.model_version !== controls.value.model_version) {
-        updateDataset(newControls.model_version).then((res) => {
-          dataset.value = res;
-        });
-      }
 
       // resets the zipcode dropdown to All Zip Codes
       if (newControls.geography !== controls.value.geography) {
@@ -257,7 +232,7 @@ export default {
     };
 
     const loading = computed(() => {
-      return dataset.value.cbg.length === 0 || resultPeriods.value.length === 0;
+      return dataset.value.cbg.length === 0 || modelVersion.value === null;
     });
 
     // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
@@ -295,7 +270,7 @@ export default {
       dropDowns,
       interventionArmUser,
       loading,
-      resultPeriods,
+      modelVersion,
       updateControls,
       zipcodes,
       zoomBg,
