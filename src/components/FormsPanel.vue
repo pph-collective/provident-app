@@ -52,14 +52,14 @@
       <div v-else class="panel-block p-0" />
 
       <div
-        v-if="selectedFormResponses.length === 0"
+        v-if="filteredFormResponses.length === 0"
         data-cy="forms-panel-block"
         class="panel-block is-justify-content-center"
       >
         <span>No forms here</span>
       </div>
       <div
-        v-for="(formResponse, idx) in selectedFormResponses"
+        v-for="(formResponse, idx) in pagedFormResponses"
         v-else
         :key="'formResponse-' + idx"
         data-cy="forms-panel-block"
@@ -158,6 +158,83 @@
         </div>
       </div>
     </div>
+
+    <nav
+      v-if="filteredFormResponses.length >= 0"
+      class="pagination m-4"
+      role="navigation"
+      aria-label="pagination"
+    >
+      <button
+        class="pagination-previous"
+        :disabled="currentPage === 1"
+        @click="currentPage = currentPage - 1"
+      >
+        Previous page
+      </button>
+      <button
+        class="pagination-next"
+        :disabled="currentPage === totalPages"
+        @click="currentPage = currentPage + 1"
+      >
+        Next page
+      </button>
+      <ul class="pagination-list">
+        <!-- Show the first page if the page range doesn't include the first page -->
+        <li v-if="!innerPageRange.includes(1)">
+          <button
+            class="pagination-link"
+            :disabled="currentPage === 1"
+            :aria-label="`Goto page 1`"
+            @click="currentPage = 1"
+          >
+            1
+          </button>
+        </li>
+
+        <!-- Show ... between the first page and the page range -->
+        <li v-if="!(innerPageRange.includes(1) || innerPageRange.includes(2))">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+
+        <!-- Show the page range -->
+        <li v-for="page in innerPageRange" :key="page">
+          <button
+            class="pagination-link"
+            :disabled="currentPage === page"
+            :aria-label="`Goto page ${page}`"
+            @click="currentPage = page"
+          >
+            {{ page }}
+          </button>
+        </li>
+
+        <!-- Show the ... between the page range and the last page -->
+        <li
+          v-if="
+            !(
+              innerPageRange.includes(totalPages) ||
+              innerPageRange.includes(totalPages - 1)
+            )
+          "
+        >
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+
+        <!-- Show the last page if the page range doesn't include the last page -->
+        <li>
+          <button
+            v-if="!innerPageRange.includes(totalPages)"
+            class="pagination-link"
+            :disabled="currentPage === totalPages"
+            :aria-label="`Goto page ${totalPages}`"
+            @click="currentPage = totalPages"
+          >
+            {{ totalPages }}
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 
   <FormModal
@@ -168,7 +245,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
@@ -213,10 +290,8 @@ const filters = reactive(
     return acc;
   }, {})
 );
-
 const showFilters = ref(true);
-
-const selectedFormResponses = computed(() => {
+const filteredFormResponses = computed(() => {
   let res = props.formResponses;
   for (const filterField of Object.keys(props.filterOptions)) {
     if (filters[filterField].length > 0) {
@@ -226,6 +301,56 @@ const selectedFormResponses = computed(() => {
     }
   }
   return res;
+});
+
+watch(filteredFormResponses, () => {
+  currentPage.value = 1;
+});
+
+const pagedFormResponses = computed(() => {
+  const start = maxFormResponsesPerPage * (currentPage.value - 1);
+  return filteredFormResponses.value.slice(
+    start,
+    start + maxFormResponsesPerPage
+  );
+});
+
+const currentPage = ref(1);
+const maxFormResponsesPerPage = 15;
+
+const totalPages = computed(() => {
+  return Math.ceil(
+    filteredFormResponses.value.length / maxFormResponsesPerPage
+  );
+});
+
+const maxVisibleInnerPages = 3;
+const startPage = computed(() => {
+  // First Page
+  if (currentPage.value === 1) {
+    return 1;
+  }
+
+  // Last Page
+  if (currentPage.value === totalPages.value) {
+    return Math.max(totalPages.value - maxVisibleInnerPages, 1);
+  }
+
+  // When in between
+  return currentPage.value - 1;
+});
+
+const innerPageRange = computed(() => {
+  const range = [];
+  for (
+    let i = startPage.value;
+    i <= Math.min(startPage.value + maxVisibleInnerPages - 1, totalPages.value);
+    i++
+  ) {
+    range.push(i);
+  }
+
+  return range;
 });
 
 const launchForm = (formResponse, readOnly) => {
