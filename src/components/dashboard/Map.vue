@@ -83,6 +83,7 @@ export default {
               .map((x) => `${x.rank}. ${x.location_name} `)
               .join("\n")}`
           : [];
+        g.properties.tooltip = datum.tooltip ?? {};
       });
 
       const collection = {
@@ -136,8 +137,10 @@ export default {
         signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
         'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
       }
+      signal += ", 'Priority': datum.properties.tooltip.priority";
       signal +=
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
+      signal += "}";
       return signal;
     });
 
