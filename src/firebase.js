@@ -207,6 +207,12 @@ const getModelData = async (period) => {
       .get();
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
+    const tooltipDataDoc = await db
+      .collection("tooltip_data")
+      .doc(period)
+      .get();
+    const tooltipData = getDataFromDoc(tooltipDataDoc);
+
     return {
       cbg: modelDt
         .join(aq.from(cbg)) // joins on bg_id, geoid
@@ -216,6 +222,9 @@ const getModelData = async (period) => {
           // Filters the landmark data based on the block group and save it into the landmarks key for each block group
           row.landmarks = landmarkData.filter(
             (landmark) => landmark.bg_id === row.bg_id
+          );
+          row.tooltip = tooltipData.find(
+            (tooltip) => tooltip.bg_id === row.bg_id
           );
           return row;
         }),

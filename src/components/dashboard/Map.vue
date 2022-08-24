@@ -14,8 +14,6 @@ import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
-import { sortByProperty } from "@/utils/utils.js";
-
 export default {
   props: {
     dataset: {
@@ -77,6 +75,7 @@ export default {
         const datum = dataset.value.find((d) => d.geoid === g.id) ?? {};
         g.properties.flag = datum[flagProperty.value] ?? "-1";
         g.properties.intervention_arm = datum.intervention_arm ?? false;
+        g.properties.tooltip = datum.tooltip ?? {};
       });
 
       const collection = {
@@ -130,6 +129,7 @@ export default {
         signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
         'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
       }
+      signal += ", 'Priority': datum.properties.tooltip.priority";
       signal += "}";
       return signal;
     });
