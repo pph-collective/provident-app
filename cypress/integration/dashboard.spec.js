@@ -547,8 +547,7 @@ describe("Dashboard viewed as a control arm user", () => {
 
     cy.get("#vg-tooltip-element")
       .contains("tbody tr", "Priority")
-      .find("td.value")
-      .should("have.text", "This neighborhood has never been prioritized");
+      .should("not.exist");
 
     cy.get("div#stats")
       .find("div.tags")
