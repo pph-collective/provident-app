@@ -68,7 +68,7 @@ async function importCsv() {
         });
 
         if (seed) {
-          dt = dt.filter((d) => aq.op.isSeed(d.city));
+          dt = dt.filter((d) => aq.op.isSeed(d.name));
         }
 
         dt = dt.select("bg_id", "name", "priority");

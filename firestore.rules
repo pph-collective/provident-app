@@ -69,6 +69,10 @@ service cloud.firestore {
       allow read: if request.auth != null;
     }
 
+    match /tooltip_data/{document=**} {
+      allow read: if request.auth != null;
+    }
+
     match /model_data/{document=**} {
       allow read: if request.auth != null;
     }

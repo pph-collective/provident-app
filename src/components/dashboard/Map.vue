@@ -139,7 +139,7 @@ export default {
       }
       signal += ", 'Priority': datum.properties.tooltip.priority";
       signal +=
-        ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''}";
+        ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''";
       signal += "}";
       return signal;
     });

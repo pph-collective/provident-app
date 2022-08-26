@@ -4309,5 +4309,121 @@
         }
       ]
     }
+  },
+  "tooltip_data": {
+    "2019-1": {
+      "data": [
+        {
+          "bg_id": "0401011",
+          "name": "Portsmouth",
+          "priority": "This neighborhood is currently prioritized"
+        },
+        {
+          "bg_id": "0401012",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401013",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401021",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401022",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401023",
+          "name": "Portsmouth",
+          "priority": "This neighborhood was previously prioritized"
+        },
+        {
+          "bg_id": "0401031",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401032",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401033",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401034",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401035",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0401036",
+          "name": "Portsmouth",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0414001",
+          "name": "Little Compton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0414002",
+          "name": "Little Compton",
+          "priority": "This neighborhood is currently prioritized"
+        },
+        {
+          "bg_id": "0416011",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0416012",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0416021",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0416022",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0417011",
+          "name": "Tiverton",
+          "priority": "This neighborhood is currently prioritized"
+        },
+        {
+          "bg_id": "0417021",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0417022",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        },
+        {
+          "bg_id": "0417023",
+          "name": "Tiverton",
+          "priority": "This neighborhood has never been prioritized"
+        }
+      ]
+    }
   }
 }
