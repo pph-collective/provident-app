@@ -136,8 +136,9 @@ export default {
       if (withPredictions.value) {
         signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
         'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
+        signal +=
+          ", 'Priority': datum.properties.intervention_arm ? datum.properties.tooltip.priority : 'N/A'";
       }
-      signal += ", 'Priority': datum.properties.tooltip.priority";
       signal +=
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''";
       signal += "}";
