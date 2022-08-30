@@ -193,7 +193,12 @@
         </li>
 
         <!-- Show ... between the first page and the page range -->
-        <li v-if="!(innerPageRange.includes(1) || innerPageRange.includes(2))">
+        <li
+          v-if="
+            !(innerPageRange.includes(1) || innerPageRange.includes(2)) &&
+            totalPages > 2
+          "
+        >
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
 
@@ -215,7 +220,7 @@
             !(
               innerPageRange.includes(totalPages) ||
               innerPageRange.includes(totalPages - 1)
-            )
+            ) && totalPages > 2
           "
         >
           <span class="pagination-ellipsis">&hellip;</span>
@@ -319,8 +324,9 @@ const currentPage = ref(1);
 const maxFormResponsesPerPage = 15;
 
 const totalPages = computed(() => {
-  return Math.ceil(
-    filteredFormResponses.value.length / maxFormResponsesPerPage
+  return Math.max(
+    Math.ceil(filteredFormResponses.value.length / maxFormResponsesPerPage),
+    1
   );
 });
 
