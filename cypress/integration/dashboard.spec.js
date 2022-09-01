@@ -136,6 +136,11 @@ describe("Dashboard viewed as a user", () => {
           "1. Glenn Farm \n2. Sandy Point Beach \n3. Mccorrie Point Beach \n4. Elmhurst \n5. Glen Manor House "
         );
 
+      cy.get("#vg-tooltip-element")
+        .contains("tbody tr", "Priority")
+        .find("td.value")
+        .should("have.text", "This neighborhood has never been prioritized");
+
       cy.get("div#stats")
         .find("div.tags")
         .first()
@@ -539,6 +544,10 @@ describe("Dashboard viewed as a control arm user", () => {
         "have.text",
         "1. Bulgarmarsh Recreation Area \n2. Nanaquaket Yoga Studio \n3. Wally's Tap House \n4. Sip 'N Dip Donuts \n5. Peppermint Panda "
       );
+
+    cy.get("#vg-tooltip-element")
+      .contains("tbody tr", "Priority")
+      .should("not.exist");
 
     cy.get("div#stats")
       .find("div.tags")

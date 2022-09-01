@@ -57,6 +57,7 @@ $box-radius: 2px;
 
         &.value {
           font-weight: bold;
+          max-height: unset;
         }
       }
     }

@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 const aq = require("arquero");
 
 const parser = new ArgumentParser({
-  description: "PROVIDENT - add landmark data",
+  description: "PROVIDENT - add tooltip data",
   add_help: true,
 });
 
@@ -57,34 +57,23 @@ function writeToFirestore(collection, doc, records) {
 
 // TODO: there are currently a couple block groups without a town name (review when 2020 census switchover happens)
 async function importCsv() {
-  const landmarkData = fs.readFileSync(file, "utf8");
-  parse(landmarkData, { columns: true }, async (err, records) => {
+  const tooltipData = fs.readFileSync(file, "utf8");
+  parse(tooltipData, { columns: true }, async (err, records) => {
     if (err) {
       console.log(err);
     } else {
       try {
         let dt = aq.from(records).derive({
-          bg_id: (d) => aq.op.substring(d.poi_cbg, 5),
+          bg_id: (d) => aq.op.substring(d.geoid, 5),
         });
 
         if (seed) {
-          dt = dt.filter((d) => aq.op.isSeed(d.city));
+          dt = dt.filter((d) => aq.op.isSeed(d.name));
         }
 
-        dt = dt.select(
-          "bg_id",
-          "location_name",
-          "top_category",
-          "latitude",
-          "longitude",
-          "street_address",
-          "city",
-          "postal_code",
-          "total_visitors",
-          "rank"
-        );
+        dt = dt.select("bg_id", "name", "priority");
 
-        await writeToFirestore("landmark_data", period, dt.objects());
+        await writeToFirestore("tooltip_data", period, dt.objects());
       } catch (e) {
         console.error(e);
         process.exit(1);
