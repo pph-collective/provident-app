@@ -85,10 +85,6 @@
                 :value="formResponse.user"
               />
               <PanelTag
-                v-if="!readOnly && formResponse.form.type === 'organization'"
-                label="organization-level"
-              />
-              <PanelTag
                 v-if="user.admin && formResponse.release_date"
                 :class="{
                   'is-success is-light': formResponse.release_date <= today,

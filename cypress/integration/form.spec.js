@@ -482,12 +482,6 @@ describe("Form functionality", () => {
       cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
     });
 
-    it("organization-level", () => {
-      cy.contains("div", "Organization Level? ").click();
-      cy.contains(".multiselect-option", "Yes").click();
-      cy.get('[data-cy="forms-panel-block"]').should("have.length", 1);
-    });
-
     it("status", () => {
       cy.contains("div", "Status ").click();
       cy.contains(".multiselect-option", "Not Started").click();
