@@ -109,7 +109,7 @@ export default {
           }
         } else if (status === undefined) {
           error.value = `User account was not set up properly. Please reach out to ${
-            import.meta.env.VUE_APP_ADMIN_EMAIL
+            import.meta.env.VITE_APP_ADMIN_EMAIL
           } with the email you used to register.`;
           await fb.logout();
         } else {

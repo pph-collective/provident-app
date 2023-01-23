@@ -116,7 +116,7 @@ export default {
       const body = `<p>Hello ${
         user.name
       },</p><br><p>Your request to access PROVIDENT has been denied. If you believe this is an error, please reach out to <a href='mailto:${
-        import.meta.env.VUE_APP_ADMIN_EMAIL
+        import.meta.env.VITE_APP_ADMIN_EMAIL
       }'>the PROVIDENT admin</a>.</p>`;
 
       await fb.createEmail({
