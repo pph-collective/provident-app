@@ -239,15 +239,16 @@ export default {
 
     const register = async () => {
       loading.value = true;
+      const email = form.email.toLowerCase();
 
       try {
-        await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
+        await fb.auth.createUserWithEmailAndPassword(email, form.password);
         //scrub out password
         form.password = "";
         form.confirmPassword = "";
         await fb.auth.currentUser.updateProfile({ displayName: form.name });
-        await fb.db.collection("users").doc(form.email).set({
-          email: form.email,
+        await fb.db.collection("users").doc(email).set({
+          email,
           name: form.name,
           organization: form.organization,
           role: "user",
@@ -263,7 +264,7 @@ export default {
         try {
           await fb.createEmail({
             subject: "PROVIDENT User Request",
-            body: `<p>${form.name} (${form.email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
+            body: `<p>${form.name} (${email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
             to: [import.meta.env.VUE_APP_ADMIN_EMAIL],
           });
           await fb.createEmail({
@@ -273,7 +274,7 @@ export default {
             },</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${
               import.meta.env.VUE_APP_ADMIN_EMAIL
             }'>the PROVIDENT admin</a>.</p>`,
-            to: [form.email],
+            to: [email],
           });
         } catch (e) {
           console.log(e);

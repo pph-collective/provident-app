@@ -98,9 +98,10 @@ export default {
 
     const submit = async () => {
       buttonLoading.value = true;
+      const email = form.email.toLowerCase();
       try {
-        await fb.login(form.email, form.password);
-        const { status } = await fb.getUserRequest(form.email);
+        await fb.login(email, form.password);
+        const { status } = await fb.getUserRequest(email);
         if (status === "approved") {
           if (route.query.redirect) {
             await router.push(route.query.redirect);
@@ -131,7 +132,7 @@ export default {
       }
 
       try {
-        await fb.auth.sendPasswordResetEmail(form.email);
+        await fb.auth.sendPasswordResetEmail(form.email.toLowerCase());
         store.dispatch("addNotification", {
           message: "Success. Check your email to reset your password.",
         });

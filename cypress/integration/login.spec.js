@@ -5,11 +5,8 @@ describe("Log In View", () => {
     cy.get('[data-cy="login-button"]').click();
   });
 
-  it("Greets with log in", () => {
+  it("Page Loads", () => {
     cy.contains("h1", "Log In").should("exist");
-  });
-
-  it("Links to /register", () => {
     cy.get("button").contains("Request Access").click();
     cy.url().should("eq", Cypress.config().baseUrl + "register");
   });
@@ -42,6 +39,14 @@ describe("Log In View", () => {
       "contain",
       "The password is invalid or the user does not have a password"
     );
+  });
+
+  it("Username casing agnostic", () => {
+    cy.get('[type="email"]').type("UsEr@user.com");
+    cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
+    cy.get('[data-cy="error-message"]').should("not.exist");
+    cy.get("a").should("contain", "Log Out");
+    cy.url().should("eq", Cypress.config().baseUrl);
   });
 
   it("Navigates to / on successful login", () => {

@@ -31,7 +31,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     );
   });
 
-  it("Submit valid reset email request", () => {
+  const verifyValidEmailRequest = (email) => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
@@ -39,7 +39,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       (req) => {
         // Assert the request
         expect(req.body.requestType).to.equal("PASSWORD_RESET");
-        expect(req.body.email).to.equal(ACCOUNTS.approved.email);
+        expect(req.body.email).to.equal(email.toLowerCase());
 
         // Asset the response
         req.continue((res) => {
@@ -49,7 +49,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
-    cy.get('[type="email"]').type(ACCOUNTS.approved.email);
+    cy.get('[type="email"]').type(email);
     cy.get('[data-cy="reset-password"]').click();
 
     // Getting pass this wait asserts that that a request of this type happened
@@ -77,7 +77,7 @@ describe("Login Page: Requesting an email to reset password", () => {
       expect(res.body.oobCodes).to.not.be.empty;
 
       const oobCode = res.body.oobCodes[res.body.oobCodes.length - 1];
-      expect(oobCode.email).to.equal(ACCOUNTS.approved.email);
+      expect(oobCode.email).to.equal(email.toLowerCase());
       expect(oobCode.requestType).to.equal("PASSWORD_RESET");
       expect(oobCode.oobCode).to.exist;
 
@@ -93,6 +93,15 @@ describe("Login Page: Requesting an email to reset password", () => {
         }`
       );
     });
+  };
+
+  it("Submit valid reset email request", () => {
+    verifyValidEmailRequest(ACCOUNTS.approved.email);
+  });
+
+  it("Submit valid reset email request - username casing agnostic", () => {
+    // Intercept the password email reset request
+    verifyValidEmailRequest("UsEr@UsEr.com");
   });
 });
 
