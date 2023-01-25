@@ -44,7 +44,6 @@ const formResponses = computed(() => {
 const filterOptions = computed(() => {
   return {
     "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
-    "Organization Level?": ["Yes", "No"],
     Status: ["Not Started", "Draft", "Submitted"],
     Municipality: uniqueArray(
       formResponses.value
@@ -62,10 +61,6 @@ const filterOptions = computed(() => {
 const filterFunctions = {
   "Form Title": (formResponse, filterValue) =>
     filterValue.includes(formResponse.form.title),
-  "Organization Level?": (formResponse, filterValue) =>
-    (filterValue.includes("Yes") &&
-      formResponse.form.type === "organization") ||
-    (filterValue.includes("No") && formResponse.form.type === "user"),
   Status: (formResponse, filterValue) =>
     filterValue.includes(formResponse.status),
   Municipality: (formResponse, filterValue) =>
