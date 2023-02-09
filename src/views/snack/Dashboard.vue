@@ -18,27 +18,47 @@
         }}
       </template>
       <template #top-right>
-        <button
-          v-if="!zoomed"
-          :disabled="!activeGeoid || !activeClickedStatus"
-          class="zoom-button button is-family-secondary is-secondary is-light"
-          @click="zoomBg"
-        >
-          <span class="icon">
-            <i class="fas fa-search-plus" />
-          </span>
-          <span>Zoom to Block Group</span>
-        </button>
-        <button
-          v-else
-          class="zoom-button button is-family-secondary is-secondary is-light"
-          @click="zoomed = false"
-        >
-          <span class="icon">
-            <i class="fas fa-search-minus" />
-          </span>
-          <span>Zoom Back Out</span>
-        </button>
+        <div class="field is-grouped">
+          <p class="control">
+            <button
+              v-if="!viewForms"
+              class="button is-family-secondary is-secondary is-light"
+              @click="viewForms = true"
+            >
+              View Submitted Forms
+            </button>
+            <button
+              v-else
+              class="button is-family-secondary is-secondary is-light"
+              @click="viewForms = false"
+            >
+              View Dashboard
+            </button>
+          </p>
+          <p class="control">
+            <button
+              v-if="!zoomed"
+              :disabled="!activeGeoid || !activeClickedStatus"
+              class="zoom-button button is-family-secondary is-secondary is-light"
+              @click="zoomBg"
+            >
+              <span class="icon">
+                <i class="fas fa-search-plus" />
+              </span>
+              <span>Zoom to Block Group</span>
+            </button>
+            <button
+              v-else
+              class="zoom-button button is-family-secondary is-secondary is-light"
+              @click="zoomed = false"
+            >
+              <span class="icon">
+                <i class="fas fa-search-minus" />
+              </span>
+              <span>Zoom Back Out</span>
+            </button>
+          </p>
+        </div>
       </template>
       <template #subtitle>
         Click on a block group to see more details or zoom in
@@ -55,6 +75,7 @@
             :with-predictions="interventionArmUser"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
+            :view-forms="viewForms"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
@@ -143,6 +164,7 @@ export default {
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
     const zoomed = ref(false);
+    const viewForms = ref(false);
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -272,6 +294,7 @@ export default {
       loading,
       modelVersion,
       updateControls,
+      viewForms,
       zipcodes,
       zoomBg,
       zoomed,

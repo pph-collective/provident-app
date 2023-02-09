@@ -15,6 +15,7 @@ import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty } from "@/utils/utils.js";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -36,6 +37,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    viewForms: {
+      type: Boolean,
+      required: true,
+    },
     zipcode: {
       type: Object,
       required: true,
@@ -47,11 +52,37 @@ export default {
       filterMunicipalities,
       dataset,
       flagProperty,
+      viewForms,
       withPredictions,
       zipcode,
     } = toRefs(props);
 
+    console.log(viewForms.value);
+
     const el = ref(null);
+    const store = useStore();
+
+    const formResponses = store.state.user.formResponses;
+    const geoIdToFormResponses = {};
+
+    formResponses
+      .filter(
+        (f) =>
+          ["neighborhood_rapid_assessment", "resource_plan"].includes(
+            f.form._id
+          ) &&
+          f.status === "Submitted" &&
+          f.response.bg_id !== undefined
+      )
+      .forEach((formResponse) => {
+        const geoid = formResponse.response.bg_id;
+
+        if (geoIdToFormResponses[geoid]) {
+          geoIdToFormResponses[geoid].push(formResponse);
+        } else {
+          geoIdToFormResponses[geoid] = [formResponse];
+        }
+      });
 
     const filteredZip = computed(() => {
       if (zipcode.value.name === "All Zip Codes") {
@@ -84,6 +115,7 @@ export default {
               .join("\n")}`
           : [];
         g.properties.tooltip = datum.tooltip ?? {};
+        g.properties.forms = geoIdToFormResponses[g.id.slice(-7)] ?? [];
       });
 
       const collection = {
@@ -143,6 +175,30 @@ export default {
         ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''";
       signal += "}";
       return signal;
+    });
+
+    const blockGroupFill = computed(() => {
+      const fill = [];
+
+      if (viewForms.value) {
+        // View Forms
+        fill.push({
+          test: "datum.properties.forms.length > 0",
+          value: "#2A3465",
+        });
+      } else {
+        // Default Dashboard Fill
+        fill.push({ test: "datum.properties.flag === '1'", value: "#2A3465" });
+        fill.push({
+          test: `${withPredictions.value} && !datum.properties.intervention_arm`,
+          value: "url(#diagonalHatch)",
+        });
+      }
+
+      // Defaults
+      fill.push({ value: "white" });
+
+      return fill;
     });
 
     const spec = computed(() => {
@@ -246,14 +302,7 @@ export default {
               enter: {
                 cursor: { value: "pointer" },
                 strokeWidth: { value: 1 },
-                fill: [
-                  { test: "datum.properties.flag === '1'", value: "#2A3465" },
-                  {
-                    test: `${withPredictions.value} && !datum.properties.intervention_arm`,
-                    value: "url(#diagonalHatch)",
-                  },
-                  { value: "white" },
-                ],
+                fill: blockGroupFill.value,
               },
               update: {
                 stroke: [
