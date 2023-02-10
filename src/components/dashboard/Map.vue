@@ -57,8 +57,6 @@ export default {
       zipcode,
     } = toRefs(props);
 
-    console.log(viewForms.value);
-
     const el = ref(null);
     const store = useStore();
 
@@ -70,9 +68,7 @@ export default {
         (f) =>
           ["neighborhood_rapid_assessment", "resource_plan"].includes(
             f.form._id
-          ) &&
-          f.status === "Submitted" &&
-          f.response.bg_id !== undefined
+          ) && f.response.bg_id !== undefined
       )
       .forEach((formResponse) => {
         const geoid = formResponse.response.bg_id;

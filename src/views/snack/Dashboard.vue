@@ -25,14 +25,14 @@
               class="button is-family-secondary is-secondary is-light"
               @click="viewForms = true"
             >
-              View Submitted Forms
+              View Forms
             </button>
             <button
               v-else
               class="button is-family-secondary is-secondary is-light"
               @click="viewForms = false"
             >
-              View Dashboard
+              View Predictions
             </button>
           </p>
           <p class="control">
