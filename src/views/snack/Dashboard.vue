@@ -65,7 +65,7 @@
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon solid-square" />
-              <span>Assessments and forms filled out</span>
+              <span>Assessments and/or resource plan forms</span>
             </div>
           </div>
         </div>
