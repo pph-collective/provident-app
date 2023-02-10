@@ -61,29 +61,29 @@
         </div>
       </template>
       <template #subtitle>
-        <div v-if="viewForms">
-          <div class="icon-text">
-            <div class="is-flex is-flex-direction-row">
-              <div class="icon solid-square" />
-              <span>Assessments and/or resource plan forms</span>
-            </div>
-          </div>
-        </div>
-        <div v-else-if="interventionArmUser">
-          <div class="icon-text">
-            <div class="is-flex is-flex-direction-row">
-              <div class="icon stripes square" />
-              <span>Not in the intervention arm block groups</span>
-            </div>
-          </div>
-          <div class="icon-text">
-            <div class="is-flex is-flex-direction-row">
-              <div class="icon solid-square" />
-              <p>Intervention arm block groups</p>
-            </div>
-          </div>
-        </div>
         <div v-if="!zoomed">
+          <div v-if="viewForms">
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon solid-square" />
+                <span>Assessments and/or resource plan forms</span>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="interventionArmUser">
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon stripes square" />
+                <span>Not in the intervention arm block groups</span>
+              </div>
+            </div>
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon solid-square" />
+                <p>Intervention arm block groups</p>
+              </div>
+            </div>
+          </div>
           Click on a block group to see more details or zoom in
         </div>
       </template>
