@@ -192,3 +192,13 @@ input:disabled, textarea:disabled {
   -webkit-text-fill-color: $input-disabled-color;
   opacity: 1; // Required for iOS
 }
+
+.stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    #bbbbbb 5px,
+    #bbbbbb 10px
+  );
+}

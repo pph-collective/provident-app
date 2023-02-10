@@ -19,7 +19,7 @@
       </template>
       <template #top-right>
         <div class="field is-grouped">
-          <p class="control">
+          <p v-if="!zoomed" class="control">
             <button
               v-if="!viewForms"
               class="button is-family-secondary is-secondary is-light"
@@ -61,7 +61,31 @@
         </div>
       </template>
       <template #subtitle>
-        Click on a block group to see more details or zoom in
+        <div v-if="viewForms">
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon solid-square" />
+              <span>Assessments and forms filled out</span>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="interventionArmUser">
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon stripes square" />
+              <span>Not in the intervention arm block groups</span>
+            </div>
+          </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon solid-square" />
+              <p>Intervention arm block groups</p>
+            </div>
+          </div>
+        </div>
+        <div v-if="!zoomed">
+          Click on a block group to see more details or zoom in
+        </div>
       </template>
       <template #content>
         <div v-if="controls.geography" class="map-container">
@@ -88,7 +112,8 @@
             class="is-absolute"
           />
           <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
-            Click on a point of interest to copy the address to your clipboard
+            Click on a <i class="fas fa-circle point-of-interest" /> point of
+            interest to copy the address to your clipboard
           </div>
         </div>
       </template>
@@ -353,5 +378,24 @@ export default {
   padding: 4px 2px;
   margin: 6px 6px 0px;
   background-color: hsl(0deg 0% 100% / 60%);
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.solid-square {
+  @extend .square;
+  background-color: $pori-blue;
+  opacity: 0.5;
+}
+
+.point-of-interest {
+  color: $pori-red;
 }
 </style>
