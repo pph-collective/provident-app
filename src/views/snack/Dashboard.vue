@@ -73,14 +73,20 @@
           <div v-else-if="interventionArmUser">
             <div class="icon-text">
               <div class="is-flex is-flex-direction-row">
-                <div class="icon stripes square" />
-                <span>Not in the intervention arm block groups</span>
+                <div class="icon solid-square" />
+                <p>Prioritized by PROVIDENT model</p>
               </div>
             </div>
             <div class="icon-text">
               <div class="is-flex is-flex-direction-row">
-                <div class="icon solid-square" />
-                <p>Intervention arm block groups</p>
+                <div class="icon square" />
+                <span>Not prioritized by PROVIDENT model</span>
+              </div>
+            </div>
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon stripes square" />
+                <span>Not eligible for PROVIDENT prediction</span>
               </div>
             </div>
           </div>
