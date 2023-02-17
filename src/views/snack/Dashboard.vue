@@ -18,30 +18,80 @@
         }}
       </template>
       <template #top-right>
-        <button
-          v-if="!zoomed"
-          :disabled="!activeGeoid || !activeClickedStatus"
-          class="zoom-button button is-family-secondary is-secondary is-light"
-          @click="zoomBg"
-        >
-          <span class="icon">
-            <i class="fas fa-search-plus" />
-          </span>
-          <span>Zoom to Block Group</span>
-        </button>
-        <button
-          v-else
-          class="zoom-button button is-family-secondary is-secondary is-light"
-          @click="zoomed = false"
-        >
-          <span class="icon">
-            <i class="fas fa-search-minus" />
-          </span>
-          <span>Zoom Back Out</span>
-        </button>
+        <div class="field is-grouped">
+          <p v-if="!zoomed" class="control">
+            <button
+              v-if="!viewForms"
+              class="button is-family-secondary is-secondary is-light"
+              @click="viewForms = true"
+            >
+              View Forms
+            </button>
+            <button
+              v-else
+              class="button is-family-secondary is-secondary is-light"
+              @click="viewForms = false"
+            >
+              View Predictions
+            </button>
+          </p>
+          <p class="control">
+            <button
+              v-if="!zoomed"
+              :disabled="!activeGeoid || !activeClickedStatus"
+              class="zoom-button button is-family-secondary is-secondary is-light"
+              @click="zoomBg"
+            >
+              <span class="icon">
+                <i class="fas fa-search-plus" />
+              </span>
+              <span>Zoom to Block Group</span>
+            </button>
+            <button
+              v-else
+              class="zoom-button button is-family-secondary is-secondary is-light"
+              @click="zoomed = false"
+            >
+              <span class="icon">
+                <i class="fas fa-search-minus" />
+              </span>
+              <span>Zoom Back Out</span>
+            </button>
+          </p>
+        </div>
       </template>
       <template #subtitle>
-        Click on a block group to see more details or zoom in
+        <div v-if="!zoomed">
+          <div v-if="viewForms">
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon solid-square" />
+                <span>Assessments and/or resource plan forms</span>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="interventionArmUser">
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon solid-square" />
+                <p>Prioritized by PROVIDENT model</p>
+              </div>
+            </div>
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon square" />
+                <span>Not prioritized by PROVIDENT model</span>
+              </div>
+            </div>
+            <div class="icon-text">
+              <div class="is-flex is-flex-direction-row">
+                <div class="icon stripes square" />
+                <span>Not eligible for PROVIDENT prediction</span>
+              </div>
+            </div>
+          </div>
+          Click on a block group to see more details or zoom in
+        </div>
       </template>
       <template #content>
         <div v-if="controls.geography" class="map-container">
@@ -55,6 +105,7 @@
             :with-predictions="interventionArmUser"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
+            :view-forms="viewForms"
             @new-active-municipality="activeMuni = $event"
             @new-active-bg="activeGeoid = $event"
             @active-clicked-status="clickMap"
@@ -67,7 +118,8 @@
             class="is-absolute"
           />
           <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
-            Click on a point of interest to copy the address to your clipboard
+            Click on a <i class="fas fa-circle point-of-interest" /> point of
+            interest to copy the address to your clipboard
           </div>
         </div>
       </template>
@@ -143,6 +195,7 @@ export default {
     const activeMuni = ref("");
     const activeClickedStatus = ref(false);
     const zoomed = ref(false);
+    const viewForms = ref(false);
 
     const filteredOrgs = computed(() => {
       const ri = { name: "All of Rhode Island", municipalities: [] };
@@ -272,6 +325,7 @@ export default {
       loading,
       modelVersion,
       updateControls,
+      viewForms,
       zipcodes,
       zoomBg,
       zoomed,
@@ -330,5 +384,24 @@ export default {
   padding: 4px 2px;
   margin: 6px 6px 0px;
   background-color: hsl(0deg 0% 100% / 60%);
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.solid-square {
+  @extend .square;
+  background-color: $pori-blue;
+  opacity: 0.5;
+}
+
+.point-of-interest {
+  color: $pori-red;
 }
 </style>
