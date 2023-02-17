@@ -38,7 +38,12 @@
                     : '',
                 ]"
                 type="button"
-                @click="launchForm(formResponse)"
+                @click="
+                  launchForm(
+                    formResponse,
+                    formResponse.status === 'Submitted' || userRole === 'user'
+                  )
+                "
               >
                 {{
                   formResponse.status === "Submitted" || userRole === "user"
@@ -86,6 +91,7 @@
 
   <FormModal
     :form-response="activeFormResponse"
+    :read-only="activeFormReadOnly"
     @update-form-response="activeFormResponse = $event"
   />
 </template>
@@ -135,6 +141,7 @@ export default {
     );
 
     const activeFormResponse = ref({});
+    const activeFormReadOnly = ref(true);
 
     const completedForms = computed(() => {
       const formResponses = store.state.user.formResponses;
@@ -181,7 +188,8 @@ export default {
       return d.toLocaleDateString();
     };
 
-    const launchForm = (formResponse) => {
+    const launchForm = (formResponse, readOnly) => {
+      activeFormReadOnly.value = readOnly;
       activeFormResponse.value = formResponse;
       fb.logActivity(
         store.state.user.data.email,
@@ -194,6 +202,7 @@ export default {
       ASSESSMENT_FORM_ID,
       FORM_ID_TO_SHORT_TITLE,
       PLAN_FORM_ID,
+      activeFormReadOnly,
       activeFormResponse,
       bgFormResponses,
       userRole,
