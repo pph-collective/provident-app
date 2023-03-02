@@ -176,6 +176,7 @@ export default {
           [MUNI_QUESTION_MODEL]: activeMuni.value,
         },
       };
+      activeFormReadOnly.value = false;
       fb.logActivity(
         store.state.user.data.email,
         `create ${form_id} form`,
