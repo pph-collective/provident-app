@@ -15,14 +15,17 @@
             <td>
               <i
                 :class="{
-                  'fas fa-tasks': formResponse.form._id === PLAN_FORM_ID,
+                  'fas fa-tasks': formResponse.form.title === PLAN_FORM,
                   'fas fa-clipboard':
-                    formResponse.form._id === ASSESSMENT_FORM_ID,
+                    formResponse.form.title === ASSESSMENT_FORM,
+                  'fas fa-star-half':
+                    formResponse.form.title === MIDWAY_FOLLOWUP_FORM,
+                  'fas fa-star': formResponse.form.title === FOLLOWUP_FORM,
                 }"
               />
             </td>
             <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
-              {{ FORM_ID_TO_SHORT_TITLE[formResponse.form._id] }}
+              {{ FORM_ID_TO_SHORT_TITLE[formResponse.form.title] }}
             </td>
             <td class="has-text-weight-bold">
               <span class="tag">{{
@@ -73,7 +76,7 @@
         class="button is-primary mt-2 mx-1"
         type="button"
         :disabled="!activeGeoid"
-        @click="createNewBGForm(ASSESSMENT_FORM_ID)"
+        @click="createNewBGForm('neighborhood_rapid_assessment')"
       >
         Start New Assessment
       </button>
@@ -82,7 +85,7 @@
         class="button is-success mt-2 mx-1"
         type="button"
         :disabled="!activeGeoid"
-        @click="createNewBGForm(PLAN_FORM_ID)"
+        @click="createNewBGForm('resource_plan')"
       >
         Start New Plan
       </button>
@@ -110,12 +113,16 @@ import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
-const ASSESSMENT_FORM_ID = "neighborhood_rapid_assessment";
-const PLAN_FORM_ID = "resource_plan";
+const ASSESSMENT_FORM = "Neighborhood Rapid Assessment";
+const PLAN_FORM = "Six Month Resource Plan";
+const MIDWAY_FOLLOWUP_FORM = "Mid-way Followup to the Six Month Resource Plan";
+const FOLLOWUP_FORM = "Followup to Six Month Resource Plan";
 
 const FORM_ID_TO_SHORT_TITLE = {
-  [ASSESSMENT_FORM_ID]: "Assessment",
-  [PLAN_FORM_ID]: "Plan",
+  [ASSESSMENT_FORM]: "Assessment",
+  [PLAN_FORM]: "Plan",
+  [MIDWAY_FOLLOWUP_FORM]: "Mid-way Plan Followup",
+  [FOLLOWUP_FORM]: "Plan Followup",
 };
 
 export default {
@@ -147,7 +154,7 @@ export default {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) =>
-          Object.keys(FORM_ID_TO_SHORT_TITLE).includes(response.form._id)
+          Object.keys(FORM_ID_TO_SHORT_TITLE).includes(response.form.title)
         )
         .sort(sortByProperty("last_updated"))
         .reverse();
@@ -194,15 +201,17 @@ export default {
       activeFormResponse.value = formResponse;
       fb.logActivity(
         store.state.user.data.email,
-        `launch ${formResponse.form._id} form`,
-        formResponse._id
+        `launch ${formResponse.form.title} form`,
+        formResponse.title
       );
     };
 
     return {
-      ASSESSMENT_FORM_ID,
+      ASSESSMENT_FORM,
       FORM_ID_TO_SHORT_TITLE,
-      PLAN_FORM_ID,
+      PLAN_FORM,
+      MIDWAY_FOLLOWUP_FORM,
+      FOLLOWUP_FORM,
       activeFormReadOnly,
       activeFormResponse,
       bgFormResponses,

@@ -901,7 +901,7 @@
       ]
     },
     "resource_plan": {
-      "title": "Six Month Resource Planning",
+      "title": "Six Month Resource Plan",
       "type": "organization",
       "questions": [
         {
@@ -927,7 +927,7 @@
           "repeat_button_title": "+ Goal",
           "questions": [
             {
-              "model": "goal",
+              "model":  "goal",
               "component": "TextArea",
               "label": "What do you plan on doing in this neighborhood?",
               "required": true
@@ -984,7 +984,179 @@
             }
           ]
         }
-      ]
+      ],
+      "followup_form": {
+        "title": "Mid-way Followup to the Six Month Resource Plan",
+        "followup_interval": "1s",
+        "questions": [
+          {
+            "source_model": "bg_id",
+            "model": "bg_id",
+            "label": "Neighborhood ID",
+            "read_only": true
+          },
+          {
+            "source_model": "municipality",
+            "model": "municipality",
+            "label": "Municipality",
+            "read_only": true
+          },
+          {
+            "label": "Goal",
+            "source_model": "goal_form",
+            "model": "goal_form",
+            "questions": [
+              {
+                "label": "What do you plan on doing in this neighborhood?",
+                "source_model": "goal",
+                "model": "goal",
+                "read_only": true
+              },
+              {
+                "label": "What progress have you made towards this goal?",
+                "model": "progress",
+                "component": "TextArea",
+                "required": true
+              },
+              {
+                "label": "Task",
+                "source_model": "task_form",
+                "model": "task_form",
+                "repeat_button_title": "+ Task",
+                "questions": [
+                  {
+                    "source_model": "plan",
+                    "model": "plan",
+                    "label": "Plan",
+                    "required": true
+                  },
+                  {
+                    "source_model": "plan_description",
+                    "model": "plan_description",
+                    "label": "Description"
+                  },
+                  {
+                    "model": "status",
+                    "component": "Select",
+                    "label": "What is the current status of this task?",
+                    "options": [
+                      "Not started",
+                      "In progress",
+                      "On hold",
+                      "Unable to Complete",
+                      "Completed"
+                    ],
+                    "required": true
+                  },
+                  {
+                    "model": "progress",
+                    "label": "What progress have you made towards this task?",
+                    "component": "TextArea",
+                    "required": true,
+                    "condition": "(model) => model.status && model.status !== 'Not started'"
+                  },
+                  {
+                    "model": "outcome",
+                    "label": "What were your outcomes?",
+                    "component": "TextArea",
+                    "required": true,
+                    "condition": "(model) => model.status === 'Completed'"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "followup_form": {
+          "title": "Followup to Six Month Resource Plan",
+          "followup_interval": "1s",
+          "questions": [
+            {
+              "source_model": "bg_id",
+              "model": "bg_id",
+              "label": "Neighborhood ID",
+              "read_only": true
+            },
+            {
+              "source_model": "municipality",
+              "model": "municipality",
+              "label": "Municipality",
+              "read_only": true
+            },
+            {
+              "label": "Goal",
+              "source_model": "goal_form",
+              "model": "goal_form",
+              "questions": [
+                {
+                  "label": "What do you plan on doing in this neighborhood?",
+                  "source_model": "goal",
+                  "model": "goal",
+                  "read_only": true
+                },
+                {
+                  "label": "What progress have you made towards this goal?",
+                  "help_text": "To help with answering the next question, we've brought forward your progress updates from the previous form.",
+                  "source_model": "progress",
+                  "model": "progress",
+                  "read_only": true,
+                  "condition": "(model) => model.progress !== undefined"
+                },
+                {
+                  "label": "What outcomes did you have from this goal?",
+                  "model": "outcome",
+                  "component": "TextArea",
+                  "required": true
+                },
+                {
+                  "label": "Task",
+                  "source_model": "task_form",
+                  "model": "task_form",
+                  "questions": [
+                    {
+                      "source_model": "plan",
+                      "model": "plan",
+                      "label": "Plan",
+                      "required": true,
+                      "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                    },
+                    {
+                      "source_model": "plan_description",
+                      "model": "plan_description",
+                      "label": "Description",
+                      "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                    },
+                    {
+                      "source_model": "status",
+                      "model": "status",
+                      "label": "What is the current status of this task?",
+                      "required": true,
+                      "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')"
+                    },
+                    {
+                      "source_model": "progress",
+                      "model": "progress",
+                      "label": "What progress have you made towards this task?",
+                      "help_text": "We've brought forward your progress updates from the previous form where available.",
+                      "condition": "(model) => model.progress !== undefined || (model.status && model.status !== 'Not started')",
+                      "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')",
+                      "required": true
+                    },
+                    {
+                      "source_model": "outcome",
+                      "model": "outcome",
+                      "label": "What were your outcomes?",
+                      "condition": "(model) => model.outcome !== undefined || model.status === 'Completed'",
+                      "read_only": "(model) => model.status && model.status.toUpperCase().includes('COMPLETE')",
+                      "required": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "sample_organization_form": {
       "title": "Sample Organization Form",
