@@ -14,18 +14,17 @@
           >
             <td>
               <i
-                :class="{
-                  'fas fa-tasks': formResponse.form.title === PLAN_FORM,
-                  'fas fa-clipboard':
-                    formResponse.form.title === ASSESSMENT_FORM,
-                  'fas fa-star-half':
-                    formResponse.form.title === MIDWAY_FOLLOWUP_FORM,
-                  'fas fa-star': formResponse.form.title === FOLLOWUP_FORM,
-                }"
+                :class="
+                  formConfig.find((f) => f.title === formResponse.form.title)
+                    .iconClass
+                "
               />
             </td>
             <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
-              {{ FORM_ID_TO_SHORT_TITLE[formResponse.form.title] }}
+              {{
+                formConfig.find((f) => f.title === formResponse.form.title)
+                  .shortTitle
+              }}
             </td>
             <td class="has-text-weight-bold">
               <span class="tag">{{
@@ -113,17 +112,28 @@ import fb from "@/firebase.js";
 
 import FormModal from "@/components/form/Modal.vue";
 
-const ASSESSMENT_FORM = "Neighborhood Rapid Assessment";
-const PLAN_FORM = "Six Month Resource Plan";
-const MIDWAY_FOLLOWUP_FORM = "Mid-way Followup to the Six Month Resource Plan";
-const FOLLOWUP_FORM = "Followup to Six Month Resource Plan";
-
-const FORM_ID_TO_SHORT_TITLE = {
-  [ASSESSMENT_FORM]: "Assessment",
-  [PLAN_FORM]: "Plan",
-  [MIDWAY_FOLLOWUP_FORM]: "Mid-way Plan Followup",
-  [FOLLOWUP_FORM]: "Plan Followup",
-};
+const formConfig = [
+  {
+    shortTitle: "Assessment",
+    title: "Neighborhood Rapid Assessment",
+    iconClass: "fas fa-clipboard",
+  },
+  {
+    shortTitle: "Plan",
+    title: "Six Month Resource Plan",
+    iconClass: "fas fa-tasks",
+  },
+  {
+    shortTitle: "Mid-way Plan Followup",
+    title: "Mid-way Followup to the Six Month Resource Plan",
+    iconClass: "fas fa-star-half",
+  },
+  {
+    shortTitle: "Plan Followup",
+    title: "Followup to Six Month Resource Plan",
+    iconClass: "fas fa-star",
+  },
+];
 
 export default {
   components: {
@@ -154,7 +164,7 @@ export default {
       const formResponses = store.state.user.formResponses;
       return formResponses
         .filter((response) =>
-          Object.keys(FORM_ID_TO_SHORT_TITLE).includes(response.form.title)
+          formConfig.map((f) => f.title).includes(response.form.title)
         )
         .sort(sortByProperty("last_updated"))
         .reverse();
@@ -207,11 +217,7 @@ export default {
     };
 
     return {
-      ASSESSMENT_FORM,
-      FORM_ID_TO_SHORT_TITLE,
-      PLAN_FORM,
-      MIDWAY_FOLLOWUP_FORM,
-      FOLLOWUP_FORM,
+      formConfig,
       activeFormReadOnly,
       activeFormResponse,
       bgFormResponses,
