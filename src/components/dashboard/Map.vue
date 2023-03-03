@@ -66,9 +66,12 @@ export default {
     formResponses
       .filter(
         (f) =>
-          ["neighborhood_rapid_assessment", "resource_plan"].includes(
-            f.form._id
-          ) && f.response.bg_id !== undefined
+          [
+            "Neighborhood Rapid Assessment",
+            "Six Month Resource Plan",
+            "Mid-way Followup to the Six Month Resource Plan",
+            "Followup to Six Month Resource Plan",
+          ].includes(f.form.title) && f.response.bg_id !== undefined
       )
       .forEach((formResponse) => {
         const geoid = formResponse.response.bg_id;
