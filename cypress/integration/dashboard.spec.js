@@ -307,7 +307,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("[data-cy='active-form-title']").should(
         "contain",
-        "Six Month Resource Planning"
+        "Six Month Resource Plan"
       );
 
       // block group map should be rendered
