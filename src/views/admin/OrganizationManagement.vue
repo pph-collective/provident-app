@@ -18,31 +18,26 @@
           <table class="table" data-cy="organization-table">
             <thead>
               <tr>
-                <th v-for="field in fields" :key="field" class="is-clickable">
+                <th
+                  v-for="field in fields"
+                  :key="field.label"
+                  class="is-clickable"
+                >
                   <span class="icon-text">
-                    <span>{{ field }}</span>
+                    <span>{{ field.label }}</span>
                   </span>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="org in organizations" :key="org.name">
-                <td :data-label="fields[0]">
-                  {{ org.name }}
-                </td>
-                <td :data-label="fields[1]">
-                  {{ org.tier }}
-                </td>
-                <td :data-label="fields[2]">
-                  <i
-                    :class="[
-                      'fas',
-                      org.intervention_arm ? 'fa-check' : 'fa-times',
-                    ]"
-                  />
-                </td>
-                <td :data-label="fields[3]" class="is-flex-wrap-wrap">
-                  <div>
+                <td
+                  v-for="field in fields"
+                  :key="field.label"
+                  :data-label="fields.label"
+                  class="is-flex-wrap-wrap"
+                >
+                  <div v-if="field.code === 'municipalities'">
                     <span
                       v-if="org.municipalities.length === 0"
                       class="tag is-info is-rounded is-light m-1"
@@ -56,6 +51,16 @@
                     >
                       {{ municipality }}
                     </span>
+                  </div>
+                  <i
+                    v-else-if="typeof org[field.code] === 'boolean'"
+                    :class="[
+                      'fas',
+                      org.intervention_arm ? 'fa-check' : 'fa-times',
+                    ]"
+                  />
+                  <div v-else>
+                    {{ org[field.code] }}
                   </div>
                 </td>
               </tr>
@@ -138,7 +143,24 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const allMunicipalities = utils.MUNICIPALITIES;
 
-    const fields = ["Name", "Tier", "Intervention Arm", "Municipalities"];
+    const fields = [
+      {
+        label: "Name",
+        code: "name",
+      },
+      {
+        label: "Tier",
+        code: "tier",
+      },
+      {
+        label: "Intervention Arm",
+        code: "intervention_arm",
+      },
+      {
+        label: "Municipalities",
+        code: "municipalities",
+      },
+    ];
     const closeFormRequest = ref(0);
     const formMessage = ref("");
     const showModal = ref(false);
