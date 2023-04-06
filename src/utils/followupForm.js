@@ -2,8 +2,15 @@ import { cloneDeep, toISODateString } from "./utils";
 import parse from "parse-duration";
 
 export const createFollowupFormResponse = (formResponse) => {
-  const { _id, form, response, last_updated, user, organization } =
-    cloneDeep(formResponse);
+  const {
+    _id,
+    form,
+    response,
+    last_updated,
+    user,
+    organization,
+    users_edited,
+  } = cloneDeep(formResponse);
   const { followup_form, questions, type } = form;
   const { title, followup_interval } = followup_form;
 
@@ -27,6 +34,7 @@ export const createFollowupFormResponse = (formResponse) => {
     status: "Not Started",
     release_date: getFollowupDate(last_updated, followup_interval),
     last_updated: Date.now(),
+    users_edited,
     ...(user && { user }),
     ...(organization && { organization }),
   };
