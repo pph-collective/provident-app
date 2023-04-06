@@ -31,6 +31,9 @@
                   {{ org.name }}
                 </td>
                 <td :data-label="fields[1]">
+                  {{ org.tier }}
+                </td>
+                <td :data-label="fields[2]">
                   <i
                     :class="[
                       'fas',
@@ -38,7 +41,7 @@
                     ]"
                   />
                 </td>
-                <td :data-label="fields[2]" class="is-flex-wrap-wrap">
+                <td :data-label="fields[3]" class="is-flex-wrap-wrap">
                   <div>
                     <span
                       v-if="org.municipalities.length === 0"
@@ -135,17 +138,23 @@ export default {
     const organizations = computed(() => store.state.organizations);
     const allMunicipalities = utils.MUNICIPALITIES;
 
-    const fields = ["Name", "Intervention Arm", "Municipalities"];
+    const fields = ["Name", "Tier", "Intervention Arm", "Municipalities"];
     const closeFormRequest = ref(0);
     const formMessage = ref("");
     const showModal = ref(false);
     const loading = ref(false);
 
-    const createOrganization = async ({ name, group, municipalities = [] }) => {
+    const createOrganization = async ({
+      name,
+      tier,
+      group,
+      municipalities = [],
+    }) => {
       loading.value = true;
 
       const organization = {
         name,
+        tier,
         intervention_arm: group === "intervention",
         municipalities,
       };
@@ -183,6 +192,13 @@ export default {
         validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
           organizations.value.map((org) => org.name.toUpperCase())
         )}, 'Organization already exists.')`,
+      },
+      {
+        component: "Select",
+        label: "What tier is this organization?",
+        model: "tier",
+        options: [1, 2],
+        required: true,
       },
       {
         component: "Radio",
