@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import Resources from "../views/Resources.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar.vue";
 import store from "@/store";
 
@@ -148,6 +149,11 @@ const routes = [
         component: () => import("../views/admin/ReviewForms.vue"),
       },
     ],
+  },
+  {
+    path: "/resources",
+    name: "Resources",
+    component: Resources,
   },
 ];
 
