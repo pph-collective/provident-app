@@ -63,6 +63,14 @@
           >
             Admin
           </router-link>
+
+          <router-link
+            data-cy="resources"
+            to="/resources"
+            class="navbar-item has-text-primary"
+          >
+            Resources
+          </router-link>
         </div>
 
         <div class="navbar-end">
