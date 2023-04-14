@@ -478,6 +478,7 @@
   "organizations": {
     "Good Doers": {
       "name": "Good Doers",
+      "tier": 1,
       "intervention_arm": true,
       "municipalities": [
         "Little Compton",
@@ -512,6 +513,7 @@
     },
     "RI 4 Us": {
       "name": "RI 4 Us",
+      "tier": 1,
       "intervention_arm": false,
       "municipalities": [
         "Tiverton"

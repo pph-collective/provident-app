@@ -221,6 +221,8 @@ describe("Admin Views and Powers", () => {
 
       cy.get('[model="name"]').clear().type(testUser.organization);
 
+      cy.get('[model="tier"]').find("input").first().check();
+
       cy.get('[model="group"]').find("input").first().check();
 
       cy.get('[model="municipalities"]')
