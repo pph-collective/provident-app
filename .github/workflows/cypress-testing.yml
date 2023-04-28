@@ -18,7 +18,7 @@ jobs:
           node-version: 16
 
       - name: Cache NPM Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -27,7 +27,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Cache firebase emulators
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.FIREBASE_EMULATORS_PATH }}
           key:
@@ -37,7 +37,7 @@ jobs:
 
 
       - name: E2E on Chrome
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v3
         with:
           browser: chrome
           build: yarn build
