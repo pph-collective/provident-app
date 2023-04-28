@@ -13,9 +13,13 @@ const cypressFirebasePlugin = require("cypress-firebase").plugin;
 const path = require("path");
 const { startDevServer } = require("@cypress/vite-dev-server");
 
+const webpackPreprocessor = require("@cypress/webpack-preprocessor");
+
 const { seedDatabase } = require("../fixtures/utils");
 
 module.exports = (on, config) => {
+  on("file:preprocessor", webpackPreprocessor());
+
   on("dev-server:start", (options) =>
     startDevServer({
       options,
