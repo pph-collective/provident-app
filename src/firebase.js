@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 import "firebase/firestore";
 import "firebase/auth";
 
@@ -7,7 +8,8 @@ import { processEmailBody } from "./utils/emails";
 import firebaseConfig from "./utils/firebaseConfig.json";
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 let db = firebase.firestore();
 let auth = firebase.auth();
