@@ -1,7 +1,7 @@
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import { getAnalytics } from "firebase/analytics";
-import "firebase/firestore";
-import "firebase/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/auth";
 
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
