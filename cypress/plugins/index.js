@@ -52,9 +52,11 @@ module.exports = (on, config) => {
         return "SKIPPING db:seed -- admin is not on localhost";
       }
     },
-    "auth:deleteUserByEmail": (email) => {
-      let auth_url_format =
-        admin.auth().authRequestHandler.tenantMgmtResourceBuilder.urlFormat;
+    "auth:deleteUserByEmail": async (email) => {
+      let auth_url_format = await admin
+        .auth()
+        .tenantManager()
+        .authRequestHandler.authResourceUrlBuilder.getUrl();
       if (auth_url_format.includes("localhost")) {
         return admin
           .auth()
