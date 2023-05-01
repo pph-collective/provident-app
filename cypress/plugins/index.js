@@ -96,5 +96,7 @@ module.exports = (on, config) => {
     },
   });
 
-  return cypressFirebasePlugin(on, config, admin);
+  return cypressFirebasePlugin(on, config, admin, {
+    projectId: "provident-ri",
+  });
 };
