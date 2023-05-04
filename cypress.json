@@ -8,5 +8,6 @@
   "testFiles": "**/*.spec.js",
   "video": false,
   "viewportWidth": 1200,
-  "viewportHeight": 800
+  "viewportHeight": 800,
+  "blockHosts": "*.google-analytics.com"
 }
