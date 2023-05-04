@@ -214,12 +214,15 @@ describe("Admin Views and Powers", () => {
     it("Creating an intervention organization", () => {
       cy.get('[data-cy="create-button"]').should("exist").click();
 
-      cy.get('[model="name"]').type("good doers");
+      cy.get('[model="name"]').find("input").type("good doers");
       cy.get('[model="name"]')
         .find(".has-text-danger")
         .should("contain", "Organization already exists");
 
-      cy.get('[model="name"]').clear().type(testUser.organization);
+      cy.get('[model="name"]')
+        .find("input")
+        .clear()
+        .type(testUser.organization);
 
       cy.get('[model="group"]').find("input").first().check();
 
