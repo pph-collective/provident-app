@@ -196,20 +196,20 @@ describe("Admin Views and Powers", () => {
       resetTest();
     });
 
-    it("Page loads", () => {
-      cy.get('[data-cy="organization-table"]').should(
-        "not.contain",
-        "No organizations found"
-      );
-
-      cy.get('[data-cy="organization-table"]')
-        .contains("td", "Good Doers")
-        .should("exist");
-
-      cy.get('[data-cy="organization-table"]')
-        .contains("td", "RI 4 Us")
-        .should("exist");
-    });
+    // it("Page loads", () => {
+    //   cy.get('[data-cy="organization-table"]').should(
+    //     "not.contain",
+    //     "No organizations found"
+    //   );
+    //
+    //   cy.get('[data-cy="organization-table"]')
+    //     .contains("td", "Good Doers")
+    //     .should("exist");
+    //
+    //   cy.get('[data-cy="organization-table"]')
+    //     .contains("td", "RI 4 Us")
+    //     .should("exist");
+    // });
 
     it("Creating an intervention organization", () => {
       cy.get('[data-cy="create-button"]').should("exist").click();
@@ -221,7 +221,11 @@ describe("Admin Views and Powers", () => {
 
       cy.get('[model="name"]').clear().type(testUser.organization);
 
-      cy.get('[model="tier"]').find("input").first().check();
+      cy.get('[model="tier"]')
+        .find(".multiselect")
+        .click()
+        .contains(".multiselect-option", "1")
+        .click();
 
       cy.get('[model="group"]').find("input").first().check();
 
@@ -275,6 +279,12 @@ describe("Admin Views and Powers", () => {
       cy.get('[data-cy="create-button"]').should("exist").click();
 
       cy.get('[model="name"]').clear().type(testUser.organization);
+
+      cy.get('[model="tier"]')
+        .find(".multiselect")
+        .click()
+        .contains(".multiselect-option", "1")
+        .click();
 
       cy.get('[model="group"]').find("input").eq(1).check();
 

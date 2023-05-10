@@ -219,7 +219,7 @@ export default {
         component: "Select",
         label: "What tier is this organization?",
         model: "tier",
-        options: [1, 2],
+        options: ["1", "2"],
         required: true,
       },
       {
