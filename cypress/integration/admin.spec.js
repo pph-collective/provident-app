@@ -224,7 +224,8 @@ describe("Admin Views and Powers", () => {
       cy.get('[model="tier"]')
         .find(".multiselect")
         .click()
-        .contains(".multiselect-option", "1")
+        .find(".multiselect-option")
+        .contains("1")
         .click();
 
       cy.get('[model="group"]').find("input").first().check();
@@ -283,7 +284,8 @@ describe("Admin Views and Powers", () => {
       cy.get('[model="tier"]')
         .find(".multiselect")
         .click()
-        .contains(".multiselect-option", "1")
+        .find(".multiselect-option")
+        .contains("1")
         .click();
 
       cy.get('[model="group"]').find("input").eq(1).check();
