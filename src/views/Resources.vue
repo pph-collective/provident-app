@@ -6,57 +6,203 @@
       A simple container to divide your page into <strong>sections</strong>,
       like the one you're currently reading.
     </h2>
-    <div class="tile is-ancestor is-vertical">
-      <div class="tile is-parent">
-        <div class="tile is-child box is-4">
-          <p class="title">One</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
-        </div>
-        <div class="tile is-child box is-4">
-          <p class="title">Two</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
-        </div>
-        <div class="tile is-child box is-4">
-          <p class="title">Three</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
+
+    <div class="columns is-multiline">
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="tile is-parent">
-        <div class="tile is-child box is-4">
-          <p class="title">Four</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
+
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
         </div>
-        <div class="tile is-child box is-4">
-          <p class="title">Five</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
         </div>
-        <div class="tile is-child box is-4">
-          <p class="title">Six</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-            non massa sem. Etiam finibus odio quis feugiat facilisis.
-          </p>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-16by9">
+              <iframe
+                class="has-ratio"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br />
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
         </div>
       </div>
     </div>
