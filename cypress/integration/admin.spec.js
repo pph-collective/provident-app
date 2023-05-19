@@ -196,20 +196,20 @@ describe("Admin Views and Powers", () => {
       resetTest();
     });
 
-    // it("Page loads", () => {
-    //   cy.get('[data-cy="organization-table"]').should(
-    //     "not.contain",
-    //     "No organizations found"
-    //   );
-    //
-    //   cy.get('[data-cy="organization-table"]')
-    //     .contains("td", "Good Doers")
-    //     .should("exist");
-    //
-    //   cy.get('[data-cy="organization-table"]')
-    //     .contains("td", "RI 4 Us")
-    //     .should("exist");
-    // });
+    it("Page loads", () => {
+      cy.get('[data-cy="organization-table"]').should(
+        "not.contain",
+        "No organizations found"
+      );
+
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", "Good Doers")
+        .should("exist");
+
+      cy.get('[data-cy="organization-table"]')
+        .contains("td", "RI 4 Us")
+        .should("exist");
+    });
 
     it("Creating an intervention organization", () => {
       cy.get('[data-cy="create-button"]').should("exist").click();
