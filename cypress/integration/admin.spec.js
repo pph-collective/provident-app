@@ -221,6 +221,13 @@ describe("Admin Views and Powers", () => {
 
       cy.get('[model="name"]').clear().type(testUser.organization);
 
+      cy.get('[model="tier"]')
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .contains("1")
+        .click();
+
       cy.get('[model="group"]').find("input").first().check();
 
       cy.get('[model="municipalities"]')
@@ -273,6 +280,13 @@ describe("Admin Views and Powers", () => {
       cy.get('[data-cy="create-button"]').should("exist").click();
 
       cy.get('[model="name"]').clear().type(testUser.organization);
+
+      cy.get('[model="tier"]')
+        .find(".multiselect")
+        .click()
+        .find(".multiselect-option")
+        .contains("1")
+        .click();
 
       cy.get('[model="group"]').find("input").eq(1).check();
 
