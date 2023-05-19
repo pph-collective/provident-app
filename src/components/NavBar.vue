@@ -169,6 +169,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/main.scss";
+
+.navbar {
+  border-bottom: 1px solid #a4b1bf;
+}
+
 .navbar-start .navbar-item {
   font-size: 18px;
   font-weight: bold;

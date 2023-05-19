@@ -1,400 +1,484 @@
 <template>
-  <section class="section">
-    <!-- VIDEOS -->
-    <h1 class="title">Section: Videos</h1>
-    <h2 class="subtitle">
-      A simple container to divide your page into <strong>sections</strong>,
-      like the one you're currently reading.
-    </h2>
-
-    <div class="columns is-multiline">
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
+  <div class="columns wrapper">
+    <div class="sidebar column is-narrow pl-5">
+      <div class="has-text-right">
+        <button type="button" class="button is-text bars" @click="toggle">
+          <i v-if="!collapsed" class="fas fa-times" />
+          <i v-else class="fas fa-bars" />
+        </button>
       </div>
-
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-16by9">
-              <iframe
-                class="has-ratio"
-                width="640"
-                height="360"
-                src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                frameborder="0"
-                allowfullscreen
-              ></iframe>
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
-              </div>
-            </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-        </div>
+      <div class="sidebar-body" :class="{ 'is-hidden-mobile': collapsed }">
+        <p v-if="!collapsed" class="menu-label">Resources</p>
+        <ul class="menu-list">
+          <li>
+            <a href="#videos">
+              <i class="fas fa-video mr-1" />
+              <span v-if="!collapsed">Videos</span>
+            </a>
+            <a href="#downloads">
+              <i class="fas fa-download mr-1" />
+              <span v-if="!collapsed">Downloads</span>
+            </a>
+            <a href="#links">
+              <i class="fas fa-link mr-1" />
+              <span v-if="!collapsed">Links</span>
+            </a>
+            <a href="#glossary">
+              <i class="fas fa-book mr-1" />
+              <span v-if="!collapsed">Glossary</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-  </section>
 
-  <!-- Downloads -->
-  <section class="section">
-    <h1 class="title">Section: Downloads</h1>
-    <h2 class="subtitle">
-      A simple container to divide your page into <strong>sections</strong>,
-      like the one you're currently reading.
-    </h2>
+    <div class="main column">
+      <section id="videos" class="section">
+        <!-- VIDEOS -->
+        <h1 class="title">Section: Videos</h1>
+        <h2 class="subtitle">
+          A simple container to divide your page into <strong>sections</strong>,
+          like the one you're currently reading.
+        </h2>
 
-    <div class="columns is-multiline">
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-content">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-128x128">
-                  <img src="https://bulma.io/images/placeholders/256x256.png" />
+        <div class="columns is-multiline">
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
                 </figure>
               </div>
-              <div class="media-content">
-                <p class="title is-4">File Name</p>
-                <p class="subtitle is-6">May 12, 2023</p>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
               </div>
             </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-
-            <footer class="card-footer">
-              <a href="#" class="card-footer-item">Download</a>
-            </footer>
           </div>
-        </div>
-      </div>
 
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-content">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-128x128">
-                  <img src="https://bulma.io/images/placeholders/256x256.png" />
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
                 </figure>
               </div>
-              <div class="media-content">
-                <p class="title is-4">File Name</p>
-                <p class="subtitle is-6">May 12, 2023</p>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
               </div>
             </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-
-            <footer class="card-footer">
-              <a href="#" class="card-footer-item">Download</a>
-            </footer>
           </div>
-        </div>
-      </div>
 
-      <div class="column is-one-third">
-        <div class="card">
-          <div class="card-content">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-128x128">
-                  <img src="https://bulma.io/images/placeholders/256x256.png" />
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
                 </figure>
               </div>
-              <div class="media-content">
-                <p class="title is-4">File Name</p>
-                <p class="subtitle is-6">May 12, 2023</p>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              nec iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-              <a href="#">#responsive</a>
-              <br />
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <footer class="card-footer">
-              <a href="#" class="card-footer-item">Download</a>
-            </footer>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-16by9">
+                  <iframe
+                    class="has-ratio"
+                    width="640"
+                    height="360"
+                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    frameborder="0"
+                    allowfullscreen
+                  ></iframe>
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- Links -->
-  <section class="section">
-    <h1 class="title">Section: Links</h1>
-    <h2 class="subtitle">
-      A simple container to divide your page into <strong>sections</strong>,
-      like the one you're currently reading.
-    </h2>
+      <!-- Downloads -->
+      <section id="downloads" class="section">
+        <h1 class="title">Section: Downloads</h1>
+        <h2 class="subtitle">
+          A simple container to divide your page into <strong>sections</strong>,
+          like the one you're currently reading.
+        </h2>
 
-    <div class="columns is-multiline">
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
+        <div class="columns is-multiline">
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-128x128">
+                      <img
+                        src="https://bulma.io/images/placeholders/256x256.png"
+                      />
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">File Name</p>
+                    <p class="subtitle is-6">May 12, 2023</p>
+                  </div>
+                </div>
 
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
 
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
+                <footer class="card-footer">
+                  <a href="#" class="card-footer-item">Download</a>
+                </footer>
+              </div>
+            </div>
+          </div>
 
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-128x128">
+                      <img
+                        src="https://bulma.io/images/placeholders/256x256.png"
+                      />
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">File Name</p>
+                    <p class="subtitle is-6">May 12, 2023</p>
+                  </div>
+                </div>
 
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
 
-      <div class="column is-one-third">
-        <ExternalLinkBig
-          href="https://www.google.com/maps"
-          title="Google Maps"
-          subtitle="Geography woo~"
-        />
-      </div>
-    </div>
-  </section>
+                <footer class="card-footer">
+                  <a href="#" class="card-footer-item">Download</a>
+                </footer>
+              </div>
+            </div>
+          </div>
 
-  <!-- Glossary -->
-  <section class="section">
-    <h1 class="title">Section: Glossary</h1>
-    <h2 class="subtitle">
-      A simple container to divide your page into <strong>sections</strong>,
-      like the one you're currently reading.
-    </h2>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-128x128">
+                      <img
+                        src="https://bulma.io/images/placeholders/256x256.png"
+                      />
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">File Name</p>
+                    <p class="subtitle is-6">May 12, 2023</p>
+                  </div>
+                </div>
 
-    <div class="container">
-      <div class="card">
-        <div class="card-content">
-          <div class="content">
-            Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at eros.
-            Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            Cras mattis consectetur purus sit amet fermentum.
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                  <a href="#">#css</a>
+                  <a href="#">#responsive</a>
+                  <br />
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div>
+
+                <footer class="card-footer">
+                  <a href="#" class="card-footer-item">Download</a>
+                </footer>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Links -->
+      <section id="links" class="section">
+        <h1 class="title">Section: Links</h1>
+        <h2 class="subtitle">
+          A simple container to divide your page into <strong>sections</strong>,
+          like the one you're currently reading.
+        </h2>
+
+        <div class="columns is-multiline">
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+
+          <div class="column is-one-third">
+            <ExternalLinkBig
+              href="https://www.google.com/maps"
+              title="Google Maps"
+              subtitle="Geography woo~"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Glossary -->
+      <section id="glossary" class="section">
+        <h1 class="title">Section: Glossary</h1>
+        <h2 class="subtitle">
+          A simple container to divide your page into <strong>sections</strong>,
+          like the one you're currently reading.
+        </h2>
+
+        <div class="container">
+          <div class="card">
+            <div class="card-content">
+              <div class="content">
+                Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at
+                eros. Donec id elit non mi porta gravida at eget metus. Cum
+                sociis natoque penatibus et magnis dis parturient montes,
+                nascetur ridiculus mus. Cras mattis consectetur purus sit amet
+                fermentum.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
+import { ref, watch } from "vue";
 import ExternalLinkBig from "@/components/ExternalLinkBig.vue";
+import { useMobileListener } from "@/composables/useMobileListener";
+
+const { isMobile } = useMobileListener();
+const collapsed = ref(false);
+
+if (isMobile.value) {
+  collapsed.value = true;
+}
+
+watch(isMobile, () => {
+  collapsed.value = isMobile.value;
+});
+
+const toggle = () => {
+  collapsed.value = !collapsed.value;
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/styles/main.scss";
+
+.wrapper {
+  background-color: whitesmoke;
+}
+
+.main {
+  border-left: 1px solid #a4b1bf;
+}
+
+.sidebar {
+  max-height: 200px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
 </style>
