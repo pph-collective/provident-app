@@ -477,8 +477,11 @@ const toggle = () => {
 
 .sidebar {
   max-height: 200px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+
+  @media (min-width: 961px) {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
 }
 </style>
