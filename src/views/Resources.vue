@@ -1,31 +1,31 @@
 <template>
   <div class="columns wrapper">
-    <div class="sidebar column is-narrow pl-5">
-      <div class="has-text-right">
+    <div class="sidebar column is-narrow pl-5 pt-5">
+      <div class="has-text-right is-hidden-mobile">
         <button type="button" class="button is-text bars" @click="toggle">
-          <i v-if="!collapsed" class="fas fa-times" />
+          <i v-if="showSidebar" class="fas fa-times" />
           <i v-else class="fas fa-bars" />
         </button>
       </div>
-      <div class="sidebar-body" :class="{ 'is-hidden-mobile': collapsed }">
-        <p v-if="!collapsed" class="menu-label">Resources</p>
+      <div class="sidebar-body">
+        <p v-if="showSidebar" class="menu-label">Resources</p>
         <ul class="menu-list">
           <li>
             <a href="#videos">
               <i class="fas fa-video mr-1" />
-              <span v-if="!collapsed">Videos</span>
+              <span v-if="showSidebar">Videos</span>
             </a>
             <a href="#downloads">
               <i class="fas fa-download mr-1" />
-              <span v-if="!collapsed">Downloads</span>
+              <span v-if="showSidebar">Downloads</span>
             </a>
             <a href="#links">
               <i class="fas fa-link mr-1" />
-              <span v-if="!collapsed">Links</span>
+              <span v-if="showSidebar">Links</span>
             </a>
             <a href="#glossary">
               <i class="fas fa-book mr-1" />
-              <span v-if="!collapsed">Glossary</span>
+              <span v-if="showSidebar">Glossary</span>
             </a>
           </li>
         </ul>
@@ -444,23 +444,18 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import ExternalLinkBig from "@/components/ExternalLinkBig.vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 
 const { isMobile } = useMobileListener();
-const collapsed = ref(false);
-
-if (isMobile.value) {
-  collapsed.value = true;
-}
-
-watch(isMobile, () => {
-  collapsed.value = isMobile.value;
+const desktopCollapsed = ref(false);
+const showSidebar = computed(() => {
+  return isMobile.value || (!isMobile.value && desktopCollapsed.value);
 });
 
 const toggle = () => {
-  collapsed.value = !collapsed.value;
+  desktopCollapsed.value = !desktopCollapsed.value;
 };
 </script>
 
