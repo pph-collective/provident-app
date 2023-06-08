@@ -432,31 +432,50 @@
           <div class="card">
             <div class="card-content">
               <div class="content">
-                <h5 class="title">Modelling Terms</h5>
-                Prioritized by PROVIDENT model<br />
-                Not prioritized by PROVIDENT model<br />
-                Not eligible for PROVIDENT prediction<br />
+                <h4 class="title">Modelling Terms</h4>
+                <strong>Prioritized</strong>: This means something
+                <br />
+                <strong>Eligible</strong>: This also means something
+                <br />
               </div>
             </div>
           </div>
           <br />
           <div class="card">
             <div class="card-content">
-              <div class="content">Item 1</div>
+              <div class="content">
+                <h4 class="title">Modelling Terms</h4>
+                <strong>Prioritized</strong>: This means something
+                <br />
+                <strong>Eligible</strong>: This also means something
+                <br />
+              </div>
             </div>
           </div>
 
           <br />
           <div class="card">
             <div class="card-content">
-              <div class="content">Item 1</div>
+              <div class="content">
+                <h4 class="title">Modelling Terms</h4>
+                <strong>Prioritized</strong>: This means something
+                <br />
+                <strong>Eligible</strong>: This also means something
+                <br />
+              </div>
             </div>
           </div>
 
           <br />
           <div class="card">
             <div class="card-content">
-              <div class="content">Item 1</div>
+              <div class="content">
+                <h4 class="title">Modelling Terms</h4>
+                <strong>Prioritized</strong>: This means something
+                <br />
+                <strong>Eligible</strong>: This also means something
+                <br />
+              </div>
             </div>
           </div>
         </div>
