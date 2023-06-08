@@ -432,12 +432,31 @@
           <div class="card">
             <div class="card-content">
               <div class="content">
-                Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at
-                eros. Donec id elit non mi porta gravida at eget metus. Cum
-                sociis natoque penatibus et magnis dis parturient montes,
-                nascetur ridiculus mus. Cras mattis consectetur purus sit amet
-                fermentum.
+                <h5 class="title">Modelling Terms</h5>
+                Prioritized by PROVIDENT model<br />
+                Not prioritized by PROVIDENT model<br />
+                Not eligible for PROVIDENT prediction<br />
               </div>
+            </div>
+          </div>
+          <br />
+          <div class="card">
+            <div class="card-content">
+              <div class="content">Item 1</div>
+            </div>
+          </div>
+
+          <br />
+          <div class="card">
+            <div class="card-content">
+              <div class="content">Item 1</div>
+            </div>
+          </div>
+
+          <br />
+          <div class="card">
+            <div class="card-content">
+              <div class="content">Item 1</div>
             </div>
           </div>
         </div>
