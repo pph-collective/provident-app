@@ -35,10 +35,10 @@
     <div class="main column">
       <section id="videos" class="section">
         <!-- VIDEOS -->
-        <h1 class="title">Section: Videos</h1>
+        <h1 class="title">Videos</h1>
         <h2 class="subtitle">
-          A simple container to divide your page into <strong>sections</strong>,
-          like the one you're currently reading.
+          Watch these videos to get a step-by-step walkthorugh of the PROVIDENT
+          web tool.
         </h2>
 
         <div class="columns is-multiline">
@@ -253,11 +253,8 @@
 
       <!-- Downloads -->
       <section id="downloads" class="section">
-        <h1 class="title">Section: Downloads</h1>
-        <h2 class="subtitle">
-          A simple container to divide your page into <strong>sections</strong>,
-          like the one you're currently reading.
-        </h2>
+        <h1 class="title">Guides and downloads</h1>
+        <h2 class="subtitle"></h2>
 
         <div class="columns is-multiline">
           <div class="column is-one-third">
@@ -395,11 +392,8 @@
 
       <!-- Glossary -->
       <section id="glossary" class="section">
-        <h1 class="title">Section: Glossary</h1>
-        <h2 class="subtitle">
-          A simple container to divide your page into <strong>sections</strong>,
-          like the one you're currently reading.
-        </h2>
+        <h1 class="title">Glossary</h1>
+        <h2 class="subtitle"></h2>
 
         <div class="container">
           <div class="card">
