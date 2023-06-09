@@ -270,6 +270,72 @@
                     </span>
                   </div>
                   <div class="media-content">
+                    <p class="title is-4">Web Tool User Guide</p>
+                    <p class="subtitle is-6">PDF</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  Learn about how to access and use the PROVIDENT Web Tool with
+                  this step-by-step tutorial.
+                  <br />
+                </div>
+
+                <footer class="card-footer">
+                  <a
+                    href="https://preventoverdoseri.org/wp-content/uploads/2023/06/PROVIDENT-Web-Tool-User-Guide.pdf"
+                    target="_blank"
+                    class="card-footer-item"
+                    >Download</a
+                  >
+                </footer>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <span class="icon is-large">
+                      <i class="fas fa-3x fa-file-pdf"></i>
+                    </span>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">PROVIDENT Overview</p>
+                    <p class="subtitle is-6">PDF</p>
+                  </div>
+                </div>
+
+                <div class="content">
+                  This one-page document gives an overview of the PROVIDENT
+                  study and the aims of our research.
+                  <br />
+                </div>
+
+                <footer class="card-footer">
+                  <a
+                    href="https://preventoverdoseri.org/wp-content/uploads/2023/06/PROVIDENT-overview.pdf"
+                    target="_blank"
+                    class="card-footer-item"
+                    >Download</a
+                  >
+                </footer>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <span class="icon is-large">
+                      <i class="fas fa-3x fa-file-pdf"></i>
+                    </span>
+                  </div>
+                  <div class="media-content">
                     <p class="title is-4">What is a RCT?</p>
                     <p class="subtitle is-6">PDF</p>
                   </div>
@@ -292,72 +358,6 @@
               </div>
             </div>
           </div>
-
-          <div class="column is-one-third">
-            <div class="card">
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-left">
-                    <figure class="image is-128x128">
-                      <img
-                        src="https://bulma.io/images/placeholders/256x256.png"
-                      />
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <p class="title is-4">File Name</p>
-                    <p class="subtitle is-6">May 12, 2023</p>
-                  </div>
-                </div>
-
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
-                  <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div>
-
-                <footer class="card-footer">
-                  <a href="#" class="card-footer-item">Download</a>
-                </footer>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third">
-            <div class="card">
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-left">
-                    <figure class="image is-128x128">
-                      <img
-                        src="https://bulma.io/images/placeholders/256x256.png"
-                      />
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <p class="title is-4">File Name</p>
-                    <p class="subtitle is-6">May 12, 2023</p>
-                  </div>
-                </div>
-
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
-                  <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div>
-
-                <footer class="card-footer">
-                  <a href="#" class="card-footer-item">Download</a>
-                </footer>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -372,9 +372,9 @@
         <div class="columns is-multiline">
           <div class="column is-one-third">
             <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
+              href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8904285/"
+              title="PROVIDENT Protocol research article"
+              subtitle="Published November 29th, 2021"
             />
           </div>
 
