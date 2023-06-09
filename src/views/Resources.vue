@@ -363,58 +363,31 @@
 
       <!-- Links -->
       <section id="links" class="section">
-        <h1 class="title">Section: Links</h1>
-        <h2 class="subtitle">
-          A simple container to divide your page into <strong>sections</strong>,
-          like the one you're currently reading.
-        </h2>
+        <h1 class="title">Learn more</h1>
+        <h2 class="subtitle"></h2>
 
         <div class="columns is-multiline">
           <div class="column is-one-third">
             <ExternalLinkBig
               href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8904285/"
-              title="PROVIDENT Protocol research article"
-              subtitle="Published November 29th, 2021"
+              title="PROVIDENT Protocol Article"
+              subtitle="Learn about the methods behind PROVIDENT"
             />
           </div>
 
           <div class="column is-one-third">
             <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
+              href="https://ridoh-drug-overdose-surveillance-iss-rihealth.hub.arcgis.com/"
+              title="Rhode Island ROAAR Alerts"
+              subtitle="Track weekly RI data"
             />
           </div>
 
           <div class="column is-one-third">
             <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
-            />
-          </div>
-
-          <div class="column is-one-third">
-            <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
-            />
-          </div>
-
-          <div class="column is-one-third">
-            <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
-            />
-          </div>
-
-          <div class="column is-one-third">
-            <ExternalLinkBig
-              href="https://www.google.com/maps"
-              title="Google Maps"
-              subtitle="Geography woo~"
+              href="https://ridoh-overdose-surveillance-rihealth.hub.arcgis.com/search?sort=-created&tags=fatal%20heat%20maps%2Cems%20heat%20maps"
+              title="Rhode Island Overdose Heat Maps"
+              subtitle="Find the latest overdose maps"
             />
           </div>
         </div>
