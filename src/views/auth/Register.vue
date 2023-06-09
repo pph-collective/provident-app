@@ -91,7 +91,35 @@
               tabindex="0"
               @click.prevent="showTerms = true"
               @keyup.enter.prevent="showTerms = true"
-              >terms and conditions</a
+              >research terms and conditions</a
+            >
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input v-model="form.terms2" type="checkbox" data-cy="form-terms" />
+            I am not a member of
+            <a
+              tabindex="0"
+              @click.prevent="showTerms2 = true"
+              @keyup.enter.prevent="showTerms2 = true"
+              >law enforcement</a
+            >
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input v-model="form.terms3" type="checkbox" data-cy="form-terms" />
+            I agree to the
+            <a
+              tabindex="0"
+              @click.prevent="showTerms3 = true"
+              @keyup.enter.prevent="showTerms3 = true"
+              >collection of metadata</a
             >
           </label>
         </div>
@@ -179,6 +207,55 @@
         </section>
       </div>
     </div>
+
+    <div v-if="showTerms2" class="modal is-active">
+      <div class="modal-background" />
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            Why do we restrict access to our web tool?
+          </p>
+          <button
+            v-esc="() => (showTerms2 = false)"
+            autofocus
+            class="delete"
+            aria-label="close"
+            @click="showTerms2 = false"
+          />
+        </header>
+        <section class="modal-card-body content">
+          <p>
+            The PROVIDENT Web Tool is intended to be used by community
+            organizations. We want to minimize the chance that detailed
+            neighborhood information is used for targeted policing.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <div v-if="showTerms3" class="modal is-active">
+      <div class="modal-background" />
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">What metadata do we collect?</p>
+          <button
+            v-esc="() => (showTerms3 = false)"
+            autofocus
+            class="delete"
+            aria-label="close"
+            @click="showTerms3 = false"
+          />
+        </header>
+        <section class="modal-card-body content">
+          <p>
+            Metadata helps us understand how people are using the tool. It also
+            helps us improve our web tool. Metadata we collect includes the
+            number of logins, time spent using the map, and which neighborhoods
+            are being selected.
+          </p>
+        </section>
+      </div>
+    </div>
   </teleport>
 </template>
 
@@ -211,6 +288,8 @@ export default {
     const requested = ref(false);
     const error = ref(null);
     const showTerms = ref(false);
+    const showTerms2 = ref(false);
+    const showTerms3 = ref(false);
     const loading = ref(false);
 
     const store = useStore();
@@ -293,6 +372,8 @@ export default {
       organizations,
       register,
       showTerms,
+      showTerms2,
+      showTerms3,
     };
   },
 };
