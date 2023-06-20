@@ -85,7 +85,11 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input v-model="form.terms" type="checkbox" data-cy="form-terms" />
+            <input
+              v-model="form.terms"
+              type="checkbox"
+              data-cy="form-terms-and-conditions"
+            />
             I agree to the
             <a
               tabindex="0"
@@ -99,12 +103,16 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input v-model="form.terms2" type="checkbox" data-cy="form-terms" />
+            <input
+              v-model="form.termsLawEnforcement"
+              type="checkbox"
+              data-cy="form-terms-law-enforcement"
+            />
             I am not a member of
             <a
               tabindex="0"
-              @click.prevent="showTerms2 = true"
-              @keyup.enter.prevent="showTerms2 = true"
+              @click.prevent="showTermsLawEnforcement = true"
+              @keyup.enter.prevent="showTermsLawEnforcement = true"
               >law enforcement</a
             >
           </label>
@@ -113,12 +121,16 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input v-model="form.terms3" type="checkbox" data-cy="form-terms" />
+            <input
+              v-model="form.termsMetadata"
+              type="checkbox"
+              data-cy="form-terms-metadata"
+            />
             I agree to the
             <a
               tabindex="0"
-              @click.prevent="showTerms3 = true"
-              @keyup.enter.prevent="showTerms3 = true"
+              @click.prevent="showTermsMetadata = true"
+              @keyup.enter.prevent="showTermsMetadata = true"
               >collection of metadata</a
             >
           </label>
@@ -208,7 +220,7 @@
       </div>
     </div>
 
-    <div v-if="showTerms2" class="modal is-active">
+    <div v-if="showTermsLawEnforcement" class="modal is-active">
       <div class="modal-background" />
       <div class="modal-card">
         <header class="modal-card-head">
@@ -216,11 +228,11 @@
             Why do we restrict access to our web tool?
           </p>
           <button
-            v-esc="() => (showTerms2 = false)"
+            v-esc="() => (showTermsLawEnforcement = false)"
             autofocus
             class="delete"
             aria-label="close"
-            @click="showTerms2 = false"
+            @click="showTermsLawEnforcement = false"
           />
         </header>
         <section class="modal-card-body content">
@@ -233,17 +245,17 @@
       </div>
     </div>
 
-    <div v-if="showTerms3" class="modal is-active">
+    <div v-if="showTermsMetadata" class="modal is-active">
       <div class="modal-background" />
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">What metadata do we collect?</p>
           <button
-            v-esc="() => (showTerms3 = false)"
+            v-esc="() => (showTermsMetadata = false)"
             autofocus
             class="delete"
             aria-label="close"
-            @click="showTerms3 = false"
+            @click="showTermsMetadata = false"
           />
         </header>
         <section class="modal-card-body content">
@@ -288,8 +300,8 @@ export default {
     const requested = ref(false);
     const error = ref(null);
     const showTerms = ref(false);
-    const showTerms2 = ref(false);
-    const showTerms3 = ref(false);
+    const showTermsLawEnforcement = ref(false);
+    const showTermsMetadata = ref(false);
     const loading = ref(false);
 
     const store = useStore();
@@ -306,17 +318,11 @@ export default {
           status: false,
           message: "password and confirmation do not match",
         };
-      } else if (!form.terms) {
-        return {
-          status: false,
-          message: "",
-        };
-      } else if (!form.terms2) {
-        return {
-          status: false,
-          message: "",
-        };
-      } else if (!form.terms3) {
+      } else if (
+        !form.terms ||
+        !form.termsLawEnforcement ||
+        !form.termsMetadata
+      ) {
         return {
           status: false,
           message: "",
@@ -382,8 +388,8 @@ export default {
       organizations,
       register,
       showTerms,
-      showTerms2,
-      showTerms3,
+      showTermsLawEnforcement,
+      showTermsMetadata,
     };
   },
 };
