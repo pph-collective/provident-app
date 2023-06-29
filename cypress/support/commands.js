@@ -57,7 +57,9 @@ Cypress.Commands.add(
     cy.get('[data-cy="form-organization"]').select(organization);
     cy.get('[data-cy="form-password"]').type(password);
     cy.get('[data-cy="form-confirm-password"]').type(password);
-    cy.get('[data-cy="form-terms"]').click();
+    cy.get('[data-cy="form-terms-and-conditions"]').click();
+    cy.get('[data-cy="form-terms-law-enforcement"]').click();
+    cy.get('[data-cy="form-terms-metadata"]').click();
 
     cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();
