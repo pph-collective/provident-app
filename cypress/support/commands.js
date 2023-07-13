@@ -7,7 +7,7 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import fb from "../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
