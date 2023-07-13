@@ -1,31 +1,44 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
-import "firebase/compat/auth";
-
+import { initializeApp } from "firebase/app";
+import {
+  connectAuthEmulator,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  connectFirestoreEmulator,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+  updateDoc,
+  writeBatch,
+} from "firebase/firestore";
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
 import firebaseConfig from "./utils/firebaseConfig.json";
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-let db = firebase.firestore();
-let auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 let emailSubjectPrefix = "";
 if (location.hostname === "localhost") {
-  db.settings({
+  db._setSettings({
     experimentalForceLongPolling: true,
     host: "localhost:8088",
     ssl: false,
   });
-  db.useEmulator("localhost", 8088);
-  auth.useEmulator("http://localhost:9099");
+  connectFirestoreEmulator(db, "localhost", 8088);
+  connectAuthEmulator(auth, "http://localhost:9099");
   emailSubjectPrefix = "TEST: ";
 }
 
 const logActivity = async (user, action, subAction = "") => {
   try {
-    await db.collection("users").doc(user).collection("activity_log").add({
+    await addDoc(collection(db, `users/${user}/activity_log`), {
       user,
       action,
       subAction,
@@ -38,7 +51,7 @@ const logActivity = async (user, action, subAction = "") => {
 
 const login = async (email, password) => {
   try {
-    const res = await auth.signInWithEmailAndPassword(email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
     return res.user.toJSON();
   } catch (e) {
     console.log(e);
@@ -46,11 +59,11 @@ const login = async (email, password) => {
   }
 };
 
-const logout = async () => await auth.signOut();
+const logout = async () => await signOut(auth);
 
 const getUserRequest = async (email) => {
   try {
-    const doc = await db.collection("users").doc(email).get();
+    const doc = await getDoc(doc(db, "users", email));
     if (doc.exists) {
       return doc.data();
     } else {
@@ -62,13 +75,13 @@ const getUserRequest = async (email) => {
 };
 
 const updateUser = async (user) => {
-  await db.collection("users").doc(user.email).update(user);
+  await updateDoc(doc(db, "users", user.email), user);
 };
 
-const getCollection = async (collection) => {
+const getCollection = async (collectionPath) => {
   let res = [];
   try {
-    const docs = await db.collection(collection).get();
+    const docs = await getDocs(collection(db, collectionPath));
     res = docs.docs.map((doc) => {
       return { _id: doc.id, ...doc.data() };
     });
@@ -103,11 +116,9 @@ const getFormResponses = async (email, organization) => {
   try {
     const formResponses = await Promise.all(
       Object.entries(formTypes).map(async ([collectionId, docId]) => {
-        const response = await db
-          .collection(collectionId)
-          .doc(docId)
-          .collection("form_responses")
-          .get();
+        const response = await getDocs(
+          collection(collectionId, docId, "form_responses")
+        );
         return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
       })
     );
@@ -120,7 +131,10 @@ const getFormResponses = async (email, organization) => {
 };
 
 const addFormAssignment = async (formAssignmentData) => {
-  const res = await db.collection("form_assignments").add(formAssignmentData);
+  const res = await addDoc(
+    collection(db, "form_assignments"),
+    formAssignmentData
+  );
   return res.id;
 };
 
@@ -131,7 +145,7 @@ const addFormAssignment = async (formAssignmentData) => {
  * @returns {Promise<void>}
  */
 const batchAddFormResponses = async (formType, formResponses, assigned) => {
-  const writeBatch = db.batch();
+  const batch = writeBatch(db);
 
   for (const formResponse of formResponses) {
     for (const assignee of assigned) {
@@ -141,16 +155,12 @@ const batchAddFormResponses = async (formType, formResponses, assigned) => {
         ...(formType === "user" && { user: assignee }),
       };
 
-      const doc = db
-        .collection(`${formType}s`)
-        .doc(assignee)
-        .collection("form_responses")
-        .doc();
-      writeBatch.set(doc, updatedFormResponse);
+      const doc = doc(db, `${formType}s`, assignee, "form_responses");
+      batch.set(doc, updatedFormResponse);
     }
   }
 
-  await writeBatch.commit();
+  await batch.commit();
 };
 
 const updateFormResponse = async (formResponse, { email, organization }) => {
@@ -161,11 +171,10 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
-    const res = await db
-      .collection(`${type}s`)
-      .doc(typeMap[type])
-      .collection("form_responses")
-      .add(formResponse);
+    const res = await addDoc(
+      collection(db, `${type}s`, typeMap[type], "form_responses"),
+      formResponse
+    );
 
     return res.id;
   } else {
@@ -183,7 +192,7 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
 const getModelDataPeriods = async () => {
   const res = [];
   try {
-    const doc = await db.collection("model_data").doc("periods").get();
+    const doc = await getDoc(doc(db, "model_data", "periods"));
     res.push(...getDataFromDoc(doc));
     res.sort().reverse();
   } catch (err) {
@@ -194,23 +203,17 @@ const getModelDataPeriods = async () => {
 
 const getModelData = async (period) => {
   try {
-    const modelMetaDoc = await db.collection("model_data").doc("bg_meta").get();
+    const modelMetaDoc = await getDoc(doc(db, "model_data", "bg_meta"));
     const modelMeta = getDataFromDoc(modelMetaDoc);
     const modelDt = aq.from(modelMeta);
 
-    const sviDataDoc = await db.collection("svi_data").doc(period).get();
+    const sviDataDoc = await getDoc(doc(db, "svi_data", period));
     const { cbg, town, ri } = sviDataDoc.data();
 
-    const landmarkDataDoc = await db
-      .collection("landmark_data")
-      .doc(period)
-      .get();
+    const landmarkDataDoc = await getDoc(doc(db, "landmark_data", period));
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
-    const tooltipDataDoc = await db
-      .collection("tooltip_data")
-      .doc(period)
-      .get();
+    const tooltipDataDoc = await getDoc(doc(db, "tooltip_data", period));
     const tooltipData = getDataFromDoc(tooltipDataDoc);
 
     return {
@@ -243,7 +246,7 @@ const getModelData = async (period) => {
 
 const getModelPredictions = async (period) => {
   try {
-    const doc = await db.collection("model_predictions").doc(period).get();
+    const doc = await getDoc(doc(db, "model_predictions", period));
     return getDataFromDoc(doc);
   } catch (err) {
     console.log(err);
@@ -253,7 +256,7 @@ const getModelPredictions = async (period) => {
 
 const getZipcodes = async () => {
   try {
-    const doc = await db.collection("map_data").doc("ri_zip_database").get();
+    const doc = await getDoc(doc(db, "map_data", "ri_zip_database"));
     return getDataFromDoc(doc);
   } catch (err) {
     console.log(err);
@@ -275,7 +278,7 @@ const createEmail = async ({
       sendDate,
       sent: false,
     };
-    await db.collection("emails").add(doc);
+    await addDoc(collection(db, "emails"), doc);
   } catch (err) {
     console.log(err);
   }
@@ -284,7 +287,7 @@ const createEmail = async ({
 const addOrg = async (organization) => {
   const docId = organization.name;
 
-  await db.collection("organizations").doc(docId).set(organization);
+  await setDoc(doc(db, "organizations", docId), organization);
 
   return docId;
 };
