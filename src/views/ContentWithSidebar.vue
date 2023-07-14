@@ -12,89 +12,81 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase.js";
+import { db } from "../firebase.js";
+import {
+  collection,
+  collectionGroup,
+  getDocs,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
 
-import Sidebar from "@/components/Sidebar.vue";
-import { useMobileListener } from "@/composables/useMobileListener";
+import Sidebar from "../components/Sidebar.vue";
+import { useMobileListener } from "../composables/useMobileListener";
 
-export default {
-  components: {
-    Sidebar,
-  },
-  props: {
-    parentRoute: {
-      type: String,
-      required: true,
-    },
-    pages: {
-      type: Array,
-      default: () => {
-        return [];
-      },
-    },
-  },
-  setup(props) {
-    const { parentRoute } = toRefs(props);
-    const { isMobile } = useMobileListener();
-    const sidebarCollapsed = ref(false);
-    let unsubUsers = null;
+const props = withDefaults(
+  defineProps<{
+    parentRoute: string;
+    pages: string[];
+  }>(),
+  {
+    pages: () => [],
+  }
+);
 
-    const store = useStore();
+const { parentRoute } = toRefs(props);
+const { isMobile } = useMobileListener();
+const sidebarCollapsed = ref(false);
+let unsubUsers = null;
 
-    if (isMobile.value) {
-      sidebarCollapsed.value = true;
-    }
+const store = useStore();
 
-    watch(isMobile, () => {
-      sidebarCollapsed.value = isMobile.value;
+if (isMobile.value) {
+  sidebarCollapsed.value = true;
+}
+
+watch(isMobile, () => {
+  sidebarCollapsed.value = isMobile.value;
+});
+
+const updateStore = () => {
+  if (parentRoute.value === "admin") {
+    const q = query(collection(db, "users"));
+    unsubUsers = onSnapshot(q, (snapshot) => {
+      store.dispatch(
+        "updateUsers",
+        snapshot.docs.map((doc) => {
+          let user = doc.data();
+          return { ...user, id: doc.id };
+        })
+      );
     });
 
-    const updateStore = () => {
-      if (parentRoute.value === "admin") {
-        unsubUsers = fb.db.collection("users").onSnapshot((snapshot) => {
-          store.dispatch(
-            "updateUsers",
-            snapshot.docs.map((doc) => {
-              let user = doc.data();
-              return { ...user, id: doc.id };
-            })
-          );
-        });
+    store.dispatch("getFormAssignments");
 
-        store.dispatch("getFormAssignments");
+    // All Form Responses
+    getDocs(collectionGroup(db, "form_responses")).then((querySnapshot) => {
+      const allFormResponses = [];
+      querySnapshot.forEach((doc) => {
+        allFormResponses.push({ id: doc.id, ...doc.data() });
+      });
 
-        // All Form Responses
-        fb.db
-          .collectionGroup("form_responses")
-          .get()
-          .then((querySnapshot) => {
-            const allFormResponses = [];
-            querySnapshot.forEach((doc) => {
-              allFormResponses.push({ id: doc.id, ...doc.data() });
-            });
-
-            store.dispatch("updateAllFormResponses", allFormResponses);
-          });
-      }
-    };
-
-    onMounted(updateStore);
-    watch(parentRoute, updateStore);
-
-    // unsubscribe when leaving this page
-    onUnmounted(() => {
-      if (unsubUsers !== null) unsubUsers();
+      store.dispatch("updateAllFormResponses", allFormResponses);
     });
-
-    return {
-      sidebarCollapsed,
-    };
-  },
+  }
 };
+
+onMounted(updateStore);
+watch(parentRoute, updateStore);
+
+// unsubscribe when leaving this page
+onUnmounted(() => {
+  if (unsubUsers !== null) unsubUsers();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,14 @@
 import { createStore } from "vuex";
-import fb from "@/firebase.js";
+import {
+  addOrg,
+  createEmail,
+  getCollection,
+  getDataset,
+  getForms,
+  getFormResponses,
+  getModelDataPeriods,
+  updateFormResponse,
+} from "@/firebase.js";
 import utils from "@/utils/utils.js";
 import { createFollowupFormResponse } from "@/utils/followupForm.js";
 
@@ -52,7 +61,7 @@ const store = createStore({
         Promise.all([
           commit("mutateUser", { property: "data", with: user }),
           dispatch("updateUserFormResponses"),
-          fb.getForms().then((forms) => {
+          getForms().then((forms) => {
             commit("mutate", { property: "forms", with: forms });
           }),
         ]).then(() => {
@@ -66,7 +75,7 @@ const store = createStore({
       }
     },
     async updateUserFormResponses({ commit, state }) {
-      const formResponses = await fb.getFormResponses(
+      const formResponses = await getFormResponses(
         state.user.data.email,
         state.user.data.organization
       );
@@ -79,24 +88,24 @@ const store = createStore({
       commit("mutateUser", { property: "admin", with: admin });
     },
     async fetchModelData({ commit, getters }) {
-      const modelDataPeriods = await fb.getModelDataPeriods();
+      const modelDataPeriods = await getModelDataPeriods();
       const modelVersion = modelDataPeriods[0];
       const interventionArmUser = getters.interventionArmUser;
 
-      const dataset = await fb.getDataset(modelVersion, interventionArmUser);
+      const dataset = await getDataset(modelVersion, interventionArmUser);
 
       commit("mutate", { property: "modelVersion", with: modelVersion });
       commit("mutate", { property: "dataset", with: dataset });
     },
     async fetchOrgs({ commit, state }) {
       if (state.organizations.length === 0) {
-        const orgs = await fb.getCollection("organizations");
+        const orgs = await getCollection("organizations");
         commit("mutate", { property: "organizations", with: orgs });
       }
     },
     async addOrg({ commit, state }, organization) {
       // Setting _id to be more consistent to getCollection in firebase.js
-      organization._id = await fb.addOrg(organization);
+      organization._id = await addOrg(organization);
 
       commit("mutate", {
         property: "organizations",
@@ -104,13 +113,10 @@ const store = createStore({
       });
     },
     async updateFormResponse({ commit, state }, updatedFormResponse) {
-      updatedFormResponse._id = await fb.updateFormResponse(
-        updatedFormResponse,
-        {
-          email: state.user.data.email,
-          organization: state.user.data.organization,
-        }
-      );
+      updatedFormResponse._id = await updateFormResponse(updatedFormResponse, {
+        email: state.user.data.email,
+        organization: state.user.data.organization,
+      });
 
       const formResponses = [...state.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
@@ -132,7 +138,7 @@ const store = createStore({
       ) {
         const followupFormResponse =
           createFollowupFormResponse(updatedFormResponse);
-        followupFormResponse._id = await fb.updateFormResponse(
+        followupFormResponse._id = await updateFormResponse(
           followupFormResponse,
           {
             email: state.user.data.email,
@@ -149,7 +155,7 @@ const store = createStore({
           location.origin
         }/snack/forms'>PROVIDENT</a>.</p>`;
 
-        await fb.createEmail({
+        await createEmail({
           to: updatedFormResponse.users_edited,
           send_date: release_date,
           subject: `PROVIDENT Followup Form: ${title}`,
@@ -167,7 +173,7 @@ const store = createStore({
       commit("mutate", { property: "users", with: users });
     },
     async getFormAssignments({ commit }) {
-      const formAssignments = await fb.getCollection("form_assignments");
+      const formAssignments = await getCollection("form_assignments");
       commit("mutate", { property: "formAssignments", with: formAssignments });
     },
     addFormAssignment({ commit, state }, formAssignment) {
@@ -193,7 +199,7 @@ const store = createStore({
     dismissNotification({ commit, state }, id) {
       commit("mutate", {
         property: "notifications",
-        with: state.notifications.filter((n) => n.id != id),
+        with: state.notifications.filter((n) => n.id !== id),
       });
     },
   },

@@ -98,8 +98,8 @@
   />
 </template>
 
-<script>
-import { ref, toRefs, computed } from "vue";
+<script setup lang="ts">
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import {
@@ -107,10 +107,10 @@ import {
   today,
   GEOID_QUESTION_MODEL,
   MUNI_QUESTION_MODEL,
-} from "@/utils/utils.js";
-import fb from "@/firebase.js";
+} from "../../utils/utils.js";
+import { logActivity } from "../../firebase.js";
 
-import FormModal from "@/components/form/Modal.vue";
+import FormModal from "../form/Modal.vue";
 
 const formConfig = [
   {
@@ -135,98 +135,73 @@ const formConfig = [
   },
 ];
 
-export default {
-  components: {
-    FormModal,
-  },
-  props: {
-    activeGeoid: {
-      type: String,
-      required: true,
+const props = defineProps<{
+  activeGeoid: string;
+  activeMuni: string;
+}>();
+
+const store = useStore();
+const userRole = computed(() =>
+  store.state.user.data ? store.state.user.data.role : "user"
+);
+
+const activeFormResponse = ref({});
+const activeFormReadOnly = ref(true);
+
+const completedForms = computed(() => {
+  const formResponses = store.state.user.formResponses;
+  return formResponses
+    .filter((response) =>
+      formConfig.map((f) => f.title).includes(response.form.title)
+    )
+    .sort(sortByProperty("last_updated"))
+    .reverse();
+});
+
+const bgFormResponses = computed(() => {
+  return completedForms.value.filter(
+    (assessment) =>
+      assessment.response[GEOID_QUESTION_MODEL] === props.activeGeoid &&
+      assessment.response[MUNI_QUESTION_MODEL] === props.activeMuni
+  );
+});
+
+const userOrganization = computed(() =>
+  store.state.user.data ? store.state.user.data.organization : ""
+);
+
+const createNewBGForm = (form_id) => {
+  activeFormResponse.value = {
+    organization: userOrganization,
+    form: store.state.forms[form_id],
+    release_date: today(),
+    status: "Not Started",
+    response: {
+      [GEOID_QUESTION_MODEL]: props.activeGeoid,
+      [MUNI_QUESTION_MODEL]: props.activeMuni,
     },
-    activeMuni: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { activeGeoid, activeMuni } = toRefs(props);
+  };
+  activeFormReadOnly.value = false;
+  logActivity(
+    store.state.user.data.email,
+    `create ${form_id} form`,
+    props.activeGeoid
+  );
+};
 
-    const store = useStore();
-    const userRole = computed(() =>
-      store.state.user.data ? store.state.user.data.role : "user"
-    );
+const formatDate = (dateNumber) => {
+  const d = new Date(dateNumber);
+  return d.toLocaleDateString();
+};
 
-    const activeFormResponse = ref({});
-    const activeFormReadOnly = ref(true);
-
-    const completedForms = computed(() => {
-      const formResponses = store.state.user.formResponses;
-      return formResponses
-        .filter((response) =>
-          formConfig.map((f) => f.title).includes(response.form.title)
-        )
-        .sort(sortByProperty("last_updated"))
-        .reverse();
-    });
-
-    const bgFormResponses = computed(() => {
-      return completedForms.value.filter(
-        (assessment) =>
-          assessment.response[GEOID_QUESTION_MODEL] === activeGeoid.value &&
-          assessment.response[MUNI_QUESTION_MODEL] === activeMuni.value
-      );
-    });
-
-    const userOrganization = computed(() =>
-      store.state.user.data ? store.state.user.data.organization : ""
-    );
-
-    const createNewBGForm = (form_id) => {
-      activeFormResponse.value = {
-        organization: userOrganization,
-        form: store.state.forms[form_id],
-        release_date: today(),
-        status: "Not Started",
-        response: {
-          [GEOID_QUESTION_MODEL]: activeGeoid.value,
-          [MUNI_QUESTION_MODEL]: activeMuni.value,
-        },
-      };
-      activeFormReadOnly.value = false;
-      fb.logActivity(
-        store.state.user.data.email,
-        `create ${form_id} form`,
-        activeGeoid.value
-      );
-    };
-
-    const formatDate = (dateNumber) => {
-      const d = new Date(dateNumber);
-      return d.toLocaleDateString();
-    };
-
-    const launchForm = (formResponse, readOnly) => {
-      activeFormReadOnly.value = readOnly;
-      activeFormResponse.value = formResponse;
-      fb.logActivity(
-        store.state.user.data.email,
-        `launch ${formResponse.form.title} form`,
-        formResponse.title
-      );
-    };
-
-    return {
-      formConfig,
-      activeFormReadOnly,
-      activeFormResponse,
-      bgFormResponses,
-      userRole,
-      createNewBGForm,
-      formatDate,
-      launchForm,
-    };
-  },
+const launchForm = (formResponse, readOnly) => {
+  activeFormReadOnly.value = readOnly;
+  activeFormResponse.value = formResponse;
+  logActivity(
+    store.state.user.data.email,
+    `launch ${formResponse.form.title} form`,
+    formResponse.title
+  );
 };
 </script>
 

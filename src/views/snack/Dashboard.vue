@@ -149,188 +149,147 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase.js";
-import { MUNICIPALITIES, sortByProperty } from "@/utils/utils";
+import { logActivity, getZipcodes } from "../../firebase.js";
+import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
-import Card from "@/components/dashboard/Card.vue";
-import ControlPanel from "@/components/dashboard/ControlPanel.vue";
-import Map from "@/components/dashboard/Map.vue";
-import BGMap from "@/components/dashboard/BGMap.vue";
-import StatsWidget from "@/components/dashboard/StatsWidget.vue";
-import AssessmentWidget from "@/components/dashboard/AssessmentWidget.vue";
-import Loading from "@/components/Loading.vue";
+import Card from "../../components/dashboard/Card.vue";
+import ControlPanel from "../../components/dashboard/ControlPanel.vue";
+import Map from "../../components/dashboard/Map.vue";
+import BGMap from "../../components/dashboard/BGMap.vue";
+import StatsWidget from "../../components/dashboard/StatsWidget.vue";
+import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
+import Loading from "../../components/Loading.vue";
 
-export default {
-  components: {
-    ControlPanel,
-    Map,
-    BGMap,
-    Card,
-    StatsWidget,
-    AssessmentWidget,
-    Loading,
-  },
-  setup() {
-    const towns = MUNICIPALITIES.map((m) => ({
-      name: m,
-      municipalities: [m],
-    }));
+const towns = MUNICIPALITIES.map((m) => ({
+  name: m,
+  municipalities: [m],
+}));
 
-    const store = useStore();
-    const interventionArmUser = computed(
-      () => store.getters.interventionArmUser
+const store = useStore();
+const interventionArmUser = computed(() => store.getters.interventionArmUser);
+const dataset = computed(() => {
+  if (store.state.dataset.cbg.length === 0) {
+    store.dispatch("fetchModelData");
+  }
+
+  return store.state.dataset;
+});
+const activeGeoid = ref("");
+const activeMuni = ref("");
+const activeClickedStatus = ref(false);
+const zoomed = ref(false);
+const viewForms = ref(false);
+
+const filteredOrgs = computed(() => {
+  const ri = { name: "All of Rhode Island", municipalities: [] };
+  const orgs = store.state.organizations;
+  if (store.state.user.admin) {
+    return [ri, ...orgs, ...towns];
+  } else if (store.state.user.data) {
+    return [
+      orgs.find((o) => o.name === store.state.user.data.organization),
+      ri,
+      ...towns,
+    ];
+  } else {
+    // shouldn't hit here in reality
+    return [ri, ...towns];
+  }
+});
+
+const modelVersion = computed(() => store.state.modelVersion);
+const zipcodes = ref([]);
+
+onMounted(async () => {
+  zipcodes.value = await getZipcodes();
+});
+
+const zipsDropdownOptions = computed(() => {
+  let zips = [];
+
+  if (controls.value.geography) {
+    const { municipalities } = controls.value.geography;
+
+    if (municipalities.length === 0) {
+      // Set the result (for the dropdown) to all of the zip codes in RI
+      zips = zipcodes.value;
+    } else {
+      municipalities.forEach((m) => {
+        zips.push(...zipcodes.value.filter((z) => z.city === m));
+      });
+    }
+
+    zips = zips
+      .map((z) => {
+        const { alias } = z;
+        const formatAlias = alias ? ` (${alias})` : "";
+
+        return {
+          ...z,
+          name: `${z.zip}${formatAlias}`,
+        };
+      })
+      .sort(sortByProperty("zip"));
+  }
+
+  return [{ name: "All Zip Codes" }, ...zips];
+});
+
+const dropDowns = computed(() => {
+  return {
+    geography: {
+      icon: "fas fa-globe",
+      values: filteredOrgs.value,
+    },
+    zipcode: {
+      icon: "fas fa-map",
+      values: zipsDropdownOptions.value,
+    },
+  };
+});
+
+const controls = ref({});
+
+const updateControls = (newControls) => {
+  // if either drop down changes, clear out the selected block group
+  activeMuni.value = "";
+  activeGeoid.value = "";
+  zoomed.value = false;
+
+  // resets the zipcode dropdown to All Zip Codes
+  if (newControls.geography !== controls.value.geography) {
+    newControls.zipcode = zipsDropdownOptions.value[0];
+  }
+
+  // update the control selections
+  for (const [k, v] of Object.entries(newControls)) {
+    controls.value[k] = v;
+  }
+};
+
+const loading = computed(() => {
+  return dataset.value.cbg.length === 0 || modelVersion.value === null;
+});
+
+// TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
+const clickMap = (clickedStatus) => {
+  activeClickedStatus.value = clickedStatus;
+  if (clickedStatus) {
+    // wait for the next render cycle as the activeGeoid gets updated at about the
+    // same time and otherwise could be stale
+    nextTick(() =>
+      logActivity(store.state.user.data.email, "click map", activeGeoid.value)
     );
-    const dataset = computed(() => {
-      if (store.state.dataset.cbg.length === 0) {
-        store.dispatch("fetchModelData");
-      }
+  }
+};
 
-      return store.state.dataset;
-    });
-    const activeGeoid = ref("");
-    const activeMuni = ref("");
-    const activeClickedStatus = ref(false);
-    const zoomed = ref(false);
-    const viewForms = ref(false);
-
-    const filteredOrgs = computed(() => {
-      const ri = { name: "All of Rhode Island", municipalities: [] };
-      const orgs = store.state.organizations;
-      if (store.state.user.admin) {
-        return [ri, ...orgs, ...towns];
-      } else if (store.state.user.data) {
-        return [
-          orgs.find((o) => o.name === store.state.user.data.organization),
-          ri,
-          ...towns,
-        ];
-      } else {
-        // shouldn't hit here in reality
-        return [ri, ...towns];
-      }
-    });
-
-    const modelVersion = computed(() => store.state.modelVersion);
-    const zipcodes = ref([]);
-
-    onMounted(async () => {
-      zipcodes.value = await fb.getZipcodes();
-    });
-
-    const zipsDropdownOptions = computed(() => {
-      let zips = [];
-
-      if (controls.value.geography) {
-        const { municipalities } = controls.value.geography;
-
-        if (municipalities.length === 0) {
-          // Set the result (for the dropdown) to all of the zip codes in RI
-          zips = zipcodes.value;
-        } else {
-          municipalities.forEach((m) => {
-            zips.push(...zipcodes.value.filter((z) => z.city === m));
-          });
-        }
-
-        zips = zips
-          .map((z) => {
-            const { alias } = z;
-            const formatAlias = alias ? ` (${alias})` : "";
-
-            return {
-              ...z,
-              name: `${z.zip}${formatAlias}`,
-            };
-          })
-          .sort(sortByProperty("zip"));
-      }
-
-      return [{ name: "All Zip Codes" }, ...zips];
-    });
-
-    const dropDowns = computed(() => {
-      return {
-        geography: {
-          icon: "fas fa-globe",
-          values: filteredOrgs.value,
-        },
-        zipcode: {
-          icon: "fas fa-map",
-          values: zipsDropdownOptions.value,
-        },
-      };
-    });
-
-    const controls = ref({});
-
-    const updateControls = (newControls) => {
-      // if either drop down changes, clear out the selected block group
-      activeMuni.value = "";
-      activeGeoid.value = "";
-      zoomed.value = false;
-
-      // resets the zipcode dropdown to All Zip Codes
-      if (newControls.geography !== controls.value.geography) {
-        newControls.zipcode = zipsDropdownOptions.value[0];
-      }
-
-      // update the control selections
-      for (const [k, v] of Object.entries(newControls)) {
-        controls.value[k] = v;
-      }
-    };
-
-    const loading = computed(() => {
-      return dataset.value.cbg.length === 0 || modelVersion.value === null;
-    });
-
-    // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
-    const clickMap = (clickedStatus) => {
-      activeClickedStatus.value = clickedStatus;
-      if (clickedStatus) {
-        // wait for the next render cycle as the activeGeoid gets updated at about the
-        // same time and otherwise could be stale
-        nextTick(() =>
-          fb.logActivity(
-            store.state.user.data.email,
-            "click map",
-            activeGeoid.value
-          )
-        );
-      }
-    };
-
-    const zoomBg = () => {
-      zoomed.value = true;
-      fb.logActivity(
-        store.state.user.data.email,
-        "zoom map",
-        activeGeoid.value
-      );
-    };
-
-    return {
-      activeClickedStatus,
-      activeGeoid,
-      activeMuni,
-      clickMap,
-      controls,
-      dataset,
-      dropDowns,
-      interventionArmUser,
-      loading,
-      modelVersion,
-      updateControls,
-      viewForms,
-      zipcodes,
-      zoomBg,
-      zoomed,
-    };
-  },
+const zoomBg = () => {
+  zoomed.value = true;
+  logActivity(store.state.user.data.email, "zoom map", activeGeoid.value);
 };
 </script>
 

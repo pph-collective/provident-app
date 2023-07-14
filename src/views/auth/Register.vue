@@ -275,7 +275,9 @@
 import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
+import { auth, db, createEmail, logout } from "@/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { esc } from "@/directives/escape";
 import FormCard from "@/components/FormCard.vue";
 import Loading from "@/components/Loading.vue";
@@ -337,12 +339,12 @@ export default {
       const email = form.email.toLowerCase();
 
       try {
-        await fb.auth.createUserWithEmailAndPassword(email, form.password);
+        await createUserWithEmailAndPassword(auth, email, form.password);
         //scrub out password
         form.password = "";
         form.confirmPassword = "";
-        await fb.auth.currentUser.updateProfile({ displayName: form.name });
-        await fb.db.collection("users").doc(email).set({
+        await updateProfile(auth.currentUser, { displayName: form.name });
+        await setDoc(doc(db, "users", email), {
           email,
           name: form.name,
           organization: form.organization,
@@ -357,12 +359,12 @@ export default {
 
       if (requested.value) {
         try {
-          await fb.createEmail({
+          await createEmail({
             subject: "PROVIDENT User Request",
             body: `<p>${form.name} (${email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
             to: [import.meta.env.VITE_APP_ADMIN_EMAIL],
           });
-          await fb.createEmail({
+          await createEmail({
             subject: "PROVIDENT Access Request",
             body: `<p>Hello ${
               form.name
@@ -375,7 +377,7 @@ export default {
           console.log(e);
         }
       }
-      await fb.logout();
+      await logout();
       loading.value = false;
     };
 

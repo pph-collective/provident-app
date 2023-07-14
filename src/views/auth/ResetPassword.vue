@@ -66,65 +66,51 @@
   </FormCard>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import fb from "@/firebase";
+import { auth } from "@/firebase";
+import { confirmPasswordReset } from "firebase/auth";
 import FormCard from "@/components/FormCard.vue";
 
-export default {
-  components: {
-    FormCard,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const router = useRouter();
+const route = useRoute();
 
-    const oobCodeExists = computed(() => {
-      return Boolean(route.query.oobCode);
-    });
+const oobCodeExists = computed(() => {
+  return Boolean(route.query.oobCode);
+});
 
-    const form = reactive({
-      resetCode: route.query.oobCode ? route.query.oobCode : "",
-      password: "",
-      confirmPassword: "",
-    });
-    const error = ref(null);
+const form = reactive({
+  resetCode: route.query.oobCode ? route.query.oobCode : "",
+  password: "",
+  confirmPassword: "",
+});
+const error = ref(null);
 
-    const formValid = computed(() => {
-      if (
-        form.resetCode.length === 0 ||
-        form.password.length < 6 ||
-        form.confirmPassword.length < 6
-      ) {
-        return { status: false, message: "" };
-      } else if (form.password !== form.confirmPassword) {
-        return {
-          status: false,
-          message: "password and confirmation do not match",
-        };
-      } else {
-        return { status: true, message: "" };
-      }
-    });
-
-    const submit = async () => {
-      try {
-        await fb.auth.confirmPasswordReset(form.resetCode, form.password);
-        await router.replace({ name: "Login" });
-      } catch (err) {
-        error.value = `${err.message}`;
-      }
-    };
-
+const formValid = computed(() => {
+  if (
+    form.resetCode.length === 0 ||
+    form.password.length < 6 ||
+    form.confirmPassword.length < 6
+  ) {
+    return { status: false, message: "" };
+  } else if (form.password !== form.confirmPassword) {
     return {
-      oobCodeExists,
-      form,
-      error,
-      formValid,
-      submit,
+      status: false,
+      message: "password and confirmation do not match",
     };
-  },
+  } else {
+    return { status: true, message: "" };
+  }
+});
+
+const submit = async () => {
+  try {
+    await confirmPasswordReset(auth, form.resetCode, form.password);
+    await router.replace({ name: "Login" });
+  } catch (err) {
+    error.value = `${err.message}`;
+  }
 };
 </script>

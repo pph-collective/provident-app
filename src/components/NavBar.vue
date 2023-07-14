@@ -96,7 +96,7 @@
               <a
                 class="button is-primary is-small"
                 data-cy="logout-button"
-                @click="logout"
+                @click="logoutAndPush"
               >
                 Log Out
               </a>
@@ -119,44 +119,33 @@
   </nav>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { useMobileListener } from "@/composables/useMobileListener";
-import fb from "@/firebase";
+import { useMobileListener } from "../composables/useMobileListener";
+import { logout } from "../firebase";
 
-export default {
-  setup() {
-    const store = useStore();
-    const user = computed(() => store.state.user);
+const store = useStore();
+const user = computed(() => store.state.user);
 
-    const hamburgerActive = ref(false);
-    const toggleBurgerMenu = () => {
-      hamburgerActive.value = !hamburgerActive.value;
-    };
-
-    const router = useRouter();
-
-    const logout = async () => {
-      await fb.logout();
-      await router.push("/");
-    };
-
-    // On window resize, collapse the hamburger menu always
-    const { isMobile } = useMobileListener();
-    watch(isMobile, () => {
-      hamburgerActive.value = false;
-    });
-
-    return {
-      user,
-      hamburgerActive,
-      toggleBurgerMenu,
-      logout,
-    };
-  },
+const hamburgerActive = ref(false);
+const toggleBurgerMenu = () => {
+  hamburgerActive.value = !hamburgerActive.value;
 };
+
+const router = useRouter();
+
+const logoutAndPush = async () => {
+  await logout();
+  await router.push("/");
+};
+
+// On window resize, collapse the hamburger menu always
+const { isMobile } = useMobileListener();
+watch(isMobile, () => {
+  hamburgerActive.value = false;
+});
 </script>
 
 <style lang="scss" scoped>
