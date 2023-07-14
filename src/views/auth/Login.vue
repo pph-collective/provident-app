@@ -66,89 +66,75 @@
   </FormCard>
 </template>
 
-<script>
+<script setup lang="ts">
 import { reactive, ref, computed, watchEffect } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 
-import fb from "@/firebase";
-import FormCard from "@/components/FormCard.vue";
+import { auth, getUserRequest, login, logout } from "../../firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
+import FormCard from "../../components/FormCard.vue";
 
-export default {
-  components: {
-    FormCard,
-  },
-  setup() {
-    const form = reactive({ email: "", password: "" });
-    const error = ref(null);
-    const buttonLoading = ref(false);
+const form = reactive({ email: "", password: "" });
+const error = ref(null);
+const buttonLoading = ref(false);
 
-    const store = useStore();
-    const userAuthenticated = computed(() => store.state.user.authenticated);
+const store = useStore();
+const userAuthenticated = computed(() => store.state.user.authenticated);
 
-    const router = useRouter();
-    const route = useRoute();
+const router = useRouter();
+const route = useRoute();
 
-    // handle case of user log in via cookie post redirect
-    watchEffect(() => {
-      if (userAuthenticated.value && route.query.redirect) {
-        router.push(route.query.redirect);
+// handle case of user log in via cookie post redirect
+watchEffect(() => {
+  if (userAuthenticated.value && route.query.redirect) {
+    router.push(route.query.redirect);
+  }
+});
+
+const submit = async () => {
+  buttonLoading.value = true;
+  const email = form.email.toLowerCase();
+  try {
+    await login(email, form.password);
+    const { status } = await getUserRequest(email);
+    if (status === "approved") {
+      if (route.query.redirect) {
+        await router.push(route.query.redirect);
+      } else {
+        await router.push({ name: "Home" });
       }
+    } else if (status === undefined) {
+      error.value = `User account was not set up properly. Please reach out to ${
+        import.meta.env.VITE_APP_ADMIN_EMAIL
+      } with the email you used to register.`;
+      await logout();
+    } else {
+      error.value = `User account not approved: ${status}`;
+      await logout();
+    }
+  } catch (err) {
+    error.value = err.message;
+    await logout();
+    console.log(err);
+  }
+  buttonLoading.value = false;
+};
+
+const resetRequest = async () => {
+  if (!form.email || !form.email.includes("@")) {
+    error.value = "Enter an email and then click reset password.";
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, form.email.toLowerCase());
+    store.dispatch("addNotification", {
+      message: "Success. Check your email to reset your password.",
     });
-
-    const submit = async () => {
-      buttonLoading.value = true;
-      const email = form.email.toLowerCase();
-      try {
-        await fb.login(email, form.password);
-        const { status } = await fb.getUserRequest(email);
-        if (status === "approved") {
-          if (route.query.redirect) {
-            await router.push(route.query.redirect);
-          } else {
-            await router.push({ name: "Home" });
-          }
-        } else if (status === undefined) {
-          error.value = `User account was not set up properly. Please reach out to ${
-            import.meta.env.VITE_APP_ADMIN_EMAIL
-          } with the email you used to register.`;
-          await fb.logout();
-        } else {
-          error.value = `User account not approved: ${status}`;
-          await fb.logout();
-        }
-      } catch (err) {
-        error.value = err.message;
-        await fb.logout();
-        console.log(err);
-      }
-      buttonLoading.value = false;
-    };
-
-    const resetRequest = async () => {
-      if (!form.email || !form.email.includes("@")) {
-        error.value = "Enter an email and then click reset password.";
-        return;
-      }
-
-      try {
-        await fb.auth.sendPasswordResetEmail(form.email.toLowerCase());
-        store.dispatch("addNotification", {
-          message: "Success. Check your email to reset your password.",
-        });
-        error.value = null;
-      } catch (err) {
-        error.value = err.message;
-      }
-    };
-
-    return {
-      buttonLoading,
-      submit,
-      resetRequest,
-      form,
-      error,
-    };
-  },
+    error.value = null;
+  } catch (err) {
+    error.value = err.message;
+  }
 };
 </script>
