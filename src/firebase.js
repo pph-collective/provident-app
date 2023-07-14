@@ -36,7 +36,7 @@ if (location.hostname === "localhost") {
   emailSubjectPrefix = "TEST: ";
 }
 
-const logActivity = async (user, action, subAction = "") => {
+export async function logActivity(user, action, subAction = "") {
   try {
     await addDoc(collection(db, `users/${user}/activity_log`), {
       user,
@@ -47,9 +47,9 @@ const logActivity = async (user, action, subAction = "") => {
   } catch (e) {
     console.warn("Activity logging failed: ", e);
   }
-};
+}
 
-const login = async (email, password) => {
+export async function login(email, password) {
   try {
     const res = await signInWithEmailAndPassword(auth, email, password);
     return res.user.toJSON();
@@ -57,28 +57,30 @@ const login = async (email, password) => {
     console.log(e);
     throw e;
   }
-};
+}
 
-const logout = async () => await signOut(auth);
+export async function logout() {
+  await signOut(auth);
+}
 
-const getUserRequest = async (email) => {
+export async function getUserRequest(email) {
   try {
-    const doc = await getDoc(doc(db, "users", email));
-    if (doc.exists) {
-      return doc.data();
+    const document = await getDoc(doc(db, "users", "admin@admin.com"));
+    if (document.exists) {
+      return document.data();
     } else {
       return {};
     }
   } catch (err) {
     return {};
   }
-};
+}
 
-const updateUser = async (user) => {
+export async function updateUser(user) {
   await updateDoc(doc(db, "users", user.email), user);
-};
+}
 
-const getCollection = async (collectionPath) => {
+export async function getCollection(collectionPath) {
   let res = [];
   try {
     const docs = await getDocs(collection(db, collectionPath));
@@ -89,18 +91,18 @@ const getCollection = async (collectionPath) => {
     console.log(err);
   }
   return res;
-};
+}
 
 // common pattern for model related data which has an array of data under the data key
-const getDataFromDoc = (res) => {
+function getDataFromDoc(res) {
   if (res.exists) {
     return res.data().data;
   } else {
     return [];
   }
-};
+}
 
-const getForms = async () => {
+export async function getForms() {
   const forms = {};
 
   for (const form of await getCollection("forms")) {
@@ -108,9 +110,9 @@ const getForms = async () => {
   }
 
   return forms;
-};
+}
 
-const getFormResponses = async (email, organization) => {
+export async function getFormResponses(email, organization) {
   const formTypes = { users: email, organizations: organization };
 
   try {
@@ -128,15 +130,15 @@ const getFormResponses = async (email, organization) => {
     console.log(err);
     return [];
   }
-};
+}
 
-const addFormAssignment = async (formAssignmentData) => {
+export async function addFormAssignment(formAssignmentData) {
   const res = await addDoc(
     collection(db, "form_assignments"),
     formAssignmentData
   );
   return res.id;
-};
+}
 
 /**
  * @param {String} formType - "user" | "organization"
@@ -144,7 +146,7 @@ const addFormAssignment = async (formAssignmentData) => {
  * @param {Set<String>} assigned - set of emails or organization names
  * @returns {Promise<void>}
  */
-const batchAddFormResponses = async (formType, formResponses, assigned) => {
+export async function batchAddFormResponses(formType, formResponses, assigned) {
   const batch = writeBatch(db);
 
   for (const formResponse of formResponses) {
@@ -155,15 +157,18 @@ const batchAddFormResponses = async (formType, formResponses, assigned) => {
         ...(formType === "user" && { user: assignee }),
       };
 
-      const doc = doc(db, `${formType}s`, assignee, "form_responses");
-      batch.set(doc, updatedFormResponse);
+      const document = doc(db, `${formType}s`, assignee, "form_responses");
+      batch.set(document, updatedFormResponse);
     }
   }
 
   await batch.commit();
-};
+}
 
-const updateFormResponse = async (formResponse, { email, organization }) => {
+export async function updateFormResponse(
+  formResponse,
+  { email, organization }
+) {
   const {
     _id,
     form: { type },
@@ -187,21 +192,21 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
 
     return _id;
   }
-};
+}
 
-const getModelDataPeriods = async () => {
+export async function getModelDataPeriods() {
   const res = [];
   try {
-    const doc = await getDoc(doc(db, "model_data", "periods"));
-    res.push(...getDataFromDoc(doc));
+    const document = await getDoc(doc(db, "model_data", "periods"));
+    res.push(...getDataFromDoc(document));
     res.sort().reverse();
   } catch (err) {
     console.log(err);
   }
   return res;
-};
+}
 
-const getModelData = async (period) => {
+export async function getModelData(period) {
   try {
     const modelMetaDoc = await getDoc(doc(db, "model_data", "bg_meta"));
     const modelMeta = getDataFromDoc(modelMetaDoc);
@@ -242,57 +247,57 @@ const getModelData = async (period) => {
       ri: [],
     };
   }
-};
+}
 
-const getModelPredictions = async (period) => {
+export async function getModelPredictions(period) {
   try {
-    const doc = await getDoc(doc(db, "model_predictions", period));
-    return getDataFromDoc(doc);
+    const document = await getDoc(doc(db, "model_predictions", period));
+    return getDataFromDoc(document);
   } catch (err) {
     console.log(err);
     return [];
   }
-};
+}
 
-const getZipcodes = async () => {
+export async function getZipcodes() {
   try {
-    const doc = await getDoc(doc(db, "map_data", "ri_zip_database"));
-    return getDataFromDoc(doc);
+    const document = await getDoc(doc(db, "map_data", "ri_zip_database"));
+    return getDataFromDoc(document);
   } catch (err) {
     console.log(err);
     return [];
   }
-};
+}
 
-const createEmail = async ({
+export async function createEmail({
   subject,
   to,
   body,
   sendDate = new Date().toISOString(),
-}) => {
+}) {
   try {
-    const doc = {
+    const document = {
       subject: emailSubjectPrefix + subject,
       to,
       body: processEmailBody(body),
       sendDate,
       sent: false,
     };
-    await addDoc(collection(db, "emails"), doc);
+    await addDoc(collection(db, "emails"), document);
   } catch (err) {
     console.log(err);
   }
-};
+}
 
-const addOrg = async (organization) => {
+export async function addOrg(organization) {
   const docId = organization.name;
 
   await setDoc(doc(db, "organizations", docId), organization);
 
   return docId;
-};
+}
 
-const getDataset = async (period, interventionArmUser) => {
+export async function getDataset(period, interventionArmUser) {
   const data = await getModelData(period);
   if (interventionArmUser) {
     const predictions = await getModelPredictions(period);
@@ -303,27 +308,4 @@ const getDataset = async (period, interventionArmUser) => {
   } else {
     return data;
   }
-};
-
-export default {
-  auth,
-  db,
-  addFormAssignment,
-  addOrg,
-  batchAddFormResponses,
-  createEmail,
-  getCollection,
-  getFormResponses,
-  getForms,
-  getModelData,
-  getDataset,
-  getModelDataPeriods,
-  getModelPredictions,
-  getUserRequest,
-  getZipcodes,
-  logActivity,
-  login,
-  logout,
-  updateFormResponse,
-  updateUser,
-};
+}
