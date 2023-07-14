@@ -119,7 +119,7 @@ export async function getFormResponses(email, organization) {
     const formResponses = await Promise.all(
       Object.entries(formTypes).map(async ([collectionId, docId]) => {
         const response = await getDocs(
-          collection(collectionId, docId, "form_responses")
+          collection(db, collectionId, docId, "form_responses")
         );
         return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
       })
