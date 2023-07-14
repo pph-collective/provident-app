@@ -8,22 +8,25 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 import firebase from "firebase/compat/app";
-import fb from "../../src/firebase";
+import { login, logout } from "../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
 const ACCOUNTS = require("../fixtures/accounts.json");
+import firebaseConfig from "../../src/utils/firebaseConfig.json";
+
+firebase.initializeApp(firebaseConfig);
 
 attachCustomCommands({ Cypress, cy, firebase });
 
 Cypress.Commands.add("login", (email, password) => {
-  cy.wrap(fb.login(email, password));
+  cy.wrap(login(email, password));
   cy.get("[data-cy='home']").click();
 });
 
 Cypress.Commands.add("login_by_permission", (permission_level) => {
   const account = ACCOUNTS[permission_level];
   if (account) {
-    cy.wrap(fb.login(account["email"], account["password"])).should(
+    cy.wrap(login(account["email"], account["password"])).should(
       "not.eq",
       "{}"
     );
@@ -38,7 +41,7 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
 
 Cypress.Commands.add("logout", () => {
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
-  cy.wrap(fb.logout()).should("eq", undefined);
+  cy.wrap(logout()).should("eq", undefined);
   cy.get("[data-cy='home']").click();
   cy.get("[data-cy='login-button']").should("exist");
   cy.log("Logged out");
