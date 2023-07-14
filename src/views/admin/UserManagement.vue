@@ -133,17 +133,12 @@ import utils from "../../utils/utils.js";
 
 const store = useStore();
 const organizations = computed(() => store.state.organizations);
-const users = computed(() => {
-  console.log("In users");
-  console.log(store.getters.approvedUsers);
-
-  const a = store.getters.approvedUsers.map((user) => {
+const users = computed(() =>
+  store.getters.approvedUsers.map((user) => {
     user.edit = false;
     return user;
-  });
-
-  return a;
-});
+  })
+);
 const roles = ["champion", "user"];
 const fields = ["Name", "Organization", "Email", "Role"];
 const sortField = ref("name");
