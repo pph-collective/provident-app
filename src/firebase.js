@@ -55,7 +55,14 @@ export async function login(email, password) {
     return res.user.toJSON();
   } catch (e) {
     console.log(e);
-    throw e;
+    let message = e.message;
+    if (e.message === "Firebase: Error (auth/wrong-password).") {
+      message = "The password is invalid or the user does not have a password";
+    }
+    throw {
+      ...e,
+      message,
+    };
   }
 }
 
