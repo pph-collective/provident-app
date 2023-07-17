@@ -55,6 +55,10 @@ Cypress.Commands.add(
     cy.get("[data-cy='login-button']").click();
     cy.get("[data-cy='request-access-button']").click();
 
+    // Check if form loaded
+    cy.get("[data-cy='form-organization']").should("exist");
+
+    // Fill out form
     cy.get('[type="email"]').focus().type(email);
     cy.get('[data-cy="form-name"]').type(name);
     cy.get('[data-cy="form-organization"]').select(organization);
