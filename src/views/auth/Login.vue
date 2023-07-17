@@ -134,7 +134,12 @@ const resetRequest = async () => {
     });
     error.value = null;
   } catch (err) {
-    error.value = err.message;
+    if (err.message === "Firebase: Error (auth/user-not-found).") {
+      error.value =
+        "There is no user record corresponding to this identifier. The user may have been deleted.";
+    } else {
+      error.value = err.message;
+    }
   }
 };
 </script>
