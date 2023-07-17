@@ -354,7 +354,13 @@ export default {
 
         requested.value = true;
       } catch (err) {
-        error.value = err.message;
+        if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+          error.value =
+            "The email address is already in use by another account.";
+        } else {
+          error.value = err.message;
+        }
+        console.log(err);
       }
 
       if (requested.value) {
