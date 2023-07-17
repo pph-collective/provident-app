@@ -73,7 +73,7 @@ export async function logout() {
 export async function getUserRequest(email) {
   try {
     const document = await getDoc(doc(db, "users", email));
-    if (document.exists) {
+    if (document.exists()) {
       return document.data();
     } else {
       return {};
