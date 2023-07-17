@@ -164,7 +164,9 @@ export async function batchAddFormResponses(formType, formResponses, assigned) {
         ...(formType === "user" && { user: assignee }),
       };
 
-      const document = doc(db, `${formType}s`, assignee, "form_responses");
+      const document = doc(
+        collection(db, `${formType}s`, assignee, "form_responses")
+      );
       batch.set(document, updatedFormResponse);
     }
   }
