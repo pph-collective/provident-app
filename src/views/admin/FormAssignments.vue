@@ -299,7 +299,7 @@ export default {
         // Create the form assignment on the db
         formAssignmentData._id = await addFormAssignment(formAssignmentData);
 
-        emails = formAssignmentUtils.addFormResponses(
+        emails = await formAssignmentUtils.addFormResponses(
           formAssignmentData,
           organizations.value,
           users.value
