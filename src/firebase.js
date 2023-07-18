@@ -192,12 +192,10 @@ export async function updateFormResponse(
 
     return res.id;
   } else {
-    await db
-      .collection(`${type}s`)
-      .doc(typeMap[type])
-      .collection("form_responses")
-      .doc(_id)
-      .set(formResponse);
+    await setDoc(
+      doc(db, `${type}s`, typeMap[type], "form_responses", _id),
+      formResponse
+    );
 
     return _id;
   }
