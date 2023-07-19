@@ -127,7 +127,8 @@
 import { computed, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase.js";
+import { db, createEmail } from "@/firebase.js";
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { processEmailBody } from "@/utils/emails";
 import formAssignmentUtils from "@/utils/formAssignment";
 import utils from "@/utils/utils.js";
@@ -171,10 +172,13 @@ export default {
       emails.value.filter(tabs[selectedTab.value])
     );
 
-    const unsubEmails = fb.db.collection("emails").onSnapshot((snapshot) => {
-      emails.value = snapshot.docs.map((doc) => doc.data());
-      loading.value = false;
-    });
+    const unsubEmails = onSnapshot(
+      query(collection(db, "emails")),
+      (snapshot) => {
+        emails.value = snapshot.docs.map((doc) => doc.data());
+        loading.value = false;
+      }
+    );
     onUnmounted(unsubEmails);
 
     const formQuestions = computed(() => {
@@ -256,7 +260,7 @@ export default {
       );
 
       try {
-        await fb.createEmail({
+        await createEmail({
           subject,
           body,
           to,

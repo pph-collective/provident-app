@@ -1,4 +1,4 @@
-import fb from "@/firebase";
+import { batchAddFormResponses } from "@/firebase";
 import utils from "@/utils/utils.js";
 
 const TARGET_FILTERS = {
@@ -114,7 +114,7 @@ const addFormResponses = async (formAssignment, organizations, users) => {
     users
   );
 
-  await fb.batchAddFormResponses(form.type, [formResponseData], assigned);
+  await batchAddFormResponses(form.type, [formResponseData], assigned);
 
   return emails;
 };
@@ -154,7 +154,7 @@ const addFormResponsesForApproved = async (
     }
   }
 
-  return await fb.batchAddFormResponses(
+  return await batchAddFormResponses(
     formResponseType,
     formResponses,
     new Set([documentId])

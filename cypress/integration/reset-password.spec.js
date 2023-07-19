@@ -219,7 +219,7 @@ describe("Reset Password Page", () => {
     // Assert old password does not work
     cy.get('[data-cy="error-message"]').should(
       "contain",
-      "The password is invalid or the user does not have a password."
+      "The password is invalid or the user does not have a password"
     );
   });
 });

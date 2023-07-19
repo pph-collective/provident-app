@@ -122,86 +122,66 @@
   </div>
 </template>
 
-<script>
-import { computed, reactive, ref } from "vue";
+<script setup lang="ts">
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import Loading from "@/components/Loading.vue";
+import Loading from "../../components/Loading.vue";
 
-import fb from "@/firebase.js";
-import utils from "@/utils/utils.js";
+import { updateUser } from "../../firebase.js";
+import utils from "../../utils/utils.js";
 
-export default {
-  components: {
-    Loading,
-  },
-  setup() {
-    const store = useStore();
-    const organizations = computed(() => store.state.organizations);
-    const users = computed(() =>
-      store.getters.approvedUsers.map((user) => {
-        user.edit = false;
-        return user;
-      })
-    );
-    const roles = ["champion", "user"];
-    const fields = ["Name", "Organization", "Email", "Role"];
-    const sortField = ref("name");
-    const sortAscending = ref(true); // ascending
+const store = useStore();
+const organizations = computed(() => store.state.organizations);
+const users = computed(() =>
+  store.getters.approvedUsers.map((user) => {
+    user.edit = false;
+    return user;
+  })
+);
+const roles = ["champion", "user"];
+const fields = ["Name", "Organization", "Email", "Role"];
+const sortField = ref("name");
+const sortAscending = ref(true); // ascending
 
-    const filters = reactive({
-      name: "",
-      organization: "",
-      email: "",
-      role: "",
-    });
+const filters = ref({
+  name: "",
+  organization: "",
+  email: "",
+  role: "",
+});
 
-    const filteredUsers = computed(() => {
-      let filtered = users.value;
-      for (const [filter, value] of Object.entries(filters)) {
-        if (value) {
-          filtered = filtered.filter((user) =>
-            user[filter].toLowerCase().includes(value.toLowerCase())
-          );
-        }
-      }
-      filtered.sort(utils.sortByProperty(sortField.value));
+const filteredUsers = computed(() => {
+  let filtered = users.value;
+  for (const [filter, value] of Object.entries(filters.value)) {
+    if (value) {
+      filtered = filtered.filter((user) =>
+        user[filter].toLowerCase().includes(value.toLowerCase())
+      );
+    }
+  }
+  filtered.sort(utils.sortByProperty(sortField.value));
 
-      if (!sortAscending.value) filtered.reverse();
+  if (!sortAscending.value) filtered.reverse();
 
-      return filtered;
-    });
+  return filtered;
+});
 
-    const saveUser = async ({ email, role }) => {
-      try {
-        await fb.updateUser({ email, role });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+const saveUser = async ({ email, role }) => {
+  try {
+    await updateUser({ email, role });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-    const updateSort = (fieldTitle) => {
-      const field = fieldTitle.toLowerCase();
-      if (field === sortField.value) {
-        sortAscending.value = !sortAscending.value; // flip sort order
-      } else {
-        sortField.value = field;
-        sortAscending.value = true;
-      }
-    };
-
-    return {
-      organizations,
-      roles,
-      fields,
-      users,
-      filteredUsers,
-      filters,
-      saveUser,
-      sortField,
-      sortAscending,
-      updateSort,
-    };
-  },
+const updateSort = (fieldTitle) => {
+  const field = fieldTitle.toLowerCase();
+  if (field === sortField.value) {
+    sortAscending.value = !sortAscending.value; // flip sort order
+  } else {
+    sortField.value = field;
+    sortAscending.value = true;
+  }
 };
 </script>
