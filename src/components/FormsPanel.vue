@@ -250,7 +250,7 @@ import { reactive, ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 
-import fb from "../firebase.js";
+import { logActivity } from "../firebase.js";
 import FormModal from "./form/Modal.vue";
 import PanelTag from "./PanelTag.vue";
 import utils, {
@@ -358,7 +358,7 @@ const innerPageRange = computed(() => {
 const launchForm = (formResponse, readOnly) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
-  fb.logActivity(
+  logActivity(
     user.value.data.email,
     readOnly ? "review form" : "launch form",
     formResponse._id

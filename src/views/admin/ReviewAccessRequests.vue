@@ -53,85 +53,77 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
-import formAssignmentUtils from "@/utils/formAssignment";
+import { db, updateUser, createEmail } from "../../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import formAssignmentUtils from "../../utils/formAssignment";
 
-import Loading from "@/components/Loading.vue";
+import Loading from "../../components/Loading.vue";
 
-export default {
-  components: {
-    Loading,
-  },
-  setup() {
-    const loading = ref(false);
+const loading = ref(false);
 
-    const store = useStore();
-    const organizations = computed(() => store.state.organizations);
-    const userRequests = computed(() => store.getters.pendingUsers);
-    const formAssignments = computed(() => store.state.formAssignments);
+const store = useStore();
+const organizations = computed(() => store.state.organizations);
+const userRequests = computed(() => store.getters.pendingUsers);
+const formAssignments = computed(() => store.state.formAssignments);
 
-    const approve = async (user) => {
-      loading.value = true;
+const approve = async (user) => {
+  loading.value = true;
 
-      try {
-        // update request status
-        await fb.updateUser({ email: user.email, status: "approved" });
+  try {
+    // update request status
+    await updateUser({ email: user.email, status: "approved" });
 
-        await formAssignmentUtils.addFormResponsesForApproved(
-          "user",
-          user,
-          formAssignments.value,
-          organizations.value
-        );
+    await formAssignmentUtils.addFormResponsesForApproved(
+      "user",
+      user,
+      formAssignments.value,
+      organizations.value
+    );
 
-        const body = `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been approved. <a href='${location.origin}/snack'>Go check out PROVIDENT!</a></p>`;
+    const body = `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been approved. <a href='${location.origin}/snack'>Go check out PROVIDENT!</a></p>`;
 
-        await fb.createEmail({
-          subject: `PROVIDENT Access Approved`,
-          body,
-          to: [user.email],
-        });
+    await createEmail({
+      subject: `PROVIDENT Access Approved`,
+      body,
+      to: [user.email],
+    });
 
-        store.dispatch("addNotification", {
-          message: `Success! ${user.email} was approved.`,
-        });
-      } catch (err) {
-        console.log(err);
-        store.dispatch("addNotification", {
-          color: "danger",
-          message: err.message,
-        });
-      }
+    store.dispatch("addNotification", {
+      message: `Success! ${user.email} was approved.`,
+    });
+  } catch (err) {
+    console.log(err);
+    store.dispatch("addNotification", {
+      color: "danger",
+      message: err.message,
+    });
+  }
 
-      loading.value = false;
-    };
+  loading.value = false;
+};
 
-    const deny = async (user) => {
-      await fb.db.collection("users").doc(user.id).update({ status: "denied" });
+const deny = async (user) => {
+  await updateDoc(doc(db, "users", user.id), { status: "denied" });
 
-      const body = `<p>Hello ${
-        user.name
-      },</p><br><p>Your request to access PROVIDENT has been denied. If you believe this is an error, please reach out to <a href='mailto:${
-        import.meta.env.VITE_APP_ADMIN_EMAIL
-      }'>the PROVIDENT admin</a>.</p>`;
+  const body = `<p>Hello ${
+    user.name
+  },</p><br><p>Your request to access PROVIDENT has been denied. If you believe this is an error, please reach out to <a href='mailto:${
+    import.meta.env.VITE_APP_ADMIN_EMAIL
+  }'>the PROVIDENT admin</a>.</p>`;
 
-      await fb.createEmail({
-        subject: "PROVIDENT Access Denied",
-        body,
-        to: [user.email],
-      });
+  await createEmail({
+    subject: "PROVIDENT Access Denied",
+    body,
+    to: [user.email],
+  });
 
-      store.dispatch("addNotification", {
-        color: "info",
-        message: `${user.email} was denied.`,
-      });
-    };
-
-    return { userRequests, approve, deny, loading };
-  },
+  store.dispatch("addNotification", {
+    color: "info",
+    message: `${user.email} was denied.`,
+  });
 };
 </script>

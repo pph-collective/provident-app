@@ -137,7 +137,8 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
+import { db, addFormAssignment, createEmail } from "@/firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 import { esc } from "@/directives/escape";
 import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
@@ -296,7 +297,7 @@ export default {
       let emails = [];
       try {
         // Create the form assignment on the db
-        formAssignmentData._id = await fb.addFormAssignment(formAssignmentData);
+        formAssignmentData._id = await addFormAssignment(formAssignmentData);
 
         emails = await formAssignmentUtils.addFormResponses(
           formAssignmentData,
@@ -327,7 +328,7 @@ export default {
             location.origin
           }/snack/forms'>PROVIDENT</a>.</p>`;
 
-          await fb.createEmail({
+          await createEmail({
             subject: `PROVIDENT New Form: ${title}`,
             body,
             to: emails,
@@ -338,10 +339,7 @@ export default {
         console.log(err);
 
         if (formAssignmentData._id) {
-          await fb.db
-            .collection("form_assignments")
-            .doc(formAssignmentData._id)
-            .delete();
+          await deleteDoc(doc(db, "form_assignments", formAssignmentData._id));
         }
 
         // only show the form error if the error was with form assignment, not email

@@ -35,7 +35,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
-      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?**",
+      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**",
       (req) => {
         // Assert the request
         expect(req.body.requestType).to.equal("PASSWORD_RESET");
@@ -121,7 +121,7 @@ describe("Reset Password Page", () => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
-      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?**"
+      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**"
     ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
@@ -170,7 +170,7 @@ describe("Reset Password Page", () => {
     // Set up intercepts
     cy.intercept(
       "POST",
-      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
+      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**"
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
@@ -193,7 +193,7 @@ describe("Reset Password Page", () => {
     // Set up intercepts
     cy.intercept(
       "POST",
-      "http://localhost:9099/www.googleapis.com/identitytoolkit/v3/relyingparty/resetPassword?**"
+      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**"
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
@@ -219,7 +219,7 @@ describe("Reset Password Page", () => {
     // Assert old password does not work
     cy.get('[data-cy="error-message"]').should(
       "contain",
-      "The password is invalid or the user does not have a password."
+      "The password is invalid or the user does not have a password"
     );
   });
 });

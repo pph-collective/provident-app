@@ -7,23 +7,26 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import firebase from "firebase/app";
-import fb from "../../src/firebase";
+import firebase from "firebase/compat/app";
+import { login, logout } from "../../src/firebase";
 import { attachCustomCommands } from "cypress-firebase";
 
 const ACCOUNTS = require("../fixtures/accounts.json");
+import firebaseConfig from "../../src/utils/firebaseConfig.json";
+
+firebase.initializeApp(firebaseConfig);
 
 attachCustomCommands({ Cypress, cy, firebase });
 
 Cypress.Commands.add("login", (email, password) => {
-  cy.wrap(fb.login(email, password));
+  cy.wrap(login(email, password));
   cy.get("[data-cy='home']").click();
 });
 
 Cypress.Commands.add("login_by_permission", (permission_level) => {
   const account = ACCOUNTS[permission_level];
   if (account) {
-    cy.wrap(fb.login(account["email"], account["password"])).should(
+    cy.wrap(login(account["email"], account["password"])).should(
       "not.eq",
       "{}"
     );
@@ -38,7 +41,7 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
 
 Cypress.Commands.add("logout", () => {
   cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
-  cy.wrap(fb.logout()).should("eq", undefined);
+  cy.wrap(logout()).should("eq", undefined);
   cy.get("[data-cy='home']").click();
   cy.get("[data-cy='login-button']").should("exist");
   cy.log("Logged out");
@@ -52,12 +55,18 @@ Cypress.Commands.add(
     cy.get("[data-cy='login-button']").click();
     cy.get("[data-cy='request-access-button']").click();
 
+    // Check if form loaded
+    cy.get("[data-cy='form-organization']").should("exist");
+
+    // Fill out form
     cy.get('[type="email"]').focus().type(email);
     cy.get('[data-cy="form-name"]').type(name);
     cy.get('[data-cy="form-organization"]').select(organization);
     cy.get('[data-cy="form-password"]').type(password);
     cy.get('[data-cy="form-confirm-password"]').type(password);
-    cy.get('[data-cy="form-terms"]').click();
+    cy.get('[data-cy="form-terms-and-conditions"]').click();
+    cy.get('[data-cy="form-terms-law-enforcement"]').click();
+    cy.get('[data-cy="form-terms-metadata"]').click();
 
     cy.get(".button").contains("Request Access").should("be.enabled");
     cy.get("form").submit();

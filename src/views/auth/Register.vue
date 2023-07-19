@@ -85,13 +85,53 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input v-model="form.terms" type="checkbox" data-cy="form-terms" />
+            <input
+              v-model="form.terms"
+              type="checkbox"
+              data-cy="form-terms-and-conditions"
+            />
             I agree to the
             <a
               tabindex="0"
               @click.prevent="showTerms = true"
               @keyup.enter.prevent="showTerms = true"
-              >terms and conditions</a
+              >research terms and conditions</a
+            >
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input
+              v-model="form.termsLawEnforcement"
+              type="checkbox"
+              data-cy="form-terms-law-enforcement"
+            />
+            I am not a member of
+            <a
+              tabindex="0"
+              @click.prevent="showTermsLawEnforcement = true"
+              @keyup.enter.prevent="showTermsLawEnforcement = true"
+              >law enforcement</a
+            >
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input
+              v-model="form.termsMetadata"
+              type="checkbox"
+              data-cy="form-terms-metadata"
+            />
+            I agree to the
+            <a
+              tabindex="0"
+              @click.prevent="showTermsMetadata = true"
+              @keyup.enter.prevent="showTermsMetadata = true"
+              >collection of metadata</a
             >
           </label>
         </div>
@@ -179,6 +219,55 @@
         </section>
       </div>
     </div>
+
+    <div v-if="showTermsLawEnforcement" class="modal is-active">
+      <div class="modal-background" />
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            Why do we restrict access to our web tool?
+          </p>
+          <button
+            v-esc="() => (showTermsLawEnforcement = false)"
+            autofocus
+            class="delete"
+            aria-label="close"
+            @click="showTermsLawEnforcement = false"
+          />
+        </header>
+        <section class="modal-card-body content">
+          <p>
+            The PROVIDENT Web Tool is intended to be used by community
+            organizations. We want to minimize the chance that detailed
+            neighborhood information is used for targeted policing.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <div v-if="showTermsMetadata" class="modal is-active">
+      <div class="modal-background" />
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">What metadata do we collect?</p>
+          <button
+            v-esc="() => (showTermsMetadata = false)"
+            autofocus
+            class="delete"
+            aria-label="close"
+            @click="showTermsMetadata = false"
+          />
+        </header>
+        <section class="modal-card-body content">
+          <p>
+            Metadata helps us understand how people are using the tool. It also
+            helps us improve our web tool. Metadata we collect includes the
+            number of logins, time spent using the map, and which neighborhoods
+            are being selected.
+          </p>
+        </section>
+      </div>
+    </div>
   </teleport>
 </template>
 
@@ -186,7 +275,9 @@
 import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import fb from "@/firebase";
+import { auth, db, createEmail, logout } from "@/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { esc } from "@/directives/escape";
 import FormCard from "@/components/FormCard.vue";
 import Loading from "@/components/Loading.vue";
@@ -211,6 +302,8 @@ export default {
     const requested = ref(false);
     const error = ref(null);
     const showTerms = ref(false);
+    const showTermsLawEnforcement = ref(false);
+    const showTermsMetadata = ref(false);
     const loading = ref(false);
 
     const store = useStore();
@@ -227,7 +320,11 @@ export default {
           status: false,
           message: "password and confirmation do not match",
         };
-      } else if (!form.terms) {
+      } else if (
+        !form.terms ||
+        !form.termsLawEnforcement ||
+        !form.termsMetadata
+      ) {
         return {
           status: false,
           message: "",
@@ -242,12 +339,12 @@ export default {
       const email = form.email.toLowerCase();
 
       try {
-        await fb.auth.createUserWithEmailAndPassword(email, form.password);
+        await createUserWithEmailAndPassword(auth, email, form.password);
         //scrub out password
         form.password = "";
         form.confirmPassword = "";
-        await fb.auth.currentUser.updateProfile({ displayName: form.name });
-        await fb.db.collection("users").doc(email).set({
+        await updateProfile(auth.currentUser, { displayName: form.name });
+        await setDoc(doc(db, "users", email), {
           email,
           name: form.name,
           organization: form.organization,
@@ -257,17 +354,23 @@ export default {
 
         requested.value = true;
       } catch (err) {
-        error.value = err.message;
+        if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+          error.value =
+            "The email address is already in use by another account.";
+        } else {
+          error.value = err.message;
+        }
+        console.log(err);
       }
 
       if (requested.value) {
         try {
-          await fb.createEmail({
+          await createEmail({
             subject: "PROVIDENT User Request",
             body: `<p>${form.name} (${email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
             to: [import.meta.env.VITE_APP_ADMIN_EMAIL],
           });
-          await fb.createEmail({
+          await createEmail({
             subject: "PROVIDENT Access Request",
             body: `<p>Hello ${
               form.name
@@ -280,7 +383,7 @@ export default {
           console.log(e);
         }
       }
-      await fb.logout();
+      await logout();
       loading.value = false;
     };
 
@@ -293,6 +396,8 @@ export default {
       organizations,
       register,
       showTerms,
+      showTermsLawEnforcement,
+      showTermsMetadata,
     };
   },
 };

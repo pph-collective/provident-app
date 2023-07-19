@@ -4,7 +4,8 @@ import App from "./App.vue";
 
 import store from "./store";
 import router from "./router";
-import fb from "@/firebase";
+import { auth, getUserRequest, logActivity } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 // general styling
 import "@/assets/styles/main.scss";
@@ -20,11 +21,11 @@ import FormTextInput from "@/components/form/TextInput.vue";
 import FormSubForm from "@/components/form/SubForm.vue";
 
 // listen for changes to user
-fb.auth.onAuthStateChanged(async (user) => {
+onAuthStateChanged(auth, async (user) => {
   await store.dispatch("fetchOrgs");
 
   if (user) {
-    const { status, organization, role } = await fb.getUserRequest(user.email);
+    const { status, organization, role } = await getUserRequest(user.email);
     if (status === "approved") {
       store.dispatch("fetchUser", {
         ...user.toJSON(),
@@ -35,7 +36,7 @@ fb.auth.onAuthStateChanged(async (user) => {
       let token = await user.getIdTokenResult();
       store.dispatch("fetchAdmin", token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
-      fb.logActivity(user.email, "login");
+      logActivity(user.email, "login");
       store.dispatch("setLoaded");
       return;
     }

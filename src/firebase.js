@@ -1,31 +1,44 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-
+import { initializeApp } from "firebase/app";
+import {
+  connectAuthEmulator,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  connectFirestoreEmulator,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+  updateDoc,
+  writeBatch,
+} from "firebase/firestore";
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
 import firebaseConfig from "./utils/firebaseConfig.json";
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-let db = firebase.firestore();
-let auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 let emailSubjectPrefix = "";
 if (location.hostname === "localhost") {
-  db.settings({
+  db._setSettings({
     experimentalForceLongPolling: true,
     host: "localhost:8088",
     ssl: false,
   });
-  db.useEmulator("localhost", 8088);
-  auth.useEmulator("http://localhost:9099");
+  connectFirestoreEmulator(db, "localhost", 8088);
+  connectAuthEmulator(auth, "http://localhost:9099");
   emailSubjectPrefix = "TEST: ";
 }
 
-const logActivity = async (user, action, subAction = "") => {
+export async function logActivity(user, action, subAction = "") {
   try {
-    await db.collection("users").doc(user).collection("activity_log").add({
+    await addDoc(collection(db, `users/${user}/activity_log`), {
       user,
       action,
       subAction,
@@ -34,41 +47,50 @@ const logActivity = async (user, action, subAction = "") => {
   } catch (e) {
     console.warn("Activity logging failed: ", e);
   }
-};
+}
 
-const login = async (email, password) => {
+export async function login(email, password) {
   try {
-    const res = await auth.signInWithEmailAndPassword(email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
     return res.user.toJSON();
   } catch (e) {
     console.log(e);
-    throw e;
+    let message = e.message;
+    if (e.message === "Firebase: Error (auth/wrong-password).") {
+      message = "The password is invalid or the user does not have a password";
+    }
+    throw {
+      ...e,
+      message,
+    };
   }
-};
+}
 
-const logout = async () => await auth.signOut();
+export async function logout() {
+  await signOut(auth);
+}
 
-const getUserRequest = async (email) => {
+export async function getUserRequest(email) {
   try {
-    const doc = await db.collection("users").doc(email).get();
-    if (doc.exists) {
-      return doc.data();
+    const document = await getDoc(doc(db, "users", email));
+    if (document.exists()) {
+      return document.data();
     } else {
       return {};
     }
   } catch (err) {
     return {};
   }
-};
+}
 
-const updateUser = async (user) => {
-  await db.collection("users").doc(user.email).update(user);
-};
+export async function updateUser(user) {
+  await updateDoc(doc(db, "users", user.email), user);
+}
 
-const getCollection = async (collection) => {
+export async function getCollection(collectionPath) {
   let res = [];
   try {
-    const docs = await db.collection(collection).get();
+    const docs = await getDocs(collection(db, collectionPath));
     res = docs.docs.map((doc) => {
       return { _id: doc.id, ...doc.data() };
     });
@@ -76,18 +98,18 @@ const getCollection = async (collection) => {
     console.log(err);
   }
   return res;
-};
+}
 
 // common pattern for model related data which has an array of data under the data key
-const getDataFromDoc = (res) => {
+function getDataFromDoc(res) {
   if (res.exists) {
     return res.data().data;
   } else {
     return [];
   }
-};
+}
 
-const getForms = async () => {
+export async function getForms() {
   const forms = {};
 
   for (const form of await getCollection("forms")) {
@@ -95,19 +117,17 @@ const getForms = async () => {
   }
 
   return forms;
-};
+}
 
-const getFormResponses = async (email, organization) => {
+export async function getFormResponses(email, organization) {
   const formTypes = { users: email, organizations: organization };
 
   try {
     const formResponses = await Promise.all(
       Object.entries(formTypes).map(async ([collectionId, docId]) => {
-        const response = await db
-          .collection(collectionId)
-          .doc(docId)
-          .collection("form_responses")
-          .get();
+        const response = await getDocs(
+          collection(db, collectionId, docId, "form_responses")
+        );
         return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
       })
     );
@@ -117,12 +137,15 @@ const getFormResponses = async (email, organization) => {
     console.log(err);
     return [];
   }
-};
+}
 
-const addFormAssignment = async (formAssignmentData) => {
-  const res = await db.collection("form_assignments").add(formAssignmentData);
+export async function addFormAssignment(formAssignmentData) {
+  const res = await addDoc(
+    collection(db, "form_assignments"),
+    formAssignmentData
+  );
   return res.id;
-};
+}
 
 /**
  * @param {String} formType - "user" | "organization"
@@ -130,8 +153,8 @@ const addFormAssignment = async (formAssignmentData) => {
  * @param {Set<String>} assigned - set of emails or organization names
  * @returns {Promise<void>}
  */
-const batchAddFormResponses = async (formType, formResponses, assigned) => {
-  const writeBatch = db.batch();
+export async function batchAddFormResponses(formType, formResponses, assigned) {
+  const batch = writeBatch(db);
 
   for (const formResponse of formResponses) {
     for (const assignee of assigned) {
@@ -141,19 +164,20 @@ const batchAddFormResponses = async (formType, formResponses, assigned) => {
         ...(formType === "user" && { user: assignee }),
       };
 
-      const doc = db
-        .collection(`${formType}s`)
-        .doc(assignee)
-        .collection("form_responses")
-        .doc();
-      writeBatch.set(doc, updatedFormResponse);
+      const document = doc(
+        collection(db, `${formType}s`, assignee, "form_responses")
+      );
+      batch.set(document, updatedFormResponse);
     }
   }
 
-  await writeBatch.commit();
-};
+  await batch.commit();
+}
 
-const updateFormResponse = async (formResponse, { email, organization }) => {
+export async function updateFormResponse(
+  formResponse,
+  { email, organization }
+) {
   const {
     _id,
     form: { type },
@@ -161,56 +185,47 @@ const updateFormResponse = async (formResponse, { email, organization }) => {
   const typeMap = { user: email, organization };
 
   if (_id === undefined) {
-    const res = await db
-      .collection(`${type}s`)
-      .doc(typeMap[type])
-      .collection("form_responses")
-      .add(formResponse);
+    const res = await addDoc(
+      collection(db, `${type}s`, typeMap[type], "form_responses"),
+      formResponse
+    );
 
     return res.id;
   } else {
-    await db
-      .collection(`${type}s`)
-      .doc(typeMap[type])
-      .collection("form_responses")
-      .doc(_id)
-      .set(formResponse);
+    await setDoc(
+      doc(db, `${type}s`, typeMap[type], "form_responses", _id),
+      formResponse
+    );
 
     return _id;
   }
-};
+}
 
-const getModelDataPeriods = async () => {
+export async function getModelDataPeriods() {
   const res = [];
   try {
-    const doc = await db.collection("model_data").doc("periods").get();
-    res.push(...getDataFromDoc(doc));
+    const document = await getDoc(doc(db, "model_data", "periods"));
+    res.push(...getDataFromDoc(document));
     res.sort().reverse();
   } catch (err) {
     console.log(err);
   }
   return res;
-};
+}
 
-const getModelData = async (period) => {
+export async function getModelData(period) {
   try {
-    const modelMetaDoc = await db.collection("model_data").doc("bg_meta").get();
+    const modelMetaDoc = await getDoc(doc(db, "model_data", "bg_meta"));
     const modelMeta = getDataFromDoc(modelMetaDoc);
     const modelDt = aq.from(modelMeta);
 
-    const sviDataDoc = await db.collection("svi_data").doc(period).get();
+    const sviDataDoc = await getDoc(doc(db, "svi_data", period));
     const { cbg, town, ri } = sviDataDoc.data();
 
-    const landmarkDataDoc = await db
-      .collection("landmark_data")
-      .doc(period)
-      .get();
+    const landmarkDataDoc = await getDoc(doc(db, "landmark_data", period));
     const landmarkData = getDataFromDoc(landmarkDataDoc);
 
-    const tooltipDataDoc = await db
-      .collection("tooltip_data")
-      .doc(period)
-      .get();
+    const tooltipDataDoc = await getDoc(doc(db, "tooltip_data", period));
     const tooltipData = getDataFromDoc(tooltipDataDoc);
 
     return {
@@ -239,57 +254,57 @@ const getModelData = async (period) => {
       ri: [],
     };
   }
-};
+}
 
-const getModelPredictions = async (period) => {
+export async function getModelPredictions(period) {
   try {
-    const doc = await db.collection("model_predictions").doc(period).get();
-    return getDataFromDoc(doc);
+    const document = await getDoc(doc(db, "model_predictions", period));
+    return getDataFromDoc(document);
   } catch (err) {
     console.log(err);
     return [];
   }
-};
+}
 
-const getZipcodes = async () => {
+export async function getZipcodes() {
   try {
-    const doc = await db.collection("map_data").doc("ri_zip_database").get();
-    return getDataFromDoc(doc);
+    const document = await getDoc(doc(db, "map_data", "ri_zip_database"));
+    return getDataFromDoc(document);
   } catch (err) {
     console.log(err);
     return [];
   }
-};
+}
 
-const createEmail = async ({
+export async function createEmail({
   subject,
   to,
   body,
   sendDate = new Date().toISOString(),
-}) => {
+}) {
   try {
-    const doc = {
+    const document = {
       subject: emailSubjectPrefix + subject,
       to,
       body: processEmailBody(body),
       sendDate,
       sent: false,
     };
-    await db.collection("emails").add(doc);
+    await addDoc(collection(db, "emails"), document);
   } catch (err) {
     console.log(err);
   }
-};
+}
 
-const addOrg = async (organization) => {
+export async function addOrg(organization) {
   const docId = organization.name;
 
-  await db.collection("organizations").doc(docId).set(organization);
+  await setDoc(doc(db, "organizations", docId), organization);
 
   return docId;
-};
+}
 
-const getDataset = async (period, interventionArmUser) => {
+export async function getDataset(period, interventionArmUser) {
   const data = await getModelData(period);
   if (interventionArmUser) {
     const predictions = await getModelPredictions(period);
@@ -300,27 +315,4 @@ const getDataset = async (period, interventionArmUser) => {
   } else {
     return data;
   }
-};
-
-export default {
-  auth,
-  db,
-  addFormAssignment,
-  addOrg,
-  batchAddFormResponses,
-  createEmail,
-  getCollection,
-  getFormResponses,
-  getForms,
-  getModelData,
-  getDataset,
-  getModelDataPeriods,
-  getModelPredictions,
-  getUserRequest,
-  getZipcodes,
-  logActivity,
-  login,
-  logout,
-  updateFormResponse,
-  updateUser,
-};
+}
