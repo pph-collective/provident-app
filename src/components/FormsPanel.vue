@@ -1,5 +1,40 @@
 <template>
   <div class="container is-fullhd">
+    <div class="p-2">
+      <table class="table">
+        <thead>
+          <tr
+            v-for="headerGroup in table.getHeaderGroups()"
+            :key="headerGroup.id"
+          >
+            <th
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              :colSpan="header.colSpan"
+            >
+              <FlexRender
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
+                :props="header.getContext()"
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in table.getRowModel().rows" :key="row.id">
+            <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+              <FlexRender
+                :render="cell.column.columnDef.cell"
+                :props="cell.getContext()"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="h-4" />
+      <!--      <button @click="rerender" class="border p-2">Rerender</button>-->
+    </div>
+
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
       <p class="panel-heading" data-cy="form-panel-heading">{{ title }}</p>
 
@@ -249,6 +284,12 @@
 import { reactive, ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
+import {
+  FlexRender,
+  getCoreRowModel,
+  useVueTable,
+  createColumnHelper,
+} from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
 import FormModal from "./form/Modal.vue";
@@ -273,6 +314,69 @@ const props = withDefaults(
     title: "",
   }
 );
+
+type Form = {
+  _id: string;
+  questions: object;
+  title: string;
+  type: "organization" | "user";
+};
+
+type FormResponse = {
+  expire_date: string;
+  form: Form;
+  form_assignment_id: string;
+  last_updated: number;
+  organization: string;
+  release_date: string;
+  response: {
+    bg_id: string;
+    municipality: string;
+  };
+  status: string;
+  user_submitted: string;
+  user_edited: string[];
+};
+
+const columnHelper = createColumnHelper<FormResponse>();
+
+const columns = [
+  columnHelper.group({
+    header: "Forms",
+    columns: [
+      columnHelper.accessor("form.title", {
+        id: "title",
+        cell: (info) => info.getValue(),
+        header: () => "Title",
+      }),
+      columnHelper.accessor("status", {
+        id: "status",
+        cell: (info) => info.getValue(),
+        header: () => "Status",
+      }),
+      columnHelper.accessor("response.municipality", {
+        id: "municipality",
+        cell: (info) => info.getValue(),
+        header: () => "Municipality",
+      }),
+      columnHelper.accessor("response.bg_id", {
+        id: "bg_id",
+        cell: (info) => info.getValue(),
+        header: () => "Block Group",
+      }),
+      columnHelper.accessor("user_submitted", {
+        id: "user_submitted",
+        cell: (info) => info.getValue(),
+        header: () => "Submitted By",
+      }),
+      columnHelper.accessor("release_date", {
+        id: "release_date",
+        cell: (info) => info.getValue(),
+        header: () => "Release Date",
+      }),
+    ],
+  }),
+];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
@@ -302,6 +406,14 @@ const filteredFormResponses = computed(() => {
     }
   }
   return res;
+});
+
+const table = useVueTable({
+  get data() {
+    return props.formResponses;
+  },
+  columns,
+  getCoreRowModel: getCoreRowModel(),
 });
 
 watch(filteredFormResponses, () => {
