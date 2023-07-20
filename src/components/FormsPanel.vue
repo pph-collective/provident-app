@@ -336,7 +336,7 @@ type FormResponse = {
   };
   status: string;
   user_submitted: string;
-  user_edited: string[];
+  users_edited: string[];
 };
 
 const columnHelper = createColumnHelper<FormResponse>();
@@ -369,6 +369,11 @@ const columns = [
         id: "user_submitted",
         cell: (info) => info.getValue(),
         header: () => "Submitted By",
+      }),
+      columnHelper.accessor("users_edited", {
+        id: "users_edited",
+        cell: (info) => info.getValue(),
+        header: () => "Edited By",
       }),
       columnHelper.accessor("release_date", {
         id: "release_date",
