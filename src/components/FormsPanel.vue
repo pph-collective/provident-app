@@ -289,6 +289,7 @@ import {
   getCoreRowModel,
   useVueTable,
   createColumnHelper,
+  getPaginationRowModel,
 } from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
@@ -352,7 +353,18 @@ const columns = [
       }),
       columnHelper.accessor("status", {
         id: "status",
-        cell: (info) => info.getValue(),
+        cell: (info) =>
+          h(
+            "span",
+            {
+              class: {
+                "tag is-light": true,
+                "is-success": info.getValue() === "Submitted",
+                "is-warning": info.getValue() === "Not Started",
+              },
+            },
+            [info.getValue()]
+          ),
         header: () => "Status",
       }),
       columnHelper.accessor("response.municipality", {
@@ -429,6 +441,7 @@ const table = useVueTable({
   },
   columns,
   getCoreRowModel: getCoreRowModel(),
+  getPaginationRowModel: getPaginationRowModel(),
 });
 
 watch(filteredFormResponses, () => {
