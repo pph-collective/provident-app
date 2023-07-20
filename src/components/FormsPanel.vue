@@ -450,6 +450,11 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Release Date",
       }),
+      columnHelper.accessor("last_updated", {
+        id: "last_updated",
+        cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
+        header: "Last Updated",
+      }),
       columnHelper.display({
         id: "actions",
         cell: (info) =>
