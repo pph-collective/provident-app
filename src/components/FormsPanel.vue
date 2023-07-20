@@ -375,7 +375,7 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Release Date",
       }),
-      columnHelper.accessor("status", {
+      columnHelper.display({
         id: "actions",
         cell: (info) =>
           h(LaunchFormResponseButton, {
@@ -383,7 +383,6 @@ const columns = [
             onClick: launchForm,
             userRole: userRole.value,
           }),
-        header: () => "Launch",
       }),
     ],
   }),
