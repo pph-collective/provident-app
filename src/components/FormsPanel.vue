@@ -281,7 +281,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed, watch } from "vue";
+import { reactive, ref, computed, watch, h } from "vue";
 import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 import {
@@ -292,6 +292,7 @@ import {
 } from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
+import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/Modal.vue";
 import PanelTag from "./PanelTag.vue";
 import utils, {
@@ -373,6 +374,16 @@ const columns = [
         id: "release_date",
         cell: (info) => info.getValue(),
         header: () => "Release Date",
+      }),
+      columnHelper.accessor("status", {
+        id: "actions",
+        cell: (info) =>
+          h(LaunchFormResponseButton, {
+            formResponse: info.row.original,
+            onClick: launchForm,
+            userRole: userRole.value,
+          }),
+        header: () => "Launch",
       }),
     ],
   }),
@@ -468,8 +479,10 @@ const innerPageRange = computed(() => {
 });
 
 const launchForm = (formResponse, readOnly) => {
+  console.log("CLICKED");
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
+  console.log(activeFormResponse.value);
   logActivity(
     user.value.data.email,
     readOnly ? "review form" : "launch form",
