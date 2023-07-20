@@ -31,8 +31,66 @@
           </tr>
         </tbody>
       </table>
-      <div class="h-4" />
-      <!--      <button @click="rerender" class="border p-2">Rerender</button>-->
+      <div>
+        <div class="flex items-center gap-2">
+          <button
+            class="button border rounded p-3"
+            :disabled="!table.getCanPreviousPage()"
+            @click="() => table.setPageIndex(0)"
+          >
+            «
+          </button>
+          <button
+            class="button border rounded p-3"
+            :disabled="!table.getCanPreviousPage()"
+            @click="() => table.previousPage()"
+          >
+            ‹
+          </button>
+          <button
+            class="button border rounded p-3"
+            :disabled="!table.getCanNextPage()"
+            @click="() => table.nextPage()"
+          >
+            ›
+          </button>
+          <button
+            class="button border rounded p-3"
+            :disabled="!table.getCanNextPage()"
+            @click="() => table.setPageIndex(table.getPageCount() - 1)"
+          >
+            »
+          </button>
+          <span class="flex items-center gap-1">
+            <div>Page</div>
+            <strong>
+              {{ table.getState().pagination.pageIndex + 1 }} of
+              {{ table.getPageCount() }}
+            </strong>
+          </span>
+          <span class="flex items-center gap-1">
+            | Go to page:
+            <input
+              type="number"
+              :value="goToPageNumber"
+              class="border p-1 rounded w-16"
+              @change="handleGoToPage"
+            />
+          </span>
+          <select
+            :value="table.getState().pagination.pageSize"
+            @change="handlePageSizeChange"
+          >
+            <option
+              v-for="pageSize in pageSizes"
+              :key="pageSize"
+              :value="pageSize"
+            >
+              Show {{ pageSize }}
+            </option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
@@ -405,6 +463,10 @@ const columns = [
   }),
 ];
 
+const INITIAL_PAGE_INDEX = 0;
+const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
+const pageSizes = [10, 20, 30, 40, 50];
+
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
 
@@ -443,6 +505,16 @@ const table = useVueTable({
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
 });
+
+const handleGoToPage = (e) => {
+  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+  goToPageNumber.value = page + 1;
+  table.setPageIndex(page);
+};
+
+const handlePageSizeChange = (e) => {
+  table.setPageSize(Number(e.target.value));
+};
 
 watch(filteredFormResponses, () => {
   currentPage.value = 1;
@@ -496,10 +568,8 @@ const innerPageRange = computed(() => {
 });
 
 const launchForm = (formResponse, readOnly) => {
-  console.log("CLICKED");
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
-  console.log(activeFormResponse.value);
   logActivity(
     user.value.data.email,
     readOnly ? "review form" : "launch form",
