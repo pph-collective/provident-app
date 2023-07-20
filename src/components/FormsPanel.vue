@@ -11,12 +11,20 @@
               v-for="header in headerGroup.headers"
               :key="header.id"
               :colSpan="header.colSpan"
+              :class="header.column.getCanSort() ? 'is-clickable' : ''"
+              @click="header.column.getToggleSortingHandler()?.($event)"
             >
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :render="header.column.columnDef.header"
                 :props="header.getContext()"
               />
+
+              {{
+                { asc: " 🔼", desc: " 🔽" }[
+                  header.column.getIsSorted() as string
+                ]
+              }}
             </th>
           </tr>
         </thead>
@@ -344,10 +352,12 @@ import { useStore } from "vuex";
 import Multiselect from "@vueform/multiselect";
 import {
   FlexRender,
-  getCoreRowModel,
-  useVueTable,
   createColumnHelper,
+  getCoreRowModel,
+  getSortedRowModel,
   getPaginationRowModel,
+  SortingState,
+  useVueTable,
 } from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
@@ -468,6 +478,8 @@ const columns = [
   }),
 ];
 
+const sorting = ref<SortingState>([]);
+
 const INITIAL_PAGE_INDEX = 0;
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
 const pageSizes = [10, 20, 30, 40, 50];
@@ -507,8 +519,20 @@ const table = useVueTable({
     return props.formResponses;
   },
   columns,
+  state: {
+    get sorting() {
+      return sorting.value;
+    },
+  },
+  onSortingChange: (updaterOrValue) => {
+    sorting.value =
+      typeof updaterOrValue === "function"
+        ? updaterOrValue(sorting.value)
+        : updaterOrValue;
+  },
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
 });
 
 const handleGoToPage = (e) => {
