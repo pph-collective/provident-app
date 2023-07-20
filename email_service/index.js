@@ -24,7 +24,7 @@ if (emulator) {
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8088";
 }
 
-let EMAIL_SMTP = "smtp://mail-relay.brown.edu:25";
+let EMAIL_SMTP = "smtp://regmail.brown.edu:25";
 if (test) {
   EMAIL_SMTP = undefined;
 }
