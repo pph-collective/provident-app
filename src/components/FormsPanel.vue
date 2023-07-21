@@ -1,7 +1,7 @@
 <template>
   <div class="container is-fullhd">
     <div class="p-2">
-      <table class="table">
+      <table class="table mx-auto">
         <thead>
           <tr
             v-for="headerGroup in table.getHeaderGroups()"
@@ -40,43 +40,44 @@
         </tbody>
       </table>
       <div>
-        <div class="flex items-center gap-2">
-          <button
-            class="button border rounded p-3"
-            :disabled="!table.getCanPreviousPage()"
-            @click="() => table.setPageIndex(0)"
-          >
-            «
-          </button>
-          <button
-            class="button border rounded p-3"
-            :disabled="!table.getCanPreviousPage()"
-            @click="() => table.previousPage()"
-          >
-            ‹
-          </button>
-          <button
-            class="button border rounded p-3"
-            :disabled="!table.getCanNextPage()"
-            @click="() => table.nextPage()"
-          >
-            ›
-          </button>
-          <button
-            class="button border rounded p-3"
-            :disabled="!table.getCanNextPage()"
-            @click="() => table.setPageIndex(table.getPageCount() - 1)"
-          >
-            »
-          </button>
-          <span class="flex items-center gap-1">
-            <div>Page</div>
+        <div>
+          <div>
+            <button
+              class="button border rounded p-3"
+              :disabled="!table.getCanPreviousPage()"
+              @click="() => table.setPageIndex(0)"
+            >
+              «
+            </button>
+            <button
+              class="button border rounded p-3"
+              :disabled="!table.getCanPreviousPage()"
+              @click="() => table.previousPage()"
+            >
+              ‹
+            </button>
+            <button
+              class="button border rounded p-3"
+              :disabled="!table.getCanNextPage()"
+              @click="() => table.nextPage()"
+            >
+              ›
+            </button>
+            <button
+              class="button border rounded p-3"
+              :disabled="!table.getCanNextPage()"
+              @click="() => table.setPageIndex(table.getPageCount() - 1)"
+            >
+              »
+            </button>
+          </div>
+          <span>
             <strong>
               {{ table.getState().pagination.pageIndex + 1 }} of
               {{ table.getPageCount() }}
             </strong>
           </span>
-          <span class="flex items-center gap-1">
+          <span>
             | Go to page:
             <input
               type="number"
