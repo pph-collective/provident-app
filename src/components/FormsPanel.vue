@@ -43,32 +43,32 @@
         <div>
           <div>
             <button
-              class="button border rounded p-3"
+              class="button border rounded p-3 m-1"
               :disabled="!table.getCanPreviousPage()"
               @click="() => table.setPageIndex(0)"
             >
-              «
+              First
             </button>
             <button
-              class="button border rounded p-3"
+              class="button border rounded p-3 m-1"
               :disabled="!table.getCanPreviousPage()"
               @click="() => table.previousPage()"
             >
-              ‹
+              Prev
             </button>
             <button
-              class="button border rounded p-3"
+              class="button border rounded p-3 m-1"
               :disabled="!table.getCanNextPage()"
               @click="() => table.nextPage()"
             >
-              ›
+              Next
             </button>
             <button
-              class="button border rounded p-3"
+              class="button border rounded p-3 m-1"
               :disabled="!table.getCanNextPage()"
               @click="() => table.setPageIndex(table.getPageCount() - 1)"
             >
-              »
+              Last
             </button>
           </div>
           <span>
