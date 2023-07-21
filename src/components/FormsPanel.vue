@@ -100,243 +100,6 @@
         </div>
       </div>
     </div>
-
-    <div class="panel is-primary m-4 has-background-white" data-cy="form-panel">
-      <p class="panel-heading" data-cy="form-panel-heading">{{ title }}</p>
-
-      <div class="p-2">
-        <button
-          class="button is-primary is-small"
-          @click="showFilters = !showFilters"
-        >
-          {{ showFilters ? "Hide" : "Show" }} Filters
-        </button>
-      </div>
-
-      <div
-        v-if="showFilters"
-        class="panel-block pt-0 is-flex-wrap-wrap is-justify-content-space-around"
-      >
-        <div
-          v-for="(options, filterName) in filterOptions"
-          :key="'filter-' + filterName"
-          class="column py-0 filter-field"
-        >
-          <label>
-            {{ filterName }}
-            <Multiselect
-              v-model="filters[filterName]"
-              mode="tags"
-              :options="options"
-              :searchable="false"
-              :close-on-select="true"
-              :hide-selected="false"
-            >
-              <template #tag="{ option, handleTagRemove, disabled }">
-                <div class="multiselect-tag is-flex">
-                  <span class="is-flex-shrink-1 shorten-ellipsis">
-                    {{ option.label }}
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="multiselect-tag-remove"
-                    @mousedown.prevent="handleTagRemove(option, $event)"
-                  >
-                    <span class="multiselect-tag-remove-icon"></span>
-                  </span>
-                </div>
-              </template>
-            </Multiselect>
-          </label>
-        </div>
-      </div>
-      <div v-else class="panel-block p-0" />
-
-      <div
-        v-if="filteredFormResponses.length === 0"
-        data-cy="forms-panel-block"
-        class="panel-block is-justify-content-center"
-      >
-        <span>No forms here</span>
-      </div>
-      <div
-        v-for="(formResponse, idx) in pagedFormResponses"
-        v-else
-        :key="'formResponse-' + idx"
-        data-cy="forms-panel-block"
-        class="panel-block"
-      >
-        <div class="level form-row" data-cy="form-row">
-          <div class="level-left">
-            <p class="level-item is-size-5" data-cy="form-title">
-              {{ formResponse.form.title }}
-            </p>
-          </div>
-
-          <div class="level-right has-text-centered is-flex-shrink-1 mt-0">
-            <div class="panel-tags">
-              <PanelTag
-                v-if="readOnly && formResponse.organization"
-                label="ORGANIZATION"
-                :value="formResponse.organization"
-              />
-              <PanelTag
-                v-if="readOnly && formResponse.user"
-                label="USER"
-                :value="formResponse.user"
-              />
-              <PanelTag
-                v-if="user.admin && formResponse.release_date"
-                :class="{
-                  'is-success is-light': formResponse.release_date <= today,
-                }"
-                label="release date"
-                :value="formResponse.release_date"
-              />
-              <PanelTag
-                v-if="formResponse.response[MUNI_QUESTION_MODEL]"
-                label="municipality"
-                :value="formResponse.response[MUNI_QUESTION_MODEL]"
-              />
-              <PanelTag
-                v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-                label="block group"
-                :value="formResponse.response[GEOID_QUESTION_MODEL]"
-              />
-              <PanelTag
-                :class="{
-                  'is-warning': formResponse.status === 'Not Started',
-                  'is-info': formResponse.status === 'Draft',
-                  'is-success': formResponse.status === 'Submitted',
-                }"
-                label="status"
-                :value="formResponse.status"
-              />
-              <PanelTag
-                v-if="formResponse.status !== 'Not Started'"
-                label="last updated"
-                :value="
-                  new Date(formResponse.last_updated).toISOString().slice(0, 10)
-                "
-              />
-              <PanelTag
-                v-if="formResponse.user_submitted"
-                label="SUBMITTED BY"
-                :value="formResponse.user_submitted"
-              />
-            </div>
-            <div class="level-item">
-              <button
-                v-if="
-                  !readOnly &&
-                  formResponse.status !== 'Submitted' &&
-                  (formResponse.form.type === 'user' ||
-                    (formResponse.form.type === 'organization' &&
-                      userRole === 'champion'))
-                "
-                class="button is-primary level-item"
-                data-cy="launch-form-button"
-                type="button"
-                @click="launchForm(formResponse, false)"
-              >
-                {{ formResponse.status === "Draft" ? "Continue" : "Start" }}
-              </button>
-              <button
-                v-else
-                class="button is-primary is-light level-item"
-                data-cy="review-form-button"
-                type="button"
-                @click="launchForm(formResponse, true)"
-              >
-                Review Form
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <nav
-      v-if="filteredFormResponses.length >= 0"
-      class="pagination m-4"
-      role="navigation"
-      aria-label="pagination"
-    >
-      <button
-        class="pagination-previous"
-        :disabled="currentPage === 1"
-        @click="currentPage = currentPage - 1"
-      >
-        Previous page
-      </button>
-      <button
-        class="pagination-next"
-        :disabled="currentPage === totalPages"
-        @click="currentPage = currentPage + 1"
-      >
-        Next page
-      </button>
-      <ul class="pagination-list">
-        <!-- Show the first page if the page range doesn't include the first page -->
-        <li v-if="!innerPageRange.includes(1)">
-          <button
-            class="pagination-link"
-            :disabled="currentPage === 1"
-            :aria-label="`Goto page 1`"
-            @click="currentPage = 1"
-          >
-            1
-          </button>
-        </li>
-
-        <!-- Show ... between the first page and the page range -->
-        <li
-          v-if="
-            !(innerPageRange.includes(1) || innerPageRange.includes(2)) &&
-            totalPages > 2
-          "
-        >
-          <span class="pagination-ellipsis">&hellip;</span>
-        </li>
-
-        <!-- Show the page range -->
-        <li v-for="page in innerPageRange" :key="page">
-          <button
-            class="pagination-link"
-            :disabled="currentPage === page"
-            :aria-label="`Goto page ${page}`"
-            @click="currentPage = page"
-          >
-            {{ page }}
-          </button>
-        </li>
-
-        <!-- Show the ... between the page range and the last page -->
-        <li
-          v-if="
-            !(
-              innerPageRange.includes(totalPages) ||
-              innerPageRange.includes(totalPages - 1)
-            ) && totalPages > 2
-          "
-        >
-          <span class="pagination-ellipsis">&hellip;</span>
-        </li>
-
-        <!-- Show the last page if the page range doesn't include the last page -->
-        <li>
-          <button
-            v-if="!innerPageRange.includes(totalPages)"
-            class="pagination-link"
-            :disabled="currentPage === totalPages"
-            :aria-label="`Goto page ${totalPages}`"
-            @click="currentPage = totalPages"
-          >
-            {{ totalPages }}
-          </button>
-        </li>
-      </ul>
-    </nav>
   </div>
 
   <FormModal
@@ -347,9 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed, watch, h } from "vue";
+import { ref, computed, h } from "vue";
 import { useStore } from "vuex";
-import Multiselect from "@vueform/multiselect";
 import {
   FlexRender,
   createColumnHelper,
@@ -363,11 +125,7 @@ import {
 import { logActivity } from "../firebase.js";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/Modal.vue";
-import PanelTag from "./PanelTag.vue";
-import utils, {
-  GEOID_QUESTION_MODEL,
-  MUNI_QUESTION_MODEL,
-} from "../utils/utils.js";
+import utils from "../utils/utils.js";
 
 const props = withDefaults(
   defineProps<{
@@ -495,25 +253,6 @@ const userRole = computed(() =>
 
 const today = utils.today();
 
-const filters = reactive(
-  Object.keys(props.filterOptions).reduce((acc, v) => {
-    acc[v] = [];
-    return acc;
-  }, {})
-);
-const showFilters = ref(true);
-const filteredFormResponses = computed(() => {
-  let res = props.formResponses;
-  for (const filterField of Object.keys(props.filterOptions)) {
-    if (filters[filterField].length > 0) {
-      res = res.filter((formResponse) =>
-        props.filterFunctions[filterField](formResponse, filters[filterField])
-      );
-    }
-  }
-  return res;
-});
-
 const table = useVueTable({
   get data() {
     return props.formResponses;
@@ -535,67 +274,6 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
 });
 
-const handleGoToPage = (e) => {
-  const page = e.target.value ? Number(e.target.value) - 1 : 0;
-  goToPageNumber.value = page + 1;
-  table.setPageIndex(page);
-};
-
-const handlePageSizeChange = (e) => {
-  table.setPageSize(Number(e.target.value));
-};
-
-watch(filteredFormResponses, () => {
-  currentPage.value = 1;
-});
-
-const pagedFormResponses = computed(() => {
-  const start = maxFormResponsesPerPage * (currentPage.value - 1);
-  return filteredFormResponses.value.slice(
-    start,
-    start + maxFormResponsesPerPage
-  );
-});
-
-const currentPage = ref(1);
-const maxFormResponsesPerPage = 15;
-
-const totalPages = computed(() => {
-  return Math.max(
-    Math.ceil(filteredFormResponses.value.length / maxFormResponsesPerPage),
-    1
-  );
-});
-
-const maxVisibleInnerPages = 3;
-const startPage = computed(() => {
-  // First Page
-  if (currentPage.value === 1) {
-    return 1;
-  }
-
-  // Last Page
-  if (currentPage.value === totalPages.value) {
-    return Math.max(totalPages.value - maxVisibleInnerPages, 1);
-  }
-
-  // When in between
-  return currentPage.value - 1;
-});
-
-const innerPageRange = computed(() => {
-  const range = [];
-  for (
-    let i = startPage.value;
-    i <= Math.min(startPage.value + maxVisibleInnerPages - 1, totalPages.value);
-    i++
-  ) {
-    range.push(i);
-  }
-
-  return range;
-});
-
 const launchForm = (formResponse, readOnly) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
@@ -609,19 +287,4 @@ const launchForm = (formResponse, readOnly) => {
 
 <style lang="scss" scoped>
 @import "../assets/styles/main.scss";
-
-.form-row {
-  width: 100%;
-}
-
-.panel-tags {
-  padding: 0 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-
-  @include mobile {
-    justify-content: center;
-  }
-}
 </style>
