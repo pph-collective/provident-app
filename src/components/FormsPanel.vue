@@ -1,5 +1,5 @@
 <template>
-  <div class="container is-fullhd">
+  <div class="container">
     <div class="p-2">
       <table class="table mx-auto">
         <thead>
@@ -41,64 +41,62 @@
       </table>
       <div>
         <div>
-          <div>
-            <button
-              class="button border rounded p-3 m-1"
-              :disabled="!table.getCanPreviousPage()"
-              @click="() => table.setPageIndex(0)"
-            >
-              First
-            </button>
-            <button
-              class="button border rounded p-3 m-1"
-              :disabled="!table.getCanPreviousPage()"
-              @click="() => table.previousPage()"
-            >
-              Prev
-            </button>
-            <button
-              class="button border rounded p-3 m-1"
-              :disabled="!table.getCanNextPage()"
-              @click="() => table.nextPage()"
-            >
-              Next
-            </button>
-            <button
-              class="button border rounded p-3 m-1"
-              :disabled="!table.getCanNextPage()"
-              @click="() => table.setPageIndex(table.getPageCount() - 1)"
-            >
-              Last
-            </button>
-          </div>
-          <span>
-            <strong>
-              {{ table.getState().pagination.pageIndex + 1 }} of
-              {{ table.getPageCount() }}
-            </strong>
-          </span>
-          <span>
-            | Go to page:
-            <input
-              type="number"
-              :value="goToPageNumber"
-              class="border p-1 rounded w-16"
-              @change="handleGoToPage"
-            />
-          </span>
-          <select
-            :value="table.getState().pagination.pageSize"
-            @change="handlePageSizeChange"
+          <button
+            class="button border rounded p-3 m-1"
+            :disabled="!table.getCanPreviousPage()"
+            @click="() => table.setPageIndex(0)"
           >
-            <option
-              v-for="pageSize in pageSizes"
-              :key="pageSize"
-              :value="pageSize"
-            >
-              Show {{ pageSize }}
-            </option>
-          </select>
+            First
+          </button>
+          <button
+            class="button border rounded p-3 m-1"
+            :disabled="!table.getCanPreviousPage()"
+            @click="() => table.previousPage()"
+          >
+            Prev
+          </button>
+          <button
+            class="button border rounded p-3 m-1"
+            :disabled="!table.getCanNextPage()"
+            @click="() => table.nextPage()"
+          >
+            Next
+          </button>
+          <button
+            class="button border rounded p-3 m-1"
+            :disabled="!table.getCanNextPage()"
+            @click="() => table.setPageIndex(table.getPageCount() - 1)"
+          >
+            Last
+          </button>
         </div>
+        <span>
+          <strong>
+            {{ table.getState().pagination.pageIndex + 1 }} of
+            {{ table.getPageCount() }}
+          </strong>
+        </span>
+        <span>
+          | Go to page:
+          <input
+            type="number"
+            :value="goToPageNumber"
+            class="border p-1 rounded w-16"
+            @change="handleGoToPage"
+          />
+        </span>
+        <select
+          :value="table.getState().pagination.pageSize"
+          @change="handlePageSizeChange"
+        >
+          <option
+            v-for="pageSize in pageSizes"
+            :key="pageSize"
+            :value="pageSize"
+          >
+            Show {{ pageSize }}
+          </option>
+        </select>
       </div>
     </div>
   </div>
