@@ -452,7 +452,7 @@ const columns = [
       }),
       columnHelper.accessor("users_edited", {
         id: "users_edited",
-        cell: (info) => info.getValue().join(", "),
+        cell: (info) => (info.getValue() ?? []).join(", "),
         header: () => "Edited By",
       }),
       columnHelper.accessor("release_date", {
