@@ -1,104 +1,107 @@
 <template>
   <div class="container">
-    <div class="p-2">
-      <table class="table mx-auto">
-        <thead>
-          <tr
-            v-for="headerGroup in table.getHeaderGroups()"
-            :key="headerGroup.id"
-          >
-            <th
-              v-for="header in headerGroup.headers"
-              :key="header.id"
-              :colSpan="header.colSpan"
-              :class="header.column.getCanSort() ? 'is-clickable' : ''"
-              @click="header.column.getToggleSortingHandler()?.($event)"
+    <section class="section">
+      <h1 class="title">Forms</h1>
+      <div class="p-2">
+        <table class="table mx-auto">
+          <thead>
+            <tr
+              v-for="headerGroup in table.getHeaderGroups()"
+              :key="headerGroup.id"
             >
-              <FlexRender
-                v-if="!header.isPlaceholder"
-                :render="header.column.columnDef.header"
-                :props="header.getContext()"
-              />
+              <th
+                v-for="header in headerGroup.headers"
+                :key="header.id"
+                :colSpan="header.colSpan"
+                :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                @click="header.column.getToggleSortingHandler()?.($event)"
+              >
+                <FlexRender
+                  v-if="!header.isPlaceholder"
+                  :render="header.column.columnDef.header"
+                  :props="header.getContext()"
+                />
 
-              {{
-                { asc: " 🔼", desc: " 🔽" }[
-                  header.column.getIsSorted() as string
-                ]
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in table.getRowModel().rows" :key="row.id">
-            <td v-for="cell in row.getVisibleCells()" :key="cell.id">
-              <FlexRender
-                :render="cell.column.columnDef.cell"
-                :props="cell.getContext()"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div>
+                {{
+                  { asc: " 🔼", desc: " 🔽" }[
+                    header.column.getIsSorted() as string
+                  ]
+                }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in table.getRowModel().rows" :key="row.id">
+              <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <FlexRender
+                  :render="cell.column.columnDef.cell"
+                  :props="cell.getContext()"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div>
-          <button
-            class="button border rounded p-3 m-1"
-            :disabled="!table.getCanPreviousPage()"
-            @click="() => table.setPageIndex(0)"
+          <div>
+            <button
+              class="button border rounded p-3 m-1"
+              :disabled="!table.getCanPreviousPage()"
+              @click="() => table.setPageIndex(0)"
+            >
+              First
+            </button>
+            <button
+              class="button border rounded p-3 m-1"
+              :disabled="!table.getCanPreviousPage()"
+              @click="() => table.previousPage()"
+            >
+              Prev
+            </button>
+            <button
+              class="button border rounded p-3 m-1"
+              :disabled="!table.getCanNextPage()"
+              @click="() => table.nextPage()"
+            >
+              Next
+            </button>
+            <button
+              class="button border rounded p-3 m-1"
+              :disabled="!table.getCanNextPage()"
+              @click="() => table.setPageIndex(table.getPageCount() - 1)"
+            >
+              Last
+            </button>
+          </div>
+          <span>
+            <strong>
+              {{ table.getState().pagination.pageIndex + 1 }} of
+              {{ table.getPageCount() }}
+            </strong>
+          </span>
+          <span>
+            | Go to page:
+            <input
+              type="number"
+              :value="goToPageNumber"
+              class="border p-1 rounded w-16"
+              @change="handleGoToPage"
+            />
+          </span>
+          <select
+            :value="table.getState().pagination.pageSize"
+            @change="handlePageSizeChange"
           >
-            First
-          </button>
-          <button
-            class="button border rounded p-3 m-1"
-            :disabled="!table.getCanPreviousPage()"
-            @click="() => table.previousPage()"
-          >
-            Prev
-          </button>
-          <button
-            class="button border rounded p-3 m-1"
-            :disabled="!table.getCanNextPage()"
-            @click="() => table.nextPage()"
-          >
-            Next
-          </button>
-          <button
-            class="button border rounded p-3 m-1"
-            :disabled="!table.getCanNextPage()"
-            @click="() => table.setPageIndex(table.getPageCount() - 1)"
-          >
-            Last
-          </button>
+            <option
+              v-for="pageSize in pageSizes"
+              :key="pageSize"
+              :value="pageSize"
+            >
+              Show {{ pageSize }}
+            </option>
+          </select>
         </div>
-        <span>
-          <strong>
-            {{ table.getState().pagination.pageIndex + 1 }} of
-            {{ table.getPageCount() }}
-          </strong>
-        </span>
-        <span>
-          | Go to page:
-          <input
-            type="number"
-            :value="goToPageNumber"
-            class="border p-1 rounded w-16"
-            @change="handleGoToPage"
-          />
-        </span>
-        <select
-          :value="table.getState().pagination.pageSize"
-          @change="handlePageSizeChange"
-        >
-          <option
-            v-for="pageSize in pageSizes"
-            :key="pageSize"
-            :value="pageSize"
-          >
-            Show {{ pageSize }}
-          </option>
-        </select>
       </div>
-    </div>
+    </section>
   </div>
 
   <FormModal
@@ -169,7 +172,7 @@ const columnHelper = createColumnHelper<FormResponse>();
 
 const columns = [
   columnHelper.group({
-    header: "Forms",
+    id: "forms",
     columns: [
       columnHelper.accessor("form.title", {
         id: "title",
