@@ -168,6 +168,12 @@ type FormResponse = {
   users_edited: string[];
 };
 
+const store = useStore();
+const user = computed(() => store.state.user);
+const userRole = computed(() =>
+  user.value.data ? user.value.data.role : "user"
+);
+
 const columnHelper = createColumnHelper<FormResponse>();
 
 const columns = [
@@ -246,12 +252,6 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
-
-const store = useStore();
-const user = computed(() => store.state.user);
-const userRole = computed(() =>
-  user.value.data ? user.value.data.role : "user"
-);
 
 const today = utils.today();
 
