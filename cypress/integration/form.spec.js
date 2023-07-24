@@ -334,20 +334,21 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.get("[data-cy='forms']").click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
 
-      // Confirm that the forms are loaded prior to continuing
-      cy.get('[data-cy="forms-panel-block"]').should(
-        "not.contain",
-        "No forms here"
-      );
+      // Form Page Loaded
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("not.have.length", 0);
 
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find(".tag")
         .should("contain", "Not Started");
 
       // Click to launch the Simple Form
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find('[data-cy="launch-form-button"]')
         .click();
 
@@ -420,13 +421,15 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // Assert Status: Draft
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find(".tag")
         .should("contain", "Draft");
 
       // Reopen
       // Click to launch the Simple Form
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find('[data-cy="launch-form-button"]')
         .click();
 
@@ -447,16 +450,19 @@ describe("Form functionality", () => {
       cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
       // Check form
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find(".tag")
         .should("contain", "Submitted");
 
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find("launch-form-button")
         .should("not.exist");
 
       // Review form
-      cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Simple Form")
         .find('[data-cy="review-form-button"]')
         .should("exist")
         .click();
