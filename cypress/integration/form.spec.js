@@ -480,35 +480,27 @@ describe("Forms viewed as an admin", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
     });
-  });
 
-  it("Release date is viewable as an admin", () => {
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-    cy.get(".tag").should("exist").should("contain", "2021-10-13");
+    cy.get('[data-cy="forms-table-body"]')
+      .find("tr")
+      .should("not.have.length", 0);
   });
 
   it("Unreleased form is viewable as an admin", () => {
-    // Confirm that the forms are loaded prior to continuing
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-
-    cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Unreleased Form")
       .find(".tag")
       .should("contain", "Not Started");
 
-    // Click to launch the Simple Form
-    cy.contains('[data-cy="forms-panel-block"]', "Unreleased Form")
+    // Click to launch the Unreleased Form
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Unreleased Form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
-    // Assert that this is the simple form
+    // Assert that this is the unreleased form
     cy.get('[data-cy="active-form-title"]').should(
       "contain",
       "Unreleased Form"
@@ -526,7 +518,8 @@ describe("Forms viewed as an admin", () => {
       .toISOString()
       .split("T")[0];
 
-    cy.contains('[data-cy="forms-panel-block"]', "Original Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Original Form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
@@ -552,23 +545,25 @@ describe("Forms viewed as an admin", () => {
     cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
     // Check the followup form
-    cy.contains('[data-cy="forms-panel-block"]', "Original Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Original Form")
       .should("exist")
       .find(".tag")
       .should("contain", "Submitted");
 
-    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup Form")
       .should("exist")
       .find(".tag")
       .should("contain", "Not Started");
 
     // Check release date
-    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
-      .should("exist")
-      .find(".tag")
-      .should("contain", `RELEASE DATE: ${tomorrow}`);
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup Form")
+      .should("contain", `${tomorrow}`);
 
-    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup Form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
@@ -598,33 +593,26 @@ describe("Forms viewed as an admin", () => {
     cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
     // Check the followup form
-    cy.contains('[data-cy="forms-panel-block"]', "Followup Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup Form")
       .should("exist")
       .find(".tag")
       .should("contain", "Submitted");
 
     // Check the followup to the followup form
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Followup to the followup form"
-    )
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup to the followup form")
       .should("exist")
       .find(".tag")
       .should("contain", "Not Started");
 
     // Check release date
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Followup to the followup form"
-    )
-      .should("exist")
-      .find(".tag")
-      .should("contain", `RELEASE DATE: ${day_after_tomorrow}`);
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup to the followup form")
+      .should("contain", `${day_after_tomorrow}`);
 
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Followup to the followup form"
-    )
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup to the followup form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
@@ -658,18 +646,14 @@ describe("Forms viewed as an admin", () => {
     cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
     // Review the followup to the followup form
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Followup to the followup form"
-    )
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup to the followup form")
       .should("exist")
       .find(".tag")
       .should("contain", "Submitted");
 
-    cy.contains(
-      '[data-cy="forms-panel-block"]',
-      "Followup to the followup form"
-    )
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Followup to the followup form")
       .find('[data-cy="review-form-button"]')
       .should("exist")
       .click();
