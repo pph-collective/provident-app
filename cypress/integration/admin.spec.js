@@ -54,21 +54,19 @@ describe("Admin Views and Powers", () => {
 
     // Navigate to forms, there should be an assigned form
     cy.get('[data-cy="forms"]').click();
-    cy.waitLoaded('[data-cy="form-panel"]');
-    cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
+    cy.waitLoaded('[data-cy="forms-table-body"]');
+    cy.get('[data-cy="forms-table-body"]')
+      .find("tr")
+      .should("not.have.length", 0);
 
-    // Confirm that forms are loaded prior to continuing
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-
-    cy.get('[data-cy="forms-panel-block"]:contains("Simple Form")')
+    cy.get('[data-cy="forms-table-body"]')
+      .find('tr:contains("Simple Form")')
       .should("have.length", 1)
       .find(".tag")
       .should("contain", "Not Started");
 
-    cy.contains('[data-cy="forms-panel-block"]', "Simple Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "Simple Form")
       .find('[data-cy="launch-form-button"]')
       .click();
 
@@ -261,9 +259,13 @@ describe("Admin Views and Powers", () => {
       cy.login(testUser.email, testUser.password);
       // Navigate to form
       cy.get('[data-cy="forms"]').click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("not.have.length", 0);
 
-      cy.contains('[data-cy="forms-panel-block"]', "Sample Organization Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Sample Organization Form")
         .find('[data-cy="review-form-button"]')
         .should("exist")
         .click();
@@ -314,10 +316,13 @@ describe("Admin Views and Powers", () => {
       cy.login(testUser.email, testUser.password);
       // Navigate to forms
       cy.get('[data-cy="forms"]').click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("not.have.length", 0);
 
-      cy.get('[data-cy="forms-panel-block"]')
-        .find("Sample Organization Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "Sample Organization Form")
         .should("not.exist");
     });
   });
@@ -325,13 +330,20 @@ describe("Admin Views and Powers", () => {
   describe("Review Forms", () => {
     beforeEach(() => {
       cy.get('a[href="/admin/review_forms"]').click();
-      cy.waitLoaded("[data-cy='form-panel']");
+      cy.waitLoaded('[data-cy="forms-table-body"]');
+
+      // Form Page Loaded
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("not.have.length", 0);
     });
 
     it("has all forms for all users", () => {
       // All forms exist
       const numForms = 11;
-      cy.get(".form-row").should("have.length", numForms);
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("have.length", numForms);
       cy.get('[data-cy="review-form-button"]').should("have.length", numForms);
 
       // Sample organization form from Good Doers and RI 4 Us
