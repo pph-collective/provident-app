@@ -223,11 +223,15 @@ const columns = [
       }),
       columnHelper.accessor("release_date", {
         id: "release_date",
+        size: 90,
+        minSize: 90,
         cell: (info) => info.getValue(),
         header: () => "Release Date",
       }),
       columnHelper.accessor("last_updated", {
         id: "last_updated",
+        size: 90,
+        minSize: 90,
         cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
         header: "Last Updated",
       }),
