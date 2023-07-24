@@ -2,34 +2,24 @@ describe("Form functionality", () => {
   beforeEach(() => {
     cy.login_by_permission("admin").then(() => {
       cy.get("[data-cy='forms']").click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
+
+      // Form Page Loaded
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr")
+        .should("not.have.length", 0);
     });
   });
 
-  it("Loading forms page", () => {
-    cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
-
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-    cy.get(".tag").should("contain", "Not Started");
-    cy.get('[data-cy="launch-form-button"]').should("exist");
-  });
-
   it("Trying to submit an empty form, then closing it without saving", () => {
-    // Confirm that forms are loaded prior to continuing
-    cy.get('[data-cy="forms-panel-block"]').should(
-      "not.contain",
-      "No forms here"
-    );
-
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "My Form")
       .find(".tag")
       .should("contain", "Not Started");
 
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
-      .find('[data-cy="launch-form-button"]')
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "My Form")
+      .find("[data-cy='launch-form-button']")
       .click();
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
@@ -45,7 +35,9 @@ describe("Form functionality", () => {
 
     cy.get('[data-cy="active-form-modal"]').should("exist");
     cy.get('[data-cy="close-form"]').click();
-    cy.contains('[data-cy="forms-panel-block"]', "My Form")
+
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "My Form")
       .find(".tag")
       .should("contain", "Not Started");
   });
@@ -55,14 +47,16 @@ describe("Form functionality", () => {
       cy.logout();
       cy.login_by_permission(permission_level);
       cy.get("[data-cy='forms']").click();
-      cy.waitLoaded('[data-cy="form-panel"]');
+      cy.waitLoaded('[data-cy="forms-table-body"]');
 
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
         .find(".tag")
         .should("contain", "Not Started");
 
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
-        .find('[data-cy="launch-form-button"]')
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
+        .find("[data-cy='launch-form-button']")
         .click();
 
       cy.get('[data-cy="active-form-title"]').should("contain", "My Form");
@@ -185,7 +179,8 @@ describe("Form functionality", () => {
       cy.get('[data-cy="close-form"]').click();
 
       // REOPEN
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
         .find('[data-cy="launch-form-button"]')
         .click();
 
@@ -213,16 +208,19 @@ describe("Form functionality", () => {
       cy.get('[data-cy="active-form-modal"]').should("not.exist");
 
       // Check form status
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
         .find(".tag")
         .should("contain", "Submitted");
 
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
         .find("launch-form-button")
         .should("not.exist");
 
       // Review form
-      cy.contains('[data-cy="forms-panel-block"]', "My Form")
+      cy.get('[data-cy="forms-table-body"]')
+        .contains("tr", "My Form")
         .find('[data-cy="review-form-button"]')
         .should("exist")
         .click();

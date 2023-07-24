@@ -30,7 +30,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody data-cy="forms-table-body">
             <tr v-for="row in table.getRowModel().rows" :key="row.id">
               <td v-for="cell in row.getVisibleCells()" :key="cell.id">
                 <FlexRender
