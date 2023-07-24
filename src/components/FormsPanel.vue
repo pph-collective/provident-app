@@ -265,6 +265,11 @@ const table = useVueTable({
       return sorting.value;
     },
   },
+  initialState: {
+    pagination: {
+      pageSize: 20,
+    },
+  },
   onSortingChange: (updaterOrValue) => {
     sorting.value =
       typeof updaterOrValue === "function"
