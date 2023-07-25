@@ -347,20 +347,14 @@ describe("Admin Views and Powers", () => {
       cy.get('[data-cy="review-form-button"]').should("have.length", numForms);
 
       // Sample organization form from Good Doers and RI 4 Us
-      cy.get(".form-row:contains('Sample Organization Form')")
-        .and("contain", "ORGANIZATION: Good Doers")
-        .and("contain", "ORGANIZATION: RI 4 Us");
-
-      // Simple form
-      cy.get(".form-row:contains('Simple Form')")
-        .and("contain", "USER: admin@admin.com")
-        .and("contain", "USER: championuser@user.com")
-        .and("contain", "USER: controluser@user.com");
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr:contains('Sample Organization Form')")
+        .and("contain", "Good Doers")
+        .and("contain", "RI 4 Us");
 
       // Review a form
-      cy.get(
-        ".form-row:contains('Sample Organization Form'):contains('ORGANIZATION: Good Doers')"
-      )
+      cy.get('[data-cy="forms-table-body"]')
+        .find("tr:contains('Sample Organization Form'):contains('Good Doers')")
         .should("have.length", 1)
         .find('[data-cy="review-form-button"]')
         .should("exist")

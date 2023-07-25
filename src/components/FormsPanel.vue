@@ -127,7 +127,6 @@ import {
 import { logActivity } from "../firebase.js";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/Modal.vue";
-import utils from "../utils/utils.js";
 
 const props = withDefaults(
   defineProps<{
@@ -262,8 +261,6 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
-
-const today = utils.today();
 
 const table = useVueTable({
   get data() {
