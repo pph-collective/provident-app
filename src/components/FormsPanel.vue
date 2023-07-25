@@ -242,6 +242,7 @@ const columns = [
             formResponse: info.row.original,
             onClick: launchForm,
             userRole: userRole.value,
+            readOnly: props.readOnly,
           }),
       }),
     ],
