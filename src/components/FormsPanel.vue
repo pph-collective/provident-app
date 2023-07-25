@@ -211,6 +211,11 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Block Group",
       }),
+      columnHelper.accessor("organization", {
+        id: "organization",
+        cell: (info) => info.getValue(),
+        header: () => "Organization",
+      }),
       columnHelper.accessor("user_submitted", {
         id: "user_submitted",
         cell: (info) => info.getValue(),
