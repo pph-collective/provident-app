@@ -2,53 +2,49 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <div class="table-wrapper is-fullwidth">
-        <div class="table-container">
-          <table class="table is-narrow is-striped is-hoverable">
-            <thead>
-              <tr
-                v-for="headerGroup in table.getHeaderGroups()"
-                :key="headerGroup.id"
+      <div class="p-2">
+        <table class="table mx-auto">
+          <thead>
+            <tr
+              v-for="headerGroup in table.getHeaderGroups()"
+              :key="headerGroup.id"
+            >
+              <th
+                v-for="header in headerGroup.headers"
+                :key="header.id"
+                :colSpan="header.colSpan"
+                :class="header.column.getCanSort() ? 'is-clickable' : ''"
               >
-                <th
-                  v-for="header in headerGroup.headers"
-                  :key="header.id"
-                  :colSpan="header.colSpan"
-                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
-                >
-                  <div
-                    @click="header.column.getToggleSortingHandler()?.($event)"
-                  >
-                    <FlexRender
-                      v-if="!header.isPlaceholder"
-                      :render="header.column.columnDef.header"
-                      :props="header.getContext()"
-                    />
-
-                    {{
-                      { asc: " ▲", desc: " ▼" }[
-                        header.column.getIsSorted() as string
-                      ]
-                    }}
-                  </div>
-                  <div v-if="header.column.getCanFilter()">
-                    <ColumnFiltering :column="header.column" :table="table" />
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody data-cy="forms-table-body">
-              <tr v-for="row in table.getRowModel().rows" :key="row.id">
-                <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <div @click="header.column.getToggleSortingHandler()?.($event)">
                   <FlexRender
-                    :render="cell.column.columnDef.cell"
-                    :props="cell.getContext()"
+                    v-if="!header.isPlaceholder"
+                    :render="header.column.columnDef.header"
+                    :props="header.getContext()"
                   />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+                  {{
+                    { asc: " 🔼", desc: " 🔽" }[
+                      header.column.getIsSorted() as string
+                    ]
+                  }}
+                </div>
+                <div v-if="header.column.getCanFilter()">
+                  <ColumnFiltering :column="header.column" :table="table" />
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody data-cy="forms-table-body">
+            <tr v-for="row in table.getRowModel().rows" :key="row.id">
+              <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <FlexRender
+                  :render="cell.column.columnDef.cell"
+                  :props="cell.getContext()"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div>
           <div>
             <button
@@ -292,6 +288,10 @@ const table = useVueTable({
       pageSize: 20,
     },
   },
+<<<<<<< HEAD
+=======
+  // // TODO: Just copying the sorting format hoping it is fine
+>>>>>>> 189b2d0 (feat: filtering start)
   onColumnFiltersChange: (updaterOrValue) => {
     columnFilters.value =
       typeof updaterOrValue === "function"
