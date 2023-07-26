@@ -14,19 +14,23 @@
                 :key="header.id"
                 :colSpan="header.colSpan"
                 :class="header.column.getCanSort() ? 'is-clickable' : ''"
-                @click="header.column.getToggleSortingHandler()?.($event)"
               >
-                <FlexRender
-                  v-if="!header.isPlaceholder"
-                  :render="header.column.columnDef.header"
-                  :props="header.getContext()"
-                />
+                <div @click="header.column.getToggleSortingHandler()?.($event)">
+                  <FlexRender
+                    v-if="!header.isPlaceholder"
+                    :render="header.column.columnDef.header"
+                    :props="header.getContext()"
+                  />
 
-                {{
-                  { asc: " 🔼", desc: " 🔽" }[
-                    header.column.getIsSorted() as string
-                  ]
-                }}
+                  {{
+                    { asc: " 🔼", desc: " 🔽" }[
+                      header.column.getIsSorted() as string
+                    ]
+                  }}
+                </div>
+                <div v-if="header.column.getCanFilter()">
+                  <ColumnFiltering :column="header.column" :table="table" />
+                </div>
               </th>
             </tr>
           </thead>
@@ -116,8 +120,10 @@ import { ref, computed, h } from "vue";
 import { useStore } from "vuex";
 import {
   FlexRender,
+  ColumnFiltersState,
   createColumnHelper,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   getPaginationRowModel,
   SortingState,
@@ -125,6 +131,7 @@ import {
 } from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
+import ColumnFiltering from "./ColumnFiltering.vue";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/Modal.vue";
 
@@ -254,6 +261,7 @@ const columns = [
 ];
 
 const sorting = ref<SortingState>([]);
+const columnFilters = ref<ColumnFiltersState>([]);
 
 const INITIAL_PAGE_INDEX = 0;
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
@@ -271,11 +279,21 @@ const table = useVueTable({
     get sorting() {
       return sorting.value;
     },
+    get columnFilters() {
+      return columnFilters.value;
+    },
   },
   initialState: {
     pagination: {
       pageSize: 20,
     },
+  },
+  // // TODO: Just copying the sorting format hoping it is fine
+  onColumnFiltersChange: (updaterOrValue) => {
+    columnFilters.value =
+      typeof updaterOrValue === "function"
+        ? updaterOrValue(columnFilters.value)
+        : updaterOrValue;
   },
   onSortingChange: (updaterOrValue) => {
     sorting.value =
@@ -284,6 +302,7 @@ const table = useVueTable({
         : updaterOrValue;
   },
   getCoreRowModel: getCoreRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
 });
