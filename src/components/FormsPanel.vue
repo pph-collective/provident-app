@@ -2,49 +2,53 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <div class="p-2">
-        <table class="table mx-auto">
-          <thead>
-            <tr
-              v-for="headerGroup in table.getHeaderGroups()"
-              :key="headerGroup.id"
-            >
-              <th
-                v-for="header in headerGroup.headers"
-                :key="header.id"
-                :colSpan="header.colSpan"
-                :class="header.column.getCanSort() ? 'is-clickable' : ''"
+      <div class="table-wrapper is-fullwidth">
+        <div class="table-container">
+          <table class="table is-narrow is-striped is-hoverable">
+            <thead>
+              <tr
+                v-for="headerGroup in table.getHeaderGroups()"
+                :key="headerGroup.id"
               >
-                <div @click="header.column.getToggleSortingHandler()?.($event)">
-                  <FlexRender
-                    v-if="!header.isPlaceholder"
-                    :render="header.column.columnDef.header"
-                    :props="header.getContext()"
-                  />
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="header.id"
+                  :colSpan="header.colSpan"
+                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                >
+                  <div
+                    @click="header.column.getToggleSortingHandler()?.($event)"
+                  >
+                    <FlexRender
+                      v-if="!header.isPlaceholder"
+                      :render="header.column.columnDef.header"
+                      :props="header.getContext()"
+                    />
 
-                  {{
-                    { asc: " 🔼", desc: " 🔽" }[
-                      header.column.getIsSorted() as string
-                    ]
-                  }}
-                </div>
-                <div v-if="header.column.getCanFilter()">
-                  <ColumnFiltering :column="header.column" :table="table" />
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody data-cy="forms-table-body">
-            <tr v-for="row in table.getRowModel().rows" :key="row.id">
-              <td v-for="cell in row.getVisibleCells()" :key="cell.id">
-                <FlexRender
-                  :render="cell.column.columnDef.cell"
-                  :props="cell.getContext()"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                    {{
+                      { asc: " 🔼", desc: " 🔽" }[
+                        header.column.getIsSorted() as string
+                      ]
+                    }}
+                  </div>
+                  <div v-if="header.column.getCanFilter()">
+                    <ColumnFiltering :column="header.column" :table="table" />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody data-cy="forms-table-body">
+              <tr v-for="row in table.getRowModel().rows" :key="row.id">
+                <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                  <FlexRender
+                    :render="cell.column.columnDef.cell"
+                    :props="cell.getContext()"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div>
           <div>
             <button
@@ -333,4 +337,8 @@ function handlePageSizeChange(e) {
 
 <style lang="scss" scoped>
 @import "../assets/styles/main.scss";
+
+.table {
+  overflow-x: auto;
+}
 </style>
