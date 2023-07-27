@@ -320,6 +320,16 @@ const launchForm = (formResponse, readOnly) => {
     formResponse._id
   );
 };
+
+function handleGoToPage(e) {
+  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+  goToPageNumber.value = page + 1;
+  table.setPageIndex(page);
+}
+
+function handlePageSizeChange(e) {
+  table.setPageSize(Number(e.target.value));
+}
 </script>
 
 <style lang="scss" scoped>
