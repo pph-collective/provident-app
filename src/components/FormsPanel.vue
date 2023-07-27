@@ -292,7 +292,6 @@ const table = useVueTable({
       pageSize: 20,
     },
   },
-  // // TODO: Just copying the sorting format hoping it is fine
   onColumnFiltersChange: (updaterOrValue) => {
     columnFilters.value =
       typeof updaterOrValue === "function"
