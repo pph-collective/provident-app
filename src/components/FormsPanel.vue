@@ -334,8 +334,4 @@ function handlePageSizeChange(e) {
 
 <style lang="scss" scoped>
 @import "../assets/styles/main.scss";
-
-.table {
-  overflow-x: auto;
-}
 </style>
