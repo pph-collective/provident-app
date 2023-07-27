@@ -2,45 +2,53 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <div class="p-2">
-        <table class="table mx-auto">
-          <thead>
-            <tr
-              v-for="headerGroup in table.getHeaderGroups()"
-              :key="headerGroup.id"
-            >
-              <th
-                v-for="header in headerGroup.headers"
-                :key="header.id"
-                :colSpan="header.colSpan"
-                :class="header.column.getCanSort() ? 'is-clickable' : ''"
-                @click="header.column.getToggleSortingHandler()?.($event)"
+      <div class="table-wrapper is-fullwidth">
+        <div class="table-container">
+          <table class="table is-narrow is-striped is-hoverable">
+            <thead>
+              <tr
+                v-for="headerGroup in table.getHeaderGroups()"
+                :key="headerGroup.id"
               >
-                <FlexRender
-                  v-if="!header.isPlaceholder"
-                  :render="header.column.columnDef.header"
-                  :props="header.getContext()"
-                />
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="header.id"
+                  :colSpan="header.colSpan"
+                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                >
+                  <div
+                    @click="header.column.getToggleSortingHandler()?.($event)"
+                  >
+                    <FlexRender
+                      v-if="!header.isPlaceholder"
+                      :render="header.column.columnDef.header"
+                      :props="header.getContext()"
+                    />
 
-                {{
-                  { asc: " 🔼", desc: " 🔽" }[
-                    header.column.getIsSorted() as string
-                  ]
-                }}
-              </th>
-            </tr>
-          </thead>
-          <tbody data-cy="forms-table-body">
-            <tr v-for="row in table.getRowModel().rows" :key="row.id">
-              <td v-for="cell in row.getVisibleCells()" :key="cell.id">
-                <FlexRender
-                  :render="cell.column.columnDef.cell"
-                  :props="cell.getContext()"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                    {{
+                      { asc: " 🔼", desc: " 🔽" }[
+                        header.column.getIsSorted() as string
+                      ]
+                    }}
+                  </div>
+                  <div v-if="header.column.getCanFilter()">
+                    <ColumnFiltering :column="header.column" :table="table" />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody data-cy="forms-table-body">
+              <tr v-for="row in table.getRowModel().rows" :key="row.id">
+                <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                  <FlexRender
+                    :render="cell.column.columnDef.cell"
+                    :props="cell.getContext()"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div>
           <div>
             <button
@@ -116,8 +124,10 @@ import { ref, computed, h } from "vue";
 import { useStore } from "vuex";
 import {
   FlexRender,
+  ColumnFiltersState,
   createColumnHelper,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   getPaginationRowModel,
   SortingState,
@@ -125,6 +135,7 @@ import {
 } from "@tanstack/vue-table";
 
 import { logActivity } from "../firebase.js";
+import ColumnFiltering from "./ColumnFiltering.vue";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/Modal.vue";
 
@@ -254,6 +265,7 @@ const columns = [
 ];
 
 const sorting = ref<SortingState>([]);
+const columnFilters = ref<ColumnFiltersState>([]);
 
 const INITIAL_PAGE_INDEX = 0;
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
@@ -271,11 +283,21 @@ const table = useVueTable({
     get sorting() {
       return sorting.value;
     },
+    get columnFilters() {
+      return columnFilters.value;
+    },
   },
   initialState: {
     pagination: {
       pageSize: 20,
     },
+  },
+  // // TODO: Just copying the sorting format hoping it is fine
+  onColumnFiltersChange: (updaterOrValue) => {
+    columnFilters.value =
+      typeof updaterOrValue === "function"
+        ? updaterOrValue(columnFilters.value)
+        : updaterOrValue;
   },
   onSortingChange: (updaterOrValue) => {
     sorting.value =
@@ -284,6 +306,7 @@ const table = useVueTable({
         : updaterOrValue;
   },
   getCoreRowModel: getCoreRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
 });
@@ -297,8 +320,22 @@ const launchForm = (formResponse, readOnly) => {
     formResponse._id
   );
 };
+
+function handleGoToPage(e) {
+  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+  goToPageNumber.value = page + 1;
+  table.setPageIndex(page);
+}
+
+function handlePageSizeChange(e) {
+  table.setPageSize(Number(e.target.value));
+}
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/styles/main.scss";
+
+.table {
+  overflow-x: auto;
+}
 </style>
