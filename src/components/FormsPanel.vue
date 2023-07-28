@@ -2,9 +2,9 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <div class="table-wrapper is-fullwidth">
-        <div class="table-container">
-          <table class="table is-narrow is-striped is-hoverable">
+      <div class="b-table table-container">
+        <div class="table-wrapper has-mobile-cards">
+          <table class="table is-striped">
             <thead>
               <tr
                 v-for="headerGroup in table.getHeaderGroups()"
@@ -26,7 +26,7 @@
                     />
 
                     {{
-                      { asc: " 🔼", desc: " 🔽" }[
+                      { asc: " ▲", desc: " ▼" }[
                         header.column.getIsSorted() as string
                       ]
                     }}
@@ -39,7 +39,14 @@
             </thead>
             <tbody data-cy="forms-table-body">
               <tr v-for="row in table.getRowModel().rows" :key="row.id">
-                <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <td
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  :data-label="
+                    cell.column.columnDef.header &&
+                    cell.column.columnDef.header() // TODO: There's type error here but i dont know why...
+                  "
+                >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
                     :props="cell.getContext()"
@@ -248,7 +255,7 @@ const columns = [
         size: 90,
         minSize: 90,
         cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
-        header: "Last Updated",
+        header: () => "Last Updated",
       }),
       columnHelper.display({
         id: "actions",
@@ -259,6 +266,7 @@ const columns = [
             userRole: userRole.value,
             readOnly: props.readOnly,
           }),
+        header: () => "",
       }),
     ],
   }),
@@ -292,10 +300,8 @@ const table = useVueTable({
       pageSize: 20,
     },
   },
-<<<<<<< HEAD
-=======
+
   // // TODO: Just copying the sorting format hoping it is fine
->>>>>>> 189b2d0 (feat: filtering start)
   onColumnFiltersChange: (updaterOrValue) => {
     columnFilters.value =
       typeof updaterOrValue === "function"
@@ -314,7 +320,7 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
 });
 
-const launchForm = (formResponse, readOnly) => {
+const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
   logActivity(
