@@ -26,7 +26,7 @@
                     />
 
                     {{
-                      { asc: " 🔼", desc: " 🔽" }[
+                      { asc: " ▲", desc: " ▼" }[
                         header.column.getIsSorted() as string
                       ]
                     }}
