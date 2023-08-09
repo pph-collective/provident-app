@@ -322,7 +322,7 @@ export default {
     const loading = ref(false);
 
     const store = useStore();
-    const organizations = computed(() => store.getters.forOrganizationOptions);
+    const organizations = computed(() => store.getters.formOrganizationOptions);
 
     const formValid = computed(() => {
       // all fields must be filled in
