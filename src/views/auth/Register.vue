@@ -52,6 +52,20 @@
           </div>
         </div>
       </div>
+      <div v-if="form.organization === 'Other'" class="field">
+        <p class="control has-icons-left">
+          <input
+            v-model="form.organizationName"
+            class="input"
+            type="text"
+            data-cy="organization"
+            placeholder="Organization"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-sitemap" />
+          </span>
+        </p>
+      </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
@@ -295,6 +309,7 @@ export default {
       email: "",
       name: "",
       organization: "",
+      organizationName: "",
       password: "",
       confirmPassword: "",
       terms: false,
@@ -307,7 +322,7 @@ export default {
     const loading = ref(false);
 
     const store = useStore();
-    const organizations = computed(() => store.getters.formOrganizationOptions);
+    const organizations = computed(() => store.getters.forOrganizationOptions);
 
     const formValid = computed(() => {
       // all fields must be filled in
@@ -348,6 +363,7 @@ export default {
           email,
           name: form.name,
           organization: form.organization,
+          organizationName: form.organizationName,
           role: "user",
           status: "pending",
         });
