@@ -326,8 +326,22 @@ export default {
 
     const formValid = computed(() => {
       // all fields must be filled in
-      if (Object.values(form).reduce((acc, curr) => acc || !curr, false)) {
+      if (
+        !(
+          form.email &&
+          form.name &&
+          form.organization &&
+          form.password &&
+          form.confirmPassword &&
+          form.terms
+        )
+      ) {
         return { status: false, message: "" };
+      } else if (form.organization === "Other" && !form.organizationName) {
+        return {
+          status: false,
+          message: "specify an organization name if selecting 'other'",
+        };
       } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
         return { status: false, message: "" };
       } else if (form.password !== form.confirmPassword) {
@@ -363,7 +377,10 @@ export default {
           email,
           name: form.name,
           organization: form.organization,
-          organizationName: form.organizationName,
+          organizationName:
+            form.organization === "Other"
+              ? form.organizationName
+              : form.organization,
           role: "user",
           status: "pending",
         });
