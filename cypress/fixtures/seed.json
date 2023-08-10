@@ -476,6 +476,12 @@
     }
   },
   "organizations": {
+    "Other": {
+      "name": "Other",
+      "tier": 1,
+      "intervention_arm": true,
+      "municipalities": []
+    },
     "Good Doers": {
       "name": "Good Doers",
       "tier": 1,
