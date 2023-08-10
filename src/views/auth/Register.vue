@@ -58,7 +58,7 @@
             v-model="form.organizationName"
             class="input"
             type="text"
-            data-cy="organization"
+            data-cy="form-organization-name"
             placeholder="Organization"
           />
           <span class="icon is-small is-left">
