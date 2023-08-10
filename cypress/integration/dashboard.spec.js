@@ -654,9 +654,8 @@ describe("Dashboard viewed as an admin", () => {
         const actual = [...options].map((o) => o.text);
         expect(actual.slice(0, 3)).to.deep.eq([
           "All of Rhode Island",
-          "Other",
           "Good Doers",
-          "RI 4 Us",
+          "Other",
         ]);
       });
   });
