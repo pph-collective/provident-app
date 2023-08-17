@@ -340,7 +340,7 @@ export default {
       } else if (form.organization === "Other" && !form.organizationName) {
         return {
           status: false,
-          message: "specify an organization name if selecting 'other'",
+          message: "What organization are you from?",
         };
       } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
         return { status: false, message: "" };
