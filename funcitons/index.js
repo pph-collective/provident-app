@@ -12,7 +12,7 @@ const functions = require("firebase-functions");
 const firestore = require("@google-cloud/firestore");
 
 const client = new firestore.v1.FirestoreAdminClient();
-const bucket = "gs://BUCKET_NAME";
+const bucket = "gs://provident-backups";
 
 exports.scheduledFirestoreExport = functions.pubsub
   .schedule("0 23 * * SUN") // Every Sunday at 11 PM GMT.
