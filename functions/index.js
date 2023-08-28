@@ -5,6 +5,10 @@ const firestore = require("@google-cloud/firestore");
 const client = new firestore.v1.FirestoreAdminClient();
 const bucket = "gs://provident-backups";
 
+/**
+ * Cloud function to automate backups to the Google Cloud
+ * bucket every week.
+ */
 exports.scheduledFirestoreExport = functions.pubsub
   .schedule("0 23 * * SUN") // Every Sunday at 11 PM GMT.
   .onRun(async () => {
