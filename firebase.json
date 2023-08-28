@@ -34,7 +34,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "funcitons",
+      "codebase": "functions",
       "ignore": [
         "node_modules",
         ".git",
