@@ -2,6 +2,57 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
+      <!-- Display mobile controls card only on mobile devices -->
+      <div class="is-hidden-desktop card my-2">
+        <header class="card-header">
+          <div class="card-header-title">Filters</div>
+          <button
+            class="card-header-icon"
+            aria-label="more options"
+            @click="() => (displayMobileFilters = !displayMobileFilters)"
+          >
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </header>
+        <div v-if="displayMobileFilters" class="card-content">
+          <div
+            v-for="headerGroup in table.getHeaderGroups()"
+            :key="headerGroup.id"
+          >
+            <div
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              class="is-flex is-flex-direction-column is-align-content-stretch"
+            >
+              <button
+                class="button my-2"
+                @click="header.column.getToggleSortingHandler()?.($event)"
+              >
+                <FlexRender
+                  v-if="header.column.getCanFilter()"
+                  :render="header.column.columnDef.header"
+                  :props="header.getContext()"
+                />
+
+                {{
+                  { asc: " ▲", desc: " ▼" }[
+                    header.column.getIsSorted() as string
+                  ]
+                }}
+              </button>
+              <div v-if="header.column.getCanFilter()" style="width: 100%">
+                <ColumnFiltering
+                  :column="header.column"
+                  :table="table"
+                  style="width: 100%"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="b-table table-container">
         <div class="table-wrapper has-mobile-cards">
           <table class="table is-striped">
@@ -281,6 +332,7 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
+const displayMobileFilters = ref(false);
 
 const table = useVueTable({
   get data() {
@@ -319,6 +371,8 @@ const table = useVueTable({
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
 });
+
+console.log(table.getHeaderGroups());
 
 const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
