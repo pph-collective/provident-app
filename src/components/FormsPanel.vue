@@ -231,18 +231,6 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Submitted By",
       }),
-      columnHelper.accessor("users_edited", {
-        id: "users_edited",
-        cell: (info) => (info.getValue() ?? []).join(", "),
-        header: () => "Edited By",
-      }),
-      columnHelper.accessor("release_date", {
-        id: "release_date",
-        size: 90,
-        minSize: 90,
-        cell: (info) => info.getValue(),
-        header: () => "Release Date",
-      }),
       columnHelper.accessor("last_updated", {
         id: "last_updated",
         size: 90,
