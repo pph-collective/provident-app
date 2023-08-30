@@ -254,7 +254,12 @@ const columns = [
   }),
 ];
 
-const sorting = ref<SortingState>([]);
+const sorting = ref<SortingState>([
+  {
+    id: "last_updated",
+    desc: true,
+  },
+]);
 const columnFilters = ref<ColumnFiltersState>([]);
 
 const INITIAL_PAGE_INDEX = 0;
