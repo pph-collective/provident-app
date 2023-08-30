@@ -27,12 +27,11 @@
               class="is-flex is-flex-direction-column is-align-content-stretch"
             >
               <button
-                v-if="!['1_forms_title', 'actions'].includes(header.id)"
+                v-if="header.column.getCanFilter()"
                 class="button my-2"
                 @click="header.column.getToggleSortingHandler()?.($event)"
               >
                 <FlexRender
-                  v-if="header.column.getCanFilter()"
                   :render="header.column.columnDef.header"
                   :props="header.getContext()"
                 />
