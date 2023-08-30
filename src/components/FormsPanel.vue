@@ -26,9 +26,11 @@
                     />
 
                     {{
-                      { asc: " ▲", desc: " ▼" }[
-                        header.column.getIsSorted() as string
-                      ]
+                      header.column.getCanSort()
+                        ? { asc: " ▲", desc: " ▼", false: "▶" }[
+                            header.column.getIsSorted() as string
+                          ]
+                        : ""
                     }}
                   </div>
                   <div v-if="header.column.getCanFilter()">
