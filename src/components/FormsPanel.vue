@@ -27,6 +27,7 @@
               class="is-flex is-flex-direction-column is-align-content-stretch"
             >
               <button
+                v-if="!['1_forms_title', 'actions'].includes(header.id)"
                 class="button my-2"
                 @click="header.column.getToggleSortingHandler()?.($event)"
               >
