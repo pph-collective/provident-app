@@ -10,7 +10,7 @@ const bucket = "gs://provident-backups";
  * bucket every week.
  */
 exports.scheduledFirestoreExport = functions.pubsub
-  .schedule("0 23 * * SUN") // Every Sunday at 11 PM GMT.
+  .schedule("0 22 * * *") // Every Sunday at 11 PM GMT. -- 0 23 * * SUN
   .onRun(async () => {
     logger.info("Starting Backup Function");
 
