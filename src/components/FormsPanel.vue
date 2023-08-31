@@ -77,9 +77,11 @@
                     />
 
                     {{
-                      { asc: " ▲", desc: " ▼" }[
-                        header.column.getIsSorted() as string
-                      ]
+                      header.column.getCanSort()
+                        ? { asc: " ▲", desc: " ▼", false: "▶" }[
+                            header.column.getIsSorted() as string
+                          ]
+                        : ""
                     }}
                   </div>
                   <div v-if="header.column.getCanFilter()">
@@ -289,18 +291,6 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Submitted By",
       }),
-      columnHelper.accessor("users_edited", {
-        id: "users_edited",
-        cell: (info) => (info.getValue() ?? []).join(", "),
-        header: () => "Edited By",
-      }),
-      columnHelper.accessor("release_date", {
-        id: "release_date",
-        size: 90,
-        minSize: 90,
-        cell: (info) => info.getValue(),
-        header: () => "Release Date",
-      }),
       columnHelper.accessor("last_updated", {
         id: "last_updated",
         size: 90,
@@ -323,7 +313,12 @@ const columns = [
   }),
 ];
 
-const sorting = ref<SortingState>([]);
+const sorting = ref<SortingState>([
+  {
+    id: "last_updated",
+    desc: true,
+  },
+]);
 const columnFilters = ref<ColumnFiltersState>([]);
 
 const INITIAL_PAGE_INDEX = 0;

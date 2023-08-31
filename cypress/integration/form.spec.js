@@ -557,11 +557,6 @@ describe("Forms viewed as an admin", () => {
       .find(".tag")
       .should("contain", "Not Started");
 
-    // Check release date
-    cy.get('[data-cy="forms-table-body"]')
-      .contains("tr", "Followup Form")
-      .should("contain", `${tomorrow}`);
-
     cy.get('[data-cy="forms-table-body"]')
       .contains("tr", "Followup Form")
       .find('[data-cy="launch-form-button"]')
@@ -605,11 +600,6 @@ describe("Forms viewed as an admin", () => {
       .should("exist")
       .find(".tag")
       .should("contain", "Not Started");
-
-    // Check release date
-    cy.get('[data-cy="forms-table-body"]')
-      .contains("tr", "Followup to the followup form")
-      .should("contain", `${day_after_tomorrow}`);
 
     cy.get('[data-cy="forms-table-body"]')
       .contains("tr", "Followup to the followup form")
