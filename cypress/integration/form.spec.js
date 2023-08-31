@@ -557,10 +557,11 @@ describe("Forms viewed as an admin", () => {
       .find(".tag")
       .should("contain", "Not Started");
 
-    // Check release date
-    cy.get('[data-cy="forms-table-body"]')
-      .contains("tr", "Followup Form")
-      .should("contain", `${tomorrow}`);
+    // // Check release date
+    // NOTE: We no longer show the release date, keeping this commented out in case we want to show it again
+    // cy.get('[data-cy="forms-table-body"]')
+    //   .contains("tr", "Followup Form")
+    //   .should("contain", `${tomorrow}`);
 
     cy.get('[data-cy="forms-table-body"]')
       .contains("tr", "Followup Form")
