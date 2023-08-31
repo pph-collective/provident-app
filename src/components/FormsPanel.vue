@@ -3,7 +3,7 @@
     <section class="section">
       <h1 class="title">Forms</h1>
       <!-- Display mobile controls card only on mobile devices -->
-      <div class="is-hidden-desktop card my-2">
+      <div class="display-only-mobile card my-2">
         <header class="card-header">
           <div class="card-header-title">Filters</div>
           <button
@@ -37,9 +37,11 @@
                 />
 
                 {{
-                  { asc: " ▲", desc: " ▼" }[
-                    header.column.getIsSorted() as string
-                  ]
+                  header.column.getCanSort()
+                    ? { asc: " ▲", desc: " ▼", false: " ▶" }[
+                        header.column.getIsSorted() as string
+                      ]
+                    : ""
                 }}
               </button>
               <div v-if="header.column.getCanFilter()" style="width: 100%">
@@ -395,5 +397,11 @@ function handlePageSizeChange(e) {
 
 .table {
   overflow-x: auto;
+}
+
+.display-only-mobile {
+  @media (min-width: 768px) {
+    display: none;
+  }
 }
 </style>
