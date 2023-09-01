@@ -68,6 +68,7 @@
                   :key="header.id"
                   :colSpan="header.colSpan"
                   :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                  style="min-width: 25px"
                 >
                   <div
                     @click="header.column.getToggleSortingHandler()?.($event)"
