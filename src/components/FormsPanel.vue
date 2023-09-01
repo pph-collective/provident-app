@@ -369,7 +369,6 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
 });
 
-console.log(table.getHeaderGroups());
 
 const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
