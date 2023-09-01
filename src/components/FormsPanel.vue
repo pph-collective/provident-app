@@ -203,6 +203,7 @@ import FormModal from "./form/Modal.vue";
 
 const props = withDefaults(
   defineProps<{
+    admin: boolean;
     filterOptions: object;
     filterFunctions: object;
     formResponses: object[];
@@ -210,6 +211,7 @@ const props = withDefaults(
     readOnly: boolean;
   }>(),
   {
+    admin: false,
     filterOptions: () => ({}),
     filterFunctions: () => ({}),
     formResponses: () => [],
@@ -283,11 +285,13 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Block Group",
       }),
-      columnHelper.accessor("organization", {
-        id: "organization",
-        cell: (info) => info.getValue(),
-        header: () => "Organization",
-      }),
+      props.admin
+        ? columnHelper.accessor("organization", {
+            id: "organization",
+            cell: (info) => info.getValue(),
+            header: () => "Organization",
+          })
+        : null,
       columnHelper.accessor("user_submitted", {
         id: "user_submitted",
         cell: (info) => info.getValue(),
@@ -311,7 +315,7 @@ const columns = [
           }),
         header: () => "",
       }),
-    ],
+    ].filter((el) => el !== null),
   }),
 ];
 
@@ -368,7 +372,6 @@ const table = useVueTable({
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
 });
-
 
 const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
