@@ -1,5 +1,6 @@
 <template>
   <input
+    class="input is-small"
     type="text"
     :value="columnFilterValue ?? ''"
     placeholder="Search..."
@@ -17,3 +18,7 @@ const props = defineProps<{
 
 const columnFilterValue = props.column.getFilterValue();
 </script>
+
+<style lang="scss" scoped>
+@import "../assets/styles/main.scss";
+</style>
