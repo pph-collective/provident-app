@@ -60,7 +60,7 @@
           <table class="table is-striped">
             <thead>
               <tr
-                v-for="headerGroup in table.getHeaderGroups()"
+                v-for="headerGroup in table.getHeaderGroups().slice(1)"
                 :key="headerGroup.id"
               >
                 <th
@@ -87,6 +87,19 @@
                         : ""
                     }}
                   </div>
+                </th>
+              </tr>
+              <tr
+                v-for="headerGroup in table.getHeaderGroups().slice(1)"
+                :key="`${headerGroup.id}-column-filtering`"
+              >
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="`${header.id}-column-filtering`"
+                  :colSpan="header.colSpan"
+                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                  style="min-width: 100px"
+                >
                   <div v-if="header.column.getCanFilter()">
                     <ColumnFiltering :column="header.column" :table="table" />
                   </div>
