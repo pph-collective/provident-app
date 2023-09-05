@@ -2,12 +2,65 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <div class="table-wrapper is-fullwidth">
-        <div class="table-container">
-          <table class="table is-narrow is-striped is-hoverable">
+      <!-- Display mobile controls card only on mobile devices -->
+      <div class="display-only-mobile card my-2">
+        <header class="card-header">
+          <div class="card-header-title">Filters</div>
+          <button
+            class="card-header-icon"
+            aria-label="more options"
+            @click="() => (displayMobileFilters = !displayMobileFilters)"
+          >
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </header>
+        <div v-if="displayMobileFilters" class="card-content">
+          <div
+            v-for="headerGroup in table.getHeaderGroups()"
+            :key="headerGroup.id"
+          >
+            <div
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              class="is-flex is-flex-direction-column is-align-content-stretch"
+            >
+              <button
+                v-if="header.column.getCanFilter()"
+                class="button my-2"
+                @click="header.column.getToggleSortingHandler()?.($event)"
+              >
+                <FlexRender
+                  :render="header.column.columnDef.header"
+                  :props="header.getContext()"
+                />
+
+                {{
+                  header.column.getCanSort()
+                    ? { asc: " ▲", desc: " ▼", false: " ▶" }[
+                        header.column.getIsSorted() as string
+                      ]
+                    : ""
+                }}
+              </button>
+              <div v-if="header.column.getCanFilter()" style="width: 100%">
+                <ColumnFiltering
+                  :column="header.column"
+                  :table="table"
+                  style="width: 100%"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="b-table table-container">
+        <div class="table-wrapper has-mobile-cards">
+          <table class="table is-striped">
             <thead>
               <tr
-                v-for="headerGroup in table.getHeaderGroups()"
+                v-for="headerGroup in table.getHeaderGroups().slice(1)"
                 :key="headerGroup.id"
               >
                 <th
@@ -15,6 +68,7 @@
                   :key="header.id"
                   :colSpan="header.colSpan"
                   :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                  style="min-width: 100px"
                 >
                   <div
                     @click="header.column.getToggleSortingHandler()?.($event)"
@@ -33,6 +87,19 @@
                         : ""
                     }}
                   </div>
+                </th>
+              </tr>
+              <tr
+                v-for="headerGroup in table.getHeaderGroups().slice(1)"
+                :key="`${headerGroup.id}-column-filtering`"
+              >
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="`${header.id}-column-filtering`"
+                  :colSpan="header.colSpan"
+                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
+                  style="min-width: 100px"
+                >
                   <div v-if="header.column.getCanFilter()">
                     <ColumnFiltering :column="header.column" :table="table" />
                   </div>
@@ -41,7 +108,14 @@
             </thead>
             <tbody data-cy="forms-table-body">
               <tr v-for="row in table.getRowModel().rows" :key="row.id">
-                <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <td
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  :data-label="
+                    cell.column.columnDef.header &&
+                    cell.column.columnDef.header() // TODO: There's type error here but i dont know why...
+                  "
+                >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
                     :props="cell.getContext()"
@@ -143,6 +217,7 @@ import FormModal from "./form/Modal.vue";
 
 const props = withDefaults(
   defineProps<{
+    admin: boolean;
     filterOptions: object;
     filterFunctions: object;
     formResponses: object[];
@@ -150,6 +225,7 @@ const props = withDefaults(
     readOnly: boolean;
   }>(),
   {
+    admin: false,
     filterOptions: () => ({}),
     filterFunctions: () => ({}),
     formResponses: () => [],
@@ -223,11 +299,13 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Block Group",
       }),
-      columnHelper.accessor("organization", {
-        id: "organization",
-        cell: (info) => info.getValue(),
-        header: () => "Organization",
-      }),
+      props.admin
+        ? columnHelper.accessor("organization", {
+            id: "organization",
+            cell: (info) => info.getValue(),
+            header: () => "Organization",
+          })
+        : null,
       columnHelper.accessor("user_submitted", {
         id: "user_submitted",
         cell: (info) => info.getValue(),
@@ -238,7 +316,7 @@ const columns = [
         size: 90,
         minSize: 90,
         cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
-        header: "Last Updated",
+        header: () => "Last Updated",
       }),
       columnHelper.display({
         id: "actions",
@@ -249,8 +327,9 @@ const columns = [
             userRole: userRole.value,
             readOnly: props.readOnly,
           }),
+        header: () => "",
       }),
-    ],
+    ].filter((el) => el !== null),
   }),
 ];
 
@@ -268,6 +347,7 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
+const displayMobileFilters = ref(false);
 
 const table = useVueTable({
   get data() {
@@ -287,6 +367,8 @@ const table = useVueTable({
       pageSize: 20,
     },
   },
+
+  // // TODO: Just copying the sorting format hoping it is fine
   onColumnFiltersChange: (updaterOrValue) => {
     columnFilters.value =
       typeof updaterOrValue === "function"
@@ -305,7 +387,7 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
 });
 
-const launchForm = (formResponse, readOnly) => {
+const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
   logActivity(
@@ -328,4 +410,14 @@ function handlePageSizeChange(e) {
 
 <style lang="scss" scoped>
 @import "../assets/styles/main.scss";
+
+.table {
+  overflow-x: auto;
+}
+
+.display-only-mobile {
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
 </style>
