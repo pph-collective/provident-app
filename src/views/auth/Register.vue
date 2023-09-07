@@ -52,6 +52,20 @@
           </div>
         </div>
       </div>
+      <div v-if="form.organization === 'Other'" class="field">
+        <p class="control has-icons-left">
+          <input
+            v-model="form.organizationName"
+            class="input"
+            type="text"
+            data-cy="form-organization-name"
+            placeholder="Organization"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-sitemap" />
+          </span>
+        </p>
+      </div>
       <div class="field">
         <p class="control has-icons-left">
           <input
@@ -295,6 +309,7 @@ export default {
       email: "",
       name: "",
       organization: "",
+      organizationName: "",
       password: "",
       confirmPassword: "",
       terms: false,
@@ -311,8 +326,22 @@ export default {
 
     const formValid = computed(() => {
       // all fields must be filled in
-      if (Object.values(form).reduce((acc, curr) => acc || !curr, false)) {
+      if (
+        !(
+          form.email &&
+          form.name &&
+          form.organization &&
+          form.password &&
+          form.confirmPassword &&
+          form.terms
+        )
+      ) {
         return { status: false, message: "" };
+      } else if (form.organization === "Other" && !form.organizationName) {
+        return {
+          status: false,
+          message: "What organization are you a part of?",
+        };
       } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
         return { status: false, message: "" };
       } else if (form.password !== form.confirmPassword) {
@@ -348,6 +377,10 @@ export default {
           email,
           name: form.name,
           organization: form.organization,
+          organizationName:
+            form.organization === "Other"
+              ? form.organizationName
+              : form.organization,
           role: "user",
           status: "pending",
         });
