@@ -478,7 +478,7 @@
   "organizations": {
     "Other": {
       "name": "Other",
-      "tier": 1,
+      "tier": 2,
       "intervention_arm": true,
       "municipalities": []
     },
