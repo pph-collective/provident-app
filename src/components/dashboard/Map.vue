@@ -238,6 +238,10 @@ export default {
                 events: "@block_groups:mousedown",
                 update: "clicked === datum ? null : datum",
               },
+              {
+                events: "@block_groups:touchend",
+                update: "clicked === datum ? null : datum",
+              },
             ],
           },
           {
