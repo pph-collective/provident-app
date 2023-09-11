@@ -255,7 +255,6 @@ const controls = ref({
 });
 
 const updateControls = (newControls) => {
-  console.log("Update controls", toRaw(newControls));
   // if either drop down changes, clear out the selected block group
   activeMuni.value = "";
   activeBG.value = "";
@@ -272,6 +271,8 @@ const updateControls = (newControls) => {
   }
 };
 
+/* 
+// other WIP version that also doesn't really work but i think is closer
 const activeLocationTemp = ref({
   municipality: "",
   blockGroup: "",
@@ -296,6 +297,7 @@ useQueryParam({
 watch(
   () => activeLocationTemp.value,
   () => {
+    console.log("active temp", activeLocationTemp.value);
     if (activeMuni.value !== activeLocationTemp.value.municipality)
       activeMuni.value = activeLocationTemp.value.municipality;
     if (activeBG.value !== activeLocationTemp.value.blockGroup)
@@ -309,6 +311,7 @@ watch(
 watch(
   () => activeMuni.value,
   () => {
+    console.log("active temp", activeLocationTemp.value);
     if (activeMuni.value !== activeLocationTemp.value.municipality)
       activeLocationTemp.value.municipality = activeMuni.value;
   }
@@ -318,6 +321,7 @@ watch(
 watch(
   () => activeBG.value,
   () => {
+    console.log("active temp", activeLocationTemp.value);
     if (activeBG.value !== activeLocationTemp.value.blockGroup)
       activeLocationTemp.value.blockGroup = activeBG.value;
   }
@@ -327,12 +331,15 @@ watch(
 watch(
   () => activeClickedStatus.value,
   () => {
+    console.log("active temp", activeLocationTemp.value);
     if (activeClickedStatus.value !== activeLocationTemp.value.clicked)
       activeLocationTemp.value.clicked = activeClickedStatus.value;
   }
 );
+*/
 
 /*
+// Uncomment this block to replicate the issue
 useQueryParam({
   param: "zoom",
   ref: zoomed,
@@ -381,8 +388,7 @@ useQueryParam({
     console.log({ bgVal: val });
     return val;
   },
-});
-*/
+});*/
 
 /*
 // This works, but fails on the page load case
