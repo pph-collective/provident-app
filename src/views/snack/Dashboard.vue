@@ -13,7 +13,7 @@
         Map:
         {{
           zoomed
-            ? `${activeMuni} - ${activeGeoid}`
+            ? `${activeMuni} - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
       </template>
@@ -38,7 +38,7 @@
           <p class="control">
             <button
               v-if="!zoomed"
-              :disabled="!activeGeoid || !activeClickedStatus"
+              :disabled="!activeBG || !activeClickedStatus"
               class="zoom-button button is-family-secondary is-secondary is-light"
               @click="zoomBg"
             >
@@ -107,17 +107,17 @@
             :data-cy="controls.geography.name"
             :view-forms="viewForms"
             @new-active-municipality="activeMuni = $event"
-            @new-active-bg="activeGeoid = $event"
+            @new-active-bg="activeBG = $event"
             @active-clicked-status="clickMap"
           />
           <BGMap
-            v-if="activeGeoid && zoomed"
+            v-if="activeBG && zoomed"
             id="bg-zoom-map"
-            :block-group="activeGeoid"
+            :block-group="activeBG"
             :dataset="dataset.cbg"
             class="is-absolute"
           />
-          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+          <div v-if="activeBG && zoomed" class="instructions is-size-6-7">
             Click on a <i class="fas fa-circle point-of-interest" /> point of
             interest to copy the address to your clipboard
           </div>
@@ -132,7 +132,7 @@
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
           :municipality="activeMuni"
-          :geoid="activeGeoid"
+          :geoid="activeBG"
           :with-predictions="interventionArmUser"
         />
       </template>
@@ -140,17 +140,14 @@
 
     <Card id="nra-widget" width="one-third" :height="2" :no-header="true">
       <template #content>
-        <AssessmentWidget
-          :active-geoid="activeGeoid"
-          :active-muni="activeMuni"
-        />
+        <AssessmentWidget :active-geoid="activeBG" :active-muni="activeMuni" />
       </template>
     </Card>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted, nextTick, toRaw, watch } from "vue";
 import { useStore } from "vuex";
 
 import { logActivity, getZipcodes } from "../../firebase.js";
@@ -163,6 +160,7 @@ import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
 import Loading from "../../components/Loading.vue";
+import { useQueryParam } from "../../composables/useQueryParam";
 
 const towns = MUNICIPALITIES.map((m) => ({
   name: m,
@@ -178,7 +176,7 @@ const dataset = computed(() => {
 
   return store.state.dataset;
 });
-const activeGeoid = ref("");
+const activeBG = ref("");
 const activeMuni = ref("");
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
@@ -186,7 +184,7 @@ const viewForms = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = store.state.organizations;
+  const orgs = toRaw(store.state).organizations;
   if (store.state.user.admin) {
     return [ri, ...orgs, ...towns];
   } else if (store.state.user.data) {
@@ -252,12 +250,15 @@ const dropDowns = computed(() => {
   };
 });
 
-const controls = ref({});
+const controls = ref({
+  geography: filteredOrgs.value[0], // All Towns
+});
 
 const updateControls = (newControls) => {
+  console.log("Update controls", toRaw(newControls));
   // if either drop down changes, clear out the selected block group
   activeMuni.value = "";
-  activeGeoid.value = "";
+  activeBG.value = "";
   zoomed.value = false;
 
   // resets the zipcode dropdown to All Zip Codes
@@ -271,6 +272,145 @@ const updateControls = (newControls) => {
   }
 };
 
+const activeLocationTemp = ref({
+  municipality: "",
+  blockGroup: "",
+  clicked: false,
+});
+
+useQueryParam({
+  param: "blockgroup",
+  ref: activeLocationTemp,
+  refField: "blockGroup",
+  valid: () => true,
+});
+
+useQueryParam({
+  param: "municipality",
+  ref: activeLocationTemp,
+  refField: "municipality",
+  valid: () => true,
+});
+
+// Sync activeLocationTemp => activeMuni & activeBG
+watch(
+  () => activeLocationTemp.value,
+  () => {
+    if (activeMuni.value !== activeLocationTemp.value.municipality)
+      activeMuni.value = activeLocationTemp.value.municipality;
+    if (activeBG.value !== activeLocationTemp.value.blockGroup)
+      activeBG.value = activeLocationTemp.value.blockGroup;
+    if (activeClickedStatus.value !== activeLocationTemp.value.clicked)
+      activeClickedStatus.value = activeLocationTemp.value.clicked;
+  }
+);
+
+// Sync activeMuni => activeLocationTemp
+watch(
+  () => activeMuni.value,
+  () => {
+    if (activeMuni.value !== activeLocationTemp.value.municipality)
+      activeLocationTemp.value.municipality = activeMuni.value;
+  }
+);
+
+// Sync activeBG => activeLocationTemp
+watch(
+  () => activeBG.value,
+  () => {
+    if (activeBG.value !== activeLocationTemp.value.blockGroup)
+      activeLocationTemp.value.blockGroup = activeBG.value;
+  }
+);
+
+// Sync activeClickedStatus => activeLocationTemp
+watch(
+  () => activeClickedStatus.value,
+  () => {
+    if (activeClickedStatus.value !== activeLocationTemp.value.clicked)
+      activeLocationTemp.value.clicked = activeClickedStatus.value;
+  }
+);
+
+/*
+useQueryParam({
+  param: "zoom",
+  ref: zoomed,
+  // no refField
+  push: true,
+  valid: (param) => {
+    const paramAsString = param.toString().toLowerCase();
+    return paramAsString === "true" || paramAsString === "false";
+  },
+  paramToVal: (param) => {
+    const paramAsString = param.toString().toLowerCase();
+    if (paramAsString === "true") return true;
+    if (paramAsString === "false") return false;
+    throw new Error("Invalid value for 'zoomed' param");
+  },
+  valToParam: (val) => (val ? "true" : "false"),
+});
+
+watch(
+  () => activeMuni.value,
+  () => console.log("municipality", activeMuni.value)
+);
+watch(
+  () => activeBG.value,
+  () => console.log("BG", activeBG.value, typeof activeBG.value)
+);
+
+useQueryParam({
+  param: "municipality",
+  ref: activeMuni,
+  // no refField
+  push: true,
+  valid: () => true,
+});
+
+useQueryParam({
+  param: "bg",
+  ref: activeBG,
+  // no refField
+  push: true,
+  paramToVal: (param) => {
+    console.log({ bgParam: param });
+    return param;
+  },
+  valToParam: (val) => {
+    console.log({ bgVal: val });
+    return val;
+  },
+});
+*/
+
+/*
+// This works, but fails on the page load case
+useQueryParam({
+  param: "geography",
+  ref: controls,
+  refField: "geography",
+  push: true,
+  valid: (g) =>
+    filteredOrgs.value
+      .map((org) => org.name.toLowerCase())
+      .includes(g.toLowerCase()),
+  paramToVal: (param) =>
+    filteredOrgs.value.find(
+      ({ name }) => param.toLowerCase() === name.toLowerCase()
+    ),
+  valToParam: (val) => toRaw(val)["name"].toLowerCase(),
+});
+*/
+/*
+useQueryParam({
+  param: "zipcode",
+  ref: controls,
+  refField: "zipcode",
+  valid: (z) => zipsDropdownOptions.value.includes(z),
+});
+*/
+
 const loading = computed(() => {
   return dataset.value.cbg.length === 0 || modelVersion.value === null;
 });
@@ -279,17 +419,17 @@ const loading = computed(() => {
 const clickMap = (clickedStatus) => {
   activeClickedStatus.value = clickedStatus;
   if (clickedStatus) {
-    // wait for the next render cycle as the activeGeoid gets updated at about the
+    // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeGeoid.value)
+      logActivity(store.state.user.data.email, "click map", activeBG.value)
     );
   }
 };
 
 const zoomBg = () => {
   zoomed.value = true;
-  logActivity(store.state.user.data.email, "zoom map", activeGeoid.value);
+  logActivity(store.state.user.data.email, "zoom map", activeBG.value);
 };
 </script>
 
