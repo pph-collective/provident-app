@@ -274,7 +274,7 @@
                     </span>
                   </div>
                   <div class="media-content">
-                    <p class="title is-4">What is a RCT?</p>
+                    <p class="title is-4">Randomized Control Trials</p>
                     <p class="subtitle is-6">PDF</p>
                   </div>
                 </div>
@@ -331,7 +331,7 @@
         </div>
       </section>
 
-      <!-- Glossary -->
+      <!-- Glossary 
       <section id="glossary" class="section">
         <h1 class="title">Glossary</h1>
         <h2 class="subtitle"></h2>
@@ -388,7 +388,7 @@
           </div>
         </div>
       </section>
-    </div>
+    --></div>
   </div>
 </template>
 
