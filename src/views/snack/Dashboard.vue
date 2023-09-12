@@ -305,7 +305,9 @@ useQueryParam({
   param: "zoomed",
   ref: zoomed,
   refField: undefined,
-  valid: () => true, //(val) => typeof val === "boolean",
+  valid: (val) =>
+    val.toString().toLowerCase() === "true" ||
+    val.toString().toLowerCase() === "false",
   paramToVal: (param) => {
     const paramAsString = param.toString().toLowerCase();
     if (paramAsString === "true") return true;

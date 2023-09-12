@@ -48,10 +48,14 @@ export function useQueryParam({
   };
 
   // build the new route object given a value
-  const getRoute = (val) => ({
-    path,
-    query: { ...route.query, [param]: valToParam(val) },
-  });
+  const getRoute = (val) => {
+    const query = { ...route.query, [param]: valToParam(val) };
+    if (!valToParam(val)) {
+      // not an empty string
+      delete query[param];
+    }
+    return { path, query };
+  };
 
   // On initialization, check if the param already exists.  If it does, validate it, and
   // if valid, update the ref's value to match the query param.  If there is no param,
