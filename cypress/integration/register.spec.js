@@ -22,6 +22,12 @@ describe("Register User", () => {
     cy.get('[data-cy="request-access-button"]').should("be.disabled");
   });
 
+  it("Shows organization name when 'other' org. selected", () => {
+    cy.get("[data-cy='form-organization-name']").should("not.exist");
+    cy.get("[data-cy='form-organization']").select("Other");
+    cy.get("[data-cy='form-organization-name']").should("exist");
+  });
+
   it("Submit valid form", () => {
     cy.registerUser(testUser);
 

@@ -3,6 +3,7 @@
 
   <FormsPanel
     title="Review Forms"
+    :admin="true"
     :filter-options="filterOptions"
     :filter-functions="filterFunctions"
     :form-responses="formResponses"

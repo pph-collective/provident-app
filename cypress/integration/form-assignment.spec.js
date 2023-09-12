@@ -36,17 +36,21 @@ const checkFormAssignedInToDos = (permission, formTitle, should) => {
   cy.logout();
   cy.login_by_permission(permission).then(() => {
     cy.get("[data-cy='forms']").click();
-    cy.waitLoaded('[data-cy="form-panel"]');
+    cy.waitLoaded('[data-cy="forms-table-body"]');
   });
 
-  cy.contains('[data-cy="forms-panel-block"]', formTitle).should(should);
+  cy.get('[data-cy="forms-table-body"]')
+    .find("tr")
+    .should("not.have.length", 0);
 
   if (should === "exist") {
-    cy.contains('[data-cy="forms-panel-block"]', formTitle)
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", formTitle)
       .find(".tag")
       .should("contain", "Not Started");
 
-    cy.contains('[data-cy="forms-panel-block"]', formTitle)
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", formTitle)
       .find('[data-cy="launch-form-button"]')
       .click();
 
@@ -329,19 +333,21 @@ describe("Form Assignment functionality", () => {
     setDatesAndSubmit();
 
     cy.get("[data-cy='forms']").click();
-    cy.waitLoaded('[data-cy="form-panel"]');
-
-    cy.get('[data-cy="form-panel-heading"]').should("not.be.empty");
+    cy.waitLoaded('[data-cy="forms-table-body"]');
+    cy.get('[data-cy="forms-table-body"]')
+      .find("tr")
+      .should("not.have.length", 0);
 
     // Check that the admin only got one User Assigned Form
     // They are both in RI 4 Us and is listed in users to get the form.
     // Use contain within the cypress get function to get a list of all the elements that contain the text
     // The cypress contain function returns just the first element
-    cy.get(
-      '[data-cy="forms-panel-block"]:contains("User Assigned Form")'
-    ).should("have.length", 1);
+    cy.get('[data-cy="forms-table-body"]')
+      .find('tr:contains("User Assigned Form")')
+      .should("have.length", 1);
 
-    cy.contains('[data-cy="forms-panel-block"]', "User Assigned Form")
+    cy.get('[data-cy="forms-table-body"]')
+      .contains("tr", "User Assigned Form")
       .find(".tag")
       .should("contain", "Not Started");
 

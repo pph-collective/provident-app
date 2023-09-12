@@ -649,12 +649,13 @@ describe("Dashboard viewed as an admin", () => {
       .find("select")
       .eq(0)
       .find("option")
-      .should("have.length", 42)
+      .should("have.length", 43)
       .then((options) => {
         const actual = [...options].map((o) => o.text);
-        expect(actual.slice(0, 3)).to.deep.eq([
+        expect(actual.slice(0, 4)).to.deep.eq([
           "All of Rhode Island",
           "Good Doers",
+          "Other",
           "RI 4 Us",
         ]);
       });
