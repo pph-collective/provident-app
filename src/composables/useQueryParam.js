@@ -1,4 +1,4 @@
-import { watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 /**
@@ -56,15 +56,17 @@ export function useQueryParam({
   // On initialization, check if the param already exists.  If it does, validate it, and
   // if valid, update the ref's value to match the query param.  If there is no param,
   // initialize the url to match the initial value of the ref.
-  if (route.query[param]) {
-    const paramVal = parseParam(route.query[param]);
-    if (!valid(paramVal)) {
-      throw new Error(`Invalid URL query parameter: ${param} = ${paramVal}`);
+  onMounted(() => {
+    if (route.query[param]) {
+      const paramVal = parseParam(route.query[param]);
+      if (!valid(paramVal)) {
+        throw new Error(`Invalid URL query parameter: ${param} = ${paramVal}`);
+      }
+      setRef(paramVal);
+    } else {
+      router.replace(getRoute(getRefValue()));
     }
-    setRef(paramVal);
-  } else {
-    router.replace(getRoute(getRefValue()));
-  }
+  });
 
   // Watch the ref's value for changes.  When it changes, create a new route, including
   // deleting any fields that need to be reset and updating the url accordingly

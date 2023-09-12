@@ -13,7 +13,7 @@
         Map:
         {{
           zoomed
-            ? `${activeMuni} - ${activeBG}`
+            ? `${computedMuni} - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
       </template>
@@ -106,7 +106,7 @@
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :view-forms="viewForms"
-            @new-active-municipality="activeMuni = $event"
+            :active-block-group="activeBG"
             @new-active-bg="activeBG = $event"
             @active-clicked-status="clickMap"
           />
@@ -131,7 +131,7 @@
         <StatsWidget
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
-          :municipality="activeMuni"
+          :municipality="computedMuni"
           :geoid="activeBG"
           :with-predictions="interventionArmUser"
         />
@@ -140,7 +140,10 @@
 
     <Card id="nra-widget" width="one-third" :height="2" :no-header="true">
       <template #content>
-        <AssessmentWidget :active-geoid="activeBG" :active-muni="activeMuni" />
+        <AssessmentWidget
+          :active-geoid="activeBG"
+          :active-muni="computedMuni"
+        />
       </template>
     </Card>
   </div>
@@ -149,6 +152,8 @@
 <script setup>
 import { ref, computed, onMounted, nextTick, toRaw, watch } from "vue";
 import { useStore } from "vuex";
+
+import geo from "@/assets/geojson/ri.json";
 
 import { logActivity, getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
@@ -167,6 +172,11 @@ const towns = MUNICIPALITIES.map((m) => ({
   municipalities: [m],
 }));
 
+const BLOCK_GROUPS = geo.map((feature) => ({
+  municipality: feature.properties.name,
+  blockGroup: feature.properties.bg_id,
+}));
+
 const store = useStore();
 const interventionArmUser = computed(() => store.getters.interventionArmUser);
 const dataset = computed(() => {
@@ -177,7 +187,13 @@ const dataset = computed(() => {
   return store.state.dataset;
 });
 const activeBG = ref("");
-const activeMuni = ref("");
+const computedMuni = computed(() => {
+  const bg = BLOCK_GROUPS.find(
+    ({ blockGroup }) => blockGroup === activeBG.value
+  );
+  if (bg) return bg.municipality;
+  return "";
+});
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 const viewForms = ref(false);
@@ -256,9 +272,8 @@ const controls = ref({
 
 const updateControls = (newControls) => {
   // if either drop down changes, clear out the selected block group
-  activeMuni.value = "";
-  activeBG.value = "";
-  zoomed.value = false;
+  //activeBG.value = "";
+  //zoomed.value = false;
 
   // resets the zipcode dropdown to All Zip Codes
   if (newControls.geography !== controls.value.geography) {
@@ -271,84 +286,19 @@ const updateControls = (newControls) => {
   }
 };
 
-/* 
-// other WIP version that also doesn't really work but i think is closer
-const activeLocationTemp = ref({
-  municipality: "",
-  blockGroup: "",
-  clicked: false,
-});
-
 useQueryParam({
-  param: "blockgroup",
-  ref: activeLocationTemp,
-  refField: "blockGroup",
+  param: "bg",
+  ref: activeBG,
+  refField: undefined,
   valid: () => true,
-});
-
-useQueryParam({
-  param: "municipality",
-  ref: activeLocationTemp,
-  refField: "municipality",
-  valid: () => true,
-});
-
-// Sync activeLocationTemp => activeMuni & activeBG
-watch(
-  () => activeLocationTemp.value,
-  () => {
-    console.log("active temp", activeLocationTemp.value);
-    if (activeMuni.value !== activeLocationTemp.value.municipality)
-      activeMuni.value = activeLocationTemp.value.municipality;
-    if (activeBG.value !== activeLocationTemp.value.blockGroup)
-      activeBG.value = activeLocationTemp.value.blockGroup;
-    if (activeClickedStatus.value !== activeLocationTemp.value.clicked)
-      activeClickedStatus.value = activeLocationTemp.value.clicked;
-  }
-);
-
-// Sync activeMuni => activeLocationTemp
-watch(
-  () => activeMuni.value,
-  () => {
-    console.log("active temp", activeLocationTemp.value);
-    if (activeMuni.value !== activeLocationTemp.value.municipality)
-      activeLocationTemp.value.municipality = activeMuni.value;
-  }
-);
-
-// Sync activeBG => activeLocationTemp
-watch(
-  () => activeBG.value,
-  () => {
-    console.log("active temp", activeLocationTemp.value);
-    if (activeBG.value !== activeLocationTemp.value.blockGroup)
-      activeLocationTemp.value.blockGroup = activeBG.value;
-  }
-);
-
-// Sync activeClickedStatus => activeLocationTemp
-watch(
-  () => activeClickedStatus.value,
-  () => {
-    console.log("active temp", activeLocationTemp.value);
-    if (activeClickedStatus.value !== activeLocationTemp.value.clicked)
-      activeLocationTemp.value.clicked = activeClickedStatus.value;
-  }
-);
-*/
-
-/*
-// Uncomment this block to replicate the issue
-useQueryParam({
-  param: "zoom",
-  ref: zoomed,
-  // no refField
   push: true,
-  valid: (param) => {
-    const paramAsString = param.toString().toLowerCase();
-    return paramAsString === "true" || paramAsString === "false";
-  },
+});
+
+useQueryParam({
+  param: "zoomed",
+  ref: zoomed,
+  refField: undefined,
+  valid: () => true, //(val) => typeof val === "boolean",
   paramToVal: (param) => {
     const paramAsString = param.toString().toLowerCase();
     if (paramAsString === "true") return true;
@@ -357,65 +307,6 @@ useQueryParam({
   },
   valToParam: (val) => (val ? "true" : "false"),
 });
-
-watch(
-  () => activeMuni.value,
-  () => console.log("municipality", activeMuni.value)
-);
-watch(
-  () => activeBG.value,
-  () => console.log("BG", activeBG.value, typeof activeBG.value)
-);
-
-useQueryParam({
-  param: "municipality",
-  ref: activeMuni,
-  // no refField
-  push: true,
-  valid: () => true,
-});
-
-useQueryParam({
-  param: "bg",
-  ref: activeBG,
-  // no refField
-  push: true,
-  paramToVal: (param) => {
-    console.log({ bgParam: param });
-    return param;
-  },
-  valToParam: (val) => {
-    console.log({ bgVal: val });
-    return val;
-  },
-});*/
-
-/*
-// This works, but fails on the page load case
-useQueryParam({
-  param: "geography",
-  ref: controls,
-  refField: "geography",
-  push: true,
-  valid: (g) =>
-    filteredOrgs.value
-      .map((org) => org.name.toLowerCase())
-      .includes(g.toLowerCase()),
-  paramToVal: (param) =>
-    filteredOrgs.value.find(
-      ({ name }) => param.toLowerCase() === name.toLowerCase()
-    ),
-  valToParam: (val) => toRaw(val)["name"].toLowerCase(),
-});
-*/
-/*
-useQueryParam({
-  param: "zipcode",
-  ref: controls,
-  refField: "zipcode",
-  valid: (z) => zipsDropdownOptions.value.includes(z),
-});
-*/
 
 const loading = computed(() => {
   return dataset.value.cbg.length === 0 || modelVersion.value === null;
