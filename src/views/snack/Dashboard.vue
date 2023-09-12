@@ -150,7 +150,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick, toRaw, watch } from "vue";
+import { ref, computed, onMounted, nextTick, toRaw } from "vue";
 import { useStore } from "vuex";
 
 import geo from "@/assets/geojson/ri.json";
@@ -268,12 +268,19 @@ const dropDowns = computed(() => {
 
 const controls = ref({
   geography: filteredOrgs.value[0], // All Towns
+  zipcode: { name: "All Zip Codes" },
 });
 
 const updateControls = (newControls) => {
-  // if either drop down changes, clear out the selected block group
-  //activeBG.value = "";
-  //zoomed.value = false;
+  // If the dropdown changes, clear the selected block group.
+  if (
+    controls.value.geography !== newControls.geography ||
+    controls.value.zipcode.name !== newControls.zipcode.name
+  ) {
+    console.log("reset");
+    activeBG.value = "";
+    zoomed.value = false;
+  }
 
   // resets the zipcode dropdown to All Zip Codes
   if (newControls.geography !== controls.value.geography) {
