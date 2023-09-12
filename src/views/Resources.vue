@@ -42,7 +42,7 @@
         </h2>
 
         <div class="columns is-multiline">
-          <div class="column is-one-third">
+          <div class="column is-half">
             <div class="card">
               <div class="card-image">
                 <figure class="image is-16by9">
@@ -79,7 +79,7 @@
             </div>
           </div>
 
-          <div class="column is-one-third">
+          <div class="column is-half">
             <div class="card">
               <div class="card-image">
                 <figure class="image is-16by9">
@@ -87,7 +87,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    src="https://www.youtube.com/embed/scZopMpFpxg"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -96,24 +96,27 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
+                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="subtitle is-6">
+                      <a
+                        href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
+                        target="_blank"
+                        >@pphcollective on YouTube</a
+                      >
+                    </p>
                   </div>
                 </div>
 
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
+                  Learn more about the PROVIDENT research project and why Rhode
+                  Island is a national leader in overdose prevention innovation.
                   <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="column is-one-third">
+          <div class="column is-half">
             <div class="card">
               <div class="card-image">
                 <figure class="image is-16by9">
@@ -121,7 +124,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    src="https://www.youtube.com/embed/scZopMpFpxg"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -130,24 +133,27 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
+                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="subtitle is-6">
+                      <a
+                        href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
+                        target="_blank"
+                        >@pphcollective on YouTube</a
+                      >
+                    </p>
                   </div>
                 </div>
 
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
+                  Learn more about the PROVIDENT research project and why Rhode
+                  Island is a national leader in overdose prevention innovation.
                   <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="column is-one-third">
+          <div class="column is-half">
             <div class="card">
               <div class="card-image">
                 <figure class="image is-16by9">
@@ -155,7 +161,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
+                    src="https://www.youtube.com/embed/scZopMpFpxg"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -164,86 +170,21 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
+                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="subtitle is-6">
+                      <a
+                        href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
+                        target="_blank"
+                        >@pphcollective on YouTube</a
+                      >
+                    </p>
                   </div>
                 </div>
 
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
+                  Learn more about the PROVIDENT research project and why Rhode
+                  Island is a national leader in overdose prevention innovation.
                   <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third">
-            <div class="card">
-              <div class="card-image">
-                <figure class="image is-16by9">
-                  <iframe
-                    class="has-ratio"
-                    width="640"
-                    height="360"
-                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                    frameborder="0"
-                    allowfullscreen
-                  ></iframe>
-                </figure>
-              </div>
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
-                  </div>
-                </div>
-
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
-                  <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="column is-one-third">
-            <div class="card">
-              <div class="card-image">
-                <figure class="image is-16by9">
-                  <iframe
-                    class="has-ratio"
-                    width="640"
-                    height="360"
-                    src="https://www.youtube.com/embed/YE7VzlLtp-4"
-                    frameborder="0"
-                    allowfullscreen
-                  ></iframe>
-                </figure>
-              </div>
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
-                  </div>
-                </div>
-
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
-                  <br />
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                 </div>
               </div>
             </div>
