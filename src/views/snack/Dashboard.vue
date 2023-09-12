@@ -277,7 +277,6 @@ const updateControls = (newControls) => {
     controls.value.geography !== newControls.geography ||
     controls.value.zipcode.name !== newControls.zipcode.name
   ) {
-    console.log("reset");
     activeBG.value = "";
     zoomed.value = false;
   }
