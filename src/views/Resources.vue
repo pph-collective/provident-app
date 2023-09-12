@@ -71,8 +71,8 @@
                 </div>
 
                 <div class="content">
-                  Learn more about the PROVIDENT research project and why Rhode
-                  Island is a national leader in overdose prevention innovation.
+                  Learn more about the PROVIDENT research project and how it can
+                  help us prevent future drug overdoses.
                   <br />
                 </div>
               </div>
@@ -96,7 +96,7 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="title is-4">Registering and Logging in</p>
                     <p class="subtitle is-6">
                       <a
                         href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
@@ -108,8 +108,8 @@
                 </div>
 
                 <div class="content">
-                  Learn more about the PROVIDENT research project and why Rhode
-                  Island is a national leader in overdose prevention innovation.
+                  Learn how to register to gain access to the PROVIDENT web
+                  tool.
                   <br />
                 </div>
               </div>
@@ -133,7 +133,7 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="title is-4">The map interface</p>
                     <p class="subtitle is-6">
                       <a
                         href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
@@ -145,8 +145,8 @@
                 </div>
 
                 <div class="content">
-                  Learn more about the PROVIDENT research project and why Rhode
-                  Island is a national leader in overdose prevention innovation.
+                  Learn how to navigate the PROVIDENT web tool and map
+                  interface.
                   <br />
                 </div>
               </div>
@@ -170,7 +170,7 @@
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <p class="title is-4">What is PROVIDENT?</p>
+                    <p class="title is-4">Exploring neighborhoods</p>
                     <p class="subtitle is-6">
                       <a
                         href="https://www.youtube.com/@peopleplacehealthcollectiv5405"
@@ -182,8 +182,8 @@
                 </div>
 
                 <div class="content">
-                  Learn more about the PROVIDENT research project and why Rhode
-                  Island is a national leader in overdose prevention innovation.
+                  Dive into the web tool and learn to explore neighborhoods and
+                  get more insights.
                   <br />
                 </div>
               </div>
