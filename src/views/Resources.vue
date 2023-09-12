@@ -50,7 +50,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/scZopMpFpxg"
+                    src="https://www.youtube.com/embed/VlO9JB9Tk20"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -87,7 +87,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/scZopMpFpxg"
+                    src="https://www.youtube.com/embed/g79TQA7SbG0"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -124,7 +124,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/scZopMpFpxg"
+                    src="https://www.youtube.com/embed/nhpXXfk9a7o"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
@@ -161,7 +161,7 @@
                     class="has-ratio"
                     width="640"
                     height="360"
-                    src="https://www.youtube.com/embed/scZopMpFpxg"
+                    src="https://www.youtube.com/embed/A1AuYh-lgrY"
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
