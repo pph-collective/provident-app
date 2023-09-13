@@ -248,7 +248,7 @@ export default {
           },
           {
             name: "clicked",
-            value: null, //initialActiveGeo.value,
+            value: null,
             on: [
               {
                 events: "@block_groups:mousedown",
