@@ -19,7 +19,10 @@ describe("User Views", () => {
     cy.visit("/snack");
 
     // User should be redirected to the dashboard
-    cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.url().should(
+      "eq",
+      `${Cypress.config().baseUrl}snack/dashboard?zoomed=false`
+    );
     cy.waitLoaded(".dashboard");
   });
 
