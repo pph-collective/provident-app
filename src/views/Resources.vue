@@ -330,65 +330,7 @@
           </div>
         </div>
       </section>
-
-      <!-- Glossary 
-      <section id="glossary" class="section">
-        <h1 class="title">Glossary</h1>
-        <h2 class="subtitle"></h2>
-
-        <div class="container">
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <h4 class="title">Modelling Terms</h4>
-                <strong>Prioritized</strong>: This means something
-                <br />
-                <strong>Eligible</strong>: This also means something
-                <br />
-              </div>
-            </div>
-          </div>
-          <br />
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <h4 class="title">Modelling Terms</h4>
-                <strong>Prioritized</strong>: This means something
-                <br />
-                <strong>Eligible</strong>: This also means something
-                <br />
-              </div>
-            </div>
-          </div>
-
-          <br />
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <h4 class="title">Modelling Terms</h4>
-                <strong>Prioritized</strong>: This means something
-                <br />
-                <strong>Eligible</strong>: This also means something
-                <br />
-              </div>
-            </div>
-          </div>
-
-          <br />
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <h4 class="title">Modelling Terms</h4>
-                <strong>Prioritized</strong>: This means something
-                <br />
-                <strong>Eligible</strong>: This also means something
-                <br />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    --></div>
+    </div>
   </div>
 </template>
 
