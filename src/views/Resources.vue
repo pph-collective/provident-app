@@ -37,7 +37,7 @@
         <!-- VIDEOS -->
         <h1 class="title">Videos</h1>
         <h2 class="subtitle">
-          Watch these videos to get a step-by-step walkthorugh of the PROVIDENT
+          Watch these videos to get a step-by-step walkthrough of the PROVIDENT
           web tool.
         </h2>
 
