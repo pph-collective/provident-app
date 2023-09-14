@@ -8,7 +8,7 @@ describe("User Views", () => {
     cy.get('[data-cy="home"]').should("exist").should("have.attr", "href", "/");
     cy.get('[data-cy="dashboard"]')
       .should("exist")
-      .should("have.attr", "href", "/snack/dashboard");
+      .should("have.attr", "href", "/snack/dashboard?zoomed=false");
     cy.get('[data-cy="forms"]')
       .should("exist")
       .should("have.attr", "href", "/snack/forms");
@@ -19,7 +19,10 @@ describe("User Views", () => {
     cy.visit("/snack");
 
     // User should be redirected to the dashboard
-    cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.url().should(
+      "eq",
+      `${Cypress.config().baseUrl}snack/dashboard?zoomed=false`
+    );
     cy.waitLoaded(".dashboard");
   });
 

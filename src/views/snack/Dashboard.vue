@@ -13,7 +13,7 @@
         Map:
         {{
           zoomed
-            ? `${activeMuni} - ${activeGeoid}`
+            ? `${computedMuni} - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
       </template>
@@ -38,7 +38,7 @@
           <p class="control">
             <button
               v-if="!zoomed"
-              :disabled="!activeGeoid || !activeClickedStatus"
+              :disabled="!activeBG || !activeClickedStatus"
               class="zoom-button button is-family-secondary is-secondary is-light"
               @click="zoomBg"
             >
@@ -106,18 +106,18 @@
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :view-forms="viewForms"
-            @new-active-municipality="activeMuni = $event"
-            @new-active-bg="activeGeoid = $event"
+            :active-block-group="activeBG"
+            @new-active-bg="activeBG = $event"
             @active-clicked-status="clickMap"
           />
           <BGMap
-            v-if="activeGeoid && zoomed"
+            v-if="activeBG && zoomed"
             id="bg-zoom-map"
-            :block-group="activeGeoid"
+            :block-group="activeBG"
             :dataset="dataset.cbg"
             class="is-absolute"
           />
-          <div v-if="activeGeoid && zoomed" class="instructions is-size-6-7">
+          <div v-if="activeBG && zoomed" class="instructions is-size-6-7">
             Click on a <i class="fas fa-circle point-of-interest" /> point of
             interest to copy the address to your clipboard
           </div>
@@ -131,8 +131,8 @@
         <StatsWidget
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
-          :municipality="activeMuni"
-          :geoid="activeGeoid"
+          :municipality="computedMuni"
+          :geoid="activeBG"
           :with-predictions="interventionArmUser"
         />
       </template>
@@ -141,8 +141,8 @@
     <Card id="nra-widget" width="one-third" :height="2" :no-header="true">
       <template #content>
         <AssessmentWidget
-          :active-geoid="activeGeoid"
-          :active-muni="activeMuni"
+          :active-geoid="activeBG"
+          :active-muni="computedMuni"
         />
       </template>
     </Card>
@@ -150,8 +150,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted, nextTick, toRaw } from "vue";
 import { useStore } from "vuex";
+
+import geo from "@/assets/geojson/ri.json";
 
 import { logActivity, getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
@@ -163,10 +165,16 @@ import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
 import Loading from "../../components/Loading.vue";
+import { useQueryParam } from "../../composables/useQueryParam";
 
 const towns = MUNICIPALITIES.map((m) => ({
   name: m,
   municipalities: [m],
+}));
+
+const BLOCK_GROUPS = geo.map((feature) => ({
+  municipality: feature.properties.name,
+  blockGroup: feature.properties.bg_id,
 }));
 
 const store = useStore();
@@ -178,15 +186,21 @@ const dataset = computed(() => {
 
   return store.state.dataset;
 });
-const activeGeoid = ref("");
-const activeMuni = ref("");
+const activeBG = ref("");
+const computedMuni = computed(() => {
+  const bg = BLOCK_GROUPS.find(
+    ({ blockGroup }) => blockGroup === activeBG.value
+  );
+  if (bg) return bg.municipality;
+  return "";
+});
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 const viewForms = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = store.state.organizations;
+  const orgs = toRaw(store.state).organizations;
   if (store.state.user.admin) {
     return [ri, ...orgs, ...towns];
   } else if (store.state.user.data) {
@@ -252,13 +266,20 @@ const dropDowns = computed(() => {
   };
 });
 
-const controls = ref({});
+const controls = ref({
+  geography: filteredOrgs.value[0], // All Towns
+  zipcode: { name: "All Zip Codes" },
+});
 
 const updateControls = (newControls) => {
-  // if either drop down changes, clear out the selected block group
-  activeMuni.value = "";
-  activeGeoid.value = "";
-  zoomed.value = false;
+  // If the dropdown changes, clear the selected block group.
+  if (
+    controls.value.geography !== newControls.geography ||
+    controls.value.zipcode.name !== newControls.zipcode.name
+  ) {
+    activeBG.value = "";
+    zoomed.value = false;
+  }
 
   // resets the zipcode dropdown to All Zip Codes
   if (newControls.geography !== controls.value.geography) {
@@ -271,6 +292,30 @@ const updateControls = (newControls) => {
   }
 };
 
+useQueryParam({
+  param: "bg",
+  ref: activeBG,
+  refField: undefined,
+  valid: () => true,
+  push: true,
+});
+
+useQueryParam({
+  param: "zoomed",
+  ref: zoomed,
+  refField: undefined,
+  valid: (val) =>
+    val.toString().toLowerCase() === "true" ||
+    val.toString().toLowerCase() === "false",
+  paramToVal: (param) => {
+    const paramAsString = param.toString().toLowerCase();
+    if (paramAsString === "true") return true;
+    if (paramAsString === "false") return false;
+    throw new Error("Invalid value for 'zoomed' param");
+  },
+  valToParam: (val) => (val ? "true" : "false"),
+});
+
 const loading = computed(() => {
   return dataset.value.cbg.length === 0 || modelVersion.value === null;
 });
@@ -279,17 +324,17 @@ const loading = computed(() => {
 const clickMap = (clickedStatus) => {
   activeClickedStatus.value = clickedStatus;
   if (clickedStatus) {
-    // wait for the next render cycle as the activeGeoid gets updated at about the
+    // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeGeoid.value)
+      logActivity(store.state.user.data.email, "click map", activeBG.value)
     );
   }
 };
 
 const zoomBg = () => {
   zoomed.value = true;
-  logActivity(store.state.user.data.email, "zoom map", activeGeoid.value);
+  logActivity(store.state.user.data.email, "zoom map", activeBG.value);
 };
 </script>
 

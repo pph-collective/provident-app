@@ -45,8 +45,13 @@ export default {
       type: Object,
       required: true,
     },
+    activeBlockGroup: {
+      type: String,
+      require: true,
+      default: () => "",
+    },
   },
-  emits: ["new-active-bg", "new-active-municipality", "active-clicked-status"],
+  emits: ["new-active-bg", "active-clicked-status"],
   setup(props, { emit }) {
     const {
       filterMunicipalities,
@@ -55,6 +60,7 @@ export default {
       viewForms,
       withPredictions,
       zipcode,
+      activeBlockGroup,
     } = toRefs(props);
 
     const el = ref(null);
@@ -158,6 +164,16 @@ export default {
       }
 
       return topo;
+    });
+
+    const initialActiveGeo = computed(() => {
+      if (activeBlockGroup.value) {
+        const activeBlock = filteredGeo.value.objects.blocks.geometries.find(
+          (geo) => geo.properties.bg_id === activeBlockGroup.value
+        );
+        if (activeBlock) return activeBlock;
+      }
+      return undefined;
     });
 
     const tooltipSignal = computed(() => {
@@ -349,31 +365,17 @@ export default {
       includeActions: ref(false),
     });
 
-    let currentBg = "";
-    let currentMuni = "";
-
     // TODO: the tooltip/stats table isn't as reactive as I'd like - maybe look into debouncing these updates
     watch(view, () => {
       if (view.value) {
         view.value.addSignalListener("activeGeography", (name, value) => {
           if (value) {
-            if (value.properties.bg_id !== currentBg) {
-              currentBg = value.properties.bg_id;
-              emit("new-active-bg", currentBg);
-            }
-
-            if (value.properties.name !== currentMuni) {
-              currentMuni = value.properties.name;
-              emit("new-active-municipality", currentMuni);
+            if (value.properties.bg_id !== activeBlockGroup) {
+              emit("new-active-bg", value.properties.bg_id);
             }
           } else {
-            if (currentBg) {
-              currentBg = "";
-              emit("new-active-bg", currentBg);
-            }
-            if (currentMuni) {
-              currentMuni = "";
-              emit("new-active-municipality", currentMuni);
+            if (activeBlockGroup) {
+              emit("new-active-bg", "");
             }
           }
         });
