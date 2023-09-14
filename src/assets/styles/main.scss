@@ -202,3 +202,33 @@ input:disabled, textarea:disabled {
     #bbbbbb 10px
   );
 }
+
+.dashboard {
+  padding: 1rem;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto;
+  column-gap: 15px;
+  row-gap: 15px;
+  justify-items: stretch;
+  align-items: stretch;
+  align-content: start;
+  grid-auto-flow: row dense;
+  @include mobile {
+    grid-template-columns: 100%;
+    column-gap: 0px;
+    padding: 5px;
+    row-gap: 5px;
+  }
+  @include tablet-only {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 5px;
+    padding: 5px;
+    row-gap: 5px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}

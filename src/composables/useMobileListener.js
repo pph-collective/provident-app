@@ -1,7 +1,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
 export function useMobileListener() {
-  const MOBILE_SIZE = 760;
+  const MOBILE_SIZE = 768;
 
   const isMobile = ref(window.innerWidth <= MOBILE_SIZE);
 

@@ -63,6 +63,14 @@
           >
             Admin
           </router-link>
+
+          <router-link
+            data-cy="resources"
+            to="/resources"
+            class="navbar-item has-text-primary"
+          >
+            Resources
+          </router-link>
         </div>
 
         <div class="navbar-end">
@@ -150,6 +158,11 @@ watch(isMobile, () => {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/main.scss";
+
+.navbar {
+  border-bottom: 1px solid #a4b1bf;
+}
+
 .navbar-start .navbar-item {
   font-size: 18px;
   font-weight: bold;
