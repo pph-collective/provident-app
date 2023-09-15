@@ -1,5 +1,5 @@
 import ACCOUNTS from "../fixtures/accounts.json";
-import { resetDatabase } from "../support";
+import { resetDatabase } from "../support/e2e.js";
 
 describe("Admin Views and Powers", () => {
   beforeEach(() => {
