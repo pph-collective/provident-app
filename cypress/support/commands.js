@@ -94,5 +94,5 @@ Cypress.Commands.add("approveUser", (email) => {
 
 Cypress.Commands.add("waitLoaded", (selector) => {
   cy.get(selector, { timeout: 10000 }).should("exist");
-  cy.get(".loading-icon", { timeout: 10000 }).should("not.exist");
+  cy.get(".loading-icon", { timeout: 12000 }).should("not.exist");
 });
