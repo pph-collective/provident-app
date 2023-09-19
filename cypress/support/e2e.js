@@ -34,5 +34,4 @@ beforeEach(() => {
 
   cy.logout();
   resetDatabase();
-  cy.reload();
 });
