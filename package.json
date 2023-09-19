@@ -21,7 +21,7 @@
     "@formvuelate/plugin-vee-validate": "^3.4.0",
     "@tanstack/vue-table": "^8.9.3",
     "@vueform/multiselect": "^2.2.0",
-    "arquero": "^4.8.4",
+    "arquero": "^5.2.0",
     "bulma": "^0.9.3",
     "bulma-responsive-tables": "^1.2.3",
     "d3-format": "^3.0.1",
@@ -39,7 +39,7 @@
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0",
-    "yup": "^0.32.9"
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@cypress/vite-dev-server": "^5.0.6",
