@@ -10,7 +10,7 @@
           :link="
             municipality
               ? `https://ridoh-overdose-surveillance-rihealth.hub.arcgis.com/documents/ri-municipality-overdose-data-report-${hyphenate(
-                  municipality
+                  municipality,
                 )}/explore`
               : ''
           "

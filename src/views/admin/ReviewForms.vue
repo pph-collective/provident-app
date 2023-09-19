@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="!user.loaded" />
+  <LoadingSpinner :loading="!user.loaded" />
 
   <FormsPanel
     title="Review Forms"
@@ -22,7 +22,7 @@ import {
   uniqueArray,
 } from "@/utils/utils.js";
 
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import FormsPanel from "@/components/FormsPanel.vue";
 
 const store = useStore();
@@ -40,18 +40,18 @@ const filterOptions = computed(() => {
   return {
     "Form Title": uniqueArray(formResponses.value.map((f) => f.form.title)),
     Organization: organizationOptions.filter((org) =>
-      formResponses.value.find((f) => f.organization === org)
+      formResponses.value.find((f) => f.organization === org),
     ),
     Status: ["Not Started", "Draft", "Submitted"],
     Municipality: uniqueArray(
       formResponses.value
         .filter((f) => f.response[MUNI_QUESTION_MODEL])
-        .map((f) => f.response[MUNI_QUESTION_MODEL])
+        .map((f) => f.response[MUNI_QUESTION_MODEL]),
     ),
     "Block Group": uniqueArray(
       formResponses.value
         .filter((f) => f.response[GEOID_QUESTION_MODEL])
-        .map((f) => f.response[GEOID_QUESTION_MODEL])
+        .map((f) => f.response[GEOID_QUESTION_MODEL]),
     ),
   };
 });

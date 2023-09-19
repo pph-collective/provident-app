@@ -44,53 +44,40 @@
   </section>
 </template>
 
-<script>
-import { ref } from "vue";
+<script setup>
+import { ref, computed } from "vue";
 
 import BiteHeader from "@/components/BiteHeader.vue";
 import BiteBody from "@/components/BiteBody.vue";
 
-export default {
-  name: "Bites",
-  components: {
-    BiteHeader,
-    BiteBody,
+const props = defineProps({
+  biteData: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    biteData: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  setup() {
-    const activeBiteId = ref(0);
+});
 
-    return {
-      activeBiteId,
-    };
-  },
-  computed: {
-    activeBite() {
-      return this.biteData.find((el) => el.id === this.activeBiteId);
-    },
-  },
-  methods: {
-    incrementBiteId() {
-      // have the active id cycle around if it hits either end
-      if (this.activeBiteId + 1 >= this.biteData.length) {
-        this.activeBiteId = 0;
-      } else {
-        this.activeBiteId += 1;
-      }
-    },
-    decrementBiteId() {
-      // have the active id cycle around if it hits either end
-      if (this.activeBiteId - 1 < 0) {
-        this.activeBiteId = this.biteData.length - 1;
-      } else {
-        this.activeBiteId -= 1;
-      }
-    },
-  },
+const activeBiteId = ref(0);
+
+const activeBite = computed(() => {
+  return props.biteData.find((el) => el.id === activeBiteId.value);
+});
+
+const incrementBiteId = () => {
+  // have the active id cycle around if it hits either end
+  if (activeBiteId.value + 1 >= props.biteData.length) {
+    activeBiteId.value = 0;
+  } else {
+    activeBiteId.value += 1;
+  }
+};
+
+const decrementBiteId = () => {
+  // have the active id cycle around if it hits either end
+  if (activeBiteId.value - 1 < 0) {
+    activeBiteId.value = props.biteData.length - 1;
+  } else {
+    activeBiteId.value -= 1;
+  }
 };
 </script>

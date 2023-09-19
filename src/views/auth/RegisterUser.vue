@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" />
+  <LoadingSpinner :loading="loading" />
   <FormCard>
     <h1 class="is-size-3 has-text-centered pb-3">Request Access</h1>
     <form v-if="!requested" @submit.prevent="register">
@@ -294,12 +294,12 @@ import { setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { esc } from "@/directives/escape";
 import FormCard from "@/components/FormCard.vue";
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default {
   components: {
     FormCard,
-    Loading,
+    LoadingSpinner,
   },
   directives: {
     ...esc,

@@ -77,7 +77,7 @@ export default {
             "Six Month Resource Plan",
             "Mid-way Followup to the Six Month Resource Plan",
             "Followup to Six Month Resource Plan",
-          ].includes(f.form.title) && f.response.bg_id !== undefined
+          ].includes(f.form.title) && f.response.bg_id !== undefined,
       )
       .forEach((formResponse) => {
         const geoid = formResponse.response.bg_id;
@@ -95,7 +95,7 @@ export default {
         return [];
       } else {
         return zipcodesGeo.find(
-          (z) => zipcode.value.zip === z.properties.ZCTA5CE10
+          (z) => zipcode.value.zip === z.properties.ZCTA5CE10,
         );
       }
     });
@@ -105,7 +105,7 @@ export default {
       let filtered = geo;
       if (filterMunicipalities.value.length > 0) {
         filtered = geo.filter((g) =>
-          filterMunicipalities.value.includes(g.properties.name)
+          filterMunicipalities.value.includes(g.properties.name),
         );
       }
 
@@ -138,8 +138,8 @@ export default {
         topojson.filterAttachedWeight(
           topo,
           sphericalArea,
-          topojson.sphericalRingArea
-        )
+          topojson.sphericalRingArea,
+        ),
       );
 
       // merge block groups into town as well
@@ -164,16 +164,6 @@ export default {
       }
 
       return topo;
-    });
-
-    const initialActiveGeo = computed(() => {
-      if (activeBlockGroup.value) {
-        const activeBlock = filteredGeo.value.objects.blocks.geometries.find(
-          (geo) => geo.properties.bg_id === activeBlockGroup.value
-        );
-        if (activeBlock) return activeBlock;
-      }
-      return undefined;
     });
 
     const tooltipSignal = computed(() => {
@@ -370,11 +360,11 @@ export default {
       if (view.value) {
         view.value.addSignalListener("activeGeography", (name, value) => {
           if (value) {
-            if (value.properties.bg_id !== activeBlockGroup) {
+            if (value.properties.bg_id !== activeBlockGroup.value) {
               emit("new-active-bg", value.properties.bg_id);
             }
           } else {
-            if (activeBlockGroup) {
+            if (activeBlockGroup.value) {
               emit("new-active-bg", "");
             }
           }

@@ -12,7 +12,9 @@
 import { Column, Table } from "@tanstack/vue-table";
 
 const props = defineProps<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   column: Column<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: Table<any>;
 }>();
 

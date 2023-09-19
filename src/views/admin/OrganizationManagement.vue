@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="organizations.length === 0 || loading" />
+  <LoadingSpinner :loading="organizations.length === 0 || loading" />
   <div class="org-management container">
     <section class="section">
       <h1 class="title">Organization Management</h1>
@@ -127,12 +127,12 @@ import utils from "../../utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default {
   components: {
     JSONForm,
-    Loading,
+    LoadingSpinner,
   },
   directives: {
     ...esc,
@@ -188,7 +188,7 @@ export default {
           "organization",
           organization,
           formAssignments.value,
-          organizations.value
+          organizations.value,
         );
         showModal.value = false;
 
@@ -212,7 +212,7 @@ export default {
         model: "name",
         required: true,
         validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
-          organizations.value.map((org) => org.name.toUpperCase())
+          organizations.value.map((org) => org.name.toUpperCase()),
         )}, 'Organization already exists.')`,
       },
       {

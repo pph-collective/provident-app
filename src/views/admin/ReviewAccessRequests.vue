@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" />
+  <LoadingSpinner :loading="loading" />
   <div class="container">
     <section class="section">
       <h1 class="title">Review Access Requests</h1>
@@ -61,7 +61,7 @@ import { db, updateUser, createEmail } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import formAssignmentUtils from "../../utils/formAssignment";
 
-import Loading from "../../components/Loading.vue";
+import LoadingSpinner from "../../components/LoadingSpinner.vue";
 
 const loading = ref(false);
 
@@ -81,7 +81,7 @@ const approve = async (user) => {
       "user",
       user,
       formAssignments.value,
-      organizations.value
+      organizations.value,
     );
 
     const body = `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been approved. <a href='${location.origin}/snack'>Go check out PROVIDENT!</a></p>`;

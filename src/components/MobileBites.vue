@@ -8,51 +8,13 @@
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
-
+<script setup>
 import BiteHeader from "@/components/BiteHeader.vue";
 
-export default {
-  name: "Bites",
-  components: {
-    BiteHeader,
+defineProps({
+  biteData: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    biteData: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  setup() {
-    const activeBiteId = ref(0);
-
-    return {
-      activeBiteId,
-    };
-  },
-  computed: {
-    activeBite() {
-      return this.biteData.find((el) => el.id === this.activeBiteId);
-    },
-  },
-  methods: {
-    incrementBiteId() {
-      // have the active id cycle around if it hits either end
-      if (this.activeBiteId + 1 >= this.biteData.length) {
-        this.activeBiteId = 0;
-      } else {
-        this.activeBiteId += 1;
-      }
-    },
-    decrementBiteId() {
-      // have the active id cycle around if it hits either end
-      if (this.activeBiteId - 1 < 0) {
-        this.activeBiteId = this.biteData.length - 1;
-      } else {
-        this.activeBiteId -= 1;
-      }
-    },
-  },
-};
+});
 </script>

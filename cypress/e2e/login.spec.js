@@ -37,7 +37,7 @@ describe("Log In View", () => {
     cy.get('[type="password"]').type("invalid{enter}");
     cy.get('[data-cy="error-message"]').should(
       "contain",
-      "The password is invalid or the user does not have a password"
+      "The password is invalid or the user does not have a password",
     );
   });
 
@@ -83,7 +83,7 @@ describe("Log In View", () => {
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
     cy.get("[data-cy='login-form-button']", { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
 
     cy.url().should("contain", "/snack/dashboard");

@@ -14,25 +14,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useStore } from "vuex";
 
-export default {
-  props: {
-    notifications: {
-      type: Array,
-      required: true,
-    },
+defineProps({
+  notifications: {
+    type: Array,
+    default: () => [],
   },
-  setup() {
-    const store = useStore();
+});
 
-    const dismissNotification = (id) => {
-      store.dispatch("dismissNotification", id);
-    };
+const store = useStore();
 
-    return { dismissNotification };
-  },
+const dismissNotification = (id) => {
+  store.dispatch("dismissNotification", id);
 };
 </script>
 

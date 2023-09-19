@@ -99,10 +99,10 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.user);
     const userEmail = computed(() =>
-      user.value.data ? user.value.data.email : ""
+      user.value.data ? user.value.data.email : "",
     );
     const userRole = computed(() =>
-      user.value.data ? user.value.data.role : "user"
+      user.value.data ? user.value.data.role : "user",
     );
 
     const closeFormRequest = ref(0);
@@ -129,7 +129,7 @@ export default {
       try {
         const _id = await store.dispatch(
           "updateFormResponse",
-          updatedFormResponse
+          updatedFormResponse,
         );
         formMessage.value = "Form successfully saved";
 

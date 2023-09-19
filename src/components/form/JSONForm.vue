@@ -115,7 +115,7 @@ export default {
 
     const formUpdated = computed(
       () =>
-        JSON.stringify({ ...props.initValue }) !== JSON.stringify(value.value)
+        JSON.stringify({ ...props.initValue }) !== JSON.stringify(value.value),
     );
 
     const closeDialog =
@@ -135,7 +135,7 @@ export default {
         } else {
           emit("close");
         }
-      }
+      },
     );
 
     onBeforeRouteLeave((to, from, next) => {

@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" />
+  <LoadingSpinner :loading="loading" />
   <div class="email container">
     <section>
       <div class="panel is-primary m-4 has-background-white">
@@ -135,13 +135,13 @@ import utils from "@/utils/utils.js";
 import { esc } from "@/directives/escape";
 
 import JSONForm from "@/components/form/JSONForm.vue";
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     JSONForm,
-    Loading,
+    LoadingSpinner,
     PanelTag,
   },
   directives: {
@@ -169,7 +169,7 @@ export default {
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
     const selectedEmails = computed(() =>
-      emails.value.filter(tabs[selectedTab.value])
+      emails.value.filter(tabs[selectedTab.value]),
     );
 
     const unsubEmails = onSnapshot(
@@ -177,7 +177,7 @@ export default {
       (snapshot) => {
         emails.value = snapshot.docs.map((doc) => doc.data());
         loading.value = false;
-      }
+      },
     );
     onUnmounted(unsubEmails);
 
@@ -256,7 +256,7 @@ export default {
         "user",
         target,
         organizations.value,
-        users.value
+        users.value,
       );
 
       try {
