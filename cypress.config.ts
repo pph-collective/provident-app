@@ -54,7 +54,7 @@ export default defineConfig({
             .auth()
             .tenantManager()
             .authRequestHandler.authResourceUrlBuilder.getUrl();
-          if (auth_url_format.includes("localhost")) {
+          if (auth_url_format.includes("localhost") || auth_url_format.includes("127.0.0.1")) {
             return admin
               .auth()
               .getUserByEmail(email)
