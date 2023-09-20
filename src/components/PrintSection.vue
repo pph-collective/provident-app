@@ -7,7 +7,7 @@
   </teleport>
 </template>
 
-<script>
+<script setup>
 defineProps({
   printable: {
     type: Boolean,
