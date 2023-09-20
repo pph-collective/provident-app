@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 defineProps({
   title: {
     type: String,
