@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { SchemaFormFactory, useSchemaForm } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
@@ -51,123 +51,109 @@ import { cloneDeep, evalSchema } from "@/utils/utils";
 // form components declared globally in main.js
 
 // Declare form components as local components
-const factory = SchemaFormFactory([VeeValidatePlugin()]);
+const SchemaForm = SchemaFormFactory([VeeValidatePlugin()]);
 
-export default {
-  components: { SchemaForm: factory },
-  props: {
-    initSchema: {
-      type: Array,
-      required: true,
-    },
-    readOnly: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    initValue: {
-      type: Object,
-      required: false,
-      default() {
-        return {};
-      },
-    },
-    closeRequest: {
-      type: Number,
-      required: true,
-    },
-    showAltButton: {
-      type: Boolean,
-      default: true,
-    },
-    altButtonLabel: {
-      type: String,
-      default: "Save as Draft",
-    },
-    lastUpdated: {
-      type: Number,
-      required: false,
-      default: undefined,
-    },
-    formTitle: {
-      type: String,
-      required: false,
-      default: "",
-    },
-    formMessage: {
-      type: String,
-      required: false,
-      default: "",
-    },
+const props = defineProps({
+  initSchema: {
+    type: Array,
+    required: true,
   },
-  emits: ["alt", "submitted", "close"],
-  setup(props, { emit }) {
-    const value = ref(cloneDeep(props.initValue));
-    useSchemaForm(value);
-
-    const schema = ref(cloneDeep(props.initSchema));
-    evalSchema(schema.value, yup);
-    schema.value.forEach((q) => {
-      if (typeof q.read_only === "function") {
-        q.read_only = q.read_only(props.initValue);
-      }
-    });
-
-    const formUpdated = computed(
-      () =>
-        JSON.stringify({ ...props.initValue }) !== JSON.stringify(value.value),
-    );
-
-    const closeDialog =
-      "Are you sure you want to close the form? You have unsaved changes.";
-
-    // watches for changes in the closeRequest prop treating a change as an event trigger
-    // alerts the user if they have unsaved changes before continuing to close
-    // emits a close event to close the form
-    watch(
-      () => props.closeRequest,
-      () => {
-        if (formUpdated.value) {
-          const answer = window.confirm(closeDialog);
-          if (answer) {
-            emit("close");
-          }
-        } else {
-          emit("close");
-        }
-      },
-    );
-
-    onBeforeRouteLeave((to, from, next) => {
-      if (formUpdated.value) {
-        const answer = window.confirm(closeDialog);
-        if (answer) {
-          next();
-        } else {
-          next(false);
-        }
-      }
-    });
-
-    const lastUpdatedValue = computed(() => {
-      if (formUpdated.value) {
-        return new Date().toLocaleString();
-      } else {
-        return props.lastUpdated
-          ? new Date(props.lastUpdated).toLocaleString()
-          : "N/A";
-      }
-    });
-
-    return {
-      value,
-      schema,
-      cloneDeep,
-      formUpdated,
-      lastUpdatedValue,
-    };
+  readOnly: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
-};
+  initValue: {
+    type: Object,
+    required: false,
+    default: () => {},
+  },
+  closeRequest: {
+    type: Number,
+    required: true,
+  },
+  showAltButton: {
+    type: Boolean,
+    default: true,
+  },
+  altButtonLabel: {
+    type: String,
+    default: "Save as Draft",
+  },
+  lastUpdated: {
+    type: Number,
+    required: false,
+    default: undefined,
+  },
+  formTitle: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  formMessage: {
+    type: String,
+    required: false,
+    default: "",
+  },
+});
+
+const emit = defineEmits(["alt", "submitted", "close"]);
+
+const value = ref(cloneDeep(props.initValue));
+useSchemaForm(value);
+
+const schema = ref(cloneDeep(props.initSchema));
+evalSchema(schema.value, yup);
+schema.value.forEach((q) => {
+  if (typeof q.read_only === "function") {
+    q.read_only = q.read_only(props.initValue);
+  }
+});
+
+const formUpdated = computed(
+  () => JSON.stringify({ ...props.initValue }) !== JSON.stringify(value.value),
+);
+
+const closeDialog =
+  "Are you sure you want to close the form? You have unsaved changes.";
+
+// watches for changes in the closeRequest prop treating a change as an event trigger
+// alerts the user if they have unsaved changes before continuing to close
+// emits a close event to close the form
+watch(
+  () => props.closeRequest,
+  () => {
+    if (formUpdated.value) {
+      const answer = window.confirm(closeDialog);
+      if (answer) {
+        emit("close");
+      }
+    } else {
+      emit("close");
+    }
+  },
+);
+
+onBeforeRouteLeave((to, from, next) => {
+  if (formUpdated.value) {
+    const answer = window.confirm(closeDialog);
+    if (answer) {
+      next();
+    } else {
+      next(false);
+    }
+  }
+});
+
+const lastUpdatedValue = computed(() => {
+  if (formUpdated.value) {
+    return new Date().toLocaleString();
+  } else {
+    return props.lastUpdated
+      ? new Date(props.lastUpdated).toLocaleString()
+      : "N/A";
+  }
+});
 </script>
 
 <style lang="scss">
