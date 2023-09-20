@@ -23,60 +23,54 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import utils from "@/utils/utils";
 
-export default {
-  props: {
-    modelValue: {
-      type: [String, undefined],
-      default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    min_date: {
-      // "today" or an ISO date string like "2020-08-26"
-      type: String,
-      default: "",
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    max_date: {
-      type: String,
-      default: "",
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  modelValue: {
+    type: [String, undefined],
+    default: undefined,
   },
-  emits: ["update:modelValue"],
-  setup() {
-    const today = utils.today(); // Date to ISO string without time
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  min_date: {
+    // "today" or an ISO date string like "2020-08-26"
+    type: String,
+    default: "",
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  max_date: {
+    type: String,
+    default: "",
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-    return {
-      today,
-    };
-  },
-};
+defineEmits(["update:modelValue"]);
+
+const today = utils.today(); // Date to ISO string without time
 </script>

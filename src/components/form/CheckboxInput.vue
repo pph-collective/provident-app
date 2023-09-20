@@ -27,62 +27,56 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: [Array, undefined],
-      default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+defineProps({
+  modelValue: {
+    type: [Array, undefined],
+    default: undefined,
   },
-  emits: ["update:modelValue"],
-  setup(_, { emit }) {
-    const updateValue = (event, modelValue) => {
-      let selected = modelValue ? [...modelValue] : [];
-
-      if (event.target.checked) {
-        selected.push(event.target.value);
-      } else {
-        selected = selected.filter((v) => v !== event.target.value);
-      }
-
-      emit("update:modelValue", selected);
-    };
-
-    return {
-      updateValue,
-    };
+  required: {
+    type: Boolean,
+    default: false,
   },
+  label: {
+    type: String,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Array,
+    required: true,
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const updateValue = (event, modelValue) => {
+  let selected = modelValue ? [...modelValue] : [];
+
+  if (event.target.checked) {
+    selected.push(event.target.value);
+  } else {
+    selected = selected.filter((v) => v !== event.target.value);
+  }
+
+  emit("update:modelValue", selected);
 };
 </script>
 

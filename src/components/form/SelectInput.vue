@@ -24,53 +24,49 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Multiselect from "@vueform/multiselect";
 
-export default {
-  components: {
-    Multiselect,
+defineProps({
+  modelValue: {
+    type: [String, Object, undefined],
+    default: undefined,
   },
-  props: {
-    modelValue: {
-      type: [String, Object, undefined],
-      default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+  required: {
+    type: Boolean,
+    default: false,
   },
-  emits: ["update:modelValue"],
-};
+  label: {
+    type: String,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  options: {
+    type: Array,
+    required: true,
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(["update:modelValue"]);
 </script>

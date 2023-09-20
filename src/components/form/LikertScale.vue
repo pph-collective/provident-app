@@ -55,84 +55,73 @@
   </div>
 </template>
 
-<script>
-import { toRefs } from "vue";
-
-export default {
-  props: {
-    modelValue: {
-      type: [Object, undefined],
-      default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Array,
-      default: () => {
-        return [
-          "Strongly Disagree",
-          "Disagree",
-          "Neutral",
-          "Agree",
-          "Strongly Agree",
-          "Don't Know / Not Applicable",
-        ];
-      },
-      required: false,
-    },
-    statements: {
-      type: Array,
-      required: true,
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+const props = defineProps({
+  modelValue: {
+    type: [Object, undefined],
+    default: undefined,
   },
-  emits: ["update:modelValue"],
-  setup(props, { emit }) {
-    const { read_only } = toRefs(props);
-
-    const checkRadio = (event, modelValue) => {
-      const fieldset = event.target.closest("fieldset");
-      if (!fieldset.disabled && !read_only.value) {
-        const radioButton = event.target.querySelector("input[type=radio]");
-        radioButton.checked = true;
-
-        updateValue(radioButton, modelValue);
-      }
-    };
-
-    const updateValue = (radioButton, modelValue) => {
-      let result = modelValue ?? {};
-      result[radioButton.getAttribute("data-key")] = radioButton.value;
-      emit("update:modelValue", result);
-    };
-
-    return {
-      checkRadio,
-      updateValue,
-    };
+  required: {
+    type: Boolean,
+    default: false,
   },
+  label: {
+    type: String,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Array,
+    default: () => {
+      return [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Don't Know / Not Applicable",
+      ];
+    },
+    required: false,
+  },
+  statements: {
+    type: Array,
+    required: true,
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const checkRadio = (event, modelValue) => {
+  const fieldset = event.target.closest("fieldset");
+  if (!fieldset.disabled && !props.read_only) {
+    const radioButton = event.target.querySelector("input[type=radio]");
+    radioButton.checked = true;
+
+    updateValue(radioButton, modelValue);
+  }
+};
+
+const updateValue = (radioButton, modelValue) => {
+  let result = modelValue ?? {};
+  result[radioButton.getAttribute("data-key")] = radioButton.value;
+  emit("update:modelValue", result);
 };
 </script>
