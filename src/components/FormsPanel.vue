@@ -3,7 +3,8 @@
     <section class="section">
       <h1 class="title">Forms</h1>
       <!-- Display mobile controls card only on mobile devices -->
-      <div class="display-only-mobile card my-2">
+      <!-- <div class="display-only-mobile card my-2"> -->
+      <div class="card my-2">
         <header class="card-header">
           <div class="card-header-title">Filters</div>
           <button
@@ -45,7 +46,15 @@
                 }}
               </button>
               <div v-if="header.column.getCanFilter()" style="width: 100%">
+                <DropdownTableFilter
+                  v-if="header.column.columnDef?.meta?.shouldUseSelectFilter"
+                  :column="header.column"
+                  :table="table"
+                  :options="header.column.columnDef?.meta?.selectOptions"
+                  style="width: 100%"
+                />
                 <ColumnFiltering
+                  v-else
                   :column="header.column"
                   :table="table"
                   style="width: 100%"
@@ -101,7 +110,19 @@
                   style="min-width: 100px"
                 >
                   <div v-if="header.column.getCanFilter()">
-                    <ColumnFiltering :column="header.column" :table="table" />
+                    <DropdownTableFilter
+                      v-if="
+                        header.column.columnDef?.meta?.shouldUseSelectFilter
+                      "
+                      :column="header.column"
+                      :table="table"
+                      :options="header.column.columnDef?.meta?.selectOptions"
+                    />
+                    <ColumnFiltering
+                      v-else
+                      :column="header.column"
+                      :table="table"
+                    />
                   </div>
                 </th>
               </tr>
@@ -214,6 +235,7 @@ import { logActivity } from "../firebase.js";
 import ColumnFiltering from "./ColumnFiltering.vue";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/ModalForm.vue";
+import DropdownTableFilter from "./DropdownTableFilter.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -264,6 +286,32 @@ const userRole = computed(() =>
 
 const columnHelper = createColumnHelper<FormResponse>();
 
+const titleOptions = computed(() =>
+  Array.from(
+    new Set(
+      (props.formResponses as FormResponse[]).map(
+        ({ form: { title } }) => title
+      )
+    )
+  )
+);
+
+const statusOptions = computed(() =>
+  Array.from(
+    new Set((props.formResponses as FormResponse[]).map(({ status }) => status))
+  )
+);
+
+const municipalityOptions = computed(() =>
+  Array.from(
+    new Set(
+      (props.formResponses as FormResponse[]).map(
+        ({ response: { municipality } }) => municipality
+      )
+    )
+  )
+);
+
 const columns = [
   columnHelper.group({
     id: "forms",
@@ -272,6 +320,11 @@ const columns = [
         id: "title",
         cell: (info) => info.getValue(),
         header: () => "Title",
+        filterFn: "includesString",
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: titleOptions.value,
+        },
       }),
       columnHelper.accessor("status", {
         id: "status",
@@ -288,28 +341,50 @@ const columns = [
             [info.getValue()]
           ),
         header: () => "Status",
+        filterFn: "includesString",
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: statusOptions.value,
+        },
       }),
       columnHelper.accessor("response.municipality", {
         id: "municipality",
         cell: (info) => info.getValue(),
         header: () => "Municipality",
+        filterFn: "includesString",
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: municipalityOptions.value,
+        },
       }),
       columnHelper.accessor("response.bg_id", {
         id: "bg_id",
         cell: (info) => info.getValue(),
         header: () => "Block Group",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       props.admin
         ? columnHelper.accessor("organization", {
             id: "organization",
             cell: (info) => info.getValue(),
             header: () => "Organization",
+            meta: {
+              shouldUseSelectFilter: false,
+              selectOptions: [],
+            },
           })
         : null,
       columnHelper.accessor("user_submitted", {
         id: "user_submitted",
         cell: (info) => info.getValue(),
         header: () => "Submitted By",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       columnHelper.accessor("last_updated", {
         id: "last_updated",
@@ -317,6 +392,10 @@ const columns = [
         minSize: 90,
         cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
         header: () => "Last Updated",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       columnHelper.display({
         id: "actions",
@@ -328,6 +407,10 @@ const columns = [
             readOnly: props.readOnly,
           }),
         header: () => "",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
     ].filter((el) => el !== null),
   }),
