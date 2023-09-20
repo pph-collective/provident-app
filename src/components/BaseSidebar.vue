@@ -54,57 +54,48 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useRoute } from "vue-router";
 import { ref, watch } from "vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 
-export default {
-  props: {
-    parentRoute: {
-      type: String,
-      required: true,
-    },
-    pages: {
-      type: Array,
-      default: () => {
-        return [];
-      },
+defineProps({
+  parentRoute: {
+    type: String,
+    required: true,
+  },
+  pages: {
+    type: Array,
+    default: () => {
+      return [];
     },
   },
-  emits: ["toggle"],
-  setup(_, { emit }) {
-    const { isMobile } = useMobileListener();
-    const collapsed = ref(false);
-    if (isMobile.value) {
-      collapsed.value = true;
-    }
+});
 
-    watch(isMobile, () => {
-      collapsed.value = isMobile.value;
-    });
+const emit = defineEmits(["toggle"]);
 
-    const route = useRoute();
+const { isMobile } = useMobileListener();
+const collapsed = ref(false);
+if (isMobile.value) {
+  collapsed.value = true;
+}
 
-    const toggle = () => {
-      collapsed.value = !collapsed.value;
-      return emit("toggle", collapsed.value);
-    };
+watch(isMobile, () => {
+  collapsed.value = isMobile.value;
+});
 
-    const getInitials = (str) => {
-      return str
-        .split(" ")
-        .map((s) => s[0].toUpperCase())
-        .join("");
-    };
+const route = useRoute();
 
-    return {
-      collapsed,
-      route,
-      toggle,
-      getInitials,
-    };
-  },
+const toggle = () => {
+  collapsed.value = !collapsed.value;
+  return emit("toggle", collapsed.value);
+};
+
+const getInitials = (str) => {
+  return str
+    .split(" ")
+    .map((s) => s[0].toUpperCase())
+    .join("");
 };
 </script>
 

@@ -16,24 +16,21 @@
 </template>
 
 <script>
-export default {
-  name: "BiteHeader",
-  props: {
-    title: {
-      type: String,
-      default: "",
-    },
-    icon: {
-      type: String,
-      default: "",
-    },
-    description: {
-      type: String,
-      default: "",
-    },
-    isActive: Boolean,
+defineProps({
+  title: {
+    type: String,
+    default: "",
   },
-};
+  icon: {
+    type: String,
+    default: "",
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+  isActive: Boolean,
+});
 </script>
 
 <style lang="scss" scoped>

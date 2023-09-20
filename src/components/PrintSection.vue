@@ -8,12 +8,10 @@
 </template>
 
 <script>
-export default {
-  props: {
-    printable: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  printable: {
+    type: Boolean,
+    default: false,
   },
-};
+});
 </script>

@@ -20,25 +20,22 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "BiteHeader",
-  props: {
-    title: {
-      type: String,
-      default: "",
-    },
-    icon: {
-      type: String,
-      default: "",
-    },
-    description: {
-      type: String,
-      default: "",
-    },
-    isActive: Boolean,
+<script setup>
+defineProps({
+  title: {
+    type: String,
+    default: "",
   },
-};
+  icon: {
+    type: String,
+    default: "",
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+  isActive: Boolean,
+});
 </script>
 
 <style>
