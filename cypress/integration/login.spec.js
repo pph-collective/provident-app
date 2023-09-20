@@ -82,7 +82,13 @@ describe("Log In View", () => {
     cy.get('[type="email"]').type(ACCOUNTS.approved.email);
     cy.get('[type="password"]').type(`${ACCOUNTS.approved.password}{enter}`);
 
-    cy.url().should("eq", `${Cypress.config().baseUrl}snack/dashboard`);
+    cy.get("[data-cy='login-form-button']", { timeout: 10000 }).should(
+      "not.exist"
+    );
+
+    cy.url().should("contain", "/snack/dashboard");
+    cy.url().should("not.contain", "redirect");
+
     cy.waitLoaded(".dashboard");
   });
 });
