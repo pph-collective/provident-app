@@ -12,57 +12,47 @@
   </div>
 </template>
 
-<script>
-import { computed, toRefs } from "vue";
-
+<script setup>
+import { computed } from "vue";
 import { tertileColorMap } from "@/utils/utils.js";
 
-export default {
-  props: {
-    stats: {
-      type: Object,
-      required: true,
-    },
-    metric: {
-      type: String,
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
-    formatFn: {
-      type: Function,
-      required: false,
-      default: () => ({}),
-    },
-    icon: {
-      type: Boolean,
-      default: true,
-    },
-    number: {
-      type: Boolean,
-      default: true,
-    },
+const props = defineProps({
+  stats: {
+    type: Object,
+    required: true,
   },
-  setup(props) {
-    const { stats, metric, location } = toRefs(props);
-
-    const color = computed(() => {
-      let color = "hsl(0deg 0% 70%)";
-      if (location.value) {
-        color =
-          tertileColorMap.get(stats.value[metric.value + "_tertile"]) ?? color;
-      }
-
-      return color;
-    });
-
-    return {
-      color,
-    };
+  metric: {
+    type: String,
+    required: true,
   },
-};
+  location: {
+    type: String,
+    required: true,
+  },
+  formatFn: {
+    type: Function,
+    required: false,
+    default: () => ({}),
+  },
+  icon: {
+    type: Boolean,
+    default: true,
+  },
+  number: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const color = computed(() => {
+  let color = "hsl(0deg 0% 70%)";
+  if (props.location) {
+    color =
+      tertileColorMap.get(props.stats[props.metric + "_tertile"]) ?? color;
+  }
+
+  return color;
+});
 </script>
 
 <style lang="scss" scoped>

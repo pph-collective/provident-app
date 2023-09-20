@@ -90,60 +90,47 @@
   </tbody>
 </template>
 
-<script>
-import { toRefs, reactive } from "vue";
-
+<script setup>
+import { reactive } from "vue";
 import StatsTableIcon from "@/components/dashboard/StatsTableIcon.vue";
 
-export default {
-  components: {
-    StatsTableIcon,
+const props = defineProps({
+  stats: {
+    type: Object,
+    required: true,
   },
-  props: {
-    stats: {
-      type: Object,
-      required: true,
-    },
-    groupedMetrics: {
-      type: Object,
-      required: true,
-    },
-    municipality: {
-      type: String,
-      required: false,
-      default: "",
-    },
-    geoid: {
-      type: String,
-      required: false,
-      default: "",
-    },
-    grouped: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
+  groupedMetrics: {
+    type: Object,
+    required: true,
   },
-  setup(props) {
-    const { groupedMetrics, grouped } = toRefs(props);
-
-    const showGroups = reactive({});
-
-    let showGroup = true; // want to show the first group
-    for (const group of Object.keys(groupedMetrics.value)) {
-      showGroups[group] = showGroup;
-      showGroup = grouped.value ? false : true;
-    }
-
-    return {
-      showGroups,
-    };
+  municipality: {
+    type: String,
+    required: false,
+    default: "",
   },
-};
+  geoid: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  grouped: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+});
+
+const showGroups = reactive({});
+
+let showGroup = true; // want to show the first group
+for (const group of Object.keys(props.groupedMetrics)) {
+  showGroups[group] = showGroup;
+  showGroup = !props.grouped;
+}
 </script>
 
 <style lang="scss" scoped>

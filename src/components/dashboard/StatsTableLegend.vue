@@ -25,37 +25,31 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { tertileColorMap } from "@/utils/utils.js";
 
-export default {
-  setup() {
-    const items = [
-      {
-        symbol: "⬥",
-        color: tertileColorMap.get(1),
-        text: "More",
-      },
-      {
-        symbol: "⬥",
-        color: tertileColorMap.get(2),
-        text: "Similar",
-      },
-      {
-        symbol: "⬥",
-        color: tertileColorMap.get(3),
-        text: "Less",
-      },
-      {
-        symbol: "⬦",
-        color: "hsl(0deg 0% 70%)",
-        text: "No data",
-      },
-    ];
-
-    return { items };
+const items = [
+  {
+    symbol: "⬥",
+    color: tertileColorMap.get(1),
+    text: "More",
   },
-};
+  {
+    symbol: "⬥",
+    color: tertileColorMap.get(2),
+    text: "Similar",
+  },
+  {
+    symbol: "⬥",
+    color: tertileColorMap.get(3),
+    text: "Less",
+  },
+  {
+    symbol: "⬦",
+    color: "hsl(0deg 0% 70%)",
+    text: "No data",
+  },
+];
 </script>
 
 <style lang="scss" scoped>
