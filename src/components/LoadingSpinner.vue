@@ -4,15 +4,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      required: true,
-    },
-  },
-};
+<script setup lang="ts">
+defineProps<{
+  loading: boolean;
+}>();
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="users.length === 0" />
+  <LoadingSpinner :loading="users.length === 0" />
   <div class="user-management container">
     <section class="section">
       <h1 class="title">User Management</h1>
@@ -126,7 +126,7 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import Loading from "../../components/Loading.vue";
+import LoadingSpinner from "../../components/LoadingSpinner.vue";
 
 import { updateUser } from "../../firebase.js";
 import utils from "../../utils/utils.js";
@@ -137,7 +137,7 @@ const users = computed(() =>
   store.getters.approvedUsers.map((user) => {
     user.edit = false;
     return user;
-  })
+  }),
 );
 const roles = ["champion", "user"];
 const fields = ["Name", "Organization", "Email", "Role"];
@@ -156,7 +156,7 @@ const filteredUsers = computed(() => {
   for (const [filter, value] of Object.entries(filters.value)) {
     if (value) {
       filtered = filtered.filter((user) =>
-        user[filter].toLowerCase().includes(value.toLowerCase())
+        user[filter].toLowerCase().includes(value.toLowerCase()),
       );
     }
   }

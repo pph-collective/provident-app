@@ -92,15 +92,15 @@ describe("Form Assignment functionality", () => {
 
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
-      "Simple Form"
+      "Simple Form",
     ).should("exist");
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
-      "Unreleased Form"
+      "Unreleased Form",
     ).should("exist");
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
-      "Sample Organization Form"
+      "Sample Organization Form",
     ).should("exist");
   });
 
@@ -108,7 +108,7 @@ describe("Form Assignment functionality", () => {
     cy.get('[data-cy="create-button"]').click();
     cy.get('[data-cy="form-assignment-modal"]').should(
       "have.class",
-      "is-active"
+      "is-active",
     );
 
     // Trying to submit an empty form
@@ -119,7 +119,7 @@ describe("Form Assignment functionality", () => {
     // Check to make sure the modal didn't close and therefore didn't submit
     cy.get('[data-cy="form-assignment-modal"]').should(
       "have.class",
-      "is-active"
+      "is-active",
     );
 
     cy.get('[aria-label="close"]').click();
@@ -244,7 +244,7 @@ describe("Form Assignment functionality", () => {
 
     cy.contains(
       '[data-cy="form-assignment-panel-block"]',
-      "Organization Assigned Form"
+      "Organization Assigned Form",
     )
       .find(".tag")
       .should("contain", "3000-01-01");
@@ -256,7 +256,7 @@ describe("Form Assignment functionality", () => {
     checkFormAssignedInToDos(
       "champion",
       "Organization Assigned Form",
-      "not.exist"
+      "not.exist",
     );
   });
 

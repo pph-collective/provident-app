@@ -51,7 +51,7 @@ export default {
       () => {
         emit("updateModelValue", value.value);
       },
-      { deep: true }
+      { deep: true },
     );
 
     return {

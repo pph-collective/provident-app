@@ -370,7 +370,7 @@ describe("Form functionality", () => {
       let alerted = false;
       cy.on("window:confirm", (str) => {
         expect(str).to.equal(
-          "Are you sure you want to close the form? You have unsaved changes."
+          "Are you sure you want to close the form? You have unsaved changes.",
         );
         alerted = true;
         return false;
@@ -414,7 +414,7 @@ describe("Form functionality", () => {
       // Form message
       cy.get('[data-cy="form-message"]').should(
         "contain",
-        "Form successfully saved"
+        "Form successfully saved",
       );
 
       // Close form
@@ -503,21 +503,13 @@ describe("Forms viewed as an admin", () => {
     // Assert that this is the unreleased form
     cy.get('[data-cy="active-form-title"]').should(
       "contain",
-      "Unreleased Form"
+      "Unreleased Form",
     );
 
     cy.get('[data-cy="close-form"]').click();
   });
 
   it("Followup forms", () => {
-    const now = Date.now();
-    const day_in_ms = 86400000;
-
-    const tomorrow = new Date(now + day_in_ms).toLocaleDateString("sv");
-    const day_after_tomorrow = new Date(now + 2 * day_in_ms)
-      .toISOString()
-      .split("T")[0];
-
     cy.get('[data-cy="forms-table-body"]')
       .contains("tr", "Original Form")
       .find('[data-cy="launch-form-button"]')
@@ -609,7 +601,7 @@ describe("Forms viewed as an admin", () => {
     // Assert that this is the followup to the followup form
     cy.get('[data-cy="active-form-title"]').should(
       "contain",
-      "Followup to the followup form"
+      "Followup to the followup form",
     );
 
     cy.get('[model="second_favorite_color"]')
@@ -782,7 +774,7 @@ describe("Forms viewed as a champion", () => {
     // Form message
     cy.get('[data-cy="form-message"]').should(
       "contain",
-      "Form successfully saved"
+      "Form successfully saved",
     );
 
     // Close form
@@ -951,7 +943,7 @@ describe("Forms edited by multiple users", () => {
     // Form message
     cy.get('[data-cy="form-message"]').should(
       "contain",
-      "Form successfully saved"
+      "Form successfully saved",
     );
 
     // Close form
@@ -1012,7 +1004,7 @@ describe("Forms edited by multiple users", () => {
       .should("contain", "Submitted by championalt@user.com")
       .should(
         "contain",
-        "Edited by championuser@user.com, championalt@user.com"
+        "Edited by championuser@user.com, championalt@user.com",
       );
 
     cy.get('[data-cy="close-form"]').click();

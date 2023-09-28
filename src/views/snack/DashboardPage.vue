@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading" />
+  <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
       v-if="modelVersion"
@@ -8,7 +8,12 @@
       @selected="updateControls"
     />
 
-    <Card id="map" style="align-self: start" width="two-thirds" :height="5">
+    <DashboardCard
+      id="map"
+      style="align-self: start"
+      width="two-thirds"
+      :height="5"
+    >
       <template #title>
         Map:
         {{
@@ -95,7 +100,7 @@
       </template>
       <template #content>
         <div v-if="controls.geography" class="map-container">
-          <Map
+          <MainMap
             v-if="dataset.cbg.length > 0"
             id="main-map"
             class="is-absolute"
@@ -123,9 +128,9 @@
           </div>
         </div>
       </template>
-    </Card>
+    </DashboardCard>
 
-    <Card id="stats" width="one-third" :height="5">
+    <DashboardCard id="stats" width="one-third" :height="5">
       <template #title> Stats: {{ modelVersion }} </template>
       <template #content>
         <StatsWidget
@@ -136,16 +141,21 @@
           :with-predictions="interventionArmUser"
         />
       </template>
-    </Card>
+    </DashboardCard>
 
-    <Card id="nra-widget" width="one-third" :height="2" :no-header="true">
+    <DashboardCard
+      id="nra-widget"
+      width="one-third"
+      :height="2"
+      :no-header="true"
+    >
       <template #content>
         <AssessmentWidget
           :active-geoid="activeBG"
           :active-muni="computedMuni"
         />
       </template>
-    </Card>
+    </DashboardCard>
   </div>
 </template>
 
@@ -158,13 +168,13 @@ import geo from "@/assets/geojson/ri.json";
 import { logActivity, getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
-import Card from "../../components/dashboard/Card.vue";
+import DashboardCard from "../../components/dashboard/DashboardCard.vue";
 import ControlPanel from "../../components/dashboard/ControlPanel.vue";
-import Map from "../../components/dashboard/Map.vue";
+import MainMap from "../../components/dashboard/MainMap.vue";
 import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
-import Loading from "../../components/Loading.vue";
+import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParam } from "../../composables/useQueryParam";
 
 const towns = MUNICIPALITIES.map((m) => ({
@@ -189,7 +199,7 @@ const dataset = computed(() => {
 const activeBG = ref("");
 const computedMuni = computed(() => {
   const bg = BLOCK_GROUPS.find(
-    ({ blockGroup }) => blockGroup === activeBG.value
+    ({ blockGroup }) => blockGroup === activeBG.value,
   );
   if (bg) return bg.municipality;
   return "";
@@ -327,7 +337,7 @@ const clickMap = (clickedStatus) => {
     // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeBG.value)
+      logActivity(store.state.user.data.email, "click map", activeBG.value),
     );
   }
 };

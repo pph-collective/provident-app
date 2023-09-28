@@ -1,6 +1,6 @@
 <template>
   <div :class="['snack-area', sidebarCollapsed ? 'collapsed' : '']">
-    <Sidebar
+    <BaseSidebar
       :pages="pages"
       :parent-route="parentRoute"
       :class="['sidebar', sidebarCollapsed ? 'collapsed' : '']"
@@ -25,7 +25,7 @@ import {
   query,
 } from "firebase/firestore";
 
-import Sidebar from "../components/Sidebar.vue";
+import BaseSidebar from "../components/BaseSidebar.vue";
 import { useMobileListener } from "../composables/useMobileListener";
 
 const props = withDefaults(
@@ -35,7 +35,7 @@ const props = withDefaults(
   }>(),
   {
     pages: () => [],
-  }
+  },
 );
 
 const { parentRoute } = toRefs(props);
@@ -62,7 +62,7 @@ const updateStore = () => {
         snapshot.docs.map((doc) => {
           let user = doc.data();
           return { ...user, id: doc.id };
-        })
+        }),
       );
     });
 

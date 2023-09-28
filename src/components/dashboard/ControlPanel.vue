@@ -1,5 +1,5 @@
 <template>
-  <Card :no-header="true" width="two-thirds" :height="1">
+  <DashboardCard :no-header="true" width="two-thirds" :height="1">
     <template #content>
       <div class="control-panel is-family-secondary">
         <div
@@ -24,17 +24,17 @@
         </div>
       </div>
     </template>
-  </Card>
+  </DashboardCard>
 </template>
 
 <script>
 import { reactive, toRefs, watch } from "vue";
 
-import Card from "@/components/dashboard/Card.vue";
+import DashboardCard from "@/components/dashboard/DashboardCard.vue";
 
 export default {
   components: {
-    Card,
+    DashboardCard,
   },
   props: {
     dropDowns: {
@@ -59,7 +59,7 @@ export default {
       () => {
         emit("selected", selected);
       },
-      { deep: true }
+      { deep: true },
     );
 
     return {

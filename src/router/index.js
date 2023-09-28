@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Resources from "../views/Resources.vue";
+import Home from "../views/HomePage.vue";
+import Resources from "../views/ResourcesPage.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar.vue";
 import store from "@/store";
 
@@ -25,12 +25,12 @@ const routes = [
         return { path: to.path, query: { redirect: from.path } };
       }
     },
-    component: () => import("../views/auth/Login.vue"),
+    component: () => import("../views/auth/LoginUser.vue"),
   },
   {
     path: "/register",
     name: "Register",
-    component: () => import("../views/auth/Register.vue"),
+    component: () => import("../views/auth/RegisterUser.vue"),
   },
   {
     path: "/auth",
@@ -62,11 +62,11 @@ const routes = [
       },
       {
         path: "forms",
-        component: () => import("../views/snack/Forms.vue"),
+        component: () => import("../views/snack/FormsPage.vue"),
       },
       {
         path: "dashboard",
-        component: () => import("../views/snack/Dashboard.vue"),
+        component: () => import("../views/snack/DashboardPage.vue"),
       },
     ],
   },
@@ -142,7 +142,7 @@ const routes = [
       },
       {
         path: "email",
-        component: () => import("../views/admin/Emails.vue"),
+        component: () => import("../views/admin/EmailsPage.vue"),
       },
       {
         path: "review_forms",

@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="pageLoading || formLoading" />
+  <LoadingSpinner :loading="pageLoading || formLoading" />
   <div class="container form-assignments">
     <section>
       <div class="panel is-primary m-4 has-background-white">
@@ -68,7 +68,7 @@
             <div class="is-flex is-flex-wrap-wrap">
               <div
                 v-for="(target_list, category) in nonEmptyVals(
-                  assignment.target
+                  assignment.target,
                 )"
                 :key="category"
                 class="m-1"
@@ -144,13 +144,13 @@ import utils from "@/utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import PanelTag from "@/components/PanelTag.vue";
 
 export default {
   components: {
     JSONForm,
-    Loading,
+    LoadingSpinner,
     PanelTag,
   },
   directives: {
@@ -167,7 +167,7 @@ export default {
     const users = computed(() => store.getters.approvedUsers);
     const formAssignments = computed(() => store.state.formAssignments);
     const pageLoading = computed(
-      () => users.value.length === 0 || forms.value.length === 0
+      () => users.value.length === 0 || forms.value.length === 0,
     );
     const formLoading = ref(false);
 
@@ -184,7 +184,7 @@ export default {
     };
     const selectedTab = ref(Object.keys(tabs)[0]);
     const selectedFormAssignments = computed(() =>
-      formAssignments.value.filter(tabs[selectedTab.value])
+      formAssignments.value.filter(tabs[selectedTab.value]),
     );
 
     const formQuestions = computed(() => {
@@ -302,7 +302,7 @@ export default {
         emails = await formAssignmentUtils.addFormResponses(
           formAssignmentData,
           organizations.value,
-          users.value
+          users.value,
         );
 
         // Update the page

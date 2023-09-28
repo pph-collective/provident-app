@@ -213,7 +213,7 @@ import {
 import { logActivity } from "../firebase.js";
 import ColumnFiltering from "./ColumnFiltering.vue";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
-import FormModal from "./form/Modal.vue";
+import FormModal from "./form/ModalForm.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -230,7 +230,7 @@ const props = withDefaults(
     filterFunctions: () => ({}),
     formResponses: () => [],
     title: "",
-  }
+  },
 );
 
 type Form = {
@@ -259,7 +259,7 @@ type FormResponse = {
 const store = useStore();
 const user = computed(() => store.state.user);
 const userRole = computed(() =>
-  user.value.data ? user.value.data.role : "user"
+  user.value.data ? user.value.data.role : "user",
 );
 
 const columnHelper = createColumnHelper<FormResponse>();
@@ -285,7 +285,7 @@ const columns = [
                 "is-warning": info.getValue() === "Not Started",
               },
             },
-            [info.getValue()]
+            [info.getValue()],
           ),
         header: () => "Status",
       }),
@@ -387,13 +387,13 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
 });
 
-const launchForm = (formResponse: { _id?: any }, readOnly: boolean) => {
+const launchForm = (formResponse: { _id?: string }, readOnly: boolean) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
   logActivity(
     user.value.data.email,
     readOnly ? "review form" : "launch form",
-    formResponse._id
+    formResponse._id,
   );
 };
 

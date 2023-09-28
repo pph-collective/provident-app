@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="!user.loaded" />
+  <LoadingSpinner :loading="!user.loaded" />
 
   <FormsPanel
     title="Forms"
@@ -22,7 +22,7 @@ import utils, {
 } from "@/utils/utils.js";
 
 import FormsPanel from "@/components/FormsPanel.vue";
-import Loading from "@/components/Loading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const store = useStore();
 const user = computed(() => store.state.user);
@@ -48,12 +48,12 @@ const filterOptions = computed(() => {
     Municipality: uniqueArray(
       formResponses.value
         .filter((f) => f.response[MUNI_QUESTION_MODEL])
-        .map((f) => f.response[MUNI_QUESTION_MODEL])
+        .map((f) => f.response[MUNI_QUESTION_MODEL]),
     ),
     "Block Group": uniqueArray(
       formResponses.value
         .filter((f) => f.response[GEOID_QUESTION_MODEL])
-        .map((f) => f.response[GEOID_QUESTION_MODEL])
+        .map((f) => f.response[GEOID_QUESTION_MODEL]),
     ),
   };
 });

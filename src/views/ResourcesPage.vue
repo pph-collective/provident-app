@@ -335,7 +335,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import ExternalLinkBig from "@/components/ExternalLinkBig.vue";
 import { useMobileListener } from "@/composables/useMobileListener";
 

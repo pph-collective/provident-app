@@ -57,11 +57,7 @@
   </footer>
 </template>
 
-<script>
-export default {
-  name: "Footer",
-};
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 .footer-content {
