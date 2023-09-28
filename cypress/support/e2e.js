@@ -33,6 +33,5 @@ beforeEach(() => {
   });
 
   cy.logout();
-
   resetDatabase();
 });

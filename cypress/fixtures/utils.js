@@ -1,7 +1,9 @@
 const SEED = require("./seed.json");
 
 const seedDatabase = async (admin) => {
-  if (admin.firestore()._settings.servicePath === "localhost") {
+  if (
+    ["localhost", "127.0.0.1"].includes(admin.firestore()._settings.servicePath)
+  ) {
     const batch = admin.firestore().batch();
 
     if (SEED) {
