@@ -118,136 +118,114 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import { esc } from "@/directives/escape";
+import { esc as vEsc } from "@/directives/escape";
 import utils from "../../utils/utils";
 import formAssignmentUtils from "@/utils/formAssignment";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
-export default {
-  components: {
-    JSONForm,
-    LoadingSpinner,
+const store = useStore();
+const formAssignments = computed(() => store.state.formAssignments);
+const organizations = computed(() => store.state.organizations);
+const allMunicipalities = utils.MUNICIPALITIES;
+
+const fields = [
+  {
+    label: "Name",
+    code: "name",
   },
-  directives: {
-    ...esc,
+  {
+    label: "Tier",
+    code: "tier",
   },
-  setup() {
-    const store = useStore();
-    const formAssignments = computed(() => store.state.formAssignments);
-    const organizations = computed(() => store.state.organizations);
-    const allMunicipalities = utils.MUNICIPALITIES;
-
-    const fields = [
-      {
-        label: "Name",
-        code: "name",
-      },
-      {
-        label: "Tier",
-        code: "tier",
-      },
-      {
-        label: "Intervention Arm",
-        code: "intervention_arm",
-      },
-      {
-        label: "Municipalities",
-        code: "municipalities",
-      },
-    ];
-    const closeFormRequest = ref(0);
-    const formMessage = ref("");
-    const showModal = ref(false);
-    const loading = ref(false);
-
-    const createOrganization = async ({
-      name,
-      tier,
-      group,
-      municipalities = [],
-    }) => {
-      loading.value = true;
-
-      const organization = {
-        name,
-        tier,
-        intervention_arm: group === "intervention",
-        municipalities,
-      };
-
-      try {
-        await store.dispatch("addOrg", organization);
-
-        await formAssignmentUtils.addFormResponsesForApproved(
-          "organization",
-          organization,
-          formAssignments.value,
-          organizations.value,
-        );
-        showModal.value = false;
-
-        store.dispatch("addNotification", {
-          color: "success",
-          message: `Success! Organization added: ${name}`,
-        });
-      } catch (err) {
-        console.log(err);
-        formMessage.value = "Error creating organization";
-        setTimeout(() => (formMessage.value = ""), 6000);
-      }
-
-      loading.value = false;
-    };
-
-    const formQuestions = computed(() => [
-      {
-        component: "TextInput",
-        label: "Organization's Name",
-        model: "name",
-        required: true,
-        validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
-          organizations.value.map((org) => org.name.toUpperCase()),
-        )}, 'Organization already exists.')`,
-      },
-      {
-        component: "Select",
-        label: "What tier is this organization?",
-        model: "tier",
-        options: ["1", "2"],
-        required: true,
-      },
-      {
-        component: "Radio",
-        label: "Intervention or Control Group?",
-        model: "group",
-        options: ["intervention", "control"],
-        required: true,
-      },
-      {
-        component: "Select",
-        multiple: true,
-        label: "Municipalities",
-        model: "municipalities",
-        options: allMunicipalities,
-      },
-    ]);
-
-    return {
-      createOrganization,
-      closeFormRequest,
-      fields,
-      formMessage,
-      formQuestions,
-      loading,
-      organizations,
-      showModal,
-    };
+  {
+    label: "Intervention Arm",
+    code: "intervention_arm",
   },
+  {
+    label: "Municipalities",
+    code: "municipalities",
+  },
+];
+const closeFormRequest = ref(0);
+const formMessage = ref("");
+const showModal = ref(false);
+const loading = ref(false);
+
+const createOrganization = async ({
+  name,
+  tier,
+  group,
+  municipalities = [],
+}) => {
+  loading.value = true;
+
+  const organization = {
+    name,
+    tier,
+    intervention_arm: group === "intervention",
+    municipalities,
+  };
+
+  try {
+    await store.dispatch("addOrg", organization);
+
+    await formAssignmentUtils.addFormResponsesForApproved(
+      "organization",
+      organization,
+      formAssignments.value,
+      organizations.value,
+    );
+    showModal.value = false;
+
+    store.dispatch("addNotification", {
+      color: "success",
+      message: `Success! Organization added: ${name}`,
+    });
+  } catch (err) {
+    console.log(err);
+    formMessage.value = "Error creating organization";
+    setTimeout(() => (formMessage.value = ""), 6000);
+  }
+
+  loading.value = false;
 };
+
+const formQuestions = computed(() => [
+  {
+    component: "TextInput",
+    label: "Organization's Name",
+    model: "name",
+    required: true,
+    validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
+      organizations.value.map((org) => org.name.toUpperCase()),
+    )}, 'Organization already exists.')`,
+  },
+  {
+    component: "Select",
+    label: "What tier is this organization?",
+    model: "tier",
+    options: ["1", "2"],
+    required: true,
+  },
+  {
+    component: "Radio",
+    label: "Intervention or Control Group?",
+    model: "group",
+    options: ["intervention", "control"],
+    required: true,
+  },
+  {
+    component: "Select",
+    multiple: true,
+    label: "Municipalities",
+    model: "municipalities",
+    options: allMunicipalities,
+  },
+]);
 </script>

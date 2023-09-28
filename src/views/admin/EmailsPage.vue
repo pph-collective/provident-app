@@ -123,7 +123,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 
@@ -131,166 +131,135 @@ import { db, createEmail } from "@/firebase.js";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { processEmailBody } from "@/utils/emails";
 import formAssignmentUtils from "@/utils/formAssignment";
-import utils from "@/utils/utils.js";
-import { esc } from "@/directives/escape";
+import { esc as vEsc } from "@/directives/escape";
 
 import JSONForm from "@/components/form/JSONForm.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import PanelTag from "@/components/PanelTag.vue";
 
-export default {
-  components: {
-    JSONForm,
-    LoadingSpinner,
-    PanelTag,
-  },
-  directives: {
-    ...esc,
-  },
-  setup() {
-    const emails = ref([]);
-    const showModal = ref(false);
-    const loading = ref(true);
-    const closeFormRequest = ref(0);
-    const preview = ref({
-      body: processEmailBody("[body of the email...]"),
-      subject: "[subject...]",
-    });
-    const today = utils.today();
+const emails = ref([]);
+const showModal = ref(false);
+const loading = ref(true);
+const closeFormRequest = ref(0);
+const preview = ref({
+  body: processEmailBody("[body of the email...]"),
+  subject: "[subject...]",
+});
 
-    const store = useStore();
-    const organizations = computed(() => store.state.organizations);
-    const users = computed(() => store.getters.approvedUsers);
+const store = useStore();
+const organizations = computed(() => store.state.organizations);
+const users = computed(() => store.getters.approvedUsers);
 
-    const tabs = {
-      Pending: (email) => !email.sent,
-      Sent: (email) => email.sent,
-      All: () => true,
-    };
-    const selectedTab = ref(Object.keys(tabs)[0]);
-    const selectedEmails = computed(() =>
-      emails.value.filter(tabs[selectedTab.value]),
-    );
+const tabs = {
+  Pending: (email) => !email.sent,
+  Sent: (email) => email.sent,
+  All: () => true,
+};
+const selectedTab = ref(Object.keys(tabs)[0]);
+const selectedEmails = computed(() =>
+  emails.value.filter(tabs[selectedTab.value]),
+);
 
-    const unsubEmails = onSnapshot(
-      query(collection(db, "emails")),
-      (snapshot) => {
-        emails.value = snapshot.docs.map((doc) => doc.data());
-        loading.value = false;
-      },
-    );
-    onUnmounted(unsubEmails);
+const unsubEmails = onSnapshot(query(collection(db, "emails")), (snapshot) => {
+  emails.value = snapshot.docs.map((doc) => doc.data());
+  loading.value = false;
+});
+onUnmounted(unsubEmails);
 
-    const formQuestions = computed(() => {
-      if (users.value.length === 0 || organizations.value.length === 0) {
-        return [];
-      }
+const formQuestions = computed(() => {
+  if (users.value.length === 0 || organizations.value.length === 0) {
+    return [];
+  }
 
-      const userOptions = store.getters.formUserOptions;
-      const organizationOptions = store.getters.formOrganizationOptions;
-      const groups = formAssignmentUtils.TARGET_GROUPS;
+  const userOptions = store.getters.formUserOptions;
+  const organizationOptions = store.getters.formOrganizationOptions;
+  const groups = formAssignmentUtils.TARGET_GROUPS;
 
-      return [
-        {
-          component: "Select",
-          multiple: true,
-          label: "Email groups",
-          model: "target_groups",
-          options: groups,
-        },
-        {
-          component: "Select",
-          multiple: true,
-          label: "Email organizations",
-          model: "target_organizations",
-          options: organizationOptions,
-        },
-        {
-          component: "Select",
-          multiple: true,
-          label: "Email users",
-          model: "target_users",
-          default: [],
-          options: userOptions,
-        },
-        {
-          component: "Date",
-          label: "Send Date",
-          help_text: "The date when the email will be sent to users.",
-          model: "send_date",
-          required: true,
-          min_date: "today",
-        },
-        {
-          component: "TextInput",
-          label: "Subject",
-          model: "subject",
-          required: true,
-        },
-        {
-          component: "TextArea",
-          label: "Body",
-          help_text:
-            "HTML body of the email to send (e.g. `<p>Hello, <a href='earth.google.com'>World</a></p>`).  Click preview button to see preview below.",
-          model: "body",
-          required: true,
-        },
-      ];
-    });
+  return [
+    {
+      component: "Select",
+      multiple: true,
+      label: "Email groups",
+      model: "target_groups",
+      options: groups,
+    },
+    {
+      component: "Select",
+      multiple: true,
+      label: "Email organizations",
+      model: "target_organizations",
+      options: organizationOptions,
+    },
+    {
+      component: "Select",
+      multiple: true,
+      label: "Email users",
+      model: "target_users",
+      default: [],
+      options: userOptions,
+    },
+    {
+      component: "Date",
+      label: "Send Date",
+      help_text: "The date when the email will be sent to users.",
+      model: "send_date",
+      required: true,
+      min_date: "today",
+    },
+    {
+      component: "TextInput",
+      label: "Subject",
+      model: "subject",
+      required: true,
+    },
+    {
+      component: "TextArea",
+      label: "Body",
+      help_text:
+        "HTML body of the email to send (e.g. `<p>Hello, <a href='earth.google.com'>World</a></p>`).  Click preview button to see preview below.",
+      model: "body",
+      required: true,
+    },
+  ];
+});
 
-    const submitEmail = async ({
-      target_groups = [],
-      target_organizations = [],
-      target_users = [],
-      send_date,
+const submitEmail = async ({
+  target_groups = [],
+  target_organizations = [],
+  target_users = [],
+  send_date,
+  subject,
+  body,
+}) => {
+  const target = {
+    users: target_users,
+    organizations: target_organizations,
+    groups: target_groups,
+  };
+
+  const { emails: to } = formAssignmentUtils.getAssignments(
+    "user",
+    target,
+    organizations.value,
+    users.value,
+  );
+
+  try {
+    await createEmail({
       subject,
       body,
-    }) => {
-      const target = {
-        users: target_users,
-        organizations: target_organizations,
-        groups: target_groups,
-      };
+      to,
+      sendDate: send_date,
+    });
+    showModal.value = false;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-      const { emails: to } = formAssignmentUtils.getAssignments(
-        "user",
-        target,
-        organizations.value,
-        users.value,
-      );
-
-      try {
-        await createEmail({
-          subject,
-          body,
-          to,
-          sendDate: send_date,
-        });
-        showModal.value = false;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    const updatePreview = ({ body, subject }) => {
-      subject = subject || "No subject";
-      preview.value = { body: processEmailBody(body), subject };
-    };
-
-    return {
-      closeFormRequest,
-      formQuestions,
-      loading,
-      preview,
-      selectedEmails,
-      selectedTab,
-      showModal,
-      submitEmail,
-      tabs,
-      today,
-      updatePreview,
-    };
-  },
+const updatePreview = ({ body, subject }) => {
+  subject = subject || "No subject";
+  preview.value = { body: processEmailBody(body), subject };
 };
 </script>
 

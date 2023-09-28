@@ -6,18 +6,16 @@
   >
 </template>
 
-<script>
-export default {
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: String,
-      required: false,
-      default: "",
-    },
+<script setup>
+defineProps({
+  label: {
+    type: String,
+    required: true,
   },
-};
+  value: {
+    type: String,
+    required: false,
+    default: "",
+  },
+});
 </script>

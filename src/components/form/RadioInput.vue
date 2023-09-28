@@ -24,44 +24,43 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: [String, undefined],
-      default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+defineProps({
+  modelValue: {
+    type: [String, undefined],
+    default: undefined,
   },
-  emits: ["update:modelValue"],
-};
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Array,
+    required: true,
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(["update:modelValue"]);
 </script>

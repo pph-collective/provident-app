@@ -42,84 +42,71 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import NestedSchema from "./NestedSchema.vue";
 import { cloneDeep } from "@/utils/utils";
-import { ref, toRefs } from "vue";
+import { ref } from "vue";
 
-export default {
-  components: {
-    NestedSchema,
+const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => [{}],
   },
-  props: {
-    modelValue: {
-      type: Array,
-      default: () => [{}],
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    help_text: {
-      type: String,
-      default: "",
-    },
-    uuid: {
-      type: Number,
-      default: 0,
-    },
-    questions: {
-      type: Array,
-      required: true,
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    repeat_button_title: {
-      type: String,
-      default: "",
-    },
-    validation: {
-      type: Object,
-      default: () => ({}),
-    },
-    // eslint-disable-next-line vue/prop-name-casing
-    read_only: {
-      type: Boolean,
-      default: false,
-    },
+  required: {
+    type: Boolean,
+    default: false,
   },
-  emits: ["update:modelValue"],
-  setup(props, { emit }) {
-    const { modelValue } = toRefs(props);
-    const value = ref(cloneDeep(modelValue.value));
-
-    const updateValue = (updatedValue, index) => {
-      value.value[index] = updatedValue;
-      emit("update:modelValue", value.value);
-    };
-
-    const pushValue = () => {
-      value.value.push({});
-      emit("update:modelValue", value.value);
-    };
-
-    const deleteValue = (index) => {
-      if (value.value.length > 1) {
-        value.value.splice(index, 1);
-        emit("update:modelValue", value.value);
-      }
-    };
-
-    return {
-      deleteValue,
-      pushValue,
-      updateValue,
-      value,
-    };
+  label: {
+    type: String,
+    required: true,
   },
+  // eslint-disable-next-line vue/prop-name-casing
+  help_text: {
+    type: String,
+    default: "",
+  },
+  uuid: {
+    type: Number,
+    default: 0,
+  },
+  questions: {
+    type: Array,
+    required: true,
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  repeat_button_title: {
+    type: String,
+    default: "",
+  },
+  validation: {
+    type: Object,
+    default: () => ({}),
+  },
+  // eslint-disable-next-line vue/prop-name-casing
+  read_only: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const value = ref(cloneDeep(props.modelValue));
+
+const updateValue = (updatedValue, index) => {
+  value.value[index] = updatedValue;
+  emit("update:modelValue", value.value);
+};
+
+const pushValue = () => {
+  value.value.push({});
+  emit("update:modelValue", value.value);
+};
+
+const deleteValue = (index) => {
+  if (value.value.length > 1) {
+    value.value.splice(index, 1);
+    emit("update:modelValue", value.value);
+  }
 };
 </script>

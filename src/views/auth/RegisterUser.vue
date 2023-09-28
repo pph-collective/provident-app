@@ -285,154 +285,135 @@
   </teleport>
 </template>
 
-<script>
-import { reactive, ref, computed } from "vue";
+<script setup>
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import { auth, db, createEmail, logout } from "@/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { esc } from "@/directives/escape";
+import { esc as vEsc } from "@/directives/escape";
 import FormCard from "@/components/FormCard.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
-export default {
-  components: {
-    FormCard,
-    LoadingSpinner,
-  },
-  directives: {
-    ...esc,
-  },
-  setup() {
-    const form = reactive({
-      email: "",
-      name: "",
-      organization: "",
-      organizationName: "",
-      password: "",
-      confirmPassword: "",
-      terms: false,
-    });
-    const requested = ref(false);
-    const error = ref(null);
-    const showTerms = ref(false);
-    const showTermsLawEnforcement = ref(false);
-    const showTermsMetadata = ref(false);
-    const loading = ref(false);
+const form = ref({
+  email: "",
+  name: "",
+  organization: "",
+  organizationName: "",
+  password: "",
+  confirmPassword: "",
+  terms: false,
+});
+const requested = ref(false);
+const error = ref(null);
+const showTerms = ref(false);
+const showTermsLawEnforcement = ref(false);
+const showTermsMetadata = ref(false);
+const loading = ref(false);
 
-    const store = useStore();
-    const organizations = computed(() => store.getters.formOrganizationOptions);
+const store = useStore();
+const organizations = computed(() => store.getters.formOrganizationOptions);
 
-    const formValid = computed(() => {
-      // all fields must be filled in
-      if (
-        !(
-          form.email &&
-          form.name &&
-          form.organization &&
-          form.password &&
-          form.confirmPassword &&
-          form.terms
-        )
-      ) {
-        return { status: false, message: "" };
-      } else if (form.organization === "Other" && !form.organizationName) {
-        return {
-          status: false,
-          message: "What organization are you a part of?",
-        };
-      } else if (form.password.length < 6 || form.confirmPassword.length < 6) {
-        return { status: false, message: "" };
-      } else if (form.password !== form.confirmPassword) {
-        return {
-          status: false,
-          message: "password and confirmation do not match",
-        };
-      } else if (
-        !form.terms ||
-        !form.termsLawEnforcement ||
-        !form.termsMetadata
-      ) {
-        return {
-          status: false,
-          message: "",
-        };
-      } else {
-        return { status: true, message: "" };
-      }
-    });
-
-    const register = async () => {
-      loading.value = true;
-      const email = form.email.toLowerCase();
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, form.password);
-        //scrub out password
-        form.password = "";
-        form.confirmPassword = "";
-        await updateProfile(auth.currentUser, { displayName: form.name });
-        await setDoc(doc(db, "users", email), {
-          email,
-          name: form.name,
-          organization: form.organization,
-          organizationName:
-            form.organization === "Other"
-              ? form.organizationName
-              : form.organization,
-          role: "user",
-          status: "pending",
-        });
-
-        requested.value = true;
-      } catch (err) {
-        if (err.message === "Firebase: Error (auth/email-already-in-use).") {
-          error.value =
-            "The email address is already in use by another account.";
-        } else {
-          error.value = err.message;
-        }
-        console.log(err);
-      }
-
-      if (requested.value) {
-        try {
-          await createEmail({
-            subject: "PROVIDENT User Request",
-            body: `<p>${form.name} (${email} from ${form.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
-            to: [import.meta.env.VITE_APP_ADMIN_EMAIL],
-          });
-          await createEmail({
-            subject: "PROVIDENT Access Request",
-            body: `<p>Hello ${
-              form.name
-            },</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${
-              import.meta.env.VITE_APP_ADMIN_EMAIL
-            }'>the PROVIDENT admin</a>.</p>`,
-            to: [email],
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      await logout();
-      loading.value = false;
-    };
-
+const formValid = computed(() => {
+  // all fields must be filled in
+  if (
+    !(
+      form.value.email &&
+      form.value.name &&
+      form.value.organization &&
+      form.value.password &&
+      form.value.confirmPassword &&
+      form.value.terms
+    )
+  ) {
+    return { status: false, message: "" };
+  } else if (
+    form.value.organization === "Other" &&
+    !form.value.organizationName
+  ) {
     return {
-      form,
-      formValid,
-      requested,
-      error,
-      loading,
-      organizations,
-      register,
-      showTerms,
-      showTermsLawEnforcement,
-      showTermsMetadata,
+      status: false,
+      message: "What organization are you a part of?",
     };
-  },
+  } else if (
+    form.value.password.length < 6 ||
+    form.value.confirmPassword.length < 6
+  ) {
+    return { status: false, message: "" };
+  } else if (form.value.password !== form.value.confirmPassword) {
+    return {
+      status: false,
+      message: "password and confirmation do not match",
+    };
+  } else if (
+    !form.value.terms ||
+    !form.value.termsLawEnforcement ||
+    !form.value.termsMetadata
+  ) {
+    return {
+      status: false,
+      message: "",
+    };
+  } else {
+    return { status: true, message: "" };
+  }
+});
+
+const register = async () => {
+  loading.value = true;
+  const email = form.value.email.toLowerCase();
+
+  try {
+    await createUserWithEmailAndPassword(auth, email, form.value.password);
+    //scrub out password
+    form.value.password = "";
+    form.value.confirmPassword = "";
+    await updateProfile(auth.currentUser, { displayName: form.value.name });
+    await setDoc(doc(db, "users", email), {
+      email,
+      name: form.value.name,
+      organization: form.value.organization,
+      organizationName:
+        form.value.organization === "Other"
+          ? form.value.organizationName
+          : form.value.organization,
+      role: "user",
+      status: "pending",
+    });
+
+    requested.value = true;
+  } catch (err) {
+    if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+      error.value = "The email address is already in use by another account.";
+    } else {
+      error.value = err.message;
+    }
+    console.log(err);
+  }
+
+  if (requested.value) {
+    try {
+      await createEmail({
+        subject: "PROVIDENT User Request",
+        body: `<p>${form.value.name} (${email} from ${form.value.organization}) has requested access to PROVIDENT. <a href="${location.origin}/admin">View the request.</a></p>`,
+        to: [import.meta.env.VITE_APP_ADMIN_EMAIL],
+      });
+      await createEmail({
+        subject: "PROVIDENT Access Request",
+        body: `<p>Hello ${
+          form.value.name
+        },</p><br><p>Your request to access PROVIDENT has been received. An administrator will review and respond within a week. If it has been a while and you haven't heard anything, please reach out to <a href='mailto:${
+          import.meta.env.VITE_APP_ADMIN_EMAIL
+        }'>the PROVIDENT admin</a>.</p>`,
+        to: [email],
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  await logout();
+  loading.value = false;
 };
 </script>
 

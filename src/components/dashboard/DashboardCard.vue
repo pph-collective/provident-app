@@ -22,23 +22,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    width: {
-      type: String,
-      default: "full",
-    },
-    height: {
-      type: Number,
-      default: 2,
-    },
-    noHeader: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+defineProps({
+  width: {
+    type: String,
+    default: "full",
   },
-};
+  height: {
+    type: Number,
+    default: 2,
+  },
+  noHeader: {
+    type: Boolean,
+    default: false,
+  },
+});
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@ const listener = (binding) => (event) => {
   }
 };
 
-const directive = {
+export const esc = {
   beforeMount(el, binding) {
     document.addEventListener("keydown", listener(binding));
   },
@@ -12,4 +12,3 @@ const directive = {
     document.removeEventListener("keydown", listener(binding));
   },
 };
-export const esc = { esc: directive };

@@ -64,117 +64,88 @@
   </teleport>
 </template>
 
-<script>
-import { ref, computed, toRefs } from "vue";
+<script setup>
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
-import { esc } from "@/directives/escape";
+import { esc as vEsc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import PrintSection from "@/components/PrintSection.vue";
 import { GEOID_QUESTION_MODEL } from "@/utils/utils.js";
 
-export default {
-  components: {
-    BGMap,
-    JSONForm,
-    PrintSection,
+const props = defineProps({
+  formResponse: {
+    type: Object,
+    required: true,
   },
-  directives: {
-    ...esc,
+  readOnly: {
+    type: Boolean,
   },
-  props: {
-    formResponse: {
-      type: Object,
-      required: true,
-    },
-    readOnly: {
-      type: Boolean,
-    },
-  },
-  emits: ["update-form-response"],
-  setup(props, { emit }) {
-    const { formResponse } = toRefs(props);
+});
 
-    const store = useStore();
-    const user = computed(() => store.state.user);
-    const userEmail = computed(() =>
-      user.value.data ? user.value.data.email : "",
-    );
-    const userRole = computed(() =>
-      user.value.data ? user.value.data.role : "user",
-    );
+const emit = defineEmits(["update-form-response"]);
 
-    const closeFormRequest = ref(0);
-    const formMessage = ref("");
+const store = useStore();
+const user = computed(() => store.state.user);
+const userEmail = computed(() =>
+  user.value.data ? user.value.data.email : "",
+);
 
-    const updateFormResponse = async (response, status) => {
-      const users_edited = formResponse.value.users_edited ?? [];
-      if (!users_edited.includes(userEmail.value))
-        users_edited.push(userEmail.value);
+const closeFormRequest = ref(0);
+const formMessage = ref("");
 
-      const updateData = {
-        response,
-        users_edited,
-        user_submitted: status === "Submitted" ? userEmail.value : "",
-        last_updated: Date.now(),
-        status,
-      };
+const updateFormResponse = async (response, status) => {
+  const users_edited = props.formResponse.users_edited ?? [];
+  if (!users_edited.includes(userEmail.value))
+    users_edited.push(userEmail.value);
 
-      const updatedFormResponse = {
-        ...formResponse.value,
-        ...updateData,
-      };
+  const updateData = {
+    response,
+    users_edited,
+    user_submitted: status === "Submitted" ? userEmail.value : "",
+    last_updated: Date.now(),
+    status,
+  };
 
-      try {
-        const _id = await store.dispatch(
-          "updateFormResponse",
-          updatedFormResponse,
-        );
-        formMessage.value = "Form successfully saved";
+  const updatedFormResponse = {
+    ...props.formResponse,
+    ...updateData,
+  };
 
-        // update activeFormResponse
-        if (status === "Submitted") {
-          emit("update-form-response", {});
-        } else {
-          emit("update-form-response", { _id, ...updatedFormResponse });
-        }
-      } catch (e) {
-        console.log(e);
-        formMessage.value = "Error saving form";
-      }
+  try {
+    const _id = await store.dispatch("updateFormResponse", updatedFormResponse);
+    formMessage.value = "Form successfully saved";
 
-      // show the message only for 6 seconds
-      setTimeout(() => (formMessage.value = ""), 6000);
-    };
-
-    const closeForm = () => {
+    // update activeFormResponse
+    if (status === "Submitted") {
       emit("update-form-response", {});
-      formMessage.value = "";
-    };
+    } else {
+      emit("update-form-response", { _id, ...updatedFormResponse });
+    }
+  } catch (e) {
+    console.log(e);
+    formMessage.value = "Error saving form";
+  }
 
-    const print = () => {
-      if (document.queryCommandSupported("print")) {
-        document.execCommand("print", true, null);
-      } else {
-        window.print();
-      }
-    };
-
-    const printable = computed(() => formResponse.value.status === "Submitted");
-
-    return {
-      GEOID_QUESTION_MODEL,
-      closeFormRequest,
-      formMessage,
-      print,
-      printable,
-      updateFormResponse,
-      userRole,
-      closeForm,
-    };
-  },
+  // show the message only for 6 seconds
+  setTimeout(() => (formMessage.value = ""), 6000);
 };
+
+const closeForm = () => {
+  emit("update-form-response", {});
+  formMessage.value = "";
+};
+
+const print = () => {
+  if (document.queryCommandSupported("print")) {
+    document.execCommand("print", true, null);
+  } else {
+    window.print();
+  }
+};
+
+const printable = computed(() => props.formResponse.status === "Submitted");
 </script>
 
 <style lang="scss" scoped>

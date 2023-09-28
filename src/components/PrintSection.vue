@@ -7,13 +7,11 @@
   </teleport>
 </template>
 
-<script>
-export default {
-  props: {
-    printable: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+defineProps({
+  printable: {
+    type: Boolean,
+    default: false,
   },
-};
+});
 </script>

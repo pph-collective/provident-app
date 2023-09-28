@@ -13,30 +13,24 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { tertileColorMap } from "@/utils/utils.js";
 
-export default {
-  props: {
-    prediction: {
-      type: String,
-      required: true,
-    },
+defineProps({
+  prediction: {
+    type: String,
+    required: true,
   },
-  setup() {
-    const getColor = (prediction) => {
-      if (prediction === "1") {
-        return tertileColorMap.get(3);
-      } else if (prediction === "0") {
-        return tertileColorMap.get(1);
-      } else {
-        return tertileColorMap.get(2);
-      }
-    };
-    return {
-      getColor,
-    };
-  },
+});
+
+const getColor = (prediction) => {
+  if (prediction === "1") {
+    return tertileColorMap.get(3);
+  } else if (prediction === "0") {
+    return tertileColorMap.get(1);
+  } else {
+    return tertileColorMap.get(2);
+  }
 };
 </script>
 

@@ -16,28 +16,26 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: String,
-      required: true,
-    },
-    link: {
-      type: String,
-      required: false,
-      default: "",
-    },
-    minWidth: {
-      type: String,
-      required: true,
-    },
+<script setup>
+defineProps({
+  label: {
+    type: String,
+    required: true,
   },
-};
+  value: {
+    type: String,
+    required: true,
+  },
+  link: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  minWidth: {
+    type: String,
+    required: true,
+  },
+});
 </script>
 
 <style lang="scss" scoped>

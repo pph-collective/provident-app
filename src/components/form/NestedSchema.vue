@@ -6,60 +6,50 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useSchemaForm, SchemaFormFactory } from "formvuelate";
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate";
 import * as yup from "yup";
-import { ref, toRefs, watch } from "vue";
+import { ref, watch } from "vue";
 import { cloneDeep, evalSchema } from "@/utils/utils";
 
-const factory = SchemaFormFactory([VeeValidatePlugin()]);
+const SchemaForm = SchemaFormFactory([VeeValidatePlugin()]);
 
-export default {
-  components: { SchemaForm: factory },
-  props: {
-    modelValue: {
-      type: Object,
-      default: () => ({}),
-    },
-    initSchema: {
-      type: Array,
-      required: true,
-    },
-    readOnly: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({}),
   },
-  emits: ["updateModelValue"],
-  setup(props, { emit }) {
-    const { modelValue, initSchema } = toRefs(props);
-
-    const value = ref(cloneDeep(modelValue.value));
-    useSchemaForm(value);
-
-    const schema = ref(cloneDeep(initSchema.value));
-    evalSchema(schema.value, yup);
-    schema.value.forEach((q) => {
-      if (typeof q.read_only === "function") {
-        q.read_only = q.read_only(modelValue.value);
-      }
-    });
-
-    watch(
-      value,
-      () => {
-        emit("updateModelValue", value.value);
-      },
-      { deep: true },
-    );
-
-    return {
-      value,
-      schema,
-    };
+  initSchema: {
+    type: Array,
+    required: true,
   },
-};
+  readOnly: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["updateModelValue"]);
+
+const value = ref(cloneDeep(props.modelValue));
+useSchemaForm(value);
+
+const schema = ref(cloneDeep(props.initSchema));
+evalSchema(schema.value, yup);
+schema.value.forEach((q) => {
+  if (typeof q.read_only === "function") {
+    q.read_only = q.read_only(props.modelValue);
+  }
+});
+
+watch(
+  value,
+  () => {
+    emit("updateModelValue", value.value);
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped>

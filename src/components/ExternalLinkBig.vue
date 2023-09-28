@@ -20,23 +20,21 @@
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    href: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      default: "",
-    },
-    subtitle: {
-      type: String,
-      default: "",
-    },
+<script setup>
+defineProps({
+  href: {
+    type: String,
+    required: true,
   },
-};
+  title: {
+    type: String,
+    default: "",
+  },
+  subtitle: {
+    type: String,
+    default: "",
+  },
+});
 </script>
 
 <style lang="scss" scoped>

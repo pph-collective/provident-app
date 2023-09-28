@@ -217,7 +217,7 @@ import FormModal from "./form/ModalForm.vue";
 
 const props = withDefaults(
   defineProps<{
-    admin: boolean;
+    admin?: boolean;
     filterOptions: object;
     filterFunctions: object;
     formResponses: object[];
