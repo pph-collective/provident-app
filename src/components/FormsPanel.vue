@@ -2,8 +2,7 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <!-- Display mobile controls card only on mobile devices -->
-      <!-- <div class="display-only-mobile card my-2"> -->
+      <!-- Expandable Filters Card -->
       <div class="card my-2">
         <header class="card-header">
           <div class="card-header-title">Filters</div>
@@ -17,19 +16,20 @@
             </span>
           </button>
         </header>
-        <div v-if="displayMobileFilters" class="card-content">
-          <div
+        <div v-if="displayMobileFilters" class="card-content filter-wrapper">
+          <template
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
           >
             <div
               v-for="header in headerGroup.headers"
               :key="header.id"
-              class="is-flex is-flex-direction-column is-align-content-stretch"
+              class="filter-item-wrapper"
             >
               <button
                 v-if="header.column.getCanFilter()"
                 class="button my-2"
+                style="width: 100%"
                 @click="header.column.getToggleSortingHandler()?.($event)"
               >
                 <FlexRender
@@ -45,7 +45,7 @@
                     : ""
                 }}
               </button>
-              <div v-if="header.column.getCanFilter()" style="width: 100%">
+              <template v-if="header.column.getCanFilter()">
                 <DropdownTableFilter
                   v-if="header.column.columnDef?.meta?.shouldUseSelectFilter"
                   :column="header.column"
@@ -58,10 +58,11 @@
                   :column="header.column"
                   :table="table"
                   style="width: 100%"
+                  :small="false"
                 />
-              </div>
+              </template>
             </div>
-          </div>
+          </template>
         </div>
       </div>
       <div class="b-table table-container">
@@ -95,34 +96,6 @@
                           ]
                         : ""
                     }}
-                  </div>
-                </th>
-              </tr>
-              <tr
-                v-for="headerGroup in table.getHeaderGroups().slice(1)"
-                :key="`${headerGroup.id}-column-filtering`"
-              >
-                <th
-                  v-for="header in headerGroup.headers"
-                  :key="`${header.id}-column-filtering`"
-                  :colSpan="header.colSpan"
-                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
-                  style="min-width: 100px"
-                >
-                  <div v-if="header.column.getCanFilter()">
-                    <DropdownTableFilter
-                      v-if="
-                        header.column.columnDef?.meta?.shouldUseSelectFilter
-                      "
-                      :column="header.column"
-                      :table="table"
-                      :options="header.column.columnDef?.meta?.selectOptions"
-                    />
-                    <ColumnFiltering
-                      v-else
-                      :column="header.column"
-                      :table="table"
-                    />
                   </div>
                 </th>
               </tr>
@@ -501,6 +474,24 @@ function handlePageSizeChange(e) {
 .display-only-mobile {
   @media (min-width: 768px) {
     display: none;
+  }
+}
+
+.filter-wrapper {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  .filter-item-wrapper {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    align-items: center;
+    @media (min-width: 768px) {
+      flex-flow: row;
+      button {
+        max-width: 200px;
+      }
+    }
   }
 }
 </style>
