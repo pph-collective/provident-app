@@ -88,14 +88,6 @@
                       :render="header.column.columnDef.header"
                       :props="header.getContext()"
                     />
-
-                    {{
-                      header.column.getCanSort()
-                        ? { asc: " ▲", desc: " ▼", false: "▶" }[
-                            header.column.getIsSorted() as string
-                          ]
-                        : ""
-                    }}
                   </div>
                 </th>
               </tr>
