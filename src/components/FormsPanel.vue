@@ -5,18 +5,18 @@
       <!-- Expandable Filters Card -->
       <div class="card my-2">
         <header class="card-header">
-          <div class="card-header-title">Filters</div>
+          <div class="card-header-title">Filter & Sort</div>
           <button
             class="card-header-icon"
             aria-label="more options"
-            @click="() => (displayMobileFilters = !displayMobileFilters)"
+            @click="() => (displayFilters = !displayFilters)"
           >
             <span class="icon">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
             </span>
           </button>
         </header>
-        <div v-if="displayMobileFilters" class="card-content filter-wrapper">
+        <div v-if="displayFilters" class="card-content filter-wrapper">
           <template
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
@@ -395,7 +395,7 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
-const displayMobileFilters = ref(false);
+const displayFilters = ref(false);
 
 const table = useVueTable({
   get data() {
