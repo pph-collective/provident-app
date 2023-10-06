@@ -277,6 +277,9 @@ const municipalityOptions = computed(() =>
   )
 );
 
+const customFilter = (row, columnId, value) =>
+  value.split(",").includes(row.getValue(columnId));
+
 const columns = [
   columnHelper.group({
     id: "forms",
@@ -285,7 +288,7 @@ const columns = [
         id: "title",
         cell: (info) => info.getValue(),
         header: () => "Title",
-        filterFn: "includesString",
+        filterFn: customFilter,
         meta: {
           shouldUseSelectFilter: true,
           selectOptions: titleOptions.value,
@@ -306,7 +309,7 @@ const columns = [
             [info.getValue()]
           ),
         header: () => "Status",
-        filterFn: "includesString",
+        filterFn: customFilter,
         meta: {
           shouldUseSelectFilter: true,
           selectOptions: statusOptions.value,
@@ -316,7 +319,7 @@ const columns = [
         id: "municipality",
         cell: (info) => info.getValue(),
         header: () => "Municipality",
-        filterFn: "includesString",
+        filterFn: customFilter,
         meta: {
           shouldUseSelectFilter: true,
           selectOptions: municipalityOptions.value,
