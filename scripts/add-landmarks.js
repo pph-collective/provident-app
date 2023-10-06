@@ -81,7 +81,7 @@ async function importCsv() {
           "city",
           "postal_code",
           "total_visitors",
-          "rank",
+          "rank"
         );
 
         await writeToFirestore("landmark_data", period, dt.objects());

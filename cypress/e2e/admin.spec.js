@@ -20,7 +20,7 @@ describe("Admin Views and Powers", () => {
 
   it("View pending users", () => {
     cy.contains('[data-cy="user-request"]', ACCOUNTS.pending.email).should(
-      "exist",
+      "exist"
     );
   });
 
@@ -41,7 +41,7 @@ describe("Admin Views and Powers", () => {
 
     cy.get(".email-row .level-item").should(
       "contain",
-      "TEST: PROVIDENT Access Approved",
+      "TEST: PROVIDENT Access Approved"
     );
 
     // Try to log in
@@ -146,14 +146,14 @@ describe("Admin Views and Powers", () => {
       cy.get("#email-preview .message-header").should("contain", "subject");
       cy.get("#email-preview .message-body").should(
         "contain",
-        "body of the email",
+        "body of the email"
       );
 
       cy.get("button").contains("Preview").click();
 
       cy.get("#email-preview .message-header").should(
         "contain",
-        "A test email",
+        "A test email"
       );
       cy.get("#email-preview .message-body").should("contain", "Hello, world");
 
@@ -197,7 +197,7 @@ describe("Admin Views and Powers", () => {
     it("Page loads", () => {
       cy.get('[data-cy="organization-table"]').should(
         "not.contain",
-        "No organizations found",
+        "No organizations found"
       );
 
       cy.get('[data-cy="organization-table"]')
@@ -276,7 +276,7 @@ describe("Admin Views and Powers", () => {
       cy.get('[data-cy="active-form-modal"]').should("exist");
       cy.get('[data-cy="active-form-title"]').should(
         "contain",
-        "Sample Organization Form",
+        "Sample Organization Form"
       );
       cy.get('[data-cy="close-form"]').click();
     });

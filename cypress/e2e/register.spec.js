@@ -54,7 +54,7 @@ describe("Register User", () => {
     cy.get("form").submit();
     cy.get('[data-cy="error-message"]').should(
       "contain",
-      "The email address is already in use by another account.",
+      "The email address is already in use by another account."
     );
   });
 

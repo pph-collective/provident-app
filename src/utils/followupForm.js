@@ -57,7 +57,7 @@ const mergeQuestions = (sourceQuestions, followupQuestions) => {
     if (source_model !== undefined) {
       // DEEP COPY SOURCE QUESTION
       const sourceQuestion = cloneDeep(
-        sourceQuestions.find((q) => source_model === q.model),
+        sourceQuestions.find((q) => source_model === q.model)
       );
 
       // RESET
@@ -83,7 +83,7 @@ const mergeQuestions = (sourceQuestions, followupQuestions) => {
       ) {
         result.questions = mergeQuestions(
           sourceQuestion.questions,
-          followupQuestion.questions,
+          followupQuestion.questions
         );
       }
 
@@ -104,7 +104,7 @@ const mergeResponses = (newQuestions, sourceResponse) => {
     if (sourceQuestionResponse) {
       if (question.component === "SubForm" && question.questions) {
         result[model] = sourceQuestionResponse.map((response) =>
-          mergeResponses(question.questions, response),
+          mergeResponses(question.questions, response)
         );
       } else {
         result[model] = sourceQuestionResponse;

@@ -48,12 +48,12 @@ const filterOptions = computed(() => {
     Municipality: uniqueArray(
       formResponses.value
         .filter((f) => f.response[MUNI_QUESTION_MODEL])
-        .map((f) => f.response[MUNI_QUESTION_MODEL]),
+        .map((f) => f.response[MUNI_QUESTION_MODEL])
     ),
     "Block Group": uniqueArray(
       formResponses.value
         .filter((f) => f.response[GEOID_QUESTION_MODEL])
-        .map((f) => f.response[GEOID_QUESTION_MODEL]),
+        .map((f) => f.response[GEOID_QUESTION_MODEL])
     ),
   };
 });

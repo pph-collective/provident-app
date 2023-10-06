@@ -126,10 +126,10 @@ export async function getFormResponses(email, organization) {
     const formResponses = await Promise.all(
       Object.entries(formTypes).map(async ([collectionId, docId]) => {
         const response = await getDocs(
-          collection(db, collectionId, docId, "form_responses"),
+          collection(db, collectionId, docId, "form_responses")
         );
         return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
-      }),
+      })
     );
 
     return formResponses.reduce((acc, cur) => [...acc, ...cur], []);
@@ -142,7 +142,7 @@ export async function getFormResponses(email, organization) {
 export async function addFormAssignment(formAssignmentData) {
   const res = await addDoc(
     collection(db, "form_assignments"),
-    formAssignmentData,
+    formAssignmentData
   );
   return res.id;
 }
@@ -165,7 +165,7 @@ export async function batchAddFormResponses(formType, formResponses, assigned) {
       };
 
       const document = doc(
-        collection(db, `${formType}s`, assignee, "form_responses"),
+        collection(db, `${formType}s`, assignee, "form_responses")
       );
       batch.set(document, updatedFormResponse);
     }
@@ -176,7 +176,7 @@ export async function batchAddFormResponses(formType, formResponses, assigned) {
 
 export async function updateFormResponse(
   formResponse,
-  { email, organization },
+  { email, organization }
 ) {
   const {
     _id,
@@ -187,14 +187,14 @@ export async function updateFormResponse(
   if (_id === undefined) {
     const res = await addDoc(
       collection(db, `${type}s`, typeMap[type], "form_responses"),
-      formResponse,
+      formResponse
     );
 
     return res.id;
   } else {
     await setDoc(
       doc(db, `${type}s`, typeMap[type], "form_responses", _id),
-      formResponse,
+      formResponse
     );
 
     return _id;
@@ -236,10 +236,10 @@ export async function getModelData(period) {
         .map((row) => {
           // Filters the landmark data based on the block group and save it into the landmarks key for each block group
           row.landmarks = landmarkData.filter(
-            (landmark) => landmark.bg_id === row.bg_id,
+            (landmark) => landmark.bg_id === row.bg_id
           );
           row.tooltip = tooltipData.find(
-            (tooltip) => tooltip.bg_id === row.bg_id,
+            (tooltip) => tooltip.bg_id === row.bg_id
           );
           return row;
         }),

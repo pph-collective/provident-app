@@ -89,7 +89,7 @@ const emit = defineEmits(["update-form-response"]);
 const store = useStore();
 const user = computed(() => store.state.user);
 const userEmail = computed(() =>
-  user.value.data ? user.value.data.email : "",
+  user.value.data ? user.value.data.email : ""
 );
 
 const closeFormRequest = ref(0);

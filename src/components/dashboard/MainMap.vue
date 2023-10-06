@@ -67,7 +67,7 @@ formResponses
         "Six Month Resource Plan",
         "Mid-way Followup to the Six Month Resource Plan",
         "Followup to Six Month Resource Plan",
-      ].includes(f.form.title) && f.response.bg_id !== undefined,
+      ].includes(f.form.title) && f.response.bg_id !== undefined
   )
   .forEach((formResponse) => {
     const geoid = formResponse.response.bg_id;
@@ -85,7 +85,7 @@ const filteredZip = computed(() => {
     return [];
   } else {
     return zipcodesGeo.find(
-      (z) => props.zipcode.zip === z.properties.ZCTA5CE10,
+      (z) => props.zipcode.zip === z.properties.ZCTA5CE10
     );
   }
 });
@@ -95,7 +95,7 @@ const filteredGeo = computed(() => {
   let filtered = geo;
   if (props.filterMunicipalities.length > 0) {
     filtered = geo.filter((g) =>
-      props.filterMunicipalities.includes(g.properties.name),
+      props.filterMunicipalities.includes(g.properties.name)
     );
   }
 
@@ -128,8 +128,8 @@ const filteredGeo = computed(() => {
     topojson.filterAttachedWeight(
       topo,
       sphericalArea,
-      topojson.sphericalRingArea,
-    ),
+      topojson.sphericalRingArea
+    )
   );
 
   // merge block groups into town as well
