@@ -1,6 +1,6 @@
 <template>
   <input
-    :class="['input', '{ 'is-small': isSmall }]"
+    :class="['input', { 'is-small': isSmall }]"
     type="text"
     :value="columnFilterValue ?? ''"
     placeholder="Search..."
