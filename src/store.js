@@ -77,7 +77,7 @@ const store = createStore({
     async updateUserFormResponses({ commit, state }) {
       const formResponses = await getFormResponses(
         state.user.data.email,
-        state.user.data.organization,
+        state.user.data.organization
       );
       commit("mutateUser", {
         property: "formResponses",
@@ -122,7 +122,7 @@ const store = createStore({
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
           formResponse._id === updatedFormResponse._id &&
-          formResponse.type === updatedFormResponse.type,
+          formResponse.type === updatedFormResponse.type
       );
 
       if (formResponseIndex >= 0) {
@@ -143,7 +143,7 @@ const store = createStore({
           {
             email: state.user.data.email,
             organization: state.user.data.organization,
-          },
+          }
         );
         formResponses.push(followupFormResponse);
 
@@ -187,7 +187,7 @@ const store = createStore({
     },
     addNotification(
       { commit, dispatch, state },
-      { color = "success", message },
+      { color = "success", message }
     ) {
       const id = utils.uniqueId();
       commit("mutate", {
@@ -215,7 +215,7 @@ const store = createStore({
       }
 
       return state.organizations.find(
-        (org) => org.name === state.user.data.organization,
+        (org) => org.name === state.user.data.organization
       ).intervention_arm;
     },
     pendingUsers(state) {

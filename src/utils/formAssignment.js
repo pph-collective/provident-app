@@ -39,7 +39,7 @@ const getAssignedUsers = (target, organizations, users) => {
     ...target.users,
     ...users
       .filter(
-        (u) => u.status === "approved" && assignedOrgs.has(u.organization),
+        (u) => u.status === "approved" && assignedOrgs.has(u.organization)
       )
       .map((u) => u.email),
   ]);
@@ -86,7 +86,7 @@ const getAssignments = (formType, target, organizations, users) => {
             (user) =>
               user.status === "approved" &&
               user.role === "champion" &&
-              assigned.has(user.organization),
+              assigned.has(user.organization)
           )
           .map((user) => user.email);
 
@@ -111,7 +111,7 @@ const addFormResponses = async (formAssignment, organizations, users) => {
     form.type,
     target,
     organizations,
-    users,
+    users
   );
 
   await batchAddFormResponses(form.type, [formResponseData], assigned);
@@ -133,7 +133,7 @@ const addFormResponsesForApproved = async (
   formResponseType,
   approved,
   formAssignments,
-  organizations,
+  organizations
 ) => {
   const [organization, documentId] =
     formResponseType === "user"
@@ -141,7 +141,7 @@ const addFormResponsesForApproved = async (
       : [approved.name, approved.name];
 
   const activeFormAssignments = formAssignments.filter(
-    (f) => f.form.type === formResponseType && utils.today() <= f.expire_date,
+    (f) => f.form.type === formResponseType && utils.today() <= f.expire_date
   );
 
   let formResponses = [];
@@ -157,7 +157,7 @@ const addFormResponsesForApproved = async (
   return await batchAddFormResponses(
     formResponseType,
     formResponses,
-    new Set([documentId]),
+    new Set([documentId])
   );
 };
 

@@ -409,13 +409,13 @@ const validateFollowupQuestions = (sourceQuestions, followupQuestions) => {
       // However, we can check if the question has questions.
       if (question.questions) {
         const subForm = sourceQuestions.find(
-          (q) => q.model === question.source_model,
+          (q) => q.model === question.source_model
         );
 
         if (subForm) {
           const nestedQuestionsWarnings = validateFollowupQuestions(
             subForm.questions,
-            question.questions,
+            question.questions
           );
 
           // If there are warnings append
@@ -488,14 +488,14 @@ const validateFollowupForm = (followupForm, sourceQuestions) => {
   if (followupForm.questions) {
     warnings.questions = validateFollowupQuestions(
       sourceQuestions,
-      followupForm.questions,
+      followupForm.questions
     );
   }
 
   if (followupForm.followup_form) {
     warnings.followup_form = validateFollowupForm(
       followupForm.followup_form,
-      followupForm.questions,
+      followupForm.questions
     );
   }
 
@@ -515,7 +515,7 @@ const addVersion = (oldForm, newForm) => {
       form.version = Date.now();
     } else {
       console.log(
-        "Form questions didn't change - keeping same version timestamp. This does not refer to followup form questions.",
+        "Form questions didn't change - keeping same version timestamp. This does not refer to followup form questions."
       );
       form.version = oldForm.version;
     }
@@ -545,7 +545,7 @@ let form = JSON.parse(rawdata);
 for (const component in componentToSchema) {
   componentToSchema[component] = mergeDeep(
     componentToSchema[component],
-    questionSchema,
+    questionSchema
   );
 }
 

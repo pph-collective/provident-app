@@ -199,7 +199,7 @@ const dataset = computed(() => {
 const activeBG = ref("");
 const computedMuni = computed(() => {
   const bg = BLOCK_GROUPS.find(
-    ({ blockGroup }) => blockGroup === activeBG.value,
+    ({ blockGroup }) => blockGroup === activeBG.value
   );
   if (bg) return bg.municipality;
   return "";
@@ -337,7 +337,7 @@ const clickMap = (clickedStatus) => {
     // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeBG.value),
+      logActivity(store.state.user.data.email, "click map", activeBG.value)
     );
   }
 };

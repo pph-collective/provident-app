@@ -28,12 +28,12 @@ Cypress.Commands.add("login_by_permission", (permission_level) => {
   if (account) {
     cy.wrap(login(account["email"], account["password"])).should(
       "not.eq",
-      "{}",
+      "{}"
     );
     cy.log(`Logged in with permission level: ${permission_level}`);
   } else {
     console.log(
-      `Account with the following permission level doesn't exist in accounts.json: ${permission_level}.`,
+      `Account with the following permission level doesn't exist in accounts.json: ${permission_level}.`
     );
   }
   cy.get("[data-cy='home']").click();
@@ -74,7 +74,7 @@ Cypress.Commands.add(
     cy.get('[data-cy="success-message"]', { timeout: 10000 })
       .should("exist")
       .contains("Your request has been received.");
-  },
+  }
 );
 
 Cypress.Commands.add("approveUser", (email) => {

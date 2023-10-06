@@ -35,7 +35,7 @@ const props = withDefaults(
   }>(),
   {
     pages: () => [],
-  },
+  }
 );
 
 const { parentRoute } = toRefs(props);
@@ -62,7 +62,7 @@ const updateStore = () => {
         snapshot.docs.map((doc) => {
           let user = doc.data();
           return { ...user, id: doc.id };
-        }),
+        })
       );
     });
 

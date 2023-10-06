@@ -59,7 +59,7 @@ withDefaults(
   }>(),
   {
     readOnly: false,
-  },
+  }
 );
 </script>
 
