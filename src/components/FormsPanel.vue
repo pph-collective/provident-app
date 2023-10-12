@@ -2,33 +2,34 @@
   <div class="container">
     <section class="section">
       <h1 class="title">Forms</h1>
-      <!-- Display mobile controls card only on mobile devices -->
-      <div class="display-only-mobile card my-2">
+      <!-- Expandable Filters Card -->
+      <div class="card my-2">
         <header class="card-header">
-          <div class="card-header-title">Filters</div>
+          <div class="card-header-title">Filter & Sort</div>
           <button
             class="card-header-icon"
             aria-label="more options"
-            @click="() => (displayMobileFilters = !displayMobileFilters)"
+            @click="() => (displayFilters = !displayFilters)"
           >
             <span class="icon">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
             </span>
           </button>
         </header>
-        <div v-if="displayMobileFilters" class="card-content">
-          <div
+        <div v-if="displayFilters" class="card-content filter-wrapper">
+          <template
             v-for="headerGroup in table.getHeaderGroups()"
             :key="headerGroup.id"
           >
             <div
               v-for="header in headerGroup.headers"
               :key="header.id"
-              class="is-flex is-flex-direction-column is-align-content-stretch"
+              class="filter-item-wrapper"
             >
               <button
                 v-if="header.column.getCanFilter()"
                 class="button my-2"
+                style="width: 100%"
                 @click="header.column.getToggleSortingHandler()?.($event)"
               >
                 <FlexRender
@@ -44,15 +45,24 @@
                     : ""
                 }}
               </button>
-              <div v-if="header.column.getCanFilter()" style="width: 100%">
+              <template v-if="header.column.getCanFilter()">
+                <DropdownTableFilter
+                  v-if="header.column.columnDef?.meta?.shouldUseSelectFilter"
+                  :column="header.column"
+                  :table="table"
+                  :options="header.column.columnDef?.meta?.selectOptions"
+                  style="width: 100%"
+                />
                 <ColumnFiltering
+                  v-else
                   :column="header.column"
                   :table="table"
                   style="width: 100%"
+                  :small="false"
                 />
-              </div>
+              </template>
             </div>
-          </div>
+          </template>
         </div>
       </div>
       <div class="b-table table-container">
@@ -78,30 +88,6 @@
                       :render="header.column.columnDef.header"
                       :props="header.getContext()"
                     />
-
-                    {{
-                      header.column.getCanSort()
-                        ? { asc: " ▲", desc: " ▼", false: "▶" }[
-                            header.column.getIsSorted() as string
-                          ]
-                        : ""
-                    }}
-                  </div>
-                </th>
-              </tr>
-              <tr
-                v-for="headerGroup in table.getHeaderGroups().slice(1)"
-                :key="`${headerGroup.id}-column-filtering`"
-              >
-                <th
-                  v-for="header in headerGroup.headers"
-                  :key="`${header.id}-column-filtering`"
-                  :colSpan="header.colSpan"
-                  :class="header.column.getCanSort() ? 'is-clickable' : ''"
-                  style="min-width: 100px"
-                >
-                  <div v-if="header.column.getCanFilter()">
-                    <ColumnFiltering :column="header.column" :table="table" />
                   </div>
                 </th>
               </tr>
@@ -214,6 +200,7 @@ import { logActivity } from "../firebase.js";
 import ColumnFiltering from "./ColumnFiltering.vue";
 import LaunchFormResponseButton from "./LaunchFormResponseButton.vue";
 import FormModal from "./form/ModalForm.vue";
+import DropdownTableFilter from "./DropdownTableFilter.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -264,6 +251,35 @@ const userRole = computed(() =>
 
 const columnHelper = createColumnHelper<FormResponse>();
 
+const titleOptions = computed(() =>
+  Array.from(
+    new Set(
+      (props.formResponses as FormResponse[]).map(
+        ({ form: { title } }) => title
+      )
+    )
+  )
+);
+
+const statusOptions = computed(() =>
+  Array.from(
+    new Set((props.formResponses as FormResponse[]).map(({ status }) => status))
+  )
+);
+
+const municipalityOptions = computed(() =>
+  Array.from(
+    new Set(
+      (props.formResponses as FormResponse[]).map(
+        ({ response: { municipality } }) => municipality
+      )
+    )
+  )
+);
+
+const customFilter = (row, columnId, value) =>
+  value.split(",").includes(row.getValue(columnId));
+
 const columns = [
   columnHelper.group({
     id: "forms",
@@ -272,6 +288,11 @@ const columns = [
         id: "title",
         cell: (info) => info.getValue(),
         header: () => "Title",
+        filterFn: customFilter,
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: titleOptions.value,
+        },
       }),
       columnHelper.accessor("status", {
         id: "status",
@@ -288,28 +309,50 @@ const columns = [
             [info.getValue()]
           ),
         header: () => "Status",
+        filterFn: customFilter,
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: statusOptions.value,
+        },
       }),
       columnHelper.accessor("response.municipality", {
         id: "municipality",
         cell: (info) => info.getValue(),
         header: () => "Municipality",
+        filterFn: customFilter,
+        meta: {
+          shouldUseSelectFilter: true,
+          selectOptions: municipalityOptions.value,
+        },
       }),
       columnHelper.accessor("response.bg_id", {
         id: "bg_id",
         cell: (info) => info.getValue(),
         header: () => "Block Group",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       props.admin
         ? columnHelper.accessor("organization", {
             id: "organization",
             cell: (info) => info.getValue(),
             header: () => "Organization",
+            meta: {
+              shouldUseSelectFilter: false,
+              selectOptions: [],
+            },
           })
         : null,
       columnHelper.accessor("user_submitted", {
         id: "user_submitted",
         cell: (info) => info.getValue(),
         header: () => "Submitted By",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       columnHelper.accessor("last_updated", {
         id: "last_updated",
@@ -317,6 +360,10 @@ const columns = [
         minSize: 90,
         cell: (info) => new Date(info.getValue()).toISOString().slice(0, 10),
         header: () => "Last Updated",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
       columnHelper.display({
         id: "actions",
@@ -328,6 +375,10 @@ const columns = [
             readOnly: props.readOnly,
           }),
         header: () => "",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
       }),
     ].filter((el) => el !== null),
   }),
@@ -347,7 +398,7 @@ const pageSizes = [10, 20, 30, 40, 50];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
-const displayMobileFilters = ref(false);
+const displayFilters = ref(false);
 
 const table = useVueTable({
   get data() {
@@ -418,6 +469,24 @@ function handlePageSizeChange(e) {
 .display-only-mobile {
   @media (min-width: 768px) {
     display: none;
+  }
+}
+
+.filter-wrapper {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  .filter-item-wrapper {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    align-items: center;
+    @media (min-width: 768px) {
+      flex-flow: row;
+      button {
+        max-width: 200px;
+      }
+    }
   }
 }
 </style>
