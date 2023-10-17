@@ -2,7 +2,7 @@
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
-      v-if="modelVersion"
+      v-if="Object.keys(modelDataPeriod).length !== 0"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
       @selected="updateControls"
@@ -131,7 +131,10 @@
     </DashboardCard>
 
     <DashboardCard id="stats" width="one-third" :height="5">
-      <template #title> Stats: {{ modelVersion }} </template>
+      <template #title> Stats: {{ modelDataPeriod.version }}</template>
+      <template v-if="modelDataPeriod.description" #subtitle>
+        {{ modelDataPeriod.description }}</template
+      >
       <template #content>
         <StatsWidget
           v-if="dataset.cbg.length > 0"
@@ -199,7 +202,7 @@ const dataset = computed(() => {
 const activeBG = ref("");
 const computedMuni = computed(() => {
   const bg = BLOCK_GROUPS.find(
-    ({ blockGroup }) => blockGroup === activeBG.value
+    ({ blockGroup }) => blockGroup === activeBG.value,
   );
   if (bg) return bg.municipality;
   return "";
@@ -225,7 +228,7 @@ const filteredOrgs = computed(() => {
   }
 });
 
-const modelVersion = computed(() => store.state.modelVersion);
+const modelDataPeriod = computed(() => store.state.modelDataPeriod);
 const zipcodes = ref([]);
 
 onMounted(async () => {
@@ -327,7 +330,10 @@ useQueryParam({
 });
 
 const loading = computed(() => {
-  return dataset.value.cbg.length === 0 || modelVersion.value === null;
+  return (
+    dataset.value.cbg.length === 0 ||
+    Object.keys(modelDataPeriod.value).length === 0
+  );
 });
 
 // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
@@ -337,7 +343,7 @@ const clickMap = (clickedStatus) => {
     // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeBG.value)
+      logActivity(store.state.user.data.email, "click map", activeBG.value),
     );
   }
 };

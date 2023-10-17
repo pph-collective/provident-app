@@ -29,7 +29,7 @@ const store = createStore({
       loaded: false,
       notifications: [],
       allFormResponses: [],
-      modelVersion: null,
+      modelDataPeriod: {},
       dataset: {
         cbg: [],
         town: [],
@@ -77,7 +77,7 @@ const store = createStore({
     async updateUserFormResponses({ commit, state }) {
       const formResponses = await getFormResponses(
         state.user.data.email,
-        state.user.data.organization
+        state.user.data.organization,
       );
       commit("mutateUser", {
         property: "formResponses",
@@ -89,12 +89,15 @@ const store = createStore({
     },
     async fetchModelData({ commit, getters }) {
       const modelDataPeriods = await getModelDataPeriods();
-      const modelVersion = modelDataPeriods[0];
+      const { version, description } = modelDataPeriods[0];
       const interventionArmUser = getters.interventionArmUser;
 
-      const dataset = await getDataset(modelVersion, interventionArmUser);
+      const dataset = await getDataset(version, interventionArmUser);
 
-      commit("mutate", { property: "modelVersion", with: modelVersion });
+      commit("mutate", {
+        property: "modelDataPeriod",
+        with: { version, description },
+      });
       commit("mutate", { property: "dataset", with: dataset });
     },
     async fetchOrgs({ commit, state }) {
@@ -122,7 +125,7 @@ const store = createStore({
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
           formResponse._id === updatedFormResponse._id &&
-          formResponse.type === updatedFormResponse.type
+          formResponse.type === updatedFormResponse.type,
       );
 
       if (formResponseIndex >= 0) {
@@ -143,7 +146,7 @@ const store = createStore({
           {
             email: state.user.data.email,
             organization: state.user.data.organization,
-          }
+          },
         );
         formResponses.push(followupFormResponse);
 
@@ -187,7 +190,7 @@ const store = createStore({
     },
     addNotification(
       { commit, dispatch, state },
-      { color = "success", message }
+      { color = "success", message },
     ) {
       const id = utils.uniqueId();
       commit("mutate", {
@@ -215,7 +218,7 @@ const store = createStore({
       }
 
       return state.organizations.find(
-        (org) => org.name === state.user.data.organization
+        (org) => org.name === state.user.data.organization,
       ).intervention_arm;
     },
     pendingUsers(state) {
