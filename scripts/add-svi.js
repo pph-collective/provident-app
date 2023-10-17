@@ -57,7 +57,7 @@ function writeToFirestore(collection, period, records) {
   if (seed) {
     fs.writeFileSync(
       `data/${collection}_${period}.json`,
-      JSON.stringify(records)
+      JSON.stringify(records),
     );
     return;
   }
