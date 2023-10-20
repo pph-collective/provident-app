@@ -2,7 +2,7 @@
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
     <ControlPanel
-      v-if="Object.keys(modelDataPeriod).length !== 0"
+      v-if="displayControlPanel"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
       @selected="updateControls"
@@ -229,6 +229,10 @@ const filteredOrgs = computed(() => {
 });
 
 const modelDataPeriod = computed(() => store.state.modelDataPeriod);
+const displayControlPanel = computed(
+  () => Object.keys(modelDataPeriod).length !== 0,
+);
+
 const zipcodes = ref([]);
 
 onMounted(async () => {
@@ -329,12 +333,9 @@ useQueryParam({
   valToParam: (val) => (val ? "true" : "false"),
 });
 
-const loading = computed(() => {
-  return (
-    dataset.value.cbg.length === 0 ||
-    Object.keys(modelDataPeriod.value).length === 0
-  );
-});
+const loading = computed(
+  () => dataset.value.cbg.length === 0 || !displayControlPanel.value,
+);
 
 // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
 const clickMap = (clickedStatus) => {
