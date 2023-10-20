@@ -17,7 +17,7 @@ To use any of the scripts, run `yarn <script-name> <args>`.
   - Add in a `map` which is an object and add in two `string` fields like the following:
     ```
     {
-      "period": "2024-1",
+      "version": "2024-1",
       "description": "description for 2024-1"
     }
     ```
