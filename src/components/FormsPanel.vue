@@ -4,17 +4,20 @@
       <h1 class="title">Forms</h1>
       <!-- Expandable Filters Card -->
       <div class="card my-2">
-        <header class="card-header">
+        <header
+          class="card-header"
+          aria-label="more options"
+          style="cursor: pointer"
+          role="button"
+          :aria-pressed="displayFilters"
+          @click="() => (displayFilters = !displayFilters)"
+        >
           <div class="card-header-title">Filter & Sort</div>
-          <button
-            class="card-header-icon"
-            aria-label="more options"
-            @click="() => (displayFilters = !displayFilters)"
-          >
+          <div class="card-header-icon">
             <span class="icon">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
             </span>
-          </button>
+          </div>
         </header>
         <div v-if="displayFilters" class="card-content filter-wrapper">
           <template
