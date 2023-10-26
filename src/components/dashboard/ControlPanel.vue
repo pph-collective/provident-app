@@ -54,7 +54,7 @@ watch(
   () => {
     emit("selected", selected);
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

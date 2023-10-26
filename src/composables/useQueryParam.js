@@ -96,6 +96,6 @@ export function useQueryParam({
           setRef(paramVal);
         }
       }
-    }
+    },
   );
 }

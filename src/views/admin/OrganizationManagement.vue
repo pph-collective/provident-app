@@ -179,7 +179,7 @@ const createOrganization = async ({
       "organization",
       organization,
       formAssignments.value,
-      organizations.value
+      organizations.value,
     );
     showModal.value = false;
 
@@ -203,7 +203,7 @@ const formQuestions = computed(() => [
     model: "name",
     required: true,
     validations: `yup.string().uppercase().notOneOf(${JSON.stringify(
-      organizations.value.map((org) => org.name.toUpperCase())
+      organizations.value.map((org) => org.name.toUpperCase()),
     )}, 'Organization already exists.')`,
   },
   {

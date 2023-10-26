@@ -68,7 +68,7 @@
             <div class="is-flex is-flex-wrap-wrap">
               <div
                 v-for="(target_list, category) in nonEmptyVals(
-                  assignment.target
+                  assignment.target,
                 )"
                 :key="category"
                 class="m-1"
@@ -157,7 +157,7 @@ const organizations = computed(() => store.state.organizations);
 const users = computed(() => store.getters.approvedUsers);
 const formAssignments = computed(() => store.state.formAssignments);
 const pageLoading = computed(
-  () => users.value.length === 0 || forms.value.length === 0
+  () => users.value.length === 0 || forms.value.length === 0,
 );
 const formLoading = ref(false);
 
@@ -173,7 +173,7 @@ const tabs = {
 };
 const selectedTab = ref(Object.keys(tabs)[0]);
 const selectedFormAssignments = computed(() =>
-  formAssignments.value.filter(tabs[selectedTab.value])
+  formAssignments.value.filter(tabs[selectedTab.value]),
 );
 
 const formQuestions = computed(() => {
@@ -291,7 +291,7 @@ const createFormAssignment = async ({
     emails = await formAssignmentUtils.addFormResponses(
       formAssignmentData,
       organizations.value,
-      users.value
+      users.value,
     );
 
     // Update the page

@@ -81,7 +81,7 @@ const approve = async (user) => {
       "user",
       user,
       formAssignments.value,
-      organizations.value
+      organizations.value,
     );
 
     const body = `<p>Hello ${user.name},</p><br><p>Your request to access PROVIDENT has been approved. <a href='${location.origin}/snack'>Go check out PROVIDENT!</a></p>`;

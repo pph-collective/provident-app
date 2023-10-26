@@ -69,7 +69,7 @@ function writeToFirestore(collection, period, records) {
   if (seed) {
     fs.writeFileSync(
       `data/${collection}_${period}.json`,
-      JSON.stringify(records)
+      JSON.stringify(records),
     );
     return;
   }
@@ -130,7 +130,7 @@ async function importCsv(csvFileName) {
               process.exit(1);
             }
           }
-        }
+        },
       );
     }
     console.log(`Wrote ${records.length} records`);

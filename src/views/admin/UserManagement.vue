@@ -137,7 +137,7 @@ const users = computed(() =>
   store.getters.approvedUsers.map((user) => {
     user.edit = false;
     return user;
-  })
+  }),
 );
 const roles = ["champion", "user"];
 const fields = ["Name", "Organization", "Email", "Role"];
@@ -156,7 +156,7 @@ const filteredUsers = computed(() => {
   for (const [filter, value] of Object.entries(filters.value)) {
     if (value) {
       filtered = filtered.filter((user) =>
-        user[filter].toLowerCase().includes(value.toLowerCase())
+        user[filter].toLowerCase().includes(value.toLowerCase()),
       );
     }
   }

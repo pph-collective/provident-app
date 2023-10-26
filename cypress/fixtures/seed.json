@@ -2249,8 +2249,14 @@
   "model_data": {
     "periods": {
       "data": [
-        "2018-2",
-        "2019-1"
+        {
+          "version": "2018-2",
+          "description": "description for 2018-2"
+        },
+        {
+          "version": "2019-1",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        }
       ]
     },
     "bg_meta": {

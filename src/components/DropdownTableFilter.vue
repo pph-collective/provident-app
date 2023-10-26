@@ -15,7 +15,9 @@ import { Column, Table } from "@tanstack/vue-table";
 import Multiselect from "@vueform/multiselect";
 
 const props = defineProps<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   column: Column<any, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: Table<any>;
   options: string[];
 }>();
@@ -25,6 +27,6 @@ const selected = ref([]);
 
 watch(
   () => selected.value,
-  () => column.value.setFilterValue(selected.value.toString())
+  () => column.value.setFilterValue(selected.value.toString()),
 );
 </script>

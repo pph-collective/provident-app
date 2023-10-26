@@ -220,7 +220,7 @@ const props = withDefaults(
     filterFunctions: () => ({}),
     formResponses: () => [],
     title: "",
-  }
+  },
 );
 
 type Form = {
@@ -249,7 +249,7 @@ type FormResponse = {
 const store = useStore();
 const user = computed(() => store.state.user);
 const userRole = computed(() =>
-  user.value.data ? user.value.data.role : "user"
+  user.value.data ? user.value.data.role : "user",
 );
 
 const columnHelper = createColumnHelper<FormResponse>();
@@ -258,26 +258,28 @@ const titleOptions = computed(() =>
   Array.from(
     new Set(
       (props.formResponses as FormResponse[]).map(
-        ({ form: { title } }) => title
-      )
-    )
-  )
+        ({ form: { title } }) => title,
+      ),
+    ),
+  ),
 );
 
 const statusOptions = computed(() =>
   Array.from(
-    new Set((props.formResponses as FormResponse[]).map(({ status }) => status))
-  )
+    new Set(
+      (props.formResponses as FormResponse[]).map(({ status }) => status),
+    ),
+  ),
 );
 
 const municipalityOptions = computed(() =>
   Array.from(
     new Set(
       (props.formResponses as FormResponse[]).map(
-        ({ response: { municipality } }) => municipality
-      )
-    )
-  )
+        ({ response: { municipality } }) => municipality,
+      ),
+    ),
+  ),
 );
 
 const customFilter = (row, columnId, value) =>
@@ -309,7 +311,7 @@ const columns = [
                 "is-warning": info.getValue() === "Not Started",
               },
             },
-            [info.getValue()]
+            [info.getValue()],
           ),
         header: () => "Status",
         filterFn: customFilter,
@@ -447,7 +449,7 @@ const launchForm = (formResponse: { _id?: string }, readOnly: boolean) => {
   logActivity(
     user.value.data.email,
     readOnly ? "review form" : "launch form",
-    formResponse._id
+    formResponse._id,
   );
 };
 

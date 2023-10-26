@@ -43,7 +43,7 @@
                 @click="
                   launchForm(
                     formResponse,
-                    formResponse.status === 'Submitted' || userRole === 'user'
+                    formResponse.status === 'Submitted' || userRole === 'user',
                   )
                 "
               >
@@ -142,7 +142,7 @@ const props = defineProps<{
 
 const store = useStore();
 const userRole = computed(() =>
-  store.state.user.data ? store.state.user.data.role : "user"
+  store.state.user.data ? store.state.user.data.role : "user",
 );
 
 const activeFormResponse = ref({});
@@ -152,7 +152,7 @@ const completedForms = computed(() => {
   const formResponses = store.state.user.formResponses;
   return formResponses
     .filter((response) =>
-      formConfig.map((f) => f.title).includes(response.form.title)
+      formConfig.map((f) => f.title).includes(response.form.title),
     )
     .sort(sortByProperty("last_updated"))
     .reverse();
@@ -162,12 +162,12 @@ const bgFormResponses = computed(() => {
   return completedForms.value.filter(
     (assessment) =>
       assessment.response[GEOID_QUESTION_MODEL] === props.activeGeoid &&
-      assessment.response[MUNI_QUESTION_MODEL] === props.activeMuni
+      assessment.response[MUNI_QUESTION_MODEL] === props.activeMuni,
   );
 });
 
 const userOrganization = computed(() =>
-  store.state.user.data ? store.state.user.data.organization : ""
+  store.state.user.data ? store.state.user.data.organization : "",
 );
 
 const createNewBGForm = (form_id) => {
@@ -185,7 +185,7 @@ const createNewBGForm = (form_id) => {
   logActivity(
     store.state.user.data.email,
     `create ${form_id} form`,
-    props.activeGeoid
+    props.activeGeoid,
   );
 };
 
@@ -200,7 +200,7 @@ const launchForm = (formResponse, readOnly) => {
   logActivity(
     store.state.user.data.email,
     `launch ${formResponse.form.title} form`,
-    formResponse.title
+    formResponse.title,
   );
 };
 </script>

@@ -133,7 +133,7 @@ describe("Dashboard viewed as a user", () => {
         .find("td.value")
         .should(
           "have.text",
-          "1. Glenn Farm \n2. Sandy Point Beach \n3. Mccorrie Point Beach \n4. Elmhurst \n5. Glen Manor House "
+          "1. Glenn Farm \n2. Sandy Point Beach \n3. Mccorrie Point Beach \n4. Elmhurst \n5. Glen Manor House ",
         );
 
       cy.get("#vg-tooltip-element")
@@ -186,7 +186,7 @@ describe("Dashboard viewed as a user", () => {
     beforeEach(() => {
       // when nothing is selected, the correct message is shown, no table
       cy.get("#nra-widget .form-response-container p").contains(
-        /Select a block group on the map to see its completed assessments and plans or start a new one/
+        /Select a block group on the map to see its completed assessments and plans or start a new one/,
       );
 
       // when something is selected with no assessments, correct message is shown, no table
@@ -199,7 +199,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("#nra-widget .form-response-container p").should(
         "contain",
-        "No Assessments or Plans Found for 0401021"
+        "No Assessments or Plans Found for 0401021",
       );
     });
 
@@ -209,7 +209,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("[data-cy='active-form-title']").should(
         "contain",
-        "Neighborhood Rapid Assessment"
+        "Neighborhood Rapid Assessment",
       );
 
       // block group map should be rendered
@@ -238,7 +238,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("[data-cy='active-form-title']").should(
         "contain",
-        "Neighborhood Rapid Assessment"
+        "Neighborhood Rapid Assessment",
       );
 
       cy.get("[model='q2_other_related_services']")
@@ -250,7 +250,7 @@ describe("Dashboard viewed as a user", () => {
       // Form message
       cy.get('[data-cy="form-message"]').should(
         "contain",
-        "Form successfully saved"
+        "Form successfully saved",
       );
 
       cy.get('[data-cy="close-form"]').click();
@@ -307,7 +307,7 @@ describe("Dashboard viewed as a user", () => {
 
       cy.get("[data-cy='active-form-title']").should(
         "contain",
-        "Six Month Resource Plan"
+        "Six Month Resource Plan",
       );
 
       // block group map should be rendered
@@ -325,7 +325,7 @@ describe("Dashboard viewed as a user", () => {
       // Form message
       cy.get('[data-cy="form-message"]').should(
         "contain",
-        "Form successfully saved"
+        "Form successfully saved",
       );
 
       cy.get('[data-cy="close-form"]').click();
@@ -542,7 +542,7 @@ describe("Dashboard viewed as a control arm user", () => {
       .find("td.value")
       .should(
         "have.text",
-        "1. Bulgarmarsh Recreation Area \n2. Nanaquaket Yoga Studio \n3. Wally's Tap House \n4. Sip 'N Dip Donuts \n5. Peppermint Panda "
+        "1. Bulgarmarsh Recreation Area \n2. Nanaquaket Yoga Studio \n3. Wally's Tap House \n4. Sip 'N Dip Donuts \n5. Peppermint Panda ",
       );
 
     cy.get("#vg-tooltip-element")
@@ -576,7 +576,7 @@ describe("Dashboard viewed as a control arm user", () => {
     // move mouse out of the way
     cy.get('.map-container [data-cy="RI 4 Us"] svg').trigger(
       "mouseout",
-      "center"
+      "center",
     );
 
     // zoom button enabled, zoom in!

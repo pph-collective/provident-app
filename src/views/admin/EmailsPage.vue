@@ -157,7 +157,7 @@ const tabs = {
 };
 const selectedTab = ref(Object.keys(tabs)[0]);
 const selectedEmails = computed(() =>
-  emails.value.filter(tabs[selectedTab.value])
+  emails.value.filter(tabs[selectedTab.value]),
 );
 
 const unsubEmails = onSnapshot(query(collection(db, "emails")), (snapshot) => {
@@ -241,7 +241,7 @@ const submitEmail = async ({
     "user",
     target,
     organizations.value,
-    users.value
+    users.value,
   );
 
   try {
