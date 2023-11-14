@@ -178,7 +178,7 @@ import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
-import { useQueryParam } from "../../composables/useQueryParam";
+import { useQueryParams } from "../../composables/useQueryParams";
 
 const towns = MUNICIPALITIES.map((m) => ({
   name: m,
@@ -309,29 +309,32 @@ const updateControls = (newControls) => {
   }
 };
 
-useQueryParam({
-  param: "bg",
-  ref: activeBG,
-  refField: undefined,
-  valid: () => true,
-  push: true,
-});
-
-useQueryParam({
-  param: "zoomed",
-  ref: zoomed,
-  refField: undefined,
-  valid: (val) =>
-    val.toString().toLowerCase() === "true" ||
-    val.toString().toLowerCase() === "false",
-  paramToVal: (param) => {
-    const paramAsString = param.toString().toLowerCase();
-    if (paramAsString === "true") return true;
-    if (paramAsString === "false") return false;
-    throw new Error("Invalid value for 'zoomed' param");
+useQueryParams([
+  {
+    param: "bg",
+    ref: activeBG,
+    refField: undefined,
+    valid: () => true,
+    push: true,
+    getInitParam: () => "",
   },
-  valToParam: (val) => (val ? "true" : "false"),
-});
+  {
+    param: "zoomed",
+    ref: zoomed,
+    refField: undefined,
+    valid: (val) =>
+      val.toString().toLowerCase() === "true" ||
+      val.toString().toLowerCase() === "false",
+    paramToVal: (param) => {
+      const paramAsString = param.toString().toLowerCase();
+      if (paramAsString === "true") return true;
+      if (paramAsString === "false") return false;
+      throw new Error("Invalid value for 'zoomed' param");
+    },
+    valToParam: (val) => (val ? "true" : "false"),
+    getInitParam: () => "false",
+  },
+]);
 
 const loading = computed(
   () => dataset.value.cbg.length === 0 || !displayControlPanel.value,
