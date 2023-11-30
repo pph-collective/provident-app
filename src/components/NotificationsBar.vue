@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex";
+import { useProvidentStore } from "../store";
 
 defineProps({
   notifications: {
@@ -24,10 +24,10 @@ defineProps({
   },
 });
 
-const store = useStore();
+const store = useProvidentStore();
 
 const dismissNotification = (id) => {
-  store.dispatch("dismissNotification", id);
+  store.dismissNotification(id);
 };
 </script>
 

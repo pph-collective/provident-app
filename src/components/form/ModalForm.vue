@@ -66,7 +66,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { esc as vEsc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
@@ -86,8 +86,8 @@ const props = defineProps({
 
 const emit = defineEmits(["update-form-response"]);
 
-const store = useStore();
-const user = computed(() => store.state.user);
+const store = useProvidentStore();
+const user = computed(() => store.user);
 const userEmail = computed(() =>
   user.value.data ? user.value.data.email : "",
 );
@@ -114,7 +114,7 @@ const updateFormResponse = async (response, status) => {
   };
 
   try {
-    const _id = await store.dispatch("updateFormResponse", updatedFormResponse);
+    const _id = await store.updateFormResponse(updatedFormResponse);
     formMessage.value = "Form successfully saved";
 
     // update activeFormResponse

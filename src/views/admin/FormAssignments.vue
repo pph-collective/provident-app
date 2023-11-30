@@ -135,7 +135,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { db, addFormAssignment, createEmail } from "@/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
@@ -151,11 +151,11 @@ const closeFormRequest = ref(0);
 const formMessage = ref("");
 const showModal = ref(false);
 
-const store = useStore();
-const forms = computed(() => store.state.forms);
-const organizations = computed(() => store.state.organizations);
-const users = computed(() => store.getters.approvedUsers);
-const formAssignments = computed(() => store.state.formAssignments);
+const store = useProvidentStore();
+const forms = computed(() => store.forms);
+const organizations = computed(() => store.organizations);
+const users = computed(() => store.approvedUsers);
+const formAssignments = computed(() => store.formAssignments);
 const pageLoading = computed(
   () => users.value.length === 0 || forms.value.length === 0,
 );
@@ -191,8 +191,8 @@ const formQuestions = computed(() => {
     })
     .sort(utils.sortByProperty("label"));
 
-  const userOptions = store.getters.formUserOptions;
-  const organizationOptions = store.getters.formOrganizationOptions;
+  const userOptions = store.formUserOptions;
+  const organizationOptions = store.formOrganizationOptions;
   const groups = formAssignmentUtils.TARGET_GROUPS;
 
   return [
@@ -295,16 +295,16 @@ const createFormAssignment = async ({
     );
 
     // Update the page
-    store.dispatch("addFormAssignment", formAssignmentData);
+    store.addFormAssignment(formAssignmentData);
 
     // assigned form to self
-    if (emails.includes(store.state.user.data.email)) {
-      await store.dispatch("updateUserFormResponses");
+    if (emails.includes(store.user.data.email)) {
+      await store.updateUserFormResponses();
     }
 
     showModal.value = false;
 
-    store.dispatch("addNotification", {
+    store.addNotification({
       color: "success",
       message: `Form assignment added: ${title}`,
     });
@@ -335,7 +335,7 @@ const createFormAssignment = async ({
     if (showModal.value) {
       formMessage.value = "Error creating form responses for form assignments.";
     } else {
-      store.dispatch("addNotification", {
+      store.addNotification({
         color: "danger",
         message: "Form assignment successfully saved. Error creating email.",
       });

@@ -55,7 +55,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { db, updateUser, createEmail } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
@@ -65,10 +65,10 @@ import LoadingSpinner from "../../components/LoadingSpinner.vue";
 
 const loading = ref(false);
 
-const store = useStore();
-const organizations = computed(() => store.state.organizations);
-const userRequests = computed(() => store.getters.pendingUsers);
-const formAssignments = computed(() => store.state.formAssignments);
+const store = useProvidentStore();
+const organizations = computed(() => store.organizations);
+const userRequests = computed(() => store.pendingUsers);
+const formAssignments = computed(() => store.formAssignments);
 
 const approve = async (user) => {
   loading.value = true;
@@ -92,12 +92,12 @@ const approve = async (user) => {
       to: [user.email],
     });
 
-    store.dispatch("addNotification", {
+    store.addNotification({
       message: `Success! ${user.email} was approved.`,
     });
   } catch (err) {
     console.log(err);
-    store.dispatch("addNotification", {
+    store.addNotification({
       color: "danger",
       message: err.message,
     });
@@ -121,7 +121,7 @@ const deny = async (user) => {
     to: [user.email],
   });
 
-  store.dispatch("addNotification", {
+  store.addNotification({
     color: "info",
     message: `${user.email} was denied.`,
   });

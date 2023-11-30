@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed, watchEffect } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 import { useRouter, useRoute } from "vue-router";
 
 import { auth, getUserRequest, login, logout } from "../../firebase";
@@ -79,8 +79,8 @@ const form = reactive({ email: "", password: "" });
 const error = ref(null);
 const buttonLoading = ref(false);
 
-const store = useStore();
-const userAuthenticated = computed(() => store.state.user.authenticated);
+const store = useProvidentStore();
+const userAuthenticated = computed(() => store.user.authenticated);
 
 const router = useRouter();
 const route = useRoute();
@@ -129,7 +129,7 @@ const resetRequest = async () => {
 
   try {
     await sendPasswordResetEmail(auth, form.email.toLowerCase());
-    store.dispatch("addNotification", {
+    store.addNotification({
       message: "Success. Check your email to reset your password.",
     });
     error.value = null;

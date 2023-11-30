@@ -186,7 +186,7 @@
 
 <script setup lang="ts">
 import { ref, computed, h } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../store";
 import {
   FlexRender,
   ColumnFiltersState,
@@ -246,8 +246,8 @@ type FormResponse = {
   users_edited: string[];
 };
 
-const store = useStore();
-const user = computed(() => store.state.user);
+const store = useProvidentStore();
+const user = computed(() => store.user);
 const userRole = computed(() =>
   user.value.data ? user.value.data.role : "user",
 );

@@ -129,13 +129,13 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../store";
 import { useRouter } from "vue-router";
 import { useMobileListener } from "../composables/useMobileListener";
 import { logout } from "../firebase";
 
-const store = useStore();
-const user = computed(() => store.state.user);
+const store = useProvidentStore();
+const user = computed(() => store.user);
 
 const hamburgerActive = ref(false);
 const toggleBurgerMenu = () => {

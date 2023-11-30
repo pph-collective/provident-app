@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { defineStore } from "pinia";
 import {
   addOrg,
   createEmail,
@@ -12,8 +12,8 @@ import {
 import utils from "@/utils/utils.js";
 import { createFollowupFormResponse } from "@/utils/followupForm.js";
 
-const store = createStore({
-  state() {
+export const useProvidentStore = defineStore("provident", {
+  state: () => {
     return {
       user: {
         authenticated: false,
@@ -38,90 +38,88 @@ const store = createStore({
     };
   },
 
-  mutations: {
-    mutate(state, payload) {
-      state[payload.property] = payload.with;
-    },
-    mutateUser(state, payload) {
-      state.user[payload.property] = payload.with;
-    },
-  },
-
   actions: {
-    fetchUser({ commit, dispatch }, user) {
-      commit("mutateUser", { property: "loaded", with: false });
-      commit("mutateUser", { property: "authenticated", with: user !== null });
+    mutate(payload) {
+      this[payload.property] = payload.with;
+    },
+    mutateUser(payload) {
+      this.user[payload.property] = payload.with;
+    },
+
+    fetchUser(user) {
+      this.mutateUser({ property: "loaded", with: false });
+      this.mutateUser({ property: "authenticated", with: user !== null });
 
       // always start empty, controlled by ContentWithSidebar
-      commit("mutate", { property: "users", with: [] });
-      commit("mutate", { property: "formAssignments", with: [] });
-      commit("mutate", { property: "notifications", with: [] });
+      this.mutate({ property: "users", with: [] });
+      this.mutate({ property: "formAssignments", with: [] });
+      this.mutate({ property: "notifications", with: [] });
 
       if (user) {
+        this.mutateUser({ property: "data", with: user });
         Promise.all([
-          commit("mutateUser", { property: "data", with: user }),
-          dispatch("updateUserFormResponses"),
+          this.updateUserFormResponses(),
           getForms().then((forms) => {
-            commit("mutate", { property: "forms", with: forms });
+            this.mutate({ property: "forms", with: forms });
           }),
         ]).then(() => {
-          commit("mutateUser", { property: "loaded", with: true });
+          this.mutateUser({ property: "loaded", with: true });
         });
       } else {
-        commit("mutateUser", { property: "data", with: null });
-        commit("mutateUser", { property: "formResponses", with: [] });
-        commit("mutate", { property: "forms", with: {} });
-        commit("mutateUser", { property: "loaded", with: true });
+        this.mutateUser({ property: "data", with: null });
+        this.mutateUser({ property: "formResponses", with: [] });
+        this.mutate({ property: "forms", with: {} });
+        this.mutateUser({ property: "loaded", with: true });
       }
     },
-    async updateUserFormResponses({ commit, state }) {
+    async updateUserFormResponses() {
       const formResponses = await getFormResponses(
-        state.user.data.email,
-        state.user.data.organization,
+        this.user.data.email,
+        this.user.data.organization,
       );
-      commit("mutateUser", {
+      this.mutateUser({
         property: "formResponses",
         with: formResponses,
       });
     },
-    fetchAdmin({ commit }, admin) {
-      commit("mutateUser", { property: "admin", with: admin });
+    fetchAdmin(admin) {
+      this.mutateUser({ property: "admin", with: admin });
     },
-    async fetchModelData({ commit, getters }) {
+    async fetchModelData() {
       const modelDataPeriods = await getModelDataPeriods();
       const { version, description } = modelDataPeriods[0];
-      const interventionArmUser = getters.interventionArmUser;
+      const interventionArmUser = this.interventionArmUser();
 
       const dataset = await getDataset(version, interventionArmUser);
 
-      commit("mutate", {
+      this.mutate({
         property: "modelDataPeriod",
         with: { version, description },
       });
-      commit("mutate", { property: "dataset", with: dataset });
+      this.mutate({ property: "dataset", with: dataset });
     },
-    async fetchOrgs({ commit, state }) {
-      if (state.organizations.length === 0) {
+    async fetchOrgs() {
+      if (this.organizations.length === 0) {
         const orgs = await getCollection("organizations");
-        commit("mutate", { property: "organizations", with: orgs });
+        this.mutate({ property: "organizations", with: orgs });
       }
     },
-    async addOrg({ commit, state }, organization) {
+    async addOrg(organization) {
       // Setting _id to be more consistent to getCollection in firebase.js
       organization._id = await addOrg(organization);
 
-      commit("mutate", {
+      this.mutate({
         property: "organizations",
-        with: [organization, ...state.organizations],
+        with: [organization, ...this.organizations],
       });
     },
-    async updateFormResponse({ commit, state }, updatedFormResponse) {
+    async updateFormResponse(updatedFormResponse) {
       updatedFormResponse._id = await updateFormResponse(updatedFormResponse, {
-        email: state.user.data.email,
-        organization: state.user.data.organization,
+        email: this.user.data.email,
+        organization: this.user.data.organization,
       });
 
-      const formResponses = [...state.user.formResponses];
+      const formResponses = [...this.user.formResponses];
       const formResponseIndex = formResponses.findIndex(
         (formResponse) =>
           formResponse._id === updatedFormResponse._id &&
@@ -144,8 +142,8 @@ const store = createStore({
         followupFormResponse._id = await updateFormResponse(
           followupFormResponse,
           {
-            email: state.user.data.email,
-            organization: state.user.data.organization,
+            email: this.user.data.email,
+            organization: this.user.data.organization,
           },
         );
         formResponses.push(followupFormResponse);
@@ -166,49 +164,46 @@ const store = createStore({
         });
       }
 
-      commit("mutateUser", { property: "formResponses", with: formResponses });
+      this.mutateUser({ property: "formResponses", with: formResponses });
       return updatedFormResponse._id;
     },
-    updateAllFormResponses({ commit }, formResponses) {
-      commit("mutate", { property: "allFormResponses", with: formResponses });
+    updateAllFormResponses(formResponses) {
+      this.mutate({ property: "allFormResponses", with: formResponses });
     },
-    updateUsers({ commit }, users) {
-      commit("mutate", { property: "users", with: users });
+    updateUsers(users) {
+      this.mutate({ property: "users", with: users });
     },
-    async getFormAssignments({ commit }) {
+    async getFormAssignments() {
       const formAssignments = await getCollection("form_assignments");
-      commit("mutate", { property: "formAssignments", with: formAssignments });
+      this.mutate({ property: "formAssignments", with: formAssignments });
     },
-    addFormAssignment({ commit, state }, formAssignment) {
-      commit("mutate", {
+    addFormAssignment(formAssignment) {
+      this.mutate({
         property: "formAssignments",
-        with: [formAssignment, ...state.formAssignments],
+        with: [formAssignment, ...this.formAssignments],
       });
     },
-    setLoaded({ commit }) {
-      commit("mutate", { property: "loaded", with: true });
+    setLoaded() {
+      this.mutate({ property: "loaded", with: true });
     },
-    addNotification(
-      { commit, dispatch, state },
-      { color = "success", message },
-    ) {
+    addNotification({ color = "success", message }) {
       const id = utils.uniqueId();
-      commit("mutate", {
+      this.mutate({
         property: "notifications",
-        with: [...state.notifications, { id, color, message }],
+        with: [...this.notifications, { id, color, message }],
       });
-      setTimeout(() => dispatch("dismissNotification", id), 6000);
+      setTimeout(() => this.dismissNotification(id), 6000);
     },
-    dismissNotification({ commit, state }, id) {
-      commit("mutate", {
+    dismissNotification(id) {
+      this.mutate({
         property: "notifications",
-        with: state.notifications.filter((n) => n.id !== id),
+        with: this.notifications.filter((n) => n.id !== id),
       });
     },
   },
 
   getters: {
-    interventionArmUser(state) {
+    interventionArmUser: (state) => {
       if (!state.user.authenticated || !state.user.data) {
         return false;
       }
@@ -221,23 +216,21 @@ const store = createStore({
         (org) => org.name === state.user.data.organization,
       ).intervention_arm;
     },
-    pendingUsers(state) {
+    pendingUsers: (state) => {
       return state.users.filter((user) => user.status === "pending");
     },
-    approvedUsers(state) {
+    approvedUsers: (state) => {
       return state.users.filter((user) => user.status === "approved");
     },
-    formUserOptions(state) {
+    formUserOptions: (state) => {
       return state.users
         .map((u) => {
           return { value: u.email, label: `${u.name} (${u.email})` };
         })
         .sort(utils.sortByProperty("label"));
     },
-    formOrganizationOptions(state) {
+    formOrganizationOptions: (state) => {
       return state.organizations.map((org) => org.name).sort();
     },
   },
 });
-
-export default store;

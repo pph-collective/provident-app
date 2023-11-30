@@ -50,7 +50,7 @@ const routes = [
     path: "/snack",
     name: "Snack",
     beforeEnter: (to) => {
-      if (!store.state.user.authenticated) {
+      if (!store.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
       }
     },
@@ -74,9 +74,9 @@ const routes = [
     path: "/admin",
     name: "Admin",
     beforeEnter: (to) => {
-      if (!store.state.user.authenticated) {
+      if (!store.user.authenticated) {
         return { name: "Login", query: { redirect: to.path } };
-      } else if (!store.state.user.admin) {
+      } else if (!store.user.admin) {
         return { name: "Home" };
       }
     },
@@ -171,7 +171,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async () => {
-  while (!store.state.loaded) {
+  while (!store.loaded) {
     await sleep(20);
   }
 });

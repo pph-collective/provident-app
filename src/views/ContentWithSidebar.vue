@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, toRefs, watch } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../store.js";
 
 import { db } from "../firebase.js";
 import {
@@ -43,7 +43,7 @@ const { isMobile } = useMobileListener();
 const sidebarCollapsed = ref(false);
 let unsubUsers = null;
 
-const store = useStore();
+const store = useProvidentStore();
 
 if (isMobile.value) {
   sidebarCollapsed.value = true;
@@ -57,8 +57,7 @@ const updateStore = () => {
   if (parentRoute.value === "admin") {
     const q = query(collection(db, "users"));
     unsubUsers = onSnapshot(q, (snapshot) => {
-      store.dispatch(
-        "updateUsers",
+      store.updateUsers(
         snapshot.docs.map((doc) => {
           let user = doc.data();
           return { ...user, id: doc.id };
@@ -66,7 +65,7 @@ const updateStore = () => {
       );
     });
 
-    store.dispatch("getFormAssignments");
+    store.getFormAssignments();
 
     // All Form Responses
     getDocs(collectionGroup(db, "form_responses")).then((querySnapshot) => {
@@ -75,7 +74,7 @@ const updateStore = () => {
         allFormResponses.push({ id: doc.id, ...doc.data() });
       });
 
-      store.dispatch("updateAllFormResponses", allFormResponses);
+      store.updateAllFormResponses(allFormResponses);
     });
   }
 };
