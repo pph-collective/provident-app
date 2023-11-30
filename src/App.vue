@@ -26,7 +26,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useProvidentStore } from "store";
+import { useProvidentStore } from "./store";
 
 import NavBar from "@/components/NavBar.vue";
 import BaseFooter from "@/components/BaseFooter.vue";

@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomePage.vue";
 import Resources from "../views/ResourcesPage.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar.vue";
-import store from "@/store";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
