@@ -88,7 +88,7 @@ export const useProvidentStore = defineStore("provident", {
     async fetchModelData() {
       const modelDataPeriods = await getModelDataPeriods();
       const { version, description } = modelDataPeriods[0];
-      const interventionArmUser = this.interventionArmUser();
+      const interventionArmUser = this.interventionArmUser;
 
       const dataset = await getDataset(version, interventionArmUser);
 

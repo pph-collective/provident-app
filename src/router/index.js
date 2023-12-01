@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomePage.vue";
 import Resources from "../views/ResourcesPage.vue";
 import ContentWithSidebar from "../views/ContentWithSidebar.vue";
+import { useProvidentStore } from "../store";
+
+let store = {};
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -170,6 +173,8 @@ const router = createRouter({
 });
 
 router.beforeEach(async () => {
+  store = useProvidentStore();
+
   while (!store.loaded) {
     await sleep(20);
   }

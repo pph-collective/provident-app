@@ -22,6 +22,20 @@ import FormTextInput from "@/components/form/TextInput.vue";
 import FormSubForm from "@/components/form/SubForm.vue";
 
 const pinia = createPinia();
+
+createApp(App)
+  .use(router)
+  .use(pinia)
+  .component("FormCheckbox", FormCheckbox)
+  .component("FormDate", FormDate)
+  .component("FormLikertScale", FormLikertScale)
+  .component("FormRadio", FormRadio)
+  .component("FormSelect", FormSelect)
+  .component("FormSubForm", FormSubForm)
+  .component("FormTextArea", FormTextArea)
+  .component("FormTextInput", FormTextInput)
+  .mount("#app");
+
 const store = useProvidentStore();
 
 // listen for changes to user
@@ -51,16 +65,3 @@ onAuthStateChanged(auth, async (user) => {
   store.fetchAdmin(false);
   store.setLoaded();
 });
-
-createApp(App)
-  .use(router)
-  .use(pinia)
-  .component("FormCheckbox", FormCheckbox)
-  .component("FormDate", FormDate)
-  .component("FormLikertScale", FormLikertScale)
-  .component("FormRadio", FormRadio)
-  .component("FormSelect", FormSelect)
-  .component("FormSubForm", FormSubForm)
-  .component("FormTextArea", FormTextArea)
-  .component("FormTextInput", FormTextInput)
-  .mount("#app");

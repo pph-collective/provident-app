@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick, toRaw } from "vue";
+import { ref, computed, onMounted, nextTick } from "vue";
 import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
@@ -213,7 +213,7 @@ const viewForms = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = toRaw(store).organizations;
+  const orgs = store.organizations;
   if (store.user.admin) {
     return [ri, ...orgs, ...towns];
   } else if (store.user.data) {
