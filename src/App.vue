@@ -26,15 +26,15 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "./store";
 
 import NavBar from "@/components/NavBar.vue";
 import BaseFooter from "@/components/BaseFooter.vue";
 import NotificationsBar from "@/components/NotificationsBar.vue";
 
-const store = useStore();
+const store = useProvidentStore();
 
-const notifications = computed(() => store.state.notifications);
+const notifications = computed(() => store.notifications);
 </script>
 
 <style lang="scss">

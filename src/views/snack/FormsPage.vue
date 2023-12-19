@@ -12,7 +12,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import utils, {
   GEOID_QUESTION_MODEL,
@@ -24,12 +24,12 @@ import utils, {
 import FormsPanel from "@/components/FormsPanel.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
-const store = useStore();
-const user = computed(() => store.state.user);
+const store = useProvidentStore();
+const user = computed(() => store.user);
 
 const today = utils.today();
 const formResponses = computed(() => {
-  let responses = [...store.state.user.formResponses];
+  let responses = [...store.user.formResponses];
   if (!user.value.admin) {
     responses = responses.filter((f) => {
       return f.release_date <= today;

@@ -13,7 +13,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import {
   GEOID_QUESTION_MODEL,
@@ -25,13 +25,13 @@ import {
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import FormsPanel from "@/components/FormsPanel.vue";
 
-const store = useStore();
-const user = computed(() => store.state.user);
+const store = useProvidentStore();
+const user = computed(() => store.user);
 
-const organizationOptions = store.getters.formOrganizationOptions;
+const organizationOptions = store.formOrganizationOptions;
 
 const formResponses = computed(() => {
-  return [...store.state.allFormResponses]
+  return [...store.allFormResponses]
     .sort(sortByProperty("last_updated"))
     .sort(sortByProperty("status"));
 });

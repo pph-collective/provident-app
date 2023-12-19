@@ -120,7 +120,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { esc as vEsc } from "@/directives/escape";
 import utils from "../../utils/utils";
@@ -129,9 +129,9 @@ import formAssignmentUtils from "@/utils/formAssignment";
 import JSONForm from "@/components/form/JSONForm.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
-const store = useStore();
-const formAssignments = computed(() => store.state.formAssignments);
-const organizations = computed(() => store.state.organizations);
+const store = useProvidentStore();
+const formAssignments = computed(() => store.formAssignments);
+const organizations = computed(() => store.organizations);
 const allMunicipalities = utils.MUNICIPALITIES;
 
 const fields = [
@@ -173,7 +173,7 @@ const createOrganization = async ({
   };
 
   try {
-    await store.dispatch("addOrg", organization);
+    await store.addOrg(organization);
 
     await formAssignmentUtils.addFormResponsesForApproved(
       "organization",
@@ -183,7 +183,7 @@ const createOrganization = async ({
     );
     showModal.value = false;
 
-    store.dispatch("addNotification", {
+    store.addNotification({
       color: "success",
       message: `Success! Organization added: ${name}`,
     });

@@ -15,7 +15,7 @@ import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty } from "@/utils/utils.js";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 const props = defineProps({
   dataset: {
@@ -54,9 +54,9 @@ const props = defineProps({
 const emit = defineEmits(["new-active-bg", "active-clicked-status"]);
 
 const el = ref(null);
-const store = useStore();
+const store = useProvidentStore();
 
-const formResponses = store.state.user.formResponses;
+const formResponses = store.user.formResponses;
 const geoIdToFormResponses = {};
 
 formResponses

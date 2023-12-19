@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, computed, watch, toRef } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import * as topology from "topojson-server";
 
@@ -33,7 +33,7 @@ const props = defineProps({
 });
 
 const el = ref(null);
-const store = useStore();
+const store = useProvidentStore();
 
 // filter geo data and simplify
 const filteredGeo = computed(() => {
@@ -185,7 +185,7 @@ watch(view, () => {
         navigator.clipboard
           .writeText(composeAddress(value))
           .then(() => {
-            store.dispatch("addNotification", {
+            store.addNotification({
               message: `Address copied to clipboard: ${value.location_name}`,
             });
           })

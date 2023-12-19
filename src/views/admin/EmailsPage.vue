@@ -125,7 +125,7 @@
 
 <script setup>
 import { computed, onUnmounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { db, createEmail } from "@/firebase.js";
 import { collection, onSnapshot, query } from "firebase/firestore";
@@ -146,9 +146,9 @@ const preview = ref({
   subject: "[subject...]",
 });
 
-const store = useStore();
-const organizations = computed(() => store.state.organizations);
-const users = computed(() => store.getters.approvedUsers);
+const store = useProvidentStore();
+const organizations = computed(() => store.organizations);
+const users = computed(() => store.approvedUsers);
 
 const tabs = {
   Pending: (email) => !email.sent,
@@ -171,8 +171,8 @@ const formQuestions = computed(() => {
     return [];
   }
 
-  const userOptions = store.getters.formUserOptions;
-  const organizationOptions = store.getters.formOrganizationOptions;
+  const userOptions = store.formUserOptions;
+  const organizationOptions = store.formOrganizationOptions;
   const groups = formAssignmentUtils.TARGET_GROUPS;
 
   return [

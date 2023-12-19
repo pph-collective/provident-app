@@ -163,8 +163,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick, toRaw } from "vue";
-import { useStore } from "vuex";
+import { ref, computed, onMounted, nextTick } from "vue";
+import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
 
@@ -190,14 +190,14 @@ const BLOCK_GROUPS = geo.map((feature) => ({
   blockGroup: feature.properties.bg_id,
 }));
 
-const store = useStore();
-const interventionArmUser = computed(() => store.getters.interventionArmUser);
+const store = useProvidentStore();
+const interventionArmUser = computed(() => store.interventionArmUser);
 const dataset = computed(() => {
-  if (store.state.dataset.cbg.length === 0) {
-    store.dispatch("fetchModelData");
+  if (store.dataset.cbg.length === 0) {
+    store.fetchModelData();
   }
 
-  return store.state.dataset;
+  return store.dataset;
 });
 const activeBG = ref("");
 const computedMuni = computed(() => {
@@ -213,12 +213,12 @@ const viewForms = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = toRaw(store.state).organizations;
-  if (store.state.user.admin) {
+  const orgs = store.organizations;
+  if (store.user.admin) {
     return [ri, ...orgs, ...towns];
-  } else if (store.state.user.data) {
+  } else if (store.user.data) {
     return [
-      orgs.find((o) => o.name === store.state.user.data.organization),
+      orgs.find((o) => o.name === store.user.data.organization),
       ri,
       ...towns,
     ];
@@ -228,7 +228,7 @@ const filteredOrgs = computed(() => {
   }
 });
 
-const modelDataPeriod = computed(() => store.state.modelDataPeriod);
+const modelDataPeriod = computed(() => store.modelDataPeriod);
 const displayControlPanel = computed(
   () => Object.keys(modelDataPeriod).length !== 0,
 );
@@ -347,14 +347,14 @@ const clickMap = (clickedStatus) => {
     // wait for the next render cycle as the activeBG gets updated at about the
     // same time and otherwise could be stale
     nextTick(() =>
-      logActivity(store.state.user.data.email, "click map", activeBG.value),
+      logActivity(store.user.data.email, "click map", activeBG.value),
     );
   }
 };
 
 const zoomBg = () => {
   zoomed.value = true;
-  logActivity(store.state.user.data.email, "zoom map", activeBG.value);
+  logActivity(store.user.data.email, "zoom map", activeBG.value);
 };
 </script>
 

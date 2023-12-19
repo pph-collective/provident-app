@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import {
   sortByProperty,
@@ -140,16 +140,16 @@ const props = defineProps<{
   activeMuni: string;
 }>();
 
-const store = useStore();
+const store = useProvidentStore();
 const userRole = computed(() =>
-  store.state.user.data ? store.state.user.data.role : "user",
+  store.user.data ? store.user.data.role : "user",
 );
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
 
 const completedForms = computed(() => {
-  const formResponses = store.state.user.formResponses;
+  const formResponses = store.user.formResponses;
   return formResponses
     .filter((response) =>
       formConfig.map((f) => f.title).includes(response.form.title),
@@ -167,13 +167,13 @@ const bgFormResponses = computed(() => {
 });
 
 const userOrganization = computed(() =>
-  store.state.user.data ? store.state.user.data.organization : "",
+  store.user.data ? store.user.data.organization : "",
 );
 
 const createNewBGForm = (form_id) => {
   activeFormResponse.value = {
     organization: userOrganization,
-    form: store.state.forms[form_id],
+    form: store.forms[form_id],
     release_date: today(),
     status: "Not Started",
     response: {
@@ -183,7 +183,7 @@ const createNewBGForm = (form_id) => {
   };
   activeFormReadOnly.value = false;
   logActivity(
-    store.state.user.data.email,
+    store.user.data.email,
     `create ${form_id} form`,
     props.activeGeoid,
   );
@@ -198,7 +198,7 @@ const launchForm = (formResponse, readOnly) => {
   activeFormReadOnly.value = readOnly;
   activeFormResponse.value = formResponse;
   logActivity(
-    store.state.user.data.email,
+    store.user.data.email,
     `launch ${formResponse.form.title} form`,
     formResponse.title,
   );

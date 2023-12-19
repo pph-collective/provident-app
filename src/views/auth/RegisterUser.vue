@@ -287,7 +287,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import { auth, db, createEmail, logout } from "@/firebase";
 import { setDoc, doc } from "firebase/firestore";
@@ -312,8 +312,8 @@ const showTermsLawEnforcement = ref(false);
 const showTermsMetadata = ref(false);
 const loading = ref(false);
 
-const store = useStore();
-const organizations = computed(() => store.getters.formOrganizationOptions);
+const store = useProvidentStore();
+const organizations = computed(() => store.formOrganizationOptions);
 
 const formValid = computed(() => {
   // all fields must be filled in

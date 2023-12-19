@@ -124,17 +124,17 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { useProvidentStore } from "../../store";
 
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 
 import { updateUser } from "../../firebase.js";
 import utils from "../../utils/utils.js";
 
-const store = useStore();
-const organizations = computed(() => store.state.organizations);
+const store = useProvidentStore();
+const organizations = computed(() => store.organizations);
 const users = computed(() =>
-  store.getters.approvedUsers.map((user) => {
+  store.approvedUsers.map((user) => {
     user.edit = false;
     return user;
   }),

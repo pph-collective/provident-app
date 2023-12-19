@@ -1,8 +1,9 @@
 // Set up Vue
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 
-import store from "./store";
+import { useProvidentStore } from "./store";
 import router from "./router";
 import { auth, getUserRequest, logActivity } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -20,37 +21,11 @@ import FormTextArea from "@/components/form/TextArea.vue";
 import FormTextInput from "@/components/form/TextInput.vue";
 import FormSubForm from "@/components/form/SubForm.vue";
 
-// listen for changes to user
-onAuthStateChanged(auth, async (user) => {
-  await store.dispatch("fetchOrgs");
-
-  if (user) {
-    const { status, organization, role } = await getUserRequest(user.email);
-    if (status === "approved") {
-      store.dispatch("fetchUser", {
-        ...user.toJSON(),
-        status,
-        organization,
-        role,
-      });
-      let token = await user.getIdTokenResult();
-      store.dispatch("fetchAdmin", token.claims && token.claims.admin);
-      // purposefully not waiting for logging to complete
-      logActivity(user.email, "login");
-      store.dispatch("setLoaded");
-      return;
-    }
-  }
-
-  // fallthrough
-  store.dispatch("fetchUser", null);
-  store.dispatch("fetchAdmin", false);
-  store.dispatch("setLoaded");
-});
+const pinia = createPinia();
 
 createApp(App)
   .use(router)
-  .use(store)
+  .use(pinia)
   .component("FormCheckbox", FormCheckbox)
   .component("FormDate", FormDate)
   .component("FormLikertScale", FormLikertScale)
@@ -60,3 +35,33 @@ createApp(App)
   .component("FormTextArea", FormTextArea)
   .component("FormTextInput", FormTextInput)
   .mount("#app");
+
+const store = useProvidentStore();
+
+// listen for changes to user
+onAuthStateChanged(auth, async (user) => {
+  await store.fetchOrgs();
+
+  if (user) {
+    const { status, organization, role } = await getUserRequest(user.email);
+    if (status === "approved") {
+      store.fetchUser({
+        ...user.toJSON(),
+        status,
+        organization,
+        role,
+      });
+      let token = await user.getIdTokenResult();
+      store.fetchAdmin(token.claims && token.claims.admin);
+      // purposefully not waiting for logging to complete
+      logActivity(user.email, "login");
+      store.setLoaded();
+      return;
+    }
+  }
+
+  // fallthrough
+  store.fetchUser(null);
+  store.fetchAdmin(false);
+  store.setLoaded();
+});
