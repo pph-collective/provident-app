@@ -1,5 +1,5 @@
 const { ArgumentParser } = require("argparse");
-const parse = require("csv-parse");
+const { parse } = require("csv-parse");
 const fs = require("fs");
 const admin = require("firebase-admin");
 const aq = require("arquero");

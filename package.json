@@ -9,13 +9,7 @@
     "lint": "eslint --ext .ts,.js,.vue src scripts cypress --fix",
     "shp2topo": "scripts/shp2topo.sh",
     "firebase:dev": "firebase emulators:start --import emulator_data",
-    "firebase:savedev": "firebase emulators:export emulator_data",
-    "add-admin": "node scripts/add-admin.js",
-    "add-form": "node scripts/add-form.js",
-    "add-results": "node scripts/add-results.js",
-    "add-model-towns": "node scripts/add-model-towns.js",
-    "add-svi": "node scripts/add-svi.js",
-    "add-landmarks": "node scripts/add-landmarks.js"
+    "firebase:savedev": "firebase emulators:export emulator_data"
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
