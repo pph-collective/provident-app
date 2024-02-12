@@ -138,6 +138,13 @@ const closeForm = () => {
 };
 
 const print = () => {
+  // HACK: Get all of the printable textareas and then replace them with divs
+  document.querySelectorAll(".printable textarea").forEach((element) => {
+    const div = document.createElement("div");
+    div.textContent = element.value;
+    element.parentNode.replaceChild(div, element);
+  });
+
   if (document.queryCommandSupported("print")) {
     document.execCommand("print", true, null);
   } else {
