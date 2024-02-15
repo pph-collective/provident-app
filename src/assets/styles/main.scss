@@ -179,6 +179,7 @@ fieldset[disabled] {
     overflow: hidden;
     background-color: white;
     isolation: isolate;
+    white-space: pre-wrap;
   }
 
   .sticky-bottom {
