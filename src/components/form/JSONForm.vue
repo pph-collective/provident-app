@@ -1,12 +1,5 @@
 <template>
   <div class="container is-static is-fluid">
-    <div class="only-printed">
-      <h2 class="is-size-2">
-        {{ formTitle }}
-      </h2>
-      <p>Last updated {{ lastUpdatedValue }}</p>
-      <hr />
-    </div>
     <fieldset :disabled="readOnly">
       <SchemaForm :schema="schema" @submit="$emit('submitted', value)">
         <template #afterForm>
@@ -144,16 +137,6 @@ onBeforeRouteLeave((to, from, next) => {
     }
   }
 });
-
-const lastUpdatedValue = computed(() => {
-  if (formUpdated.value) {
-    return new Date().toLocaleString();
-  } else {
-    return props.lastUpdated
-      ? new Date(props.lastUpdated).toLocaleString()
-      : "N/A";
-  }
-});
 </script>
 
 <style lang="scss">
@@ -169,16 +152,6 @@ const lastUpdatedValue = computed(() => {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/main.scss";
-
-.only-printed {
-  display: none;
-}
-
-@media print {
-  .only-printed {
-    display: inline;
-  }
-}
 
 .is-static {
   position: static;

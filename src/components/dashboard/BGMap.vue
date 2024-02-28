@@ -30,6 +30,14 @@ const props = defineProps({
     type: Number,
     default: 1280,
   },
+  minWidth: {
+    type: Number,
+    default: 180,
+  },
+  maxWidth: {
+    type: Number,
+    default: 1280,
+  },
 });
 
 const el = ref(null);
@@ -43,9 +51,7 @@ const filteredGeo = computed(() => {
     blocks: { type: "FeatureCollection", features: filtered },
   };
 
-  let topo = topology.topology(collection, 1e9);
-
-  return topo;
+  return topology.topology(collection, 1e9);
 });
 
 const spec = computed(() => {
@@ -170,7 +176,8 @@ const { view } = useVega({
   el,
   minHeight: toRef(() => props.minHeight),
   maxHeight: toRef(() => props.maxHeight),
-  maxWidth: ref(1280),
+  minWidth: toRef(() => props.minWidth),
+  maxWidth: toRef(() => props.maxWidth),
   includeActions: ref(false),
 });
 

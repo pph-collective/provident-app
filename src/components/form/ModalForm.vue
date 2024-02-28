@@ -36,7 +36,41 @@
                   <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
                 </p>
               </div>
-              <div>
+              <div class="only-printed">
+                <h2 class="is-size-2">
+                  {{ formResponse.form.title }}
+                </h2>
+                <p>
+                  Last updated
+                  {{
+                    formResponse.last_updated
+                      ? new Date(formResponse.last_updated).toLocaleString()
+                      : "N/A"
+                  }}
+                </p>
+                <hr />
+                <div class="m-auto">
+                  <BGMap
+                    v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                    :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
+                    :min-height="500"
+                    :min-width="750"
+                    :dataset="dataset.cbg"
+                  />
+                </div>
+                <div class="columns is-multiline">
+                  <div
+                    v-for="landmark in landmarks"
+                    :key="landmark.street_address"
+                    class="column is-one-third my-1"
+                  >
+                    {{ landmark.location_name }}<br />
+                    {{ landmark.street_address }}<br />
+                    {{ landmark.city }}, RI {{ landmark.postal_code }} <br />
+                  </div>
+                </div>
+              </div>
+              <div class="not-printed">
                 <BGMap
                   v-if="formResponse.response[GEOID_QUESTION_MODEL]"
                   :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -91,6 +125,23 @@ const user = computed(() => store.user);
 const userEmail = computed(() =>
   user.value.data ? user.value.data.email : "",
 );
+const dataset = computed(() => {
+  if (store.dataset.cbg.length === 0) {
+    store.fetchModelData();
+  }
+
+  return store.dataset;
+});
+
+const landmarks = computed(() => {
+  const blockGroup = props.formResponse.response[GEOID_QUESTION_MODEL];
+
+  if (dataset.value !== undefined && blockGroup !== undefined) {
+    return dataset.value.cbg.find((c) => c.bg_id === blockGroup)?.landmarks;
+  }
+
+  return [];
+});
 
 const closeFormRequest = ref(0);
 const formMessage = ref("");
@@ -160,5 +211,19 @@ const printable = computed(() => props.formResponse.status === "Submitted");
   padding-top: 0rem;
   padding-bottom: 0rem;
   text-align: right;
+}
+
+.only-printed {
+  display: none;
+}
+
+@media print {
+  .only-printed {
+    display: inline;
+  }
+
+  .not-printed {
+    display: none;
+  }
 }
 </style>
