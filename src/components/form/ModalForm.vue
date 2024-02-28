@@ -49,7 +49,9 @@
                   }}
                 </p>
                 <hr />
-                <div class="m-auto">
+                <div
+                  class="is-flex is-justify-content-center is-align-items-center"
+                >
                   <BGMap
                     v-if="formResponse.response[GEOID_QUESTION_MODEL]"
                     :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -58,7 +60,7 @@
                     :dataset="dataset.cbg"
                   />
                 </div>
-                <div class="columns is-multiline">
+                <div class="columns is-multiline my-4">
                   <div
                     v-for="landmark in landmarks"
                     :key="landmark.street_address"
