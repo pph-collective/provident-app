@@ -49,11 +49,11 @@
                   {{ formResponse.form.title }}
                 </h2>
                 <h3 class="subtitle is-3">
-                  <p>
+                  <p v-if="formResponse.response[MUNI_QUESTION_MODEL]">
                     <b>Neighborhood ID:</b>
                     {{ formResponse.response[MUNI_QUESTION_MODEL] }}
                   </p>
-                  <p>
+                  <p v-if="formResponse.response[GEOID_QUESTION_MODEL]">
                     <b>Municipality:</b>
                     {{ formResponse.response[GEOID_QUESTION_MODEL] }}
                   </p>
@@ -81,7 +81,10 @@
                     {{ landmark.city }}, RI {{ landmark.postal_code }} <br />
                   </div>
                 </div>
-                <div class="page-break" />
+                <div
+                  v-if="formResponse.response[GEOID_QUESTION_MODEL]"
+                  class="page-break"
+                />
               </div>
               <div class="not-printed">
                 <BGMap
