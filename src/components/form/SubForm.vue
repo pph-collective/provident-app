@@ -8,12 +8,12 @@
           <label class="label" :for="uuid">{{ label }}</label>
           <button
             v-if="!read_only && repeat_button_title"
-            class="button is-link is-inverted"
+            class="button is-link is-inverted not-printed"
             data-cy="delete-sub-form-button"
             :disabled="modelValue.length === 1"
             @click="deleteValue(index)"
           >
-            <i class="fas fa-trash not-printed" />
+            <i class="fas fa-trash" />
           </button>
         </div>
         <p v-if="help_text" class="help">
@@ -30,7 +30,7 @@
         <button
           v-if="repeat_button_title"
           type="button"
-          class="button is-link"
+          class="button is-link not-printed"
           data-cy="sub-form-button"
           :disabled="read_only"
           @click="pushValue"

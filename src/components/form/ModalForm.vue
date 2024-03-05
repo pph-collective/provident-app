@@ -28,7 +28,7 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <PrintSection :printable="printable">
-              <div class="card-content user-submitted">
+              <div class="has-text-right">
                 <p v-if="formResponse.user_submitted">
                   <em>Submitted by {{ formResponse.user_submitted }}</em>
                 </p>
@@ -44,48 +44,11 @@
                   >
                 </p>
               </div>
-              <div class="only-printed">
-                <h2 class="title is-2">
-                  {{ formResponse.form.title }}
-                </h2>
-                <h3 class="subtitle is-3">
-                  <p v-if="formResponse.response[MUNI_QUESTION_MODEL]">
-                    <b>Neighborhood ID:</b>
-                    {{ formResponse.response[MUNI_QUESTION_MODEL] }}
-                  </p>
-                  <p v-if="formResponse.response[GEOID_QUESTION_MODEL]">
-                    <b>Municipality:</b>
-                    {{ formResponse.response[GEOID_QUESTION_MODEL] }}
-                  </p>
-                </h3>
-                <hr />
-                <div
-                  class="is-flex is-justify-content-center is-align-items-center"
-                >
-                  <BGMap
-                    v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-                    :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
-                    :min-height="500"
-                    :min-width="750"
-                    :dataset="dataset.cbg"
-                  />
-                </div>
-                <div class="columns is-multiline my-4">
-                  <div
-                    v-for="landmark in landmarks"
-                    :key="landmark.street_address"
-                    class="column is-one-third my-1"
-                  >
-                    {{ landmark.location_name }}<br />
-                    {{ landmark.street_address }}<br />
-                    {{ landmark.city }}, RI {{ landmark.postal_code }} <br />
-                  </div>
-                </div>
-                <div
-                  v-if="formResponse.response[GEOID_QUESTION_MODEL]"
-                  class="page-break"
-                />
-              </div>
+              <PrintFormCoverPage
+                :form-title="formResponse.form.title"
+                :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
+                :municipality="formResponse.response[MUNI_QUESTION_MODEL]"
+              />
               <div class="not-printed">
                 <BGMap
                   v-if="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -115,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 import { useProvidentStore } from "../../store";
 
 import { esc as vEsc } from "@/directives/escape";
@@ -123,6 +86,7 @@ import JSONForm from "@/components/form/JSONForm.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import PrintSection from "@/components/PrintSection.vue";
 import { GEOID_QUESTION_MODEL, MUNI_QUESTION_MODEL } from "@/utils/utils.js";
+import PrintFormCoverPage from "./PrintFormCoverPage.vue";
 
 const props = defineProps({
   formResponse: {
@@ -141,23 +105,6 @@ const user = computed(() => store.user);
 const userEmail = computed(() =>
   user.value.data ? user.value.data.email : "",
 );
-const dataset = computed(() => {
-  if (store.dataset.cbg.length === 0) {
-    store.fetchModelData();
-  }
-
-  return store.dataset;
-});
-
-const landmarks = computed(() => {
-  const blockGroup = props.formResponse.response[GEOID_QUESTION_MODEL];
-
-  if (dataset.value !== undefined && blockGroup !== undefined) {
-    return dataset.value.cbg.find((c) => c.bg_id === blockGroup)?.landmarks;
-  }
-
-  return [];
-});
 
 const closeFormRequest = ref(0);
 const formMessage = ref("");
@@ -221,11 +168,3 @@ const print = () => {
 
 const printable = computed(() => props.formResponse.status === "Submitted");
 </script>
-
-<style lang="scss" scoped>
-.user-submitted {
-  padding-top: 0rem;
-  padding-bottom: 0rem;
-  text-align: right;
-}
-</style>
