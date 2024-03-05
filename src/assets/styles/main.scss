@@ -145,15 +145,7 @@ fieldset[disabled] {
   }
 }
 
-// when printing forms, don't break page in the middle of a question
-@media print {
-  .field {
-    page-break-before: auto;
-    page-break-inside: avoid;
-  }
-}
-
-.printable {
+.printable, .only-printed, .page-break {
   display: none;
 }
 
@@ -184,6 +176,19 @@ fieldset[disabled] {
 
   .sticky-bottom {
     position: relative !important;
+  }
+
+  .only-printed {
+    display: inline;
+  }
+
+  .not-printed {
+    display: none;
+  }
+
+  .page-break {
+    display: block;
+    page-break-before: always;
   }
 }
 

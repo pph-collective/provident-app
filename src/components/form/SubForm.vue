@@ -13,7 +13,7 @@
             :disabled="modelValue.length === 1"
             @click="deleteValue(index)"
           >
-            <i class="fas fa-trash" />
+            <i class="fas fa-trash not-printed" />
           </button>
         </div>
         <p v-if="help_text" class="help">

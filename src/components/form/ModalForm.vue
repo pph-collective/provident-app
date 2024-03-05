@@ -35,19 +35,29 @@
                 <p v-if="formResponse.users_edited?.length > 0">
                   <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
                 </p>
+                <p v-if="formResponse.last_updated" class="only-printed">
+                  <em
+                    >Last updated
+                    {{
+                      new Date(formResponse.last_updated).toLocaleString()
+                    }}</em
+                  >
+                </p>
               </div>
               <div class="only-printed">
-                <h2 class="is-size-2">
+                <h2 class="title is-2">
                   {{ formResponse.form.title }}
                 </h2>
-                <p>
-                  Last updated
-                  {{
-                    formResponse.last_updated
-                      ? new Date(formResponse.last_updated).toLocaleString()
-                      : "N/A"
-                  }}
-                </p>
+                <h3 class="subtitle is-3">
+                  <p>
+                    <b>Neighborhood ID:</b>
+                    {{ formResponse.response[MUNI_QUESTION_MODEL] }}
+                  </p>
+                  <p>
+                    <b>Municipality:</b>
+                    {{ formResponse.response[GEOID_QUESTION_MODEL] }}
+                  </p>
+                </h3>
                 <hr />
                 <div
                   class="is-flex is-justify-content-center is-align-items-center"
@@ -71,6 +81,7 @@
                     {{ landmark.city }}, RI {{ landmark.postal_code }} <br />
                   </div>
                 </div>
+                <div class="page-break" />
               </div>
               <div class="not-printed">
                 <BGMap
@@ -108,7 +119,7 @@ import { esc as vEsc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import PrintSection from "@/components/PrintSection.vue";
-import { GEOID_QUESTION_MODEL } from "@/utils/utils.js";
+import { GEOID_QUESTION_MODEL, MUNI_QUESTION_MODEL } from "@/utils/utils.js";
 
 const props = defineProps({
   formResponse: {
@@ -213,19 +224,5 @@ const printable = computed(() => props.formResponse.status === "Submitted");
   padding-top: 0rem;
   padding-bottom: 0rem;
   text-align: right;
-}
-
-.only-printed {
-  display: none;
-}
-
-@media print {
-  .only-printed {
-    display: inline;
-  }
-
-  .not-printed {
-    display: none;
-  }
 }
 </style>
