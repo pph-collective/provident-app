@@ -28,7 +28,7 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <PrintSection :printable="printable">
-              <div class="has-text-right">
+              <div class="user-submitted has-text-right">
                 <p v-if="formResponse.user_submitted">
                   <em>Submitted by {{ formResponse.user_submitted }}</em>
                 </p>
