@@ -78,15 +78,19 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref, computed, watch } from "vue";
 import { useProvidentStore } from "../../store";
 
 import { esc as vEsc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import PrintSection from "@/components/PrintSection.vue";
-import { GEOID_QUESTION_MODEL, MUNI_QUESTION_MODEL } from "@/utils/utils.js";
 import PrintFormCoverPage from "./PrintFormCoverPage.vue";
+import {
+  GEOID_QUESTION_MODEL,
+  MUNI_QUESTION_MODEL,
+  FORM_CONFIG,
+} from "@/utils/utils.js";
 
 const props = defineProps({
   formResponse: {
@@ -108,6 +112,27 @@ const userEmail = computed(() =>
 
 const closeFormRequest = ref(0);
 const formMessage = ref("");
+
+watch(
+  () => props.formResponse,
+  () => {
+    if (!props.formResponse || Object.keys(props.formResponse).length === 0) {
+      document.title = "PROVIDENT";
+      return;
+    }
+
+    const formConfig = FORM_CONFIG.find(
+      (f) => f.title === props.formResponse.form.title,
+    );
+    const geoId = props.formResponse.response[GEOID_QUESTION_MODEL];
+    const municipality = props.formResponse.response[MUNI_QUESTION_MODEL];
+    const title = formConfig
+      ? formConfig.shortTitle
+      : props.formResponse.form.title;
+
+    document.title = [title, municipality, geoId].filter(Boolean).join(" ");
+  },
+);
 
 const updateFormResponse = async (response, status) => {
   const users_edited = props.formResponse.users_edited ?? [];
