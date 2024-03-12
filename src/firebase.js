@@ -31,8 +31,8 @@ if (location.hostname === "localhost") {
     host: "localhost:8088",
     ssl: false,
   });
-  connectFirestoreEmulator(db, "localhost", 8088);
-  connectAuthEmulator(auth, "http://localhost:9099");
+  connectFirestoreEmulator(db, "127.0.0.1", 8088);
+  connectAuthEmulator(auth, "http://127.0.0.1:9099");
   emailSubjectPrefix = "TEST: ";
 }
 

@@ -35,7 +35,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
-      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**",
+      "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**",
       (req) => {
         // Assert the request
         expect(req.body.requestType).to.equal("PASSWORD_RESET");
@@ -67,7 +67,7 @@ describe("Login Page: Requesting an email to reset password", () => {
     // Get the oobCode
     cy.request(
       "GET",
-      "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes",
+      "http://127.0.0.1:9099/emulator/v1/projects/provident-ri/oobCodes",
     ).as("oobCodes-request");
 
     cy.get("@oobCodes-request").then((res) => {
@@ -121,7 +121,7 @@ describe("Reset Password Page", () => {
     // Intercept the password email reset request
     cy.intercept(
       "POST",
-      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**",
+      "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=**",
     ).as("password-email-reset-request");
 
     // User types in email and clicks reset password
@@ -135,7 +135,7 @@ describe("Reset Password Page", () => {
     // Get the oobCode
     cy.request(
       "GET",
-      "http://localhost:9099/emulator/v1/projects/provident-ri/oobCodes",
+      "http://127.0.0.1:9099/emulator/v1/projects/provident-ri/oobCodes",
     ).as("oobCodes-request");
 
     cy.get("@oobCodes-request").then((res) => {
@@ -170,7 +170,7 @@ describe("Reset Password Page", () => {
     // Set up intercepts
     cy.intercept(
       "POST",
-      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**",
+      "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**",
     ).as("reset-password-request");
 
     // fill in new password & confirm new password
@@ -193,7 +193,7 @@ describe("Reset Password Page", () => {
     // Set up intercepts
     cy.intercept(
       "POST",
-      "http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**",
+      "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=**",
     ).as("reset-password-request");
 
     // fill in new password & confirm new password

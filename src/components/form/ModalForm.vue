@@ -28,15 +28,28 @@
           </header>
           <section class="modal-card-body" data-cy="form-body">
             <PrintSection :printable="printable">
-              <div class="card-content user-submitted">
+              <div class="user-submitted has-text-right">
                 <p v-if="formResponse.user_submitted">
                   <em>Submitted by {{ formResponse.user_submitted }}</em>
                 </p>
                 <p v-if="formResponse.users_edited?.length > 0">
                   <em>Edited by {{ formResponse.users_edited.join(", ") }}</em>
                 </p>
+                <p v-if="formResponse.last_updated" class="only-printed">
+                  <em
+                    >Last updated
+                    {{
+                      new Date(formResponse.last_updated).toLocaleString()
+                    }}</em
+                  >
+                </p>
               </div>
-              <div>
+              <PrintFormCoverPage
+                :form-title="formResponse.form.title"
+                :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
+                :municipality="formResponse.response[MUNI_QUESTION_MODEL]"
+              />
+              <div class="not-printed">
                 <BGMap
                   v-if="formResponse.response[GEOID_QUESTION_MODEL]"
                   :block-group="formResponse.response[GEOID_QUESTION_MODEL]"
@@ -65,14 +78,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useProvidentStore } from "../../store";
 
 import { esc as vEsc } from "@/directives/escape";
 import JSONForm from "@/components/form/JSONForm.vue";
 import BGMap from "@/components/dashboard/BGMap.vue";
 import PrintSection from "@/components/PrintSection.vue";
-import { GEOID_QUESTION_MODEL } from "@/utils/utils.js";
+import PrintFormCoverPage from "./PrintFormCoverPage.vue";
+import {
+  GEOID_QUESTION_MODEL,
+  MUNI_QUESTION_MODEL,
+  FORM_CONFIG,
+} from "@/utils/utils.js";
 
 const props = defineProps({
   formResponse: {
@@ -94,6 +112,27 @@ const userEmail = computed(() =>
 
 const closeFormRequest = ref(0);
 const formMessage = ref("");
+
+watch(
+  () => props.formResponse,
+  () => {
+    if (!props.formResponse || Object.keys(props.formResponse).length === 0) {
+      document.title = "PROVIDENT";
+      return;
+    }
+
+    const formConfig = FORM_CONFIG.find(
+      (f) => f.title === props.formResponse.form.title,
+    );
+    const geoId = props.formResponse.response[GEOID_QUESTION_MODEL];
+    const municipality = props.formResponse.response[MUNI_QUESTION_MODEL];
+    const title = formConfig
+      ? formConfig.shortTitle
+      : props.formResponse.form.title;
+
+    document.title = [title, municipality, geoId].filter(Boolean).join(" ");
+  },
+);
 
 const updateFormResponse = async (response, status) => {
   const users_edited = props.formResponse.users_edited ?? [];
@@ -154,11 +193,3 @@ const print = () => {
 
 const printable = computed(() => props.formResponse.status === "Submitted");
 </script>
-
-<style lang="scss" scoped>
-.user-submitted {
-  padding-top: 0rem;
-  padding-bottom: 0rem;
-  text-align: right;
-}
-</style>

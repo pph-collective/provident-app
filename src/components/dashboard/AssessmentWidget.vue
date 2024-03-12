@@ -15,14 +15,14 @@
             <td>
               <i
                 :class="
-                  formConfig.find((f) => f.title === formResponse.form.title)
+                  FORM_CONFIG.find((f) => f.title === formResponse.form.title)
                     .iconClass
                 "
               />
             </td>
             <td class="has-text-weight-bold is-size-6-7 is-align-items-center">
               {{
-                formConfig.find((f) => f.title === formResponse.form.title)
+                FORM_CONFIG.find((f) => f.title === formResponse.form.title)
                   .shortTitle
               }}
             </td>
@@ -101,6 +101,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useProvidentStore } from "../../store";
+import { FORM_CONFIG } from "@/utils/utils.js";
 
 import {
   sortByProperty,
@@ -111,29 +112,6 @@ import {
 import { logActivity } from "../../firebase.js";
 
 import FormModal from "../form/ModalForm.vue";
-
-const formConfig = [
-  {
-    shortTitle: "Assessment",
-    title: "Neighborhood Rapid Assessment",
-    iconClass: "fas fa-clipboard",
-  },
-  {
-    shortTitle: "Plan",
-    title: "Six Month Resource Plan",
-    iconClass: "fas fa-tasks",
-  },
-  {
-    shortTitle: "Mid-way Plan Followup",
-    title: "Mid-way Followup to the Six Month Resource Plan",
-    iconClass: "fas fa-star-half",
-  },
-  {
-    shortTitle: "Plan Followup",
-    title: "Followup to Six Month Resource Plan",
-    iconClass: "fas fa-star",
-  },
-];
 
 const props = defineProps<{
   activeGeoid: string;
@@ -152,7 +130,7 @@ const completedForms = computed(() => {
   const formResponses = store.user.formResponses;
   return formResponses
     .filter((response) =>
-      formConfig.map((f) => f.title).includes(response.form.title),
+      FORM_CONFIG.map((f) => f.title).includes(response.form.title),
     )
     .sort(sortByProperty("last_updated"))
     .reverse();
