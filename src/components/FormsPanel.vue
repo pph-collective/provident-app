@@ -370,6 +370,17 @@ const columns = [
           selectOptions: [],
         },
       }),
+      columnHelper.accessor("release_date", {
+        id: "release_date",
+        size: 90,
+        minSize: 90,
+        cell: (info) => info.getValue(),
+        header: () => "Release Date",
+        meta: {
+          shouldUseSelectFilter: false,
+          selectOptions: [],
+        },
+      }),
       columnHelper.display({
         id: "actions",
         cell: (info) =>
@@ -424,7 +435,6 @@ const table = useVueTable({
     },
   },
 
-  // // TODO: Just copying the sorting format hoping it is fine
   onColumnFiltersChange: (updaterOrValue) => {
     columnFilters.value =
       typeof updaterOrValue === "function"
