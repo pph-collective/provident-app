@@ -20,7 +20,15 @@ db.collectionGroup("form_responses")
   .then((querySnapshot) => {
     const results = [];
     querySnapshot.forEach((doc) => {
-      results.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      const result = {
+        id: doc.id,
+        ...data,
+        last_updated: new Date(data.last_updated),
+      };
+      delete result["release_date"];
+
+      results.push(result);
     });
 
     fs.writeFileSync(FILE_PATH, JSON.stringify(results, null, 2));
