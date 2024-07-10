@@ -66,8 +66,16 @@ The `add-svi` script reads in a csv with svi data for a single period, and loads
 
 #### Usage
 ```
-node ./scripts/add-svi.js -p 2019-2 -f <path to csv> [--emulator]
+node ./scripts/add-svi.js -p <period> -c <path to cbg file> -t <path to town file> -r <path to ri file> [--emulator] [--seed]
 ```
+Flags
+- `-e`, `--emulator`: use emulator
+- `-p`, `--period`: which model period should this data be attached to (e.g. '2019-2')
+- `-c`, `--cbgfile`: path to cbg file
+- `-t`, `--townfile`: path to town file
+- `-r`, `--rifile`: path to ri file
+- `-s`, `--seed`: Generate a json file with seed data instead of uploading to firebase
+
 
 ### `add-landmarks`
 
