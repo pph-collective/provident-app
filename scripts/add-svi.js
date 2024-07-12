@@ -24,7 +24,7 @@ parser.add_argument("-c", "--cbgfile", {
 
 parser.add_argument("-t", "--townfile", {
   required: true,
-  help: "path to cbg file",
+  help: "path to town file",
 });
 
 parser.add_argument("-r", "--rifile", {
