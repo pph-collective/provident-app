@@ -133,7 +133,7 @@ watch(
     const organization = props.formResponse.organization;
     const date = props.formResponse.last_updated;
 
-    document.title = [date, organization, title, municipality, geoId]
+    document.title = [organization, date, title, municipality, geoId]
       .filter(Boolean)
       .join(" ");
   },
