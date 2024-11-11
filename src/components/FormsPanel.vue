@@ -399,7 +399,7 @@ const columnFilters = ref<ColumnFiltersState>([]);
 
 const INITIAL_PAGE_INDEX = 0;
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
-const pageSizes = [10, 20, 30, 40, 50];
+const pageSizes = [10, 20, 30, 40, 50, 500];
 
 const activeFormResponse = ref({});
 const activeFormReadOnly = ref(true);
@@ -420,7 +420,7 @@ const table = useVueTable({
   },
   initialState: {
     pagination: {
-      pageSize: 20,
+      pageSize: 500,
     },
   },
 

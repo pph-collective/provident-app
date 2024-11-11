@@ -14,6 +14,7 @@
             </p>
             <button
               v-if="printable"
+              data-cy="print-button"
               class="button is-small is-primary mx-2"
               @click="print"
             >
@@ -129,8 +130,12 @@ watch(
     const title = formConfig
       ? formConfig.shortTitle
       : props.formResponse.form.title;
+    const organization = props.formResponse.organization;
+    const date = props.formResponse.last_updated;
 
-    document.title = [title, municipality, geoId].filter(Boolean).join(" ");
+    document.title = [date, organization, title, municipality, geoId]
+      .filter(Boolean)
+      .join(" ");
   },
 );
 
