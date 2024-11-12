@@ -7,7 +7,6 @@ import {
   getDoc,
   getDocs,
   getFirestore,
-  setDoc,
 } from "firebase/firestore";
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
@@ -167,14 +166,6 @@ export async function createEmail({
   } catch (err) {
     console.log(err);
   }
-}
-
-export async function addOrg(organization) {
-  const docId = organization.name;
-
-  await setDoc(doc(db, "organizations", docId), organization);
-
-  return docId;
 }
 
 export async function getDataset(period) {
