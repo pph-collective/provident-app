@@ -124,12 +124,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
 
-import { logActivity, getZipcodes } from "../../firebase.js";
+import { getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
 import DashboardCard from "../../components/dashboard/DashboardCard.vue";
@@ -290,13 +290,6 @@ const loading = computed(
 // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
 const clickMap = (clickedStatus) => {
   activeClickedStatus.value = clickedStatus;
-  if (clickedStatus) {
-    // wait for the next render cycle as the activeBG gets updated at about the
-    // same time and otherwise could be stale
-    nextTick(() =>
-      logActivity(store.user.data.email, "click map", activeBG.value),
-    );
-  }
 };
 
 const zoomBg = () => {

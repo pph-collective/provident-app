@@ -5,7 +5,7 @@ import App from "./App.vue";
 
 import { useProvidentStore } from "./store";
 import router from "./router";
-import { auth, getUserRequest, logActivity } from "./firebase";
+import { auth, getUserRequest } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 // general styling
@@ -30,8 +30,6 @@ onAuthStateChanged(auth, async (user) => {
         organization,
         role,
       });
-      // purposefully not waiting for logging to complete
-      logActivity(user.email, "login");
       store.setLoaded();
       return;
     }

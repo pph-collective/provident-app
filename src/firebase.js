@@ -18,19 +18,6 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 let emailSubjectPrefix = "";
 
-export async function logActivity(user, action, subAction = "") {
-  try {
-    await addDoc(collection(db, `users/${user}/activity_log`), {
-      user,
-      action,
-      subAction,
-      datetime: Date.now(),
-    });
-  } catch (e) {
-    console.warn("Activity logging failed: ", e);
-  }
-}
-
 export async function login(email, password) {
   try {
     const res = await signInWithEmailAndPassword(auth, email, password);
