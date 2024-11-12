@@ -35,7 +35,6 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@cypress/vue": "^6.0.0",
     "@firebase/rules-unit-testing": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
