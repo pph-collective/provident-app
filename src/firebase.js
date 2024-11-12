@@ -177,15 +177,11 @@ export async function addOrg(organization) {
   return docId;
 }
 
-export async function getDataset(period, interventionArmUser) {
+export async function getDataset(period) {
   const data = await getModelData(period);
-  if (interventionArmUser) {
-    const predictions = await getModelPredictions(period);
-    return {
-      ...data,
-      cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
-    };
-  } else {
-    return data;
-  }
+  const predictions = await getModelPredictions(period);
+  return {
+    ...data,
+    cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
+  };
 }

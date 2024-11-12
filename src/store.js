@@ -51,9 +51,8 @@ export const useProvidentStore = defineStore("provident", {
     async fetchModelData() {
       const modelDataPeriods = await getModelDataPeriods();
       const { version, description } = modelDataPeriods[0];
-      const interventionArmUser = this.interventionArmUser;
 
-      const dataset = await getDataset(version, interventionArmUser);
+      const dataset = await getDataset(version);
 
       this.mutate({
         property: "modelDataPeriod",
@@ -90,19 +89,6 @@ export const useProvidentStore = defineStore("provident", {
   },
 
   getters: {
-    interventionArmUser: (state) => {
-      if (!state.user.authenticated || !state.user.data) {
-        return false;
-      }
-
-      if (state.organizations.length === 0) {
-        return false;
-      }
-
-      return state.organizations.find(
-        (org) => org.name === state.user.data.organization,
-      ).intervention_arm;
-    },
     pendingUsers: (state) => {
       return state.users.filter((user) => user.status === "pending");
     },

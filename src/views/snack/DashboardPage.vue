@@ -51,24 +51,22 @@
       </template>
       <template #subtitle>
         <div v-if="!zoomed">
-          <div v-if="interventionArmUser">
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon solid-square" />
-                <p>Prioritized by PROVIDENT model</p>
-              </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon solid-square" />
+              <p>Prioritized by PROVIDENT model</p>
             </div>
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon square" />
-                <span>Not prioritized by PROVIDENT model</span>
-              </div>
+          </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon square" />
+              <span>Not prioritized by PROVIDENT model</span>
             </div>
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon stripes square" />
-                <span>Not eligible for PROVIDENT prediction</span>
-              </div>
+          </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon stripes square" />
+              <span>Not eligible for PROVIDENT prediction</span>
             </div>
           </div>
           Click on a block group to see more details or zoom in
@@ -83,7 +81,7 @@
             :dataset="dataset.cbg"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
-            :with-predictions="interventionArmUser"
+            :with-predictions="true"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :active-block-group="activeBG"
@@ -116,7 +114,7 @@
           :dataset="dataset"
           :municipality="computedMuni"
           :geoid="activeBG"
-          :with-predictions="interventionArmUser"
+          :with-predictions="true"
         />
       </template>
     </DashboardCard>
@@ -151,7 +149,6 @@ const BLOCK_GROUPS = geo.map((feature) => ({
 }));
 
 const store = useProvidentStore();
-const interventionArmUser = computed(() => store.interventionArmUser);
 const dataset = computed(() => {
   if (store.dataset.cbg.length === 0) {
     store.fetchModelData();
