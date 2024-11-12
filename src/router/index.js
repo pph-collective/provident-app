@@ -63,10 +63,6 @@ const routes = [
         redirect: "/snack/dashboard",
       },
       {
-        path: "forms",
-        component: () => import("../views/snack/FormsPage.vue"),
-      },
-      {
         path: "dashboard",
         component: () => import("../views/snack/DashboardPage.vue"),
       },
@@ -114,11 +110,6 @@ const routes = [
           route: "email",
           icon: "fa-paper-plane",
         },
-        {
-          name: "Review Forms",
-          route: "review_forms",
-          icon: "fa-clipboard",
-        },
       ],
     },
     children: [
@@ -145,10 +136,6 @@ const routes = [
       {
         path: "email",
         component: () => import("../views/admin/EmailsPage.vue"),
-      },
-      {
-        path: "review_forms",
-        component: () => import("../views/admin/ReviewForms.vue"),
       },
     ],
   },

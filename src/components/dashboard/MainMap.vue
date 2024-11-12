@@ -15,7 +15,6 @@ import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty } from "@/utils/utils.js";
-import { useProvidentStore } from "../../store";
 
 const props = defineProps({
   dataset: {
@@ -36,10 +35,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  viewForms: {
-    type: Boolean,
-    required: true,
-  },
   zipcode: {
     type: Object,
     required: true,
@@ -54,30 +49,6 @@ const props = defineProps({
 const emit = defineEmits(["new-active-bg", "active-clicked-status"]);
 
 const el = ref(null);
-const store = useProvidentStore();
-
-const formResponses = store.user.formResponses;
-const geoIdToFormResponses = {};
-
-formResponses
-  .filter(
-    (f) =>
-      [
-        "Neighborhood Rapid Assessment",
-        "Six Month Resource Plan",
-        "Mid-way Followup to the Six Month Resource Plan",
-        "Followup to Six Month Resource Plan",
-      ].includes(f.form.title) && f.response.bg_id !== undefined,
-  )
-  .forEach((formResponse) => {
-    const geoid = formResponse.response.bg_id;
-
-    if (geoIdToFormResponses[geoid]) {
-      geoIdToFormResponses[geoid].push(formResponse);
-    } else {
-      geoIdToFormResponses[geoid] = [formResponse];
-    }
-  });
 
 const filteredZip = computed(() => {
   if (props.zipcode.name === "All Zip Codes") {
@@ -110,7 +81,6 @@ const filteredGeo = computed(() => {
           .join("\n")}`
       : [];
     g.properties.tooltip = datum.tooltip ?? {};
-    g.properties.forms = geoIdToFormResponses[g.id.slice(-7)] ?? [];
   });
 
   const collection = {
@@ -175,20 +145,12 @@ const tooltipSignal = computed(() => {
 const blockGroupFill = computed(() => {
   const fill = [];
 
-  if (props.viewForms) {
-    // View Forms
-    fill.push({
-      test: "datum.properties.forms.length > 0",
-      value: "#2A3465",
-    });
-  } else {
-    // Default Dashboard Fill
-    fill.push({ test: "datum.properties.flag === '1'", value: "#2A3465" });
-    fill.push({
-      test: `${props.withPredictions} && !datum.properties.intervention_arm`,
-      value: "url(#diagonalHatch)",
-    });
-  }
+  // Default Dashboard Fill
+  fill.push({ test: "datum.properties.flag === '1'", value: "#2A3465" });
+  fill.push({
+    test: `${props.withPredictions} && !datum.properties.intervention_arm`,
+    value: "url(#diagonalHatch)",
+  });
 
   // Defaults
   fill.push({ value: "white" });

@@ -9,7 +9,6 @@ import {
   getFirestore,
   setDoc,
   updateDoc,
-  writeBatch,
 } from "firebase/firestore";
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
@@ -93,96 +92,12 @@ function getDataFromDoc(res) {
   }
 }
 
-export async function getForms() {
-  const forms = {};
-
-  for (const form of await getCollection("forms")) {
-    forms[form._id] = form;
-  }
-
-  return forms;
-}
-
-export async function getFormResponses(email, organization) {
-  const formTypes = { users: email, organizations: organization };
-
-  try {
-    const formResponses = await Promise.all(
-      Object.entries(formTypes).map(async ([collectionId, docId]) => {
-        const response = await getDocs(
-          collection(db, collectionId, docId, "form_responses"),
-        );
-        return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
-      }),
-    );
-
-    return formResponses.reduce((acc, cur) => [...acc, ...cur], []);
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
-
 export async function addFormAssignment(formAssignmentData) {
   const res = await addDoc(
     collection(db, "form_assignments"),
     formAssignmentData,
   );
   return res.id;
-}
-
-/**
- * @param {String} formType - "user" | "organization"
- * @param {Object[]} formResponses - list of form response objects
- * @param {Set<String>} assigned - set of emails or organization names
- * @returns {Promise<void>}
- */
-export async function batchAddFormResponses(formType, formResponses, assigned) {
-  const batch = writeBatch(db);
-
-  for (const formResponse of formResponses) {
-    for (const assignee of assigned) {
-      const updatedFormResponse = {
-        ...formResponse,
-        ...(formType === "organization" && { organization: assignee }),
-        ...(formType === "user" && { user: assignee }),
-      };
-
-      const document = doc(
-        collection(db, `${formType}s`, assignee, "form_responses"),
-      );
-      batch.set(document, updatedFormResponse);
-    }
-  }
-
-  await batch.commit();
-}
-
-export async function updateFormResponse(
-  formResponse,
-  { email, organization },
-) {
-  const {
-    _id,
-    form: { type },
-  } = formResponse;
-  const typeMap = { user: email, organization };
-
-  if (_id === undefined) {
-    const res = await addDoc(
-      collection(db, `${type}s`, typeMap[type], "form_responses"),
-      formResponse,
-    );
-
-    return res.id;
-  } else {
-    await setDoc(
-      doc(db, `${type}s`, typeMap[type], "form_responses", _id),
-      formResponse,
-    );
-
-    return _id;
-  }
 }
 
 export async function getModelDataPeriods() {

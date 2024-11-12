@@ -11,30 +11,9 @@ import { onAuthStateChanged } from "firebase/auth";
 // general styling
 import "@/assets/styles/main.scss";
 
-// form components - needed globally
-import FormCheckbox from "@/components/form/CheckboxInput.vue";
-import FormDate from "@/components/form/DateInput.vue";
-import FormLikertScale from "@/components/form/LikertScale.vue";
-import FormRadio from "@/components/form/RadioInput.vue";
-import FormSelect from "@/components/form/SelectInput.vue";
-import FormTextArea from "@/components/form/TextArea.vue";
-import FormTextInput from "@/components/form/TextInput.vue";
-import FormSubForm from "@/components/form/SubForm.vue";
-
 const pinia = createPinia();
 
-createApp(App)
-  .use(router)
-  .use(pinia)
-  .component("FormCheckbox", FormCheckbox)
-  .component("FormDate", FormDate)
-  .component("FormLikertScale", FormLikertScale)
-  .component("FormRadio", FormRadio)
-  .component("FormSelect", FormSelect)
-  .component("FormSubForm", FormSubForm)
-  .component("FormTextArea", FormTextArea)
-  .component("FormTextInput", FormTextInput)
-  .mount("#app");
+createApp(App).use(router).use(pinia).mount("#app");
 
 const store = useProvidentStore();
 

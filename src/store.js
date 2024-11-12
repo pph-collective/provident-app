@@ -1,16 +1,11 @@
 import { defineStore } from "pinia";
 import {
   addOrg,
-  createEmail,
   getCollection,
   getDataset,
-  getForms,
-  getFormResponses,
   getModelDataPeriods,
-  updateFormResponse,
 } from "@/firebase.js";
 import utils from "@/utils/utils.js";
-import { createFollowupFormResponse } from "@/utils/followupForm.js";
 
 export const useProvidentStore = defineStore("provident", {
   state: () => {
@@ -19,16 +14,13 @@ export const useProvidentStore = defineStore("provident", {
         authenticated: false,
         data: null,
         admin: false,
-        formResponses: [],
         loaded: true,
       },
       formAssignments: [],
-      forms: {},
       organizations: [],
       users: [],
       loaded: false,
       notifications: [],
-      allFormResponses: [],
       modelDataPeriod: {},
       dataset: {
         cbg: [],
@@ -57,30 +49,11 @@ export const useProvidentStore = defineStore("provident", {
 
       if (user) {
         this.mutateUser({ property: "data", with: user });
-        Promise.all([
-          this.updateUserFormResponses(),
-          getForms().then((forms) => {
-            this.mutate({ property: "forms", with: forms });
-          }),
-        ]).then(() => {
-          this.mutateUser({ property: "loaded", with: true });
-        });
+        this.mutateUser({ property: "loaded", with: true });
       } else {
         this.mutateUser({ property: "data", with: null });
-        this.mutateUser({ property: "formResponses", with: [] });
-        this.mutate({ property: "forms", with: {} });
         this.mutateUser({ property: "loaded", with: true });
       }
-    },
-    async updateUserFormResponses() {
-      const formResponses = await getFormResponses(
-        this.user.data.email,
-        this.user.data.organization,
-      );
-      this.mutateUser({
-        property: "formResponses",
-        with: formResponses,
-      });
     },
     fetchAdmin(admin) {
       this.mutateUser({ property: "admin", with: admin });
@@ -112,63 +85,6 @@ export const useProvidentStore = defineStore("provident", {
         property: "organizations",
         with: [organization, ...this.organizations],
       });
-    },
-    async updateFormResponse(updatedFormResponse) {
-      updatedFormResponse._id = await updateFormResponse(updatedFormResponse, {
-        email: this.user.data.email,
-        organization: this.user.data.organization,
-      });
-
-      const formResponses = [...this.user.formResponses];
-      const formResponseIndex = formResponses.findIndex(
-        (formResponse) =>
-          formResponse._id === updatedFormResponse._id &&
-          formResponse.type === updatedFormResponse.type,
-      );
-
-      if (formResponseIndex >= 0) {
-        formResponses[formResponseIndex] = updatedFormResponse;
-      } else {
-        formResponses.push(updatedFormResponse);
-      }
-
-      // Follow up form
-      if (
-        updatedFormResponse.status === "Submitted" &&
-        updatedFormResponse.form.followup_form !== undefined
-      ) {
-        const followupFormResponse =
-          createFollowupFormResponse(updatedFormResponse);
-        followupFormResponse._id = await updateFormResponse(
-          followupFormResponse,
-          {
-            email: this.user.data.email,
-            organization: this.user.data.organization,
-          },
-        );
-        formResponses.push(followupFormResponse);
-
-        const { release_date, form } = followupFormResponse;
-        const { title, type } = form;
-        const body = `<p>A followup form, <em>${title}</em>, has been assigned to ${
-          type === "user" ? "you" : "your organization"
-        }. Check out the form on <a href='${
-          location.origin
-        }/snack/forms'>PROVIDENT</a>.</p>`;
-
-        await createEmail({
-          to: updatedFormResponse.users_edited,
-          send_date: release_date,
-          subject: `PROVIDENT Followup Form: ${title}`,
-          body,
-        });
-      }
-
-      this.mutateUser({ property: "formResponses", with: formResponses });
-      return updatedFormResponse._id;
-    },
-    updateAllFormResponses(formResponses) {
-      this.mutate({ property: "allFormResponses", with: formResponses });
     },
     updateUsers(users) {
       this.mutate({ property: "users", with: users });
@@ -221,16 +137,6 @@ export const useProvidentStore = defineStore("provident", {
     },
     approvedUsers: (state) => {
       return state.users.filter((user) => user.status === "approved");
-    },
-    formUserOptions: (state) => {
-      return state.users
-        .map((u) => {
-          return { value: u.email, label: `${u.name} (${u.email})` };
-        })
-        .sort(utils.sortByProperty("label"));
-    },
-    formOrganizationOptions: (state) => {
-      return state.organizations.map((org) => org.name).sort();
     },
   },
 });

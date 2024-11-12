@@ -24,22 +24,6 @@
       </template>
       <template #top-right>
         <div class="field is-grouped">
-          <p v-if="!zoomed" class="control">
-            <button
-              v-if="!viewForms"
-              class="button is-family-secondary is-secondary is-light"
-              @click="viewForms = true"
-            >
-              View Forms
-            </button>
-            <button
-              v-else
-              class="button is-family-secondary is-secondary is-light"
-              @click="viewForms = false"
-            >
-              View Predictions
-            </button>
-          </p>
           <p class="control">
             <button
               v-if="!zoomed"
@@ -67,15 +51,7 @@
       </template>
       <template #subtitle>
         <div v-if="!zoomed">
-          <div v-if="viewForms">
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon solid-square" />
-                <span>Assessments and/or resource plan forms</span>
-              </div>
-            </div>
-          </div>
-          <div v-else-if="interventionArmUser">
+          <div v-if="interventionArmUser">
             <div class="icon-text">
               <div class="is-flex is-flex-direction-row">
                 <div class="icon solid-square" />
@@ -110,7 +86,6 @@
             :with-predictions="interventionArmUser"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
-            :view-forms="viewForms"
             :active-block-group="activeBG"
             @new-active-bg="activeBG = $event"
             @active-clicked-status="clickMap"
@@ -145,20 +120,6 @@
         />
       </template>
     </DashboardCard>
-
-    <DashboardCard
-      id="nra-widget"
-      width="one-third"
-      :height="2"
-      :no-header="true"
-    >
-      <template #content>
-        <AssessmentWidget
-          :active-geoid="activeBG"
-          :active-muni="computedMuni"
-        />
-      </template>
-    </DashboardCard>
   </div>
 </template>
 
@@ -176,7 +137,6 @@ import ControlPanel from "../../components/dashboard/ControlPanel.vue";
 import MainMap from "../../components/dashboard/MainMap.vue";
 import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
-import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParams } from "../../composables/useQueryParams";
 
@@ -209,7 +169,6 @@ const computedMuni = computed(() => {
 });
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
-const viewForms = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };

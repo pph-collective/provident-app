@@ -48,14 +48,6 @@
           </router-link>
 
           <router-link
-            data-cy="forms"
-            to="/snack/forms"
-            class="navbar-item has-text-primary"
-          >
-            Forms
-          </router-link>
-
-          <router-link
             v-if="user.admin"
             data-cy="admin"
             to="/admin"

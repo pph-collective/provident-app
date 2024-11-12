@@ -17,13 +17,7 @@ import { onMounted, onUnmounted, ref, toRefs, watch } from "vue";
 import { useProvidentStore } from "../store.js";
 
 import { db } from "../firebase.js";
-import {
-  collection,
-  collectionGroup,
-  getDocs,
-  onSnapshot,
-  query,
-} from "firebase/firestore";
+import { collection, onSnapshot, query } from "firebase/firestore";
 
 import BaseSidebar from "../components/BaseSidebar.vue";
 import { useMobileListener } from "../composables/useMobileListener";
@@ -66,16 +60,6 @@ const updateStore = () => {
     });
 
     store.getFormAssignments();
-
-    // All Form Responses
-    getDocs(collectionGroup(db, "form_responses")).then((querySnapshot) => {
-      const allFormResponses = [];
-      querySnapshot.forEach((doc) => {
-        allFormResponses.push({ id: doc.id, ...doc.data() });
-      });
-
-      store.updateAllFormResponses(allFormResponses);
-    });
   }
 };
 
