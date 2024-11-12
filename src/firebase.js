@@ -1,14 +1,8 @@
 import { initializeApp } from "firebase/app";
-import {
-  connectAuthEmulator,
-  getAuth,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   addDoc,
   collection,
-  connectFirestoreEmulator,
   doc,
   getDoc,
   getDocs,
@@ -25,16 +19,6 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 let emailSubjectPrefix = "";
-if (location.hostname === "localhost") {
-  db._setSettings({
-    experimentalForceLongPolling: true,
-    host: "localhost:8088",
-    ssl: false,
-  });
-  connectFirestoreEmulator(db, "127.0.0.1", 8088);
-  connectAuthEmulator(auth, "http://127.0.0.1:9099");
-  emailSubjectPrefix = "TEST: ";
-}
 
 export async function logActivity(user, action, subAction = "") {
   try {

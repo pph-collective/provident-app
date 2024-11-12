@@ -18,18 +18,13 @@
     ]
   },
   "emulators": {
-    "auth": {
-      "port": 9099
-    },
-    "firestore": {
-      "port": 8088
-    },
     "hosting": {
       "port": 5055
     },
     "ui": {
       "enabled": true
-    }
+    },
+    "singleProjectMode": true
   },
   "functions": [
     {

@@ -6,9 +6,7 @@
     "serve": "vite",
     "build": "vite build",
     "lint": "eslint --ext .ts,.js,.vue src scripts --fix",
-    "shp2topo": "scripts/shp2topo.sh",
-    "firebase:dev": "firebase emulators:start --import emulator_data",
-    "firebase:savedev": "firebase emulators:export emulator_data"
+    "shp2topo": "scripts/shp2topo.sh"
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
