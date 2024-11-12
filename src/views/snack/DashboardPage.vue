@@ -172,19 +172,7 @@ const zoomed = ref(false);
 
 const filteredOrgs = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = store.organizations;
-  if (store.user.admin) {
-    return [ri, ...orgs, ...towns];
-  } else if (store.user.data) {
-    return [
-      orgs.find((o) => o.name === store.user.data.organization),
-      ri,
-      ...towns,
-    ];
-  } else {
-    // shouldn't hit here in reality
-    return [ri, ...towns];
-  }
+  return [ri, ...towns];
 });
 
 const modelDataPeriod = computed(() => store.modelDataPeriod);

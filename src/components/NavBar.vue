@@ -48,15 +48,6 @@
           </router-link>
 
           <router-link
-            v-if="user.admin"
-            data-cy="admin"
-            to="/admin"
-            class="navbar-item has-text-primary"
-          >
-            Admin
-          </router-link>
-
-          <router-link
             data-cy="resources"
             to="/resources"
             class="navbar-item has-text-primary"

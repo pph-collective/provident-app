@@ -1,10 +1,5 @@
 import { defineStore } from "pinia";
-import {
-  addOrg,
-  getCollection,
-  getDataset,
-  getModelDataPeriods,
-} from "@/firebase.js";
+import { getCollection, getDataset, getModelDataPeriods } from "@/firebase.js";
 import utils from "@/utils/utils.js";
 
 export const useProvidentStore = defineStore("provident", {
@@ -16,7 +11,6 @@ export const useProvidentStore = defineStore("provident", {
         admin: false,
         loaded: true,
       },
-      formAssignments: [],
       organizations: [],
       users: [],
       loaded: false,
@@ -44,7 +38,6 @@ export const useProvidentStore = defineStore("provident", {
 
       // always start empty, controlled by ContentWithSidebar
       this.mutate({ property: "users", with: [] });
-      this.mutate({ property: "formAssignments", with: [] });
       this.mutate({ property: "notifications", with: [] });
 
       if (user) {
@@ -54,9 +47,6 @@ export const useProvidentStore = defineStore("provident", {
         this.mutateUser({ property: "data", with: null });
         this.mutateUser({ property: "loaded", with: true });
       }
-    },
-    fetchAdmin(admin) {
-      this.mutateUser({ property: "admin", with: admin });
     },
     async fetchModelData() {
       const modelDataPeriods = await getModelDataPeriods();
@@ -77,27 +67,8 @@ export const useProvidentStore = defineStore("provident", {
         this.mutate({ property: "organizations", with: orgs });
       }
     },
-    async addOrg(organization) {
-      // Setting _id to be more consistent to getCollection in firebase.js
-      organization._id = await addOrg(organization);
-
-      this.mutate({
-        property: "organizations",
-        with: [organization, ...this.organizations],
-      });
-    },
     updateUsers(users) {
       this.mutate({ property: "users", with: users });
-    },
-    async getFormAssignments() {
-      const formAssignments = await getCollection("form_assignments");
-      this.mutate({ property: "formAssignments", with: formAssignments });
-    },
-    addFormAssignment(formAssignment) {
-      this.mutate({
-        property: "formAssignments",
-        with: [formAssignment, ...this.formAssignments],
-      });
     },
     setLoaded() {
       this.mutate({ property: "loaded", with: true });

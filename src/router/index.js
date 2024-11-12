@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomePage.vue";
 import Resources from "../views/ResourcesPage.vue";
-import ContentWithSidebar from "../views/ContentWithSidebar.vue";
 import { useProvidentStore } from "../store";
 
 let store = {};
@@ -65,77 +64,6 @@ const routes = [
       {
         path: "dashboard",
         component: () => import("../views/snack/DashboardPage.vue"),
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    name: "Admin",
-    beforeEnter: (to) => {
-      if (!store.user.authenticated) {
-        return { name: "Login", query: { redirect: to.path } };
-      } else if (!store.user.admin) {
-        return { name: "Home" };
-      }
-    },
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: ContentWithSidebar,
-    props: {
-      parentRoute: "admin",
-      pages: [
-        {
-          name: "Review Access Requests",
-          route: "review_access_requests",
-          icon: "fa-universal-access",
-        },
-        {
-          name: "User Management",
-          route: "user_management",
-          icon: "fa-crown",
-        },
-        {
-          name: "Organization Management",
-          route: "organization_management",
-          icon: "fa-handshake",
-        },
-        {
-          name: "Form Assignments",
-          route: "form_assignments",
-          icon: "fa-file-import",
-        },
-        {
-          name: "Emails",
-          route: "email",
-          icon: "fa-paper-plane",
-        },
-      ],
-    },
-    children: [
-      {
-        path: "",
-        redirect: "/admin/review_access_requests",
-      },
-      {
-        path: "review_access_requests",
-        component: () => import("../views/admin/ReviewAccessRequests.vue"),
-      },
-      {
-        path: "user_management",
-        component: () => import("../views/admin/UserManagement.vue"),
-      },
-      {
-        path: "organization_management",
-        component: () => import("../views/admin/OrganizationManagement.vue"),
-      },
-      {
-        path: "form_assignments",
-        component: () => import("../views/admin/FormAssignments.vue"),
-      },
-      {
-        path: "email",
-        component: () => import("../views/admin/EmailsPage.vue"),
       },
     ],
   },

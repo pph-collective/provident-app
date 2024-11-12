@@ -8,7 +8,6 @@ import {
   getDocs,
   getFirestore,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import * as aq from "arquero";
 import { processEmailBody } from "./utils/emails";
@@ -66,10 +65,6 @@ export async function getUserRequest(email) {
   }
 }
 
-export async function updateUser(user) {
-  await updateDoc(doc(db, "users", user.email), user);
-}
-
 export async function getCollection(collectionPath) {
   let res = [];
   try {
@@ -90,14 +85,6 @@ function getDataFromDoc(res) {
   } else {
     return [];
   }
-}
-
-export async function addFormAssignment(formAssignmentData) {
-  const res = await addDoc(
-    collection(db, "form_assignments"),
-    formAssignmentData,
-  );
-  return res.id;
 }
 
 export async function getModelDataPeriods() {

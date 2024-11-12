@@ -30,8 +30,6 @@ onAuthStateChanged(auth, async (user) => {
         organization,
         role,
       });
-      let token = await user.getIdTokenResult();
-      store.fetchAdmin(token.claims && token.claims.admin);
       // purposefully not waiting for logging to complete
       logActivity(user.email, "login");
       store.setLoaded();
@@ -41,6 +39,5 @@ onAuthStateChanged(auth, async (user) => {
 
   // fallthrough
   store.fetchUser(null);
-  store.fetchAdmin(false);
   store.setLoaded();
 });
