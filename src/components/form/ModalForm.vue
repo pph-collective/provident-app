@@ -131,7 +131,9 @@ watch(
       ? formConfig.shortTitle
       : props.formResponse.form.title;
     const organization = props.formResponse.organization;
-    const date = props.formResponse.last_updated;
+    const date = new Date(props.formResponse.last_updated)
+      .toISOString()
+      .split("T")[0];
 
     document.title = [organization, date, title, municipality, geoId]
       .filter(Boolean)
