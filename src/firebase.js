@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -8,12 +7,10 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import * as aq from "arquero";
-import { processEmailBody } from "./utils/emails";
 import firebaseConfig from "./utils/firebaseConfig.json";
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-let emailSubjectPrefix = "";
 
 export async function getCollection(collectionPath) {
   let res = [];
@@ -109,26 +106,6 @@ export async function getZipcodes() {
   } catch (err) {
     console.log(err);
     return [];
-  }
-}
-
-export async function createEmail({
-  subject,
-  to,
-  body,
-  sendDate = new Date().toISOString(),
-}) {
-  try {
-    const document = {
-      subject: emailSubjectPrefix + subject,
-      to,
-      body: processEmailBody(body),
-      sendDate,
-      sent: false,
-    };
-    await addDoc(collection(db, "emails"), document);
-  } catch (err) {
-    console.log(err);
   }
 }
 
