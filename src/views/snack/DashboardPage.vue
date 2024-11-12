@@ -167,7 +167,7 @@ const computedMuni = computed(() => {
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 
-const filteredOrgs = computed(() => {
+const locations = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
   return [ri, ...towns];
 });
@@ -218,7 +218,7 @@ const dropDowns = computed(() => {
   return {
     geography: {
       icon: "fas fa-globe",
-      values: filteredOrgs.value,
+      values: locations.value,
     },
     zipcode: {
       icon: "fas fa-map",
@@ -228,7 +228,7 @@ const dropDowns = computed(() => {
 });
 
 const controls = ref({
-  geography: filteredOrgs.value[0], // All Towns
+  geography: locations.value[0], // All Towns
   zipcode: { name: "All Zip Codes" },
 });
 
