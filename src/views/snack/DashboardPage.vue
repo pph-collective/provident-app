@@ -291,7 +291,6 @@ const clickMap = (clickedStatus) => {
 
 const zoomBg = () => {
   zoomed.value = true;
-  logActivity(store.user.data.email, "zoom map", activeBG.value);
 };
 </script>
 
