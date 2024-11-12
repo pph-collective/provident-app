@@ -44,7 +44,6 @@
     "ajv-errors": "^3.0.0",
     "argparse": "^2.0.1",
     "csv-parse": "^5.5.0",
-    "cypress-firebase": "^3.0.2",
     "d3-dsv": "^3.0.1",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",

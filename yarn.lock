@@ -2377,11 +2377,6 @@ csv-parse@^5.5.0:
   resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.0.tgz#2313421e69b650dae32a79ac884b20b21ca1d9da"
   integrity sha512-RxruSK3M4XgzcD7Trm2wEN+SJ26ChIb903+IWxNOcB5q4jT2Cs+hFr6QP39J05EohshRFEvyzEBoZ/466S2sbw==
 
-cypress-firebase@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/cypress-firebase/-/cypress-firebase-3.0.2.tgz#b153f066584506fca200f7b4f86285464b086edc"
-  integrity sha512-tlVH2MPSxtSo45CCksTmDHq+QY9CRxaDwzA+LbpPifKIUeIo6adfwRKYvjjKLjM4SDZwIqz4Vp+8oTCAl8CleA==
-
 "d3-array@1 - 3", "d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@^3.1.1:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.1.6.tgz#0342c835925826f49b4d16eb7027aec334ffc97d"
