@@ -16,45 +16,8 @@ const routes = [
     component: Home,
   },
   {
-    path: "/login",
-    name: "Login",
-    beforeEnter: async (to, from) => {
-      if (
-        !to.query.redirect &&
-        !["ResetPassword", "Register"].includes(from.name)
-      ) {
-        return { path: to.path, query: { redirect: from.path } };
-      }
-    },
-    component: () => import("../views/auth/LoginUser.vue"),
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: () => import("../views/auth/RegisterUser.vue"),
-  },
-  {
-    path: "/auth",
-    redirect: (to) => {
-      const { query } = to;
-      if (query.mode === "resetPassword") {
-        return { path: "/updatepassword", query: query };
-      }
-    },
-  },
-  {
-    path: "/updatepassword",
-    name: "ResetPassword",
-    component: () => import("../views/auth/ResetPassword.vue"),
-  },
-  {
     path: "/snack",
     name: "Snack",
-    beforeEnter: (to) => {
-      if (!store.user.authenticated) {
-        return { name: "Login", query: { redirect: to.path } };
-      }
-    },
     component: () => import("../views/PassThrough.vue"),
     children: [
       {

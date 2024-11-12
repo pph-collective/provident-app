@@ -57,43 +57,6 @@
         </div>
 
         <div class="navbar-end">
-          <div v-if="!user.authenticated" class="navbar-item">
-            <p class="control">
-              <router-link
-                to="/login"
-                class="button is-primary is-small"
-                data-cy="login-button"
-              >
-                Log In
-              </router-link>
-            </p>
-          </div>
-          <div v-else class="is-flex is-flex-row navbar-item">
-            <div class="navbar-item is-hidden-touch">
-              <span class="icon-text has-text-primary">
-                <span class="icon">
-                  <i
-                    class="fas"
-                    :class="{
-                      'fa-user-circle': user.data.role === 'user',
-                      'fa-crown': user.data.role === 'champion',
-                    }"
-                  />
-                </span>
-                <span>{{ user.data.displayName }}</span>
-              </span>
-            </div>
-            <p class="control">
-              <a
-                class="button is-primary is-small"
-                data-cy="logout-button"
-                @click="logoutAndPush"
-              >
-                Log Out
-              </a>
-            </p>
-          </div>
-
           <div class="navbar-item">
             <p class="control">
               <a
@@ -111,25 +74,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { useProvidentStore } from "../store";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
 import { useMobileListener } from "../composables/useMobileListener";
-import { logout } from "../firebase";
-
-const store = useProvidentStore();
-const user = computed(() => store.user);
 
 const hamburgerActive = ref(false);
 const toggleBurgerMenu = () => {
   hamburgerActive.value = !hamburgerActive.value;
-};
-
-const router = useRouter();
-
-const logoutAndPush = async () => {
-  await logout();
-  await router.push("/");
 };
 
 // On window resize, collapse the hamburger menu always

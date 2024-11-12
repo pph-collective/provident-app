@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -14,42 +13,7 @@ import firebaseConfig from "./utils/firebaseConfig.json";
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const auth = getAuth(app);
 let emailSubjectPrefix = "";
-
-export async function login(email, password) {
-  try {
-    const res = await signInWithEmailAndPassword(auth, email, password);
-    return res.user.toJSON();
-  } catch (e) {
-    console.log(e);
-    let message = e.message;
-    if (e.message === "Firebase: Error (auth/wrong-password).") {
-      message = "The password is invalid or the user does not have a password";
-    }
-    throw {
-      ...e,
-      message,
-    };
-  }
-}
-
-export async function logout() {
-  await signOut(auth);
-}
-
-export async function getUserRequest(email) {
-  try {
-    const document = await getDoc(doc(db, "users", email));
-    if (document.exists()) {
-      return document.data();
-    } else {
-      return {};
-    }
-  } catch (err) {
-    return {};
-  }
-}
 
 export async function getCollection(collectionPath) {
   let res = [];
