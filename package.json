@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "node ./cypress/fixtures/seedDatabase.js & vite",
+    "serve": "vite",
     "build": "vite build",
-    "test:e2e": "cypress open",
-    "lint": "eslint --ext .ts,.js,.vue src scripts cypress --fix",
+    "lint": "eslint --ext .ts,.js,.vue src scripts --fix",
     "shp2topo": "scripts/shp2topo.sh",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data"
@@ -101,7 +100,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [
-      "eslint --ext .ts,.js,.vue src scripts cypress --fix"
+      "eslint --ext .ts,.js,.vue src scripts --fix"
     ]
   }
 }
