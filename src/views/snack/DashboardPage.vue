@@ -24,22 +24,6 @@
       </template>
       <template #top-right>
         <div class="field is-grouped">
-          <p v-if="!zoomed" class="control">
-            <button
-              v-if="!viewForms"
-              class="button is-family-secondary is-secondary is-light"
-              @click="viewForms = true"
-            >
-              View Forms
-            </button>
-            <button
-              v-else
-              class="button is-family-secondary is-secondary is-light"
-              @click="viewForms = false"
-            >
-              View Predictions
-            </button>
-          </p>
           <p class="control">
             <button
               v-if="!zoomed"
@@ -67,32 +51,22 @@
       </template>
       <template #subtitle>
         <div v-if="!zoomed">
-          <div v-if="viewForms">
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon solid-square" />
-                <span>Assessments and/or resource plan forms</span>
-              </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon solid-square" />
+              <p>Prioritized by PROVIDENT model</p>
             </div>
           </div>
-          <div v-else-if="interventionArmUser">
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon solid-square" />
-                <p>Prioritized by PROVIDENT model</p>
-              </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon square" />
+              <span>Not prioritized by PROVIDENT model</span>
             </div>
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon square" />
-                <span>Not prioritized by PROVIDENT model</span>
-              </div>
-            </div>
-            <div class="icon-text">
-              <div class="is-flex is-flex-direction-row">
-                <div class="icon stripes square" />
-                <span>Not eligible for PROVIDENT prediction</span>
-              </div>
+          </div>
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <div class="icon stripes square" />
+              <span>Not eligible for PROVIDENT prediction</span>
             </div>
           </div>
           Click on a block group to see more details or zoom in
@@ -107,10 +81,9 @@
             :dataset="dataset.cbg"
             :filter-municipalities="controls.geography.municipalities"
             flag-property="prediction"
-            :with-predictions="interventionArmUser"
+            :with-predictions="true"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
-            :view-forms="viewForms"
             :active-block-group="activeBG"
             @new-active-bg="activeBG = $event"
             @active-clicked-status="clickMap"
@@ -141,21 +114,7 @@
           :dataset="dataset"
           :municipality="computedMuni"
           :geoid="activeBG"
-          :with-predictions="interventionArmUser"
-        />
-      </template>
-    </DashboardCard>
-
-    <DashboardCard
-      id="nra-widget"
-      width="one-third"
-      :height="2"
-      :no-header="true"
-    >
-      <template #content>
-        <AssessmentWidget
-          :active-geoid="activeBG"
-          :active-muni="computedMuni"
+          :with-predictions="true"
         />
       </template>
     </DashboardCard>
@@ -163,12 +122,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
 
-import { logActivity, getZipcodes } from "../../firebase.js";
+import { getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
 import DashboardCard from "../../components/dashboard/DashboardCard.vue";
@@ -176,7 +135,6 @@ import ControlPanel from "../../components/dashboard/ControlPanel.vue";
 import MainMap from "../../components/dashboard/MainMap.vue";
 import BGMap from "../../components/dashboard/BGMap.vue";
 import StatsWidget from "../../components/dashboard/StatsWidget.vue";
-import AssessmentWidget from "../../components/dashboard/AssessmentWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParams } from "../../composables/useQueryParams";
 
@@ -191,7 +149,6 @@ const BLOCK_GROUPS = geo.map((feature) => ({
 }));
 
 const store = useProvidentStore();
-const interventionArmUser = computed(() => store.interventionArmUser);
 const dataset = computed(() => {
   if (store.dataset.cbg.length === 0) {
     store.fetchModelData();
@@ -209,23 +166,10 @@ const computedMuni = computed(() => {
 });
 const activeClickedStatus = ref(false);
 const zoomed = ref(false);
-const viewForms = ref(false);
 
-const filteredOrgs = computed(() => {
+const locations = computed(() => {
   const ri = { name: "All of Rhode Island", municipalities: [] };
-  const orgs = store.organizations;
-  if (store.user.admin) {
-    return [ri, ...orgs, ...towns];
-  } else if (store.user.data) {
-    return [
-      orgs.find((o) => o.name === store.user.data.organization),
-      ri,
-      ...towns,
-    ];
-  } else {
-    // shouldn't hit here in reality
-    return [ri, ...towns];
-  }
+  return [ri, ...towns];
 });
 
 const modelDataPeriod = computed(() => store.modelDataPeriod);
@@ -274,7 +218,7 @@ const dropDowns = computed(() => {
   return {
     geography: {
       icon: "fas fa-globe",
-      values: filteredOrgs.value,
+      values: locations.value,
     },
     zipcode: {
       icon: "fas fa-map",
@@ -284,7 +228,7 @@ const dropDowns = computed(() => {
 });
 
 const controls = ref({
-  geography: filteredOrgs.value[0], // All Towns
+  geography: locations.value[0], // All Towns
   zipcode: { name: "All Zip Codes" },
 });
 
@@ -343,18 +287,10 @@ const loading = computed(
 // TODO: the timing of the click signal listener and the active Geography signal listener make this not always right
 const clickMap = (clickedStatus) => {
   activeClickedStatus.value = clickedStatus;
-  if (clickedStatus) {
-    // wait for the next render cycle as the activeBG gets updated at about the
-    // same time and otherwise could be stale
-    nextTick(() =>
-      logActivity(store.user.data.email, "click map", activeBG.value),
-    );
-  }
 };
 
 const zoomBg = () => {
   zoomed.value = true;
-  logActivity(store.user.data.email, "zoom map", activeBG.value);
 };
 </script>
 

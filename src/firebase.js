@@ -1,75 +1,16 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
-  setDoc,
-  updateDoc,
-  writeBatch,
 } from "firebase/firestore";
 import * as aq from "arquero";
-import { processEmailBody } from "./utils/emails";
 import firebaseConfig from "./utils/firebaseConfig.json";
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const auth = getAuth(app);
-let emailSubjectPrefix = "";
-
-export async function logActivity(user, action, subAction = "") {
-  try {
-    await addDoc(collection(db, `users/${user}/activity_log`), {
-      user,
-      action,
-      subAction,
-      datetime: Date.now(),
-    });
-  } catch (e) {
-    console.warn("Activity logging failed: ", e);
-  }
-}
-
-export async function login(email, password) {
-  try {
-    const res = await signInWithEmailAndPassword(auth, email, password);
-    return res.user.toJSON();
-  } catch (e) {
-    console.log(e);
-    let message = e.message;
-    if (e.message === "Firebase: Error (auth/wrong-password).") {
-      message = "The password is invalid or the user does not have a password";
-    }
-    throw {
-      ...e,
-      message,
-    };
-  }
-}
-
-export async function logout() {
-  await signOut(auth);
-}
-
-export async function getUserRequest(email) {
-  try {
-    const document = await getDoc(doc(db, "users", email));
-    if (document.exists()) {
-      return document.data();
-    } else {
-      return {};
-    }
-  } catch (err) {
-    return {};
-  }
-}
-
-export async function updateUser(user) {
-  await updateDoc(doc(db, "users", user.email), user);
-}
 
 export async function getCollection(collectionPath) {
   let res = [];
@@ -90,98 +31,6 @@ function getDataFromDoc(res) {
     return res.data().data;
   } else {
     return [];
-  }
-}
-
-export async function getForms() {
-  const forms = {};
-
-  for (const form of await getCollection("forms")) {
-    forms[form._id] = form;
-  }
-
-  return forms;
-}
-
-export async function getFormResponses(email, organization) {
-  const formTypes = { users: email, organizations: organization };
-
-  try {
-    const formResponses = await Promise.all(
-      Object.entries(formTypes).map(async ([collectionId, docId]) => {
-        const response = await getDocs(
-          collection(db, collectionId, docId, "form_responses"),
-        );
-        return response.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
-      }),
-    );
-
-    return formResponses.reduce((acc, cur) => [...acc, ...cur], []);
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
-
-export async function addFormAssignment(formAssignmentData) {
-  const res = await addDoc(
-    collection(db, "form_assignments"),
-    formAssignmentData,
-  );
-  return res.id;
-}
-
-/**
- * @param {String} formType - "user" | "organization"
- * @param {Object[]} formResponses - list of form response objects
- * @param {Set<String>} assigned - set of emails or organization names
- * @returns {Promise<void>}
- */
-export async function batchAddFormResponses(formType, formResponses, assigned) {
-  const batch = writeBatch(db);
-
-  for (const formResponse of formResponses) {
-    for (const assignee of assigned) {
-      const updatedFormResponse = {
-        ...formResponse,
-        ...(formType === "organization" && { organization: assignee }),
-        ...(formType === "user" && { user: assignee }),
-      };
-
-      const document = doc(
-        collection(db, `${formType}s`, assignee, "form_responses"),
-      );
-      batch.set(document, updatedFormResponse);
-    }
-  }
-
-  await batch.commit();
-}
-
-export async function updateFormResponse(
-  formResponse,
-  { email, organization },
-) {
-  const {
-    _id,
-    form: { type },
-  } = formResponse;
-  const typeMap = { user: email, organization };
-
-  if (_id === undefined) {
-    const res = await addDoc(
-      collection(db, `${type}s`, typeMap[type], "form_responses"),
-      formResponse,
-    );
-
-    return res.id;
-  } else {
-    await setDoc(
-      doc(db, `${type}s`, typeMap[type], "form_responses", _id),
-      formResponse,
-    );
-
-    return _id;
   }
 }
 
@@ -260,43 +109,11 @@ export async function getZipcodes() {
   }
 }
 
-export async function createEmail({
-  subject,
-  to,
-  body,
-  sendDate = new Date().toISOString(),
-}) {
-  try {
-    const document = {
-      subject: emailSubjectPrefix + subject,
-      to,
-      body: processEmailBody(body),
-      sendDate,
-      sent: false,
-    };
-    await addDoc(collection(db, "emails"), document);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export async function addOrg(organization) {
-  const docId = organization.name;
-
-  await setDoc(doc(db, "organizations", docId), organization);
-
-  return docId;
-}
-
-export async function getDataset(period, interventionArmUser) {
+export async function getDataset(period) {
   const data = await getModelData(period);
-  if (interventionArmUser) {
-    const predictions = await getModelPredictions(period);
-    return {
-      ...data,
-      cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
-    };
-  } else {
-    return data;
-  }
+  const predictions = await getModelPredictions(period);
+  return {
+    ...data,
+    cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
+  };
 }
