@@ -25,15 +25,6 @@ To use any of the scripts, run `yarn <script-name> <args>`.
 
 ## All the Scripts
 
-### `add-results`
-
-The `add-results` script reads in a csv with predicted blockgroups, and loads them to the firestore "model_predictions" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
-
-#### Usage
-```shell
-node ./scripts/add-results.js -f <path to csv> -p <period> [--emulator] [--seed]
-```
-
 ### `add-model-towns`
 
 The `add-model-towns` script reads in a csv with town metadata, and loads them to the firestore "model_data" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
