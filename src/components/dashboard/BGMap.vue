@@ -67,6 +67,7 @@ const spec = computed(() => {
           "https://api.mapbox.com/styles/v1/ccv-bot/cl5wvienz000o16qk2qw5n52h/static/",
       },
       {
+        // Access token is restricted to certain domains in the mapbox settings
         name: "mapboxToken",
         value:
           "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja3ZsY2JzMHY2ZGRiMm9xMTQ0eW1nZTJsIn0.uydOaXlX1uQfxPrKfucB2A",

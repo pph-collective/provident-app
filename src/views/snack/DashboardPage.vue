@@ -53,20 +53,20 @@
         <div v-if="!zoomed">
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
-              <div class="icon solid-square" />
-              <p>Prioritized by PROVIDENT model</p>
+              <div class="icon square-red" />
+              <p>Persistently high risk for overdose</p>
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
-              <div class="icon square" />
-              <span>Not prioritized by PROVIDENT model</span>
+              <div class="icon square-orange" />
+              <span>Sporadically high risk for overdose</span>
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
-              <div class="icon stripes square" />
-              <span>Not eligible for PROVIDENT prediction</span>
+              <div class="icon square-grey" />
+              <span>Lower risk for overdose</span>
             </div>
           </div>
           Click on a block group to see more details or zoom in
@@ -353,12 +353,22 @@ const zoomBg = () => {
   border-color: black;
   border-width: 1px;
   border-style: solid;
+  opacity: 0.5;
 }
 
-.solid-square {
+.square-red {
   @extend .square;
-  background-color: $pori-blue;
-  opacity: 0.5;
+  background-color: $trajectory-red;
+}
+
+.square-orange {
+  @extend .square;
+  background-color: $trajectory-orange;
+}
+
+.square-grey {
+  @extend .square;
+  background-color: $trajectory-grey;
 }
 
 .point-of-interest {
