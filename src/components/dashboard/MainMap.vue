@@ -124,14 +124,12 @@ const filteredGeo = computed(() => {
   return topo;
 });
 
-const tooltipSignal = computed(() => {
-  return `{
-    title: 'Block Group ' + datum.properties.bg_id,
-    Municipality: datum.properties.name,
-    Priority: datum.properties.tooltip.priority,
-    'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''
-  }`;
-});
+const tooltipSignal = `{
+  title: 'Block Group ' + datum.properties.bg_id,
+  Municipality: datum.properties.name,
+  Priority: datum.properties.tooltip.priority,
+  'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''
+}`;
 
 const blockGroupFill = [
   {
@@ -268,7 +266,7 @@ const spec = computed(() => {
               { value: 0 },
             ],
             tooltip: {
-              signal: tooltipSignal.value,
+              signal: tooltipSignal,
             },
           },
         },
