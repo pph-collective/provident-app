@@ -14,7 +14,7 @@ import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
-import { sortByProperty } from "@/utils/utils.js";
+import { sortByProperty, priorityToColor } from "@/utils/utils.js";
 
 const props = defineProps({
   dataset: {
@@ -26,14 +26,6 @@ const props = defineProps({
     default() {
       return [];
     },
-  },
-  flagProperty: {
-    type: String,
-    required: true,
-  },
-  withPredictions: {
-    type: Boolean,
-    required: true,
   },
   zipcode: {
     type: Object,
@@ -134,15 +126,15 @@ const tooltipSignal = `{
 const blockGroupFill = [
   {
     test: "datum.properties.tooltip.priority === 'Persistently high risk for overdose'",
-    value: "#A82E41",
+    value: priorityToColor["Persistently high risk for overdose"],
   },
   {
     test: "datum.properties.tooltip.priority === 'Sporadically high risk for overdose'",
-    value: "#EDAA60",
+    value: priorityToColor["Sporadically high risk for overdose"],
   },
   {
     test: "datum.properties.tooltip.priority === 'Lower risk for overdose'",
-    value: "#DBD4D0",
+    value: priorityToColor["Lower risk for overdose"],
   },
   // Default
   { value: "url(#diagonalHatch)" },

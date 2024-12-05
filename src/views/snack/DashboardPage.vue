@@ -80,8 +80,6 @@
             class="is-absolute"
             :dataset="dataset.cbg"
             :filter-municipalities="controls.geography.municipalities"
-            flag-property="prediction"
-            :with-predictions="true"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :active-block-group="activeBG"
@@ -114,7 +112,6 @@
           :dataset="dataset"
           :municipality="computedMuni"
           :geoid="activeBG"
-          :with-predictions="true"
         />
       </template>
     </DashboardCard>
