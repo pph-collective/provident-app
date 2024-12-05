@@ -102,7 +102,7 @@
     </DashboardCard>
 
     <DashboardCard id="stats" width="one-third" :height="5">
-      <template #title> Stats: {{ modelDataPeriod.version }}</template>
+      <template #title><h3>Neighborhood Characteristics</h3></template>
       <template v-if="modelDataPeriod.description" #subtitle>
         {{ modelDataPeriod.description }}</template
       >
