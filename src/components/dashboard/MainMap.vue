@@ -143,7 +143,7 @@ const blockGroupFill = [
     value: "#EDAA60",
   },
   {
-    test: "datum.properties.tooltip.priority === 'Sporadically high risk for overdose'",
+    test: "datum.properties.tooltip.priority === 'Lower risk for overdose'",
     value: "#DBD4D0",
   },
   // Default
@@ -260,8 +260,8 @@ const spec = computed(() => {
               { value: "#999999" },
             ],
             fillOpacity: [
-              { test: "datum === activeGeography", value: 0.5 },
-              { value: 0.2 },
+              { test: "datum === activeGeography", value: 0.8 },
+              { value: 0.5 },
             ],
             zindex: [
               { test: "datum === activeGeography", value: 1 },
