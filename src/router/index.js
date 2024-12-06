@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomePage.vue";
 import Resources from "../views/ResourcesPage.vue";
+import Dashboard from "../views/snack/DashboardPage.vue";
 import { useProvidentStore } from "../store";
 
 let store = {};
@@ -16,19 +17,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/snack",
-    name: "Snack",
-    component: () => import("../views/PassThrough.vue"),
-    children: [
-      {
-        path: "",
-        redirect: "/snack/dashboard",
-      },
-      {
-        path: "dashboard",
-        component: () => import("../views/snack/DashboardPage.vue"),
-      },
-    ],
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
   },
   {
     path: "/resources",
