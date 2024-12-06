@@ -9,43 +9,17 @@ yarn firebase login
 ```
 
 ### Compiles and hot-reloads for development
-Needs two terminals
 
-1. Start the firebase emulators, wait until it finishes
-```
-yarn firebase:dev
-```
+> [!NOTE]  
+> Only need to start the server now. The emulator for Firebase (backend database) and authentication have been disabled.
 
-2. Loads the seed data into firebase and then starts the server
 ```
 yarn serve
 ```
 
-### Save updated firebase data
-
-For database changes, edit the seed json file located at `./tests/fixtures/seed.json`. Use the `subCollections` key to 
-identify sub-collections.
-
-For authentication changes
-- Edit authentications changes through the firebase console or through the web app (registering, user management page,
-reset password)
-- Clear the emulator database in the emulator console, since database changes are in the seed json file (as noted 
-above).
-- Then run `yarn firebase:savedev`
-
 ### Compiles and minifies for production
 ```
 yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Run your end-to-end tests
-```
-yarn test:e2e
 ```
 
 ### Lints and fixes files
@@ -53,288 +27,22 @@ yarn test:e2e
 yarn lint
 ```
 
-## Forms
+### Setup Firebase Admin
 
-As part of this web app, forms can be specified using JSON and added to the firebase store. There is support for a variety of field types, validation, and conditional fields.
-We're using [formvuelate](https://formvuelate.js.org/guide/#installation) to build and validate our forms.  The validation is done using [VeeValidate](https://formvuelate.js.org/guide/veevalidate.html) and [yup](https://github.com/jquense/yup#api).
+> [!NOTE]
+> This is necessary if you want to run any of the scripts. Mainly setting up Firebase Admin allows you to read/write 
+> to the database 
 
-A sample JSON:
-```json
-{
-  "title": "My Form",
-  "type": "user",
-  "questions": [
-    {
-      "model": "age",
-      "component": "TextInput",
-      "type": "number",
-      "label": "What is your age?",
-      "validations": "yup.number().min(13).max(110).required()",
-      "required": true
-    },
-    {
-      "model": "old",
-      "component": "Radio",
-      "label": "Do you feel old?",
-      "condition": "(model) => model.age > 100",
-      "options": [
-        "Yes",
-        "No",
-        "Get off my lawn"
-      ]
-    },
-    {
-      "model": "favorite_color",
-      "component": "Select",
-      "label": "What is your favorite color?",
-      "required": true,
-      "options": [
-        "Green",
-        "Rainbow",
-        "Sparkles",
-        "Other"
-      ]
-    },
-    {
-      "model": "other_favorite_color",
-      "component": "TextInput",
-      "label": "Favorite Color",
-      "required": true,
-      "condition": "(model) => model.favorite_color === 'Other'"
-    },
-    {
-      "model": "color_essay",
-      "component": "TextArea",
-      "label": "Please write an essay about your favorite color."
-    }
-  ]
-}
-```
-
-See the data folder for [sample forms](https://github.com/pph-collective/provident-app/tree/main/data) 
-See [scripts](scripts/README.md) for info on how to upload a JSON form to firebase
-
-### How to Build a Form
-Required keys at the root level:
-
-* `title`: The title of the form (will display to the end user)
-* `type`: The type of the form which can be either `user` or `organization`
-* `questions`: A list of question fields (See [How to Build Questions](#how-to-build-questions))
-
-Optional keys at the root level:
-* `followup_form`: A form that follows up with the form. (See [How to Build a Followup Form](#how-to-build-a-followup-form))
-
-### How to Build Questions
-
-Required keys for all fields:
-* `model`: The identifier for the question result (e.g. `"age"`)
-* `component`: Which field to use (e.g. `TextInput`)
-* `label`: The question to display with the input (e.g. `"How old are you?"`)
-
-Optional keys supported on all fields:
-* `required`: A boolean (true/false) indicating if the field is required
-* `help_text` : A string containing help text displayed for the user to see.
-* `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
-* `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
-* `read_only`: A boolean (true/false) indicating if the field is read only.
-
-The fields currently supported (component in `src/components/forms`) are:
-* `Checkbox`: A list of checkboxes to check
-* `Date`: A calendar date picker
-* `LikertScale`: A table of radio buttons to rate statements
-* `Radio`: Radio button group
-* `Select`: Drop down menu
-* `SubForm`: A component that acts as a form. Typically used to repeat a group of questions.
-* `TextArea`: A multi-line text input
-* `TextInput`: A one line text input
-
-
-#### Checkbox
-
-Required additional keys:
-
-- `options`: an array of strings which the user can select.
-
-#### Date
-
-Optional keys:
-
-- `max_date`: a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker after this date.
-- `min_date`: `"today"` or a date formatted as `"yyyy-mm-dd"`. Disables dates on the date picker before this date.
-
-If `min` is set to `today` then, whenever the form is viewed any date before today is disabled.
-
-#### `LikertScale`
-
-Required additional keys:
-
-- `statements`: a list of strings to rate. For example,
-```
-statements: [
-    "It is easy to get sterile needles in this census tract",
-    "It is easy to get new works (like cookers, cottons, sterile water) in this census tract",
-    "It is easy to get naloxone in this census tract"
-]
-```
-
-Optional keys:
-
-`options`: a list of strings on a rating scale and defaults to the following.
-```
-options: [
-    "Strongly Disagree",
-    "Disagree",
-    "Neutral",
-    "Agree",
-    "Strongly Agree",
-    "N/A"
-]
-```
-
-#### Radio
-
-Required additional keys:
-
-`options`: an array of strings which the user can select
-
-#### Select
-
-Required additional keys:
-
-- `options`: an array of strings which the user can select.
-
-#### SubForm
-
-Required additional keys:
-- `questions`: an array of the question dictionaries
-
-Optional keys: 
-- `repeat_button_title`: a string. If supplied, a button to repeat this sub form will appear at the bottom. For example `"+ Task"`
-
-:warning: The `validations` key doesn't work as expected in the SubForm component because it looks at the whole form globally instead of scoped to just the sub form.
-
-#### TextArea
-
-The `TextArea` field only uses the standard keys.
-
-#### TextInput
-
-Optional keys:
-- `type`: Different input types. The default is `"text"`. Other values include can be found [on the MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types)
-
-Not all of these will work out of the box, common ones that will are:
-* `text`
-* `color`
-* `date` (we have a more specific date field as well)
-* `email`
-* `month`
-* `number`
-* `password` (though probably not a good reason to use this in a form...)
-* `tel`
-* `time`
-* `url`
-* `week`
-
-### How to Build a Followup Form
-At the root level of your form you need to add the key `'followup_form'`
-
-For example
-```json
-{
-  "title": "Example Form",
-  "type": "user",
-  "questions": [...],
-  "followup_form": {
-    // Here is were you'll add the keys for a followup form
-  }
-}
-```
-
-Required keys:
-* `title`: The title of the followup form (will display to the end user)
-* `followup_interval`: When to followup with a user from the time they submit the parent form, for example 
-`"3 months"`. See docs for [parse-duration](https://github.com/jkroso/parse-duration) for how to format this field. 
-* `questions`: A list of question fields which can either be [followup questions](#followup-questions) or regular
-questions (See [how to build questions](#how-to-build-questions)).
-
-Optional keys:
-* `followup_form`: You can add in another followup form which will release after the parent followup form
-
-Notes:
-The `type` key, where we'd normally specify whether this is a user or organization form, is invalid here. We instead
-inherit the type of the form from the parent form.
-
-#### Followup question
-This is a question that refers to a question in the direct parent form. Your followup form can have new questions.
-See [how to build questions](#how-to-build-questions).
-
-Required keys:
-* `source_model` : The identifier for the parent question `model`. This is how we refer to the parent.
-* `model`: The identifier for the question result (e.g. `"age"`)
-* `label`: The question to display with the input (e.g. `"How old are you?"`)
-
-Optional keys:
-* `required`: A boolean (true/false) indicating if the field is required
-* `help_text` : A string containing help text displayed for the user to see.
-* `validations`: A string containing a [yup](https://github.com/jquense/yup#api) validation method (e.g. `"yup.number().positive().required()"`)
-* `condition`: A string containing a function which takes the model as an argument and returns true if the question should be shown or false if not (e.g. `"(model) => model.past_question === 'Yes'"`)
-* `read_only`: A boolean (true/false) indicating if the field is read only.
-
-Notes:
-- The `component` key is invalid here since we inherit this from the parent field.
-- The `condition`, `help_text`, `read_only`, and `required` field are not taken from the parent field and can be reset
-here.
-
-#### Advanced
-
-##### Read Only
-The `read_only` key for any question in a followup form (new vanilla questions or sourced followup questions), can be set to a string containing a function that evaluates to true/false similar to what you can write in `condition`. It takes `model` as an argument and returns true if the question should be read only or false if not. (e.g. `"(model) => model.status === 'Completed'"`)
-
-## Authentication
-
-This web app uses firebase auth to restrict access to the `snacks` and `admin` paths.
-
-To create a user, navigate to `/login`, then select the `Request Account` button and fill out the form.  An admin can then approve that request.  (This can also be done manually in the database by marking the user as `status: "approved"`).
-
-To make a user an admin, see the [add-admin script](scripts/README.md).  (The key differentiating feature of an admin vs normal user is that their JWT includes an `admin: true` claim).
-
-## Testing
-This web app uses the Cypress testing framework alongside a locally run Firestore emulator. It uses`cypress-firebase`, `firebase-admin`, and `@firebase/rules-unit-testing` packages to connect Cypress to Firebase and it includes additional methods and commands for admins and testing purposes interacting with Firestore.
-
-### Setup
-
-In order for `firebase-admin` to have read/write access during testing, we need to include a private key.
+In order for `firebase-admin` to have read/write access, we need to include a private key.
 
 1. Navigate to the Firebase console to generate a private key (Settings > Service Accounts).
 2. Click **Generate New Private Key** and save the JSON file as `serviceAccount.json`
 3. Add that JSON file to the project root directory. This file is listed in the `.gitignore`. Do not share this private key.
 
-### Running the tests
-
-In separate terminals, run `yarn firebase:dev`, `yarn serve`, and then `yarn test:e2e`.
-
-### Notes
-
-In order for Cypress to access admin firebase commands in test specs, use/create custom Cypress tasks in `./tests/e2e/plugins/index.js` or use the custom Cypress commands included in [cypress-firebase](https://github.com/prescottprue/cypress-firebase).
-
-## Email
-
-The admin email is set in the `.env.production` file, if you would like to override this in development create a file with the same keys called `.env.local` and set the email to the value you'd like.  See `email_service/` for more details on sending emails.
-
-## Firestore rules
-In development, you can use the `firestore.rules` file to test edits to the firestore rules against the firebase emulator. Afterwards, you'll want to make your changes live in the production firebase project, `provident-ri`.
+## Firestore Security Rules
+The `firestore.rules` file (in the repo) was used to test edits to the firestore rules against the firebase emulator. We no longer use the firebase emulator. Firebase Security Rules are editted and displayed live in the Firebase Console.
 
 ## Activity Logging
 
-Various actions are logged as a user interacts with the app:
-
-* `login`: the user logs in, no `subAction`
-* `click map`: the user selects a block group on the map, `subAction` is the selected geoid
-* `zoom map`: the user zooms in on a block group on the map, `subAction` is the selected geoid
-* `launch form`: the user launches a form on the forms page, `subAction` is the form id
-* `create NRA`: the user selects the create button on the neighborhood rapid assessment widget, `subAction` is the selected geoid
-* `launch NRA form`: the user launches a form on the NRA widget, `subAction` is the form id
-
-## Querying the Data
-
-See [`query_examples/`](query_examples) for more on how to get data out of firebase.
+> [!NOTE]  
+> Activity logging is to be migrated over to using only Google Analytics [#338](https://github.com/pph-collective/provident-app/issues/338)

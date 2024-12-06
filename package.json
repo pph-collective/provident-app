@@ -3,13 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "node ./cypress/fixtures/seedDatabase.js & vite",
+    "serve": "vite",
     "build": "vite build",
-    "test:e2e": "cypress open",
-    "lint": "eslint --ext .ts,.js,.vue src scripts cypress --fix",
-    "shp2topo": "scripts/shp2topo.sh",
-    "firebase:dev": "firebase emulators:start --import emulator_data",
-    "firebase:savedev": "firebase emulators:export emulator_data"
+    "lint": "eslint --ext .ts,.js,.vue src scripts --fix",
+    "shp2topo": "scripts/shp2topo.sh"
   },
   "dependencies": {
     "@formvuelate/plugin-vee-validate": "^3.4.0",
@@ -36,8 +33,6 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@cypress/vite-dev-server": "^5.0.6",
-    "@cypress/vue": "^6.0.0",
     "@firebase/rules-unit-testing": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
@@ -47,12 +42,9 @@
     "ajv-errors": "^3.0.0",
     "argparse": "^2.0.1",
     "csv-parse": "^5.5.0",
-    "cypress": "13.2.0",
-    "cypress-firebase": "^3.0.2",
     "d3-dsv": "^3.0.1",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-vue": "^9.17.0",
     "firebase-admin": "^11.10.1",
@@ -101,7 +93,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [
-      "eslint --ext .ts,.js,.vue src scripts cypress --fix"
+      "eslint --ext .ts,.js,.vue src scripts --fix"
     ]
   }
 }

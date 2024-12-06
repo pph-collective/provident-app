@@ -9,7 +9,6 @@ To use any of the scripts, run `yarn <script-name> <args>`.
 ## Adding in a new dataset
 1. Determine your model period, ex. `2024-1`
 2. Adding in all the new data. *Note:* There is the `copy` script if you want to copy over the same data such as for the landmarks data.
-  - `add-results` for the predictions
   - `add-svi` for the svi data
   - `add-landmarks` for the landmark data
   - `add-tooltip` for the tooltip data
@@ -24,32 +23,6 @@ To use any of the scripts, run `yarn <script-name> <args>`.
     ```
 
 ## All the Scripts
-### `add-admin`
-
-The `add-admin` script accepts a user's email and upgrades them to an admin user.
-
-#### Usage
-```shell
-node ./scripts/add-admin.js -e <email address>
-```
-
-### `add-form`
-
-The `add-form` script takes a form specification (see the main README for details) as a json file and an id for the form, validates the keys are nominally correct, and uploads the form to firebase. If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--overwrite` flag is passed, the script will overwrite an existing form instead of erroring.
-
-#### Usage
-```shell
-node ./scripts/add-form.js --id <form id> -f <path to form> [--emulator] [--overwrite]
-```
-
-### `add-results`
-
-The `add-results` script reads in a csv with predicted blockgroups, and loads them to the firestore "model_predictions" document.  If the `--emulator` flag is passed, the data will be loaded to the emulator instead of the production database.  If the `--emulator --seed` flags are passed, a small subset of the data used for e2e testing will be written to file so it can be copied into the seed json.
-
-#### Usage
-```shell
-node ./scripts/add-results.js -f <path to csv> -p <period> [--emulator] [--seed]
-```
 
 ### `add-model-towns`
 
