@@ -124,13 +124,13 @@ const props = defineProps({
   },
 });
 
-const showGroups = reactive({});
-
-let showGroup = true; // want to show the first group
-for (const group of Object.keys(props.groupedMetrics)) {
-  showGroups[group] = showGroup;
-  showGroup = !props.grouped;
-}
+// Start all of the groups showing true
+const showGroups = reactive(
+  Object.keys(props.groupedMetrics).reduce((acc, group) => {
+    acc[group] = true;
+    return acc;
+  }, {}),
+);
 </script>
 
 <style lang="scss" scoped>

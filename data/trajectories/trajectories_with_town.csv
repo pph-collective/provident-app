@@ -1,0 +1,810 @@
+﻿geoid,name,priority
+440010301001,Barrington,Lower risk for overdose
+440010301002,Barrington,Lower risk for overdose
+440010301003,Barrington,Lower risk for overdose
+440010301004,Barrington,Lower risk for overdose
+440010302001,Barrington,Lower risk for overdose
+440010302002,Barrington,Lower risk for overdose
+440010302003,Barrington,Lower risk for overdose
+440010303001,Barrington,Lower risk for overdose
+440010303002,Barrington,Lower risk for overdose
+440010303003,Barrington,Lower risk for overdose
+440010304001,Barrington,Lower risk for overdose
+440010304002,Barrington,Lower risk for overdose
+440010304003,Barrington,Lower risk for overdose
+440010307001,Bristol,Lower risk for overdose
+440010307002,Bristol,Lower risk for overdose
+440010307003,Bristol,Lower risk for overdose
+440010307004,Bristol,Sporadically high risk for overdose
+440010308001,Bristol,Lower risk for overdose
+440010308002,Bristol,Lower risk for overdose
+440010308003,Bristol,Lower risk for overdose
+440010308004,Bristol,Lower risk for overdose
+440010309011,Bristol,Lower risk for overdose
+440010309012,Bristol,Lower risk for overdose
+440010309013,Bristol,Lower risk for overdose
+440010309021,Bristol,Lower risk for overdose
+440010309022,Bristol,Lower risk for overdose
+440010309023,Bristol,Lower risk for overdose
+440010309024,Bristol,Sporadically high risk for overdose
+440070129001,Burrillville,Sporadically high risk for overdose
+440070129002,Burrillville,Sporadically high risk for overdose
+440070129003,Burrillville,Lower risk for overdose
+440070129004,Burrillville,Lower risk for overdose
+440070130011,Burrillville,Lower risk for overdose
+440070130012,Burrillville,Lower risk for overdose
+440070130013,Burrillville,Lower risk for overdose
+440070130021,Burrillville,Sporadically high risk for overdose
+440070130022,Burrillville,Lower risk for overdose
+440070130023,Burrillville,Lower risk for overdose
+440070130024,Burrillville,Lower risk for overdose
+440070108001,Central Falls,Persistently high risk for overdose
+440070108002,Central Falls,Persistently high risk for overdose
+440070108003,Central Falls,Lower risk for overdose
+440070109001,Central Falls,Sporadically high risk for overdose
+440070109002,Central Falls,Sporadically high risk for overdose
+440070109003,Central Falls,Lower risk for overdose
+440070110001,Central Falls,Sporadically high risk for overdose
+440070110002,Central Falls,Persistently high risk for overdose
+440070110003,Central Falls,Persistently high risk for overdose
+440070111001,Central Falls,Sporadically high risk for overdose
+440070111002,Central Falls,Persistently high risk for overdose
+440090511011,Charlestown,Lower risk for overdose
+440090511012,Charlestown,Lower risk for overdose
+440090511013,Charlestown,Lower risk for overdose
+440090511014,Charlestown,Lower risk for overdose
+440090511021,Charlestown,Lower risk for overdose
+440090511022,Charlestown,Lower risk for overdose
+440090511023,Charlestown,Lower risk for overdose
+440030206011,Coventry,Sporadically high risk for overdose
+440030206012,Coventry,Lower risk for overdose
+440030206013,Coventry,Lower risk for overdose
+440030206014,Coventry,Lower risk for overdose
+440030206021,Coventry,Sporadically high risk for overdose
+440030206022,Coventry,Sporadically high risk for overdose
+440030206031,Coventry,Sporadically high risk for overdose
+440030206032,Coventry,Lower risk for overdose
+440030206033,Coventry,Sporadically high risk for overdose
+440030206041,Coventry,Persistently high risk for overdose
+440030206042,Coventry,Sporadically high risk for overdose
+440030206043,Coventry,Sporadically high risk for overdose
+440030207011,Coventry,Lower risk for overdose
+440030207021,Coventry,Lower risk for overdose
+440030207022,Coventry,Sporadically high risk for overdose
+440030207031,Coventry,Lower risk for overdose
+440030207032,Coventry,Sporadically high risk for overdose
+440030207033,Coventry,Lower risk for overdose
+440070134001,Cranston,Lower risk for overdose
+440070134002,Cranston,Lower risk for overdose
+440070134003,Cranston,Lower risk for overdose
+440070134004,Cranston,Lower risk for overdose
+440070135001,Cranston,Lower risk for overdose
+440070135002,Cranston,Lower risk for overdose
+440070135003,Cranston,Lower risk for overdose
+440070135004,Cranston,Lower risk for overdose
+440070135005,Cranston,Sporadically high risk for overdose
+440070136001,Cranston,Lower risk for overdose
+440070136002,Cranston,Lower risk for overdose
+440070136003,Cranston,Sporadically high risk for overdose
+440070137011,Cranston,Lower risk for overdose
+440070137012,Cranston,Lower risk for overdose
+440070137013,Cranston,Lower risk for overdose
+440070137014,Cranston,Lower risk for overdose
+440070137021,Cranston,Lower risk for overdose
+440070137022,Cranston,Lower risk for overdose
+440070137023,Cranston,Lower risk for overdose
+440070138001,Cranston,Lower risk for overdose
+440070138002,Cranston,Lower risk for overdose
+440070138003,Cranston,Lower risk for overdose
+440070138004,Cranston,Lower risk for overdose
+440070138005,Cranston,Lower risk for overdose
+440070139001,Cranston,Lower risk for overdose
+440070139002,Cranston,Lower risk for overdose
+440070139003,Cranston,Sporadically high risk for overdose
+440070140001,Cranston,Lower risk for overdose
+440070140002,Cranston,Sporadically high risk for overdose
+440070140003,Cranston,Sporadically high risk for overdose
+440070140004,Cranston,Lower risk for overdose
+440070140005,Cranston,Lower risk for overdose
+440070141001,Cranston,Sporadically high risk for overdose
+440070141002,Cranston,Sporadically high risk for overdose
+440070141003,Cranston,Sporadically high risk for overdose
+440070141004,Cranston,Lower risk for overdose
+440070142001,Cranston,Lower risk for overdose
+440070142002,Cranston,Sporadically high risk for overdose
+440070142003,Cranston,Lower risk for overdose
+440070143001,Cranston,Lower risk for overdose
+440070143002,Cranston,Lower risk for overdose
+440070143003,Cranston,Lower risk for overdose
+440070143004,Cranston,Lower risk for overdose
+440070144001,Cranston,Lower risk for overdose
+440070144002,Cranston,Lower risk for overdose
+440070144003,Cranston,Lower risk for overdose
+440070145011,Cranston,Lower risk for overdose
+440070145012,Cranston,Lower risk for overdose
+440070145013,Cranston,Lower risk for overdose
+440070145021,Cranston,Lower risk for overdose
+440070145022,Cranston,Lower risk for overdose
+440070145023,Cranston,Lower risk for overdose
+440070146001,Cranston,Lower risk for overdose
+440070146002,Cranston,Sporadically high risk for overdose
+440070146003,Cranston,Lower risk for overdose
+440070147001,Cranston,Sporadically high risk for overdose
+440070147002,Cranston,Sporadically high risk for overdose
+440070147003,Cranston,Sporadically high risk for overdose
+440070147004,Cranston,Lower risk for overdose
+440070147005,Cranston,Sporadically high risk for overdose
+440070147006,Cranston,Sporadically high risk for overdose
+440070148001,Cranston,Sporadically high risk for overdose
+440070148002,Cranston,Sporadically high risk for overdose
+440070148003,Cranston,Lower risk for overdose
+440070112001,Cumberland,Lower risk for overdose
+440070112002,Cumberland,Sporadically high risk for overdose
+440070112003,Cumberland,Lower risk for overdose
+440070112004,Cumberland,Sporadically high risk for overdose
+440070112005,Cumberland,Sporadically high risk for overdose
+440070113011,Cumberland,Lower risk for overdose
+440070113012,Cumberland,Sporadically high risk for overdose
+440070113013,Cumberland,Lower risk for overdose
+440070113021,Cumberland,Lower risk for overdose
+440070113022,Cumberland,Lower risk for overdose
+440070113023,Cumberland,Lower risk for overdose
+440070114011,Cumberland,Lower risk for overdose
+440070114012,Cumberland,Lower risk for overdose
+440070114013,Cumberland,Lower risk for overdose
+440070114014,Cumberland,Lower risk for overdose
+440070114015,Cumberland,Lower risk for overdose
+440070114021,Cumberland,Lower risk for overdose
+440070114022,Cumberland,Lower risk for overdose
+440070114031,Cumberland,Lower risk for overdose
+440070114032,Cumberland,Lower risk for overdose
+440070114033,Cumberland,Sporadically high risk for overdose
+440070114034,Cumberland,Lower risk for overdose
+440030209011,East Greenwich,Sporadically high risk for overdose
+440030209012,East Greenwich,Lower risk for overdose
+440030209013,East Greenwich,Lower risk for overdose
+440030209014,East Greenwich,Lower risk for overdose
+440030209031,East Greenwich,Lower risk for overdose
+440030209032,East Greenwich,Lower risk for overdose
+440030209033,East Greenwich,Lower risk for overdose
+440030209041,East Greenwich,Lower risk for overdose
+440030209042,East Greenwich,Lower risk for overdose
+440070101011,East Providence,Lower risk for overdose
+440070101012,East Providence,Lower risk for overdose
+440070101013,East Providence,Lower risk for overdose
+440070101014,East Providence,Lower risk for overdose
+440070101021,East Providence,Lower risk for overdose
+440070101022,East Providence,Lower risk for overdose
+440070101023,East Providence,Lower risk for overdose
+440070101024,East Providence,Lower risk for overdose
+440070102001,East Providence,Lower risk for overdose
+440070102002,East Providence,Lower risk for overdose
+440070102003,East Providence,Lower risk for overdose
+440070102004,East Providence,Lower risk for overdose
+440070102005,East Providence,Lower risk for overdose
+440070102006,East Providence,Sporadically high risk for overdose
+440070102007,East Providence,Sporadically high risk for overdose
+440070103001,East Providence,Sporadically high risk for overdose
+440070103002,East Providence,Lower risk for overdose
+440070103003,East Providence,Lower risk for overdose
+440070104001,East Providence,Lower risk for overdose
+440070104002,East Providence,Sporadically high risk for overdose
+440070104003,East Providence,Sporadically high risk for overdose
+440070104004,East Providence,Sporadically high risk for overdose
+440070104005,East Providence,Lower risk for overdose
+440070105011,East Providence,Sporadically high risk for overdose
+440070105012,East Providence,Lower risk for overdose
+440070105013,East Providence,Lower risk for overdose
+440070105021,East Providence,Lower risk for overdose
+440070105022,East Providence,Lower risk for overdose
+440070105023,East Providence,Sporadically high risk for overdose
+440070105024,East Providence,Lower risk for overdose
+440070106001,East Providence,Lower risk for overdose
+440070106002,East Providence,Sporadically high risk for overdose
+440070106003,East Providence,Lower risk for overdose
+440070106004,East Providence,Lower risk for overdose
+440070106005,East Providence,Lower risk for overdose
+440070106006,East Providence,Sporadically high risk for overdose
+440070107011,East Providence,Lower risk for overdose
+440070107012,East Providence,Lower risk for overdose
+440070107021,East Providence,Lower risk for overdose
+440070107022,East Providence,Lower risk for overdose
+440070107023,East Providence,Lower risk for overdose
+440070107024,East Providence,Lower risk for overdose
+440070107025,East Providence,Lower risk for overdose
+440090505001,Exeter,Lower risk for overdose
+440090505002,Exeter,Lower risk for overdose
+440090505003,Exeter,Sporadically high risk for overdose
+440070133001,Foster,Lower risk for overdose
+440070133002,Foster,Lower risk for overdose
+440070133003,Foster,Lower risk for overdose
+440070133004,Foster,Lower risk for overdose
+440070131011,Glocester,Lower risk for overdose
+440070131012,Glocester,Lower risk for overdose
+440070131013,Glocester,Lower risk for overdose
+440070131021,Glocester,Lower risk for overdose
+440070131022,Glocester,Lower risk for overdose
+440070131023,Glocester,Lower risk for overdose
+440090507001,Hopkinton,Sporadically high risk for overdose
+440090507002,Hopkinton,Lower risk for overdose
+440090507003,Hopkinton,Lower risk for overdose
+440090507004,Hopkinton,Lower risk for overdose
+440090507005,Hopkinton,Lower risk for overdose
+440090507006,Hopkinton,Lower risk for overdose
+440050413001,Jamestown,Lower risk for overdose
+440050413002,Jamestown,Lower risk for overdose
+440050413003,Jamestown,Lower risk for overdose
+440050413004,Jamestown,Lower risk for overdose
+440050413005,Jamestown,Lower risk for overdose
+440070122001,Johnston,Lower risk for overdose
+440070122002,Johnston,Lower risk for overdose
+440070122003,Johnston,Lower risk for overdose
+440070122004,Johnston,Sporadically high risk for overdose
+440070123001,Johnston,Sporadically high risk for overdose
+440070123002,Johnston,Sporadically high risk for overdose
+440070123003,Johnston,Sporadically high risk for overdose
+440070124011,Johnston,Lower risk for overdose
+440070124012,Johnston,Lower risk for overdose
+440070124013,Johnston,Lower risk for overdose
+440070124014,Johnston,Lower risk for overdose
+440070124015,Johnston,Lower risk for overdose
+440070124016,Johnston,Sporadically high risk for overdose
+440070124021,Johnston,Lower risk for overdose
+440070124022,Johnston,Lower risk for overdose
+440070125001,Johnston,Persistently high risk for overdose
+440070125002,Johnston,Persistently high risk for overdose
+440070125003,Johnston,Lower risk for overdose
+440070115001,Lincoln,Lower risk for overdose
+440070115002,Lincoln,Sporadically high risk for overdose
+440070115003,Lincoln,Lower risk for overdose
+440070115004,Lincoln,Sporadically high risk for overdose
+440070116001,Lincoln,Lower risk for overdose
+440070116002,Lincoln,Sporadically high risk for overdose
+440070116003,Lincoln,Lower risk for overdose
+440070116004,Lincoln,Lower risk for overdose
+440070117011,Lincoln,Sporadically high risk for overdose
+440070117012,Lincoln,Sporadically high risk for overdose
+440070117013,Lincoln,Lower risk for overdose
+440070117021,Lincoln,Lower risk for overdose
+440070117022,Lincoln,Lower risk for overdose
+440070117023,Lincoln,Lower risk for overdose
+440050414001,Little Compton,Lower risk for overdose
+440050414002,Little Compton,Lower risk for overdose
+440050402001,Middletown,Lower risk for overdose
+440050403021,Middletown,Sporadically high risk for overdose
+440050403022,Middletown,Lower risk for overdose
+440050403031,Middletown,Lower risk for overdose
+440050403032,Middletown,Persistently high risk for overdose
+440050403041,Middletown,Lower risk for overdose
+440050403042,Middletown,Sporadically high risk for overdose
+440050404001,Middletown,Lower risk for overdose
+440050404002,Middletown,Lower risk for overdose
+440050404003,Middletown,Lower risk for overdose
+440090515021,Narragansett,Lower risk for overdose
+440090515022,Narragansett,Lower risk for overdose
+440090515023,Narragansett,Lower risk for overdose
+440090515024,Narragansett,Lower risk for overdose
+440090515025,Narragansett,Lower risk for overdose
+440090515031,Narragansett,Lower risk for overdose
+440090515032,Narragansett,Lower risk for overdose
+440090515033,Narragansett,Lower risk for overdose
+440090515041,Narragansett,Sporadically high risk for overdose
+440090515042,Narragansett,Lower risk for overdose
+440090515043,Narragansett,Lower risk for overdose
+440090515044,Narragansett,Lower risk for overdose
+440090415001,New Shoreham,Lower risk for overdose
+440090415002,New Shoreham,Lower risk for overdose
+440050405001,Newport,Persistently high risk for overdose
+440050405002,Newport,Sporadically high risk for overdose
+440050405003,Newport,Lower risk for overdose
+440050406001,Newport,Lower risk for overdose
+440050406002,Newport,Lower risk for overdose
+440050406003,Newport,Lower risk for overdose
+440050406004,Newport,Sporadically high risk for overdose
+440050407001,Newport,Lower risk for overdose
+440050407002,Newport,Lower risk for overdose
+440050407003,Newport,Lower risk for overdose
+440050408001,Newport,Lower risk for overdose
+440050408002,Newport,Lower risk for overdose
+440050408003,Newport,Lower risk for overdose
+440050409001,Newport,Lower risk for overdose
+440050409002,Newport,Lower risk for overdose
+440050409003,Newport,Lower risk for overdose
+440050409004,Newport,Lower risk for overdose
+440050410001,Newport,Sporadically high risk for overdose
+440050410002,Newport,Lower risk for overdose
+440050411001,Newport,Lower risk for overdose
+440050411002,Newport,Lower risk for overdose
+440050411003,Newport,Lower risk for overdose
+440050412001,Newport,Lower risk for overdose
+440090501021,North Kingstown,Lower risk for overdose
+440090501022,North Kingstown,Lower risk for overdose
+440090501031,North Kingstown,Sporadically high risk for overdose
+440090501032,North Kingstown,Lower risk for overdose
+440090501033,North Kingstown,Persistently high risk for overdose
+440090501034,North Kingstown,Lower risk for overdose
+440090501035,North Kingstown,Sporadically high risk for overdose
+440090501041,North Kingstown,Sporadically high risk for overdose
+440090501042,North Kingstown,Lower risk for overdose
+440090503011,North Kingstown,Lower risk for overdose
+440090503012,North Kingstown,Lower risk for overdose
+440090503013,North Kingstown,Lower risk for overdose
+440090503021,North Kingstown,Lower risk for overdose
+440090503022,North Kingstown,Lower risk for overdose
+440090503023,North Kingstown,Sporadically high risk for overdose
+440090504011,North Kingstown,Lower risk for overdose
+440090504012,North Kingstown,Lower risk for overdose
+440090504021,North Kingstown,Lower risk for overdose
+440090504022,North Kingstown,Lower risk for overdose
+440090504023,North Kingstown,Lower risk for overdose
+440070118001,North Providence,Sporadically high risk for overdose
+440070118002,North Providence,Sporadically high risk for overdose
+440070118003,North Providence,Sporadically high risk for overdose
+440070118004,North Providence,Lower risk for overdose
+440070118005,North Providence,Lower risk for overdose
+440070119011,North Providence,Sporadically high risk for overdose
+440070119012,North Providence,Lower risk for overdose
+440070119021,North Providence,Lower risk for overdose
+440070119022,North Providence,Lower risk for overdose
+440070119023,North Providence,Lower risk for overdose
+440070120001,North Providence,Lower risk for overdose
+440070120002,North Providence,Sporadically high risk for overdose
+440070120003,North Providence,Lower risk for overdose
+440070120004,North Providence,Lower risk for overdose
+440070120005,North Providence,Lower risk for overdose
+440070121021,North Providence,Sporadically high risk for overdose
+440070121022,North Providence,Lower risk for overdose
+440070121023,North Providence,Lower risk for overdose
+440070121024,North Providence,Lower risk for overdose
+440070121031,North Providence,Persistently high risk for overdose
+440070121032,North Providence,Lower risk for overdose
+440070121041,North Providence,Persistently high risk for overdose
+440070121042,North Providence,Persistently high risk for overdose
+440070121043,North Providence,Lower risk for overdose
+440070128011,North Smithfield,Lower risk for overdose
+440070128012,North Smithfield,Lower risk for overdose
+440070128013,North Smithfield,Lower risk for overdose
+440070128021,North Smithfield,Lower risk for overdose
+440070128022,North Smithfield,Lower risk for overdose
+440070128031,North Smithfield,Sporadically high risk for overdose
+440070128032,North Smithfield,Sporadically high risk for overdose
+440070150001,Pawtucket,Sporadically high risk for overdose
+440070150002,Pawtucket,Sporadically high risk for overdose
+440070151001,Pawtucket,Persistently high risk for overdose
+440070151002,Pawtucket,Persistently high risk for overdose
+440070151003,Pawtucket,Sporadically high risk for overdose
+440070152001,Pawtucket,Persistently high risk for overdose
+440070152002,Pawtucket,Persistently high risk for overdose
+440070153001,Pawtucket,Sporadically high risk for overdose
+440070153002,Pawtucket,Sporadically high risk for overdose
+440070154001,Pawtucket,Lower risk for overdose
+440070154002,Pawtucket,Persistently high risk for overdose
+440070155001,Pawtucket,Lower risk for overdose
+440070155002,Pawtucket,Lower risk for overdose
+440070155003,Pawtucket,Sporadically high risk for overdose
+440070155004,Pawtucket,Lower risk for overdose
+440070156001,Pawtucket,Lower risk for overdose
+440070156002,Pawtucket,Lower risk for overdose
+440070156003,Pawtucket,Lower risk for overdose
+440070157001,Pawtucket,Lower risk for overdose
+440070157002,Pawtucket,Lower risk for overdose
+440070157003,Pawtucket,Lower risk for overdose
+440070157004,Pawtucket,Lower risk for overdose
+440070158001,Pawtucket,Lower risk for overdose
+440070158002,Pawtucket,Lower risk for overdose
+440070158003,Pawtucket,Lower risk for overdose
+440070158004,Pawtucket,Lower risk for overdose
+440070158005,Pawtucket,Lower risk for overdose
+440070159001,Pawtucket,Lower risk for overdose
+440070159002,Pawtucket,Lower risk for overdose
+440070159003,Pawtucket,Lower risk for overdose
+440070159004,Pawtucket,Lower risk for overdose
+440070160001,Pawtucket,Sporadically high risk for overdose
+440070160002,Pawtucket,Lower risk for overdose
+440070160003,Pawtucket,Persistently high risk for overdose
+440070161001,Pawtucket,Persistently high risk for overdose
+440070161002,Pawtucket,Lower risk for overdose
+440070161003,Pawtucket,Sporadically high risk for overdose
+440070161004,Pawtucket,Persistently high risk for overdose
+440070163001,Pawtucket,Lower risk for overdose
+440070163002,Pawtucket,Lower risk for overdose
+440070163003,Pawtucket,Lower risk for overdose
+440070164001,Pawtucket,Persistently high risk for overdose
+440070164002,Pawtucket,Sporadically high risk for overdose
+440070164003,Pawtucket,Sporadically high risk for overdose
+440070165001,Pawtucket,Lower risk for overdose
+440070165002,Pawtucket,Sporadically high risk for overdose
+440070165003,Pawtucket,Lower risk for overdose
+440070166001,Pawtucket,Sporadically high risk for overdose
+440070167001,Pawtucket,Sporadically high risk for overdose
+440070167002,Pawtucket,Persistently high risk for overdose
+440070168001,Pawtucket,Lower risk for overdose
+440070168002,Pawtucket,Lower risk for overdose
+440070168003,Pawtucket,Lower risk for overdose
+440070169001,Pawtucket,Lower risk for overdose
+440070169002,Pawtucket,Lower risk for overdose
+440070169003,Pawtucket,Lower risk for overdose
+440070170001,Pawtucket,Lower risk for overdose
+440070170002,Pawtucket,Sporadically high risk for overdose
+440070170003,Pawtucket,Lower risk for overdose
+440070170004,Pawtucket,Lower risk for overdose
+440070171001,Pawtucket,Lower risk for overdose
+440070171002,Pawtucket,Sporadically high risk for overdose
+440070171003,Pawtucket,Persistently high risk for overdose
+440070171004,Pawtucket,Lower risk for overdose
+440050401011,Portsmouth,Lower risk for overdose
+440050401012,Portsmouth,Lower risk for overdose
+440050401013,Portsmouth,Lower risk for overdose
+440050401021,Portsmouth,Lower risk for overdose
+440050401022,Portsmouth,Lower risk for overdose
+440050401023,Portsmouth,Sporadically high risk for overdose
+440050401032,Portsmouth,Lower risk for overdose
+440050401033,Portsmouth,Lower risk for overdose
+440050401034,Portsmouth,Lower risk for overdose
+440050401035,Portsmouth,Lower risk for overdose
+440050401036,Portsmouth,Lower risk for overdose
+440070001011,Providence,Lower risk for overdose
+440070001012,Providence,Lower risk for overdose
+440070001013,Providence,Lower risk for overdose
+440070001014,Providence,Sporadically high risk for overdose
+440070001021,Providence,Sporadically high risk for overdose
+440070001022,Providence,Sporadically high risk for overdose
+440070001023,Providence,Sporadically high risk for overdose
+440070001024,Providence,Sporadically high risk for overdose
+440070002001,Providence,Sporadically high risk for overdose
+440070002002,Providence,Sporadically high risk for overdose
+440070002003,Providence,Sporadically high risk for overdose
+440070002004,Providence,Lower risk for overdose
+440070002005,Providence,Persistently high risk for overdose
+440070003001,Providence,Sporadically high risk for overdose
+440070003002,Providence,Lower risk for overdose
+440070003003,Providence,Lower risk for overdose
+440070003004,Providence,Persistently high risk for overdose
+440070003005,Providence,Persistently high risk for overdose
+440070003006,Providence,Sporadically high risk for overdose
+440070004001,Providence,Sporadically high risk for overdose
+440070004002,Providence,Lower risk for overdose
+440070004003,Providence,Sporadically high risk for overdose
+440070004004,Providence,Sporadically high risk for overdose
+440070005001,Providence,Sporadically high risk for overdose
+440070005002,Providence,Sporadically high risk for overdose
+440070005003,Providence,Sporadically high risk for overdose
+440070006001,Providence,Sporadically high risk for overdose
+440070006002,Providence,Sporadically high risk for overdose
+440070007001,Providence,Sporadically high risk for overdose
+440070007002,Providence,Sporadically high risk for overdose
+440070007003,Providence,Persistently high risk for overdose
+440070008001,Providence,Persistently high risk for overdose
+440070008002,Providence,Persistently high risk for overdose
+440070008003,Providence,Persistently high risk for overdose
+440070009001,Providence,Sporadically high risk for overdose
+440070009002,Providence,Sporadically high risk for overdose
+440070010001,Providence,Sporadically high risk for overdose
+440070010002,Providence,Sporadically high risk for overdose
+440070011001,Providence,Lower risk for overdose
+440070011002,Providence,Lower risk for overdose
+440070011003,Providence,Lower risk for overdose
+440070012001,Providence,Sporadically high risk for overdose
+440070012002,Providence,Sporadically high risk for overdose
+440070012003,Providence,Sporadically high risk for overdose
+440070013001,Providence,Sporadically high risk for overdose
+440070013002,Providence,Sporadically high risk for overdose
+440070013003,Providence,Sporadically high risk for overdose
+440070013004,Providence,Sporadically high risk for overdose
+440070014001,Providence,Sporadically high risk for overdose
+440070014002,Providence,Persistently high risk for overdose
+440070014003,Providence,Sporadically high risk for overdose
+440070014004,Providence,Sporadically high risk for overdose
+440070014005,Providence,Persistently high risk for overdose
+440070015001,Providence,Sporadically high risk for overdose
+440070015002,Providence,Lower risk for overdose
+440070015003,Providence,Lower risk for overdose
+440070016001,Providence,Lower risk for overdose
+440070016002,Providence,Persistently high risk for overdose
+440070016003,Providence,Sporadically high risk for overdose
+440070016004,Providence,Sporadically high risk for overdose
+440070016005,Providence,Sporadically high risk for overdose
+440070016006,Providence,Sporadically high risk for overdose
+440070016007,Providence,Sporadically high risk for overdose
+440070017001,Providence,Lower risk for overdose
+440070017002,Providence,Sporadically high risk for overdose
+440070017003,Providence,Persistently high risk for overdose
+440070018001,Providence,Lower risk for overdose
+440070018002,Providence,Sporadically high risk for overdose
+440070018003,Providence,Lower risk for overdose
+440070018004,Providence,Sporadically high risk for overdose
+440070018005,Providence,Lower risk for overdose
+440070018006,Providence,Lower risk for overdose
+440070019001,Providence,Sporadically high risk for overdose
+440070019002,Providence,Persistently high risk for overdose
+440070019003,Providence,Sporadically high risk for overdose
+440070019004,Providence,Lower risk for overdose
+440070019005,Providence,Persistently high risk for overdose
+440070019006,Providence,Sporadically high risk for overdose
+440070020001,Providence,Sporadically high risk for overdose
+440070020002,Providence,Sporadically high risk for overdose
+440070020003,Providence,Sporadically high risk for overdose
+440070020004,Providence,Lower risk for overdose
+440070021011,Providence,Lower risk for overdose
+440070021012,Providence,Lower risk for overdose
+440070021013,Providence,Sporadically high risk for overdose
+440070021021,Providence,Lower risk for overdose
+440070021022,Providence,Lower risk for overdose
+440070021023,Providence,Persistently high risk for overdose
+440070021024,Providence,Sporadically high risk for overdose
+440070021025,Providence,Lower risk for overdose
+440070022001,Providence,Sporadically high risk for overdose
+440070022002,Providence,Sporadically high risk for overdose
+440070022003,Providence,Sporadically high risk for overdose
+440070022004,Providence,Sporadically high risk for overdose
+440070023001,Providence,Lower risk for overdose
+440070023002,Providence,Lower risk for overdose
+440070023003,Providence,Lower risk for overdose
+440070023004,Providence,Lower risk for overdose
+440070023005,Providence,Lower risk for overdose
+440070023006,Providence,Lower risk for overdose
+440070024001,Providence,Lower risk for overdose
+440070024002,Providence,Lower risk for overdose
+440070024003,Providence,Lower risk for overdose
+440070024004,Providence,Lower risk for overdose
+440070024005,Providence,Lower risk for overdose
+440070024006,Providence,Lower risk for overdose
+440070025001,Providence,Sporadically high risk for overdose
+440070025002,Providence,Sporadically high risk for overdose
+440070026001,Providence,Persistently high risk for overdose
+440070026002,Providence,Sporadically high risk for overdose
+440070026003,Providence,Sporadically high risk for overdose
+440070027001,Providence,Sporadically high risk for overdose
+440070027002,Providence,Sporadically high risk for overdose
+440070027003,Providence,Persistently high risk for overdose
+440070027004,Providence,Sporadically high risk for overdose
+440070028001,Providence,Persistently high risk for overdose
+440070028002,Providence,Sporadically high risk for overdose
+440070028003,Providence,Sporadically high risk for overdose
+440070028004,Providence,Sporadically high risk for overdose
+440070029001,Providence,Lower risk for overdose
+440070029002,Providence,Sporadically high risk for overdose
+440070029003,Providence,Persistently high risk for overdose
+440070029004,Providence,Persistently high risk for overdose
+440070029005,Providence,Sporadically high risk for overdose
+440070031001,Providence,Lower risk for overdose
+440070031002,Providence,Lower risk for overdose
+440070031003,Providence,Sporadically high risk for overdose
+440070031004,Providence,Lower risk for overdose
+440070031005,Providence,Sporadically high risk for overdose
+440070032001,Providence,Lower risk for overdose
+440070032002,Providence,Lower risk for overdose
+440070032003,Providence,Lower risk for overdose
+440070032004,Providence,Lower risk for overdose
+440070033001,Providence,Lower risk for overdose
+440070033002,Providence,Lower risk for overdose
+440070033003,Providence,Sporadically high risk for overdose
+440070033004,Providence,Lower risk for overdose
+440070034001,Providence,Lower risk for overdose
+440070034002,Providence,Sporadically high risk for overdose
+440070034003,Providence,Lower risk for overdose
+440070034004,Providence,Lower risk for overdose
+440070035001,Providence,Lower risk for overdose
+440070035002,Providence,Sporadically high risk for overdose
+440070035003,Providence,Lower risk for overdose
+440070035004,Providence,Lower risk for overdose
+440070036011,Providence,Lower risk for overdose
+440070036012,Providence,Lower risk for overdose
+440070036021,Providence,Lower risk for overdose
+440070036022,Providence,Lower risk for overdose
+440070036023,Providence,Lower risk for overdose
+440070037001,Providence,Lower risk for overdose
+440070037002,Providence,Lower risk for overdose
+440070037003,Providence,Lower risk for overdose
+440070037004,Providence,Lower risk for overdose
+440090506001,Richmond,Lower risk for overdose
+440090506002,Richmond,Lower risk for overdose
+440090506003,Richmond,Lower risk for overdose
+440090506004,Richmond,Lower risk for overdose
+440070132011,Scituate,Lower risk for overdose
+440070132012,Scituate,Lower risk for overdose
+440070132013,Scituate,Lower risk for overdose
+440070132014,Scituate,Lower risk for overdose
+440070132021,Scituate,Lower risk for overdose
+440070132022,Scituate,Sporadically high risk for overdose
+440070132023,Scituate,Lower risk for overdose
+440070126011,Smithfield,Lower risk for overdose
+440070126012,Smithfield,Lower risk for overdose
+440070126021,Smithfield,Lower risk for overdose
+440070126022,Smithfield,Sporadically high risk for overdose
+440070126023,Smithfield,Lower risk for overdose
+440070126024,Smithfield,Lower risk for overdose
+440070126025,Smithfield,Lower risk for overdose
+440070126026,Smithfield,Lower risk for overdose
+440070127011,Smithfield,Lower risk for overdose
+440070127012,Smithfield,Lower risk for overdose
+440070127013,Smithfield,Lower risk for overdose
+440070127021,Smithfield,Lower risk for overdose
+440070127022,Smithfield,Lower risk for overdose
+440070127023,Smithfield,Lower risk for overdose
+440090512011,South Kingstown,Lower risk for overdose
+440090512012,South Kingstown,Sporadically high risk for overdose
+440090512021,South Kingstown,Lower risk for overdose
+440090512022,South Kingstown,Lower risk for overdose
+440090512023,South Kingstown,Lower risk for overdose
+440090512024,South Kingstown,Lower risk for overdose
+440090513021,South Kingstown,Lower risk for overdose
+440090513022,South Kingstown,Lower risk for overdose
+440090513023,South Kingstown,Lower risk for overdose
+440090513024,South Kingstown,Lower risk for overdose
+440090513025,South Kingstown,Lower risk for overdose
+440090513026,South Kingstown,Lower risk for overdose
+440090513041,South Kingstown,Lower risk for overdose
+440090513051,South Kingstown,Lower risk for overdose
+440090513052,South Kingstown,Lower risk for overdose
+440090513061,South Kingstown,Lower risk for overdose
+440090513062,South Kingstown,Lower risk for overdose
+440090513063,South Kingstown,Lower risk for overdose
+440090514001,South Kingstown,Lower risk for overdose
+440050416011,Tiverton,Sporadically high risk for overdose
+440050416012,Tiverton,Lower risk for overdose
+440050416021,Tiverton,Lower risk for overdose
+440050416022,Tiverton,Sporadically high risk for overdose
+440050417011,Tiverton,Sporadically high risk for overdose
+440050417021,Tiverton,Lower risk for overdose
+440050417022,Tiverton,Lower risk for overdose
+440050417023,Tiverton,Lower risk for overdose
+440010305001,Warren,Sporadically high risk for overdose
+440010305002,Warren,Sporadically high risk for overdose
+440010305003,Warren,Sporadically high risk for overdose
+440010306011,Warren,Lower risk for overdose
+440010306012,Warren,Lower risk for overdose
+440010306013,Warren,Lower risk for overdose
+440010306021,Warren,Lower risk for overdose
+440010306022,Warren,Lower risk for overdose
+440010306023,Warren,Lower risk for overdose
+440010306024,Warren,Lower risk for overdose
+440030210011,Warwick,Lower risk for overdose
+440030210012,Warwick,Lower risk for overdose
+440030210021,Warwick,Lower risk for overdose
+440030210022,Warwick,Lower risk for overdose
+440030210023,Warwick,Lower risk for overdose
+440030210024,Warwick,Lower risk for overdose
+440030211001,Warwick,Lower risk for overdose
+440030211002,Warwick,Persistently high risk for overdose
+440030211003,Warwick,Lower risk for overdose
+440030211004,Warwick,Sporadically high risk for overdose
+440030212001,Warwick,Lower risk for overdose
+440030212002,Warwick,Lower risk for overdose
+440030212003,Warwick,Lower risk for overdose
+440030213001,Warwick,Lower risk for overdose
+440030213002,Warwick,Lower risk for overdose
+440030213003,Warwick,Lower risk for overdose
+440030213004,Warwick,Lower risk for overdose
+440030214011,Warwick,Lower risk for overdose
+440030214012,Warwick,Lower risk for overdose
+440030214013,Warwick,Lower risk for overdose
+440030214021,Warwick,Lower risk for overdose
+440030214022,Warwick,Lower risk for overdose
+440030214023,Warwick,Lower risk for overdose
+440030215011,Warwick,Lower risk for overdose
+440030215012,Warwick,Lower risk for overdose
+440030215013,Warwick,Lower risk for overdose
+440030215014,Warwick,Lower risk for overdose
+440030215021,Warwick,Lower risk for overdose
+440030215022,Warwick,Lower risk for overdose
+440030215023,Warwick,Lower risk for overdose
+440030215024,Warwick,Lower risk for overdose
+440030216001,Warwick,Lower risk for overdose
+440030216002,Warwick,Lower risk for overdose
+440030217001,Warwick,Lower risk for overdose
+440030217002,Warwick,Sporadically high risk for overdose
+440030217003,Warwick,Lower risk for overdose
+440030217004,Warwick,Lower risk for overdose
+440030217005,Warwick,Lower risk for overdose
+440030218001,Warwick,Sporadically high risk for overdose
+440030218002,Warwick,Lower risk for overdose
+440030219011,Warwick,Lower risk for overdose
+440030219012,Warwick,Lower risk for overdose
+440030219013,Warwick,Lower risk for overdose
+440030219014,Warwick,Lower risk for overdose
+440030219021,Warwick,Lower risk for overdose
+440030219022,Warwick,Lower risk for overdose
+440030219023,Warwick,Lower risk for overdose
+440030219031,Warwick,Lower risk for overdose
+440030219032,Warwick,Lower risk for overdose
+440030219033,Warwick,Lower risk for overdose
+440030220001,Warwick,Lower risk for overdose
+440030220002,Warwick,Lower risk for overdose
+440030220003,Warwick,Lower risk for overdose
+440030221001,Warwick,Persistently high risk for overdose
+440030221002,Warwick,Lower risk for overdose
+440030221003,Warwick,Sporadically high risk for overdose
+440030221004,Warwick,Lower risk for overdose
+440030222011,Warwick,Lower risk for overdose
+440030222012,Warwick,Lower risk for overdose
+440030222013,Warwick,Lower risk for overdose
+440030222014,Warwick,Lower risk for overdose
+440030222015,Warwick,Lower risk for overdose
+440030222021,Warwick,Lower risk for overdose
+440030222022,Warwick,Sporadically high risk for overdose
+440030222023,Warwick,Lower risk for overdose
+440030223001,Warwick,Lower risk for overdose
+440030223002,Warwick,Sporadically high risk for overdose
+440030223003,Warwick,Sporadically high risk for overdose
+440030223004,Warwick,Sporadically high risk for overdose
+440030224001,Warwick,Lower risk for overdose
+440030224002,Warwick,Lower risk for overdose
+440030208001,West Greenwich,Sporadically high risk for overdose
+440030208002,West Greenwich,Lower risk for overdose
+440030208003,West Greenwich,Lower risk for overdose
+440030201011,West Warwick,Sporadically high risk for overdose
+440030201012,West Warwick,Lower risk for overdose
+440030201013,West Warwick,Sporadically high risk for overdose
+440030201021,West Warwick,Lower risk for overdose
+440030201022,West Warwick,Persistently high risk for overdose
+440030201023,West Warwick,Sporadically high risk for overdose
+440030202001,West Warwick,Persistently high risk for overdose
+440030202002,West Warwick,Sporadically high risk for overdose
+440030202003,West Warwick,Persistently high risk for overdose
+440030203001,West Warwick,Lower risk for overdose
+440030203002,West Warwick,Sporadically high risk for overdose
+440030203003,West Warwick,Persistently high risk for overdose
+440030203004,West Warwick,Persistently high risk for overdose
+440030203005,West Warwick,Persistently high risk for overdose
+440030204001,West Warwick,Lower risk for overdose
+440030204002,West Warwick,Sporadically high risk for overdose
+440030204003,West Warwick,Sporadically high risk for overdose
+440030205001,West Warwick,Lower risk for overdose
+440030205002,West Warwick,Persistently high risk for overdose
+440030205003,West Warwick,Lower risk for overdose
+440090508011,Westerly,Lower risk for overdose
+440090508012,Westerly,Lower risk for overdose
+440090508013,Westerly,Sporadically high risk for overdose
+440090508014,Westerly,Sporadically high risk for overdose
+440090508015,Westerly,Sporadically high risk for overdose
+440090508021,Westerly,Sporadically high risk for overdose
+440090508022,Westerly,Lower risk for overdose
+440090509011,Westerly,Lower risk for overdose
+440090509012,Westerly,Sporadically high risk for overdose
+440090509013,Westerly,Lower risk for overdose
+440090509021,Westerly,Sporadically high risk for overdose
+440090509022,Westerly,Lower risk for overdose
+440090509023,Westerly,Lower risk for overdose
+440090509024,Westerly,Lower risk for overdose
+440090510001,Westerly,Lower risk for overdose
+440090510002,Westerly,Lower risk for overdose
+440090510003,Westerly,Lower risk for overdose
+440090510004,Westerly,Lower risk for overdose
+440090510005,Westerly,Lower risk for overdose
+440070173001,Woonsocket,Lower risk for overdose
+440070173002,Woonsocket,Sporadically high risk for overdose
+440070173003,Woonsocket,Lower risk for overdose
+440070174001,Woonsocket,Sporadically high risk for overdose
+440070174002,Woonsocket,Persistently high risk for overdose
+440070174003,Woonsocket,Persistently high risk for overdose
+440070175001,Woonsocket,Sporadically high risk for overdose
+440070175002,Woonsocket,Lower risk for overdose
+440070175003,Woonsocket,Lower risk for overdose
+440070176001,Woonsocket,Persistently high risk for overdose
+440070176002,Woonsocket,Persistently high risk for overdose
+440070177001,Woonsocket,Lower risk for overdose
+440070177002,Woonsocket,Lower risk for overdose
+440070177003,Woonsocket,Sporadically high risk for overdose
+440070178001,Woonsocket,Sporadically high risk for overdose
+440070178002,Woonsocket,Sporadically high risk for overdose
+440070178003,Woonsocket,Sporadically high risk for overdose
+440070179001,Woonsocket,Sporadically high risk for overdose
+440070179002,Woonsocket,Sporadically high risk for overdose
+440070179003,Woonsocket,Persistently high risk for overdose
+440070180001,Woonsocket,Persistently high risk for overdose
+440070180002,Woonsocket,Persistently high risk for overdose
+440070180003,Woonsocket,Persistently high risk for overdose
+440070181001,Woonsocket,Persistently high risk for overdose
+440070181002,Woonsocket,Persistently high risk for overdose
+440070182001,Woonsocket,Sporadically high risk for overdose
+440070182002,Woonsocket,Sporadically high risk for overdose
+440070183001,Woonsocket,Persistently high risk for overdose
+440070184001,Woonsocket,Sporadically high risk for overdose
+440070184002,Woonsocket,Lower risk for overdose
+440070184003,Woonsocket,Sporadically high risk for overdose
+440070184004,Woonsocket,Lower risk for overdose
+440070184005,Woonsocket,Sporadically high risk for overdose
+440070185001,Woonsocket,Sporadically high risk for overdose
+440070185002,Woonsocket,Sporadically high risk for overdose
+440070185003,Woonsocket,Lower risk for overdose

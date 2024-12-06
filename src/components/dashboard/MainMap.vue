@@ -14,7 +14,7 @@ import { useVega } from "@/composables/useVega.js";
 import geo from "@/assets/geojson/ri.json";
 import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
-import { sortByProperty } from "@/utils/utils.js";
+import { sortByProperty, priorityToColor } from "@/utils/utils.js";
 
 const props = defineProps({
   dataset: {
@@ -26,14 +26,6 @@ const props = defineProps({
     default() {
       return [];
     },
-  },
-  flagProperty: {
-    type: String,
-    required: true,
-  },
-  withPredictions: {
-    type: Boolean,
-    required: true,
   },
   zipcode: {
     type: Object,
@@ -72,8 +64,6 @@ const filteredGeo = computed(() => {
 
   filtered.forEach((g) => {
     const datum = props.dataset.find((d) => d.geoid === g.id) ?? {};
-    g.properties.flag = datum[props.flagProperty] ?? "-1";
-    g.properties.intervention_arm = datum.intervention_arm ?? false;
     g.properties.landmarks = datum.landmarks
       ? `${datum.landmarks
           .sort(sortByProperty("rank"))
@@ -126,37 +116,29 @@ const filteredGeo = computed(() => {
   return topo;
 });
 
-const tooltipSignal = computed(() => {
-  let signal = `{
-      Municipality: datum.properties.name,
-      title: 'Block Group ' + datum.properties.bg_id`;
-  if (props.withPredictions) {
-    signal += `, 'Prediction Eligible?': datum.properties.intervention_arm ? 'Yes' : 'No',
-    'Prediction': datum.properties.flag === '1' ? 'Prioritized' : datum.properties.flag === '0' ? 'Not Prioritized' : 'N/A'`;
-    signal +=
-      ", 'Priority': datum.properties.intervention_arm ? datum.properties.tooltip.priority : 'N/A'";
-  }
-  signal +=
-    ", 'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''";
-  signal += "}";
-  return signal;
-});
+const tooltipSignal = `{
+  title: 'Block Group ' + datum.properties.bg_id,
+  Municipality: datum.properties.name,
+  Priority: datum.properties.tooltip.priority,
+  'Points of Interest': (datum.properties.landmarks && datum.properties.landmarks.length > 0) ? datum.properties.landmarks : ''
+}`;
 
-const blockGroupFill = computed(() => {
-  const fill = [];
-
-  // Default Dashboard Fill
-  fill.push({ test: "datum.properties.flag === '1'", value: "#2A3465" });
-  fill.push({
-    test: `${props.withPredictions} && !datum.properties.intervention_arm`,
-    value: "url(#diagonalHatch)",
-  });
-
-  // Defaults
-  fill.push({ value: "white" });
-
-  return fill;
-});
+const blockGroupFill = [
+  {
+    test: "datum.properties.tooltip.priority === 'Persistently high risk for overdose'",
+    value: priorityToColor["Persistently high risk for overdose"],
+  },
+  {
+    test: "datum.properties.tooltip.priority === 'Sporadically high risk for overdose'",
+    value: priorityToColor["Sporadically high risk for overdose"],
+  },
+  {
+    test: "datum.properties.tooltip.priority === 'Lower risk for overdose'",
+    value: priorityToColor["Lower risk for overdose"],
+  },
+  // Default
+  { value: "url(#diagonalHatch)" },
+];
 
 const spec = computed(() => {
   return {
@@ -170,6 +152,7 @@ const spec = computed(() => {
           "https://api.mapbox.com/styles/v1/ccv-bot/cl5wvienz000o16qk2qw5n52h/static/",
       },
       {
+        // Access token is restricted to certain domains in the mapbox settings
         name: "mapboxToken",
         value:
           "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja3ZsY2JzMHY2ZGRiMm9xMTQ0eW1nZTJsIn0.uydOaXlX1uQfxPrKfucB2A",
@@ -259,7 +242,7 @@ const spec = computed(() => {
           enter: {
             cursor: { value: "pointer" },
             strokeWidth: { value: 1 },
-            fill: blockGroupFill.value,
+            fill: blockGroupFill,
           },
           update: {
             stroke: [
@@ -267,15 +250,15 @@ const spec = computed(() => {
               { value: "#999999" },
             ],
             fillOpacity: [
-              { test: "datum === activeGeography", value: 0.5 },
-              { value: 0.2 },
+              { test: "datum === activeGeography", value: 0.8 },
+              { value: 0.5 },
             ],
             zindex: [
               { test: "datum === activeGeography", value: 1 },
               { value: 0 },
             ],
             tooltip: {
-              signal: tooltipSignal.value,
+              signal: tooltipSignal,
             },
           },
         },

@@ -46,14 +46,11 @@ export async function getModelDataPeriods() {
   return res;
 }
 
-export async function getModelData(period) {
+export async function getDataset(period) {
   try {
-    const modelMetaDoc = await getDoc(doc(db, "model_data", "bg_meta"));
-    const modelMeta = getDataFromDoc(modelMetaDoc);
-    const modelDt = aq.from(modelMeta);
-
     const sviDataDoc = await getDoc(doc(db, "svi_data", period));
     const { cbg, town, ri } = sviDataDoc.data();
+    const cbgDt = aq.from(cbg);
 
     const landmarkDataDoc = await getDoc(doc(db, "landmark_data", period));
     const landmarkData = getDataFromDoc(landmarkDataDoc);
@@ -62,20 +59,19 @@ export async function getModelData(period) {
     const tooltipData = getDataFromDoc(tooltipDataDoc);
 
     return {
-      cbg: modelDt
-        .join(aq.from(cbg)) // joins on bg_id, geoid
-        .filter((d) => d.municipality !== "")
+      cbg: cbgDt
         .objects()
         .map((row) => {
-          // Filters the landmark data based on the block group and save it into the landmarks key for each block group
-          row.landmarks = landmarkData.filter(
-            (landmark) => landmark.bg_id === row.bg_id,
-          );
-          row.tooltip = tooltipData.find(
-            (tooltip) => tooltip.bg_id === row.bg_id,
-          );
-          return row;
-        }),
+          return {
+            ...row,
+            // Filters the landmark data based on the block group and save it into the landmarks key for each block group
+            landmarks: landmarkData.filter(
+              (landmark) => landmark.bg_id === row.bg_id,
+            ),
+            tooltip: tooltipData.find((tooltip) => tooltip.bg_id === row.bg_id),
+          };
+        })
+        .filter((d) => d.municipality !== ""),
       town,
       ri,
     };
@@ -89,16 +85,6 @@ export async function getModelData(period) {
   }
 }
 
-export async function getModelPredictions(period) {
-  try {
-    const document = await getDoc(doc(db, "model_predictions", period));
-    return getDataFromDoc(document);
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
-
 export async function getZipcodes() {
   try {
     const document = await getDoc(doc(db, "map_data", "ri_zip_database"));
@@ -107,13 +93,4 @@ export async function getZipcodes() {
     console.log(err);
     return [];
   }
-}
-
-export async function getDataset(period) {
-  const data = await getModelData(period);
-  const predictions = await getModelPredictions(period);
-  return {
-    ...data,
-    cbg: aq.from(data.cbg).join_left(aq.from(predictions), "bg_id").objects(),
-  };
 }
