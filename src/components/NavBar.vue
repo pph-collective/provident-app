@@ -41,7 +41,7 @@
 
           <router-link
             data-cy="dashboard"
-            to="/snack/dashboard"
+            to="/dashboard"
             class="navbar-item has-text-primary"
           >
             Dashboard
