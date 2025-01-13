@@ -335,16 +335,6 @@ const zoomBg = () => {
   }
 }
 
-.zoom-button {
-  min-width: 220px;
-}
-
-// Hack: Sorry! Very quick fix so that the tooltip's opacity inherits an opacity of 1.
-.zoom-button:disabled {
-  opacity: 1 !important;
-  color: rgba(0, 0, 0, 0.5) !important;
-}
-
 .instructions {
   position: absolute;
   top: 0;
@@ -380,6 +370,16 @@ const zoomBg = () => {
 
 .point-of-interest {
   color: $pori-red;
+}
+
+.zoom-button {
+  min-width: 220px;
+}
+
+// Hack: Sorry! Very quick fix so that the tooltip's opacity inherits an opacity of 1.
+.zoom-button:disabled {
+  opacity: 1 !important;
+  color: rgba(0, 0, 0, 0.5) !important;
 }
 
 // Tooltip for the Zoom button
