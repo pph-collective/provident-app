@@ -2,11 +2,12 @@
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
     <DashboardCard :height="1">
-      <template #title>Title</template>
-      <template #subtitle>Subtitle</template>
-      <template #content
+      <template #title
+        >Neighborhoods at risk of overdose in Rhode Island</template
+      >
+      <template #subtitle
         >This tool shows results from a machine learning model that was updated
-        between November 2021 and August 2024. The model uses many datasets to
+        between November 2021 and August 2024. The model used many datasets to
         predict whether an area might be at risk for overdose. Persistently high
         risk areas mean that our model predicted this area every time.
         Sporadically high risk areas were predicted some of the time. Shaded
@@ -14,6 +15,7 @@
         efforts. You can use this tool to find neighborhoods at risk of overdose
         across the state and learn more about them.</template
       >
+      <template #content></template>
     </DashboardCard>
 
     <ControlPanel
@@ -49,10 +51,10 @@
               <span class="icon">
                 <i class="fas fa-search-plus" />
               </span>
-              <span>Zoom to Block Group</span>
+              <span>Zoom to neighborhood</span>
               <!-- Adds tooltip text if the button is disabled -->
               <span v-if="!activeBG || !activeClickedStatus" class="tooltiptext"
-                >Click on a block group to see more details or zoom in</span
+                >Select a neighborhood to see more details or zoom in</span
               >
             </button>
             <button
@@ -69,6 +71,7 @@
         </div>
       </template>
       <template #subtitle>
+        Select a neighborhood to see more details or zoom in
         <div v-if="!zoomed">
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
@@ -88,7 +91,6 @@
               <span>Lower risk for overdose</span>
             </div>
           </div>
-          Click on a block group to see more details or zoom in
         </div>
       </template>
       <template #content>
@@ -113,7 +115,7 @@
             class="is-absolute"
           />
           <div v-if="activeBG && zoomed" class="instructions is-size-6-7">
-            Click on a <i class="fas fa-circle point-of-interest" /> point of
+            Select a <i class="fas fa-circle point-of-interest" /> point of
             interest to copy the address to your clipboard
           </div>
         </div>
