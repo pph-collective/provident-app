@@ -12,6 +12,8 @@
         us where we might need to focus our overdose prevention efforts. You can
         use this tool to find neighborhoods at risk of overdose across the state
         and learn more about them.
+        <br />
+        <br />
         <strong
           >To use this tool, select an area on the map below to learn more about
           it.</strong
