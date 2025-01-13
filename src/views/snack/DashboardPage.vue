@@ -8,12 +8,14 @@
       <template #subtitle
         >This tool shows results from a machine learning model that was updated
         between November 2021 and August 2024. The model used many datasets to
-        predict whether an area might be at risk for overdose. Persistently high
-        risk areas mean that our model predicted this area every time.
-        Sporadically high risk areas were predicted some of the time. Shaded
-        areas show us where we might need to focus our overdose prevention
-        efforts. You can use this tool to find neighborhoods at risk of overdose
-        across the state and learn more about them.</template
+        predict whether an area might be at risk for overdose. Shaded areas show
+        us where we might need to focus our overdose prevention efforts. You can
+        use this tool to find neighborhoods at risk of overdose across the state
+        and learn more about them.
+        <strong
+          >To use this tool, select an area on the map below to learn more about
+          it.</strong
+        ></template
       >
       <template #content></template>
     </DashboardCard>
@@ -71,7 +73,6 @@
         </div>
       </template>
       <template #subtitle>
-        Select a neighborhood to see more details or zoom in
         <div v-if="!zoomed">
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
@@ -89,6 +90,18 @@
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-grey" />
               <span>Lower risk for overdose</span>
+            </div>
+          </div>
+        </div>
+        <div v-if="zoomed">
+          <div class="icon-text">
+            <div class="is-flex is-flex-direction-row">
+              <p>
+                Red circles show where people in this neighborhood gather based
+                on anonymous cellular data. Points of interest are used as an
+                approximation of where people might be. You can use this
+                information to find potential outreach locations.
+              </p>
             </div>
           </div>
         </div>
