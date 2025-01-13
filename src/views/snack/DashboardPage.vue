@@ -1,7 +1,7 @@
 <template>
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
-    <DashboardCard :height="1" width="two-thirds">
+    <DashboardCard :height="1">
       <template #title>Title</template>
       <template #subtitle>Subtitle</template>
       <template #content
