@@ -5,7 +5,14 @@
       <template #title>Title</template>
       <template #subtitle>Subtitle</template>
       <template #content
-        >Instructions on how to use the PROVIDENT tool</template
+        >This tool shows results from a machine learning model that was updated
+        between November 2021 and August 2024. The model uses many datasets to
+        predict whether an area might be at risk for overdose. Persistently high
+        risk areas mean that our model predicted this area every time.
+        Sporadically high risk areas were predicted some of the time. Shaded
+        areas show us where we might need to focus our overdose prevention
+        efforts. You can use this tool to find neighborhoods at risk of overdose
+        across the state and learn more about them.</template
       >
     </DashboardCard>
 
