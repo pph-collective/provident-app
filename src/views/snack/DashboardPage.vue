@@ -1,6 +1,14 @@
 <template>
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
+    <DashboardCard :height="1" width="two-thirds">
+      <template #title>Title</template>
+      <template #subtitle>Subtitle</template>
+      <template #content
+        >Instructions on how to use the PROVIDENT tool</template
+      >
+    </DashboardCard>
+
     <ControlPanel
       v-if="displayControlPanel"
       id="dashboard-control-panel"
@@ -220,10 +228,12 @@ const dropDowns = computed(() => {
     geography: {
       icon: "fas fa-globe",
       values: locations.value,
+      title: "Where do you want to look?",
     },
     zipcode: {
       icon: "fas fa-map",
       values: zipsDropdownOptions.value,
+      title: "Which zip code do you want to focus on?",
     },
   };
 });
