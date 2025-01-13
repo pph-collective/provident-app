@@ -28,13 +28,16 @@
             <button
               v-if="!zoomed"
               :disabled="!activeBG || !activeClickedStatus"
-              class="zoom-button button is-family-secondary is-secondary is-light"
+              class="zoom-button button is-family-secondary is-secondary is-light tooltip"
               @click="zoomBg"
             >
               <span class="icon">
                 <i class="fas fa-search-plus" />
               </span>
               <span>Zoom to Block Group</span>
+              <span class="tooltiptext"
+                >Click on a block group to see more details or zoom in</span
+              >
             </button>
             <button
               v-else
@@ -335,6 +338,12 @@ const zoomBg = () => {
   min-width: 220px;
 }
 
+// Hack: Sorry! Very quick fix so that the tooltip's opacity inherits an opacity of 1.
+.zoom-button:disabled {
+  opacity: 1 !important;
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
 .instructions {
   position: absolute;
   top: 0;
@@ -370,5 +379,48 @@ const zoomBg = () => {
 
 .point-of-interest {
   color: $pori-red;
+}
+
+// Tooltip for the Zoom button
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 200px;
+  max-width: 100%;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  overflow-wrap: normal;
+  white-space: normal; /* Allow multiple lines for wrapping */
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1 !important;
 }
 </style>
