@@ -163,6 +163,31 @@
         />
       </template>
     </DashboardCard>
+
+    <DashboardCard :height="1">
+      <template #subtitle>Data Notes</template>
+      <template #content>
+        <div>
+          The PROVIDENT dashboard uses a predictive models to generate
+          neighborhood-level (census block group) insights. Predictive analytics
+          are forecasting tools that are powered by large datasets. They use
+          statistical models to identify patterns in large datasets. With
+          predictive analytics, we can use more data than ever before to
+          understand the overdose crisis and create a forecast of what to
+          expect. The PROVIDENT model consistently identifies the top 20% of
+          neighborhoods where more than 40% of overdose deaths subsequently
+          occur. We included public health data from state agencies like the
+          Rhode Island Department of Health. These data include things like
+          fatal and non-fatal overdose events and naloxone availability. We also
+          used neighborhood data on underlying overdose risks, such as poverty
+          rates, unemployment trends, and resources in each community., These
+          data come from publicly available datasets and other sources.
+          <a href="" target="blank"
+            >Learn more about the PROVIDENT research project.</a
+          >
+        </div>
+      </template>
+    </DashboardCard>
   </div>
 </template>
 
