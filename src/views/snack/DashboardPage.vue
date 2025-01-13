@@ -35,7 +35,8 @@
                 <i class="fas fa-search-plus" />
               </span>
               <span>Zoom to Block Group</span>
-              <span class="tooltiptext"
+              <!-- Adds tooltip text if the button is disabled -->
+              <span v-if="!activeBG || !activeClickedStatus" class="tooltiptext"
                 >Click on a block group to see more details or zoom in</span
               >
             </button>
@@ -421,6 +422,6 @@ const zoomBg = () => {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-  opacity: 1 !important;
+  opacity: 1;
 }
 </style>
