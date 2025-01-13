@@ -73,25 +73,36 @@
         </div>
       </template>
       <template #subtitle>
+        <br />
         <div v-if="!zoomed">
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-red" />
-              <p>Persistently high risk for overdose</p>
+              <p>
+                <strong>Persistently high risk for overdose</strong> -
+                neighborhoods our model always predicted
+              </p>
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-orange" />
-              <span>Sporadically high risk for overdose</span>
+              <span
+                ><strong>Sporadically high risk for overdose</strong> -
+                neighborhoods our model sometimes predicted</span
+              >
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-grey" />
-              <span>Lower risk for overdose</span>
+              <span
+                ><strong>Lower risk for overdose</strong> - neighborhoods our
+                model never predicted</span
+              >
             </div>
           </div>
+          <br />
         </div>
         <div v-if="zoomed">
           <div class="icon-text">
@@ -103,6 +114,7 @@
                 information to find potential outreach locations.
               </p>
             </div>
+            <br />
           </div>
         </div>
       </template>
