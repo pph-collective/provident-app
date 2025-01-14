@@ -12,7 +12,7 @@
         </h2>
         <div><slot name="top-right" /></div>
       </div>
-      <h3 class="subtitle is-family-secondary">
+      <h3 class="subtitle is-family-secondary my-3">
         <slot name="subtitle" />
       </h3>
     </header>

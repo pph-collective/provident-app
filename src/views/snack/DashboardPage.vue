@@ -14,12 +14,11 @@
         and learn more about them.
         <br />
         <br />
-        <strong
-          >To use this tool, select an area on the map below to learn more about
-          it.</strong
-        ></template
-      >
-      <template #content></template>
+        <strong>
+          To use this tool, select an area on the map below to learn more about
+          it.
+        </strong>
+      </template>
     </DashboardCard>
 
     <ControlPanel
@@ -75,13 +74,12 @@
         </div>
       </template>
       <template #subtitle>
-        <br />
         <div v-if="!zoomed">
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-red" />
               <p>
-                <strong>Persistently high risk for overdose</strong> -
+                <strong>Persistently high risk for overdose:</strong>
                 neighborhoods our model always predicted
               </p>
             </div>
@@ -90,7 +88,7 @@
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-orange" />
               <span
-                ><strong>Sporadically high risk for overdose</strong> -
+                ><strong>Sporadically high risk for overdose:</strong>
                 neighborhoods our model sometimes predicted</span
               >
             </div>
@@ -99,25 +97,19 @@
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-grey" />
               <span
-                ><strong>Lower risk for overdose</strong> - neighborhoods our
+                ><strong>Lower risk for overdose:</strong> neighborhoods our
                 model never predicted</span
               >
             </div>
           </div>
-          <br />
         </div>
         <div v-if="zoomed">
-          <div class="icon-text">
-            <div class="is-flex is-flex-direction-row">
-              <p>
-                Red circles show where people in this neighborhood gather based
-                on anonymous cellular data. Points of interest are used as an
-                approximation of where people might be. You can use this
-                information to find potential outreach locations.
-              </p>
-            </div>
-            <br />
-          </div>
+          <p>
+            Red circles show where people in this neighborhood gather based on
+            anonymous cellular data. Points of interest are used as an
+            approximation of where people might be. You can use this information
+            to find potential outreach locations.
+          </p>
         </div>
       </template>
       <template #content>
@@ -151,8 +143,9 @@
 
     <DashboardCard id="stats" width="one-third" :height="5">
       <template #title><h3>Neighborhood Characteristics</h3></template>
-      <template v-if="modelDataPeriod.description" #subtitle>
-        {{ modelDataPeriod.description }}</template
+      <template #subtitle
+        >When you select a neighborhood, you can use the table below to compare
+        its characteristics to town and state values.</template
       >
       <template #content>
         <StatsWidget
@@ -167,25 +160,24 @@
     <DashboardCard :height="1">
       <template #subtitle>Data Notes</template>
       <template #content>
-        <div>
-          The PROVIDENT dashboard uses a predictive models to generate
-          neighborhood-level (census block group) insights. Predictive analytics
-          are forecasting tools that are powered by large datasets. They use
-          statistical models to identify patterns in large datasets. With
-          predictive analytics, we can use more data than ever before to
-          understand the overdose crisis and create a forecast of what to
-          expect. The PROVIDENT model consistently identifies the top 20% of
-          neighborhoods where more than 40% of overdose deaths subsequently
-          occur. We included public health data from state agencies like the
-          Rhode Island Department of Health. These data include things like
-          fatal and non-fatal overdose events and naloxone availability. We also
-          used neighborhood data on underlying overdose risks, such as poverty
-          rates, unemployment trends, and resources in each community., These
-          data come from publicly available datasets and other sources.
-          <a href="" target="blank"
-            >Learn more about the PROVIDENT research project.</a
-          >
-        </div>
+        The PROVIDENT dashboard uses a predictive models to generate
+        neighborhood-level (census block group) insights. Predictive analytics
+        are forecasting tools that are powered by large datasets. They use
+        statistical models to identify patterns in large datasets. With
+        predictive analytics, we can use more data than ever before to
+        understand the overdose crisis and create a forecast of what to expect.
+        The PROVIDENT model consistently identifies the top 20% of neighborhoods
+        where more than 40% of overdose deaths subsequently occur. We included
+        public health data from state agencies like the Rhode Island Department
+        of Health. These data include things like fatal and non-fatal overdose
+        events and naloxone availability. We also used neighborhood data on
+        underlying overdose risks, such as poverty rates, unemployment trends,
+        and resources in each community. These data come from publicly available
+        datasets and other sources.
+
+        <ExternalLink href="/resources"
+          >Learn more about the PROVIDENT research project</ExternalLink
+        >
       </template>
     </DashboardCard>
   </div>
@@ -200,6 +192,7 @@ import geo from "@/assets/geojson/ri.json";
 import { getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
+import ExternalLink from "../../components/ExternalLink.vue";
 import DashboardCard from "../../components/dashboard/DashboardCard.vue";
 import ControlPanel from "../../components/dashboard/ControlPanel.vue";
 import MainMap from "../../components/dashboard/MainMap.vue";

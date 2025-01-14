@@ -1,11 +1,4 @@
 <template>
-  <div>
-    <p>
-      When you select a neighborhood, you can use the table below to compare its
-      characteristics to town and state values.
-    </p>
-    <br />
-  </div>
   <div
     class="is-flex is-flex-direction-column is-justify-content-space-between is-fullheight"
   >
@@ -27,8 +20,6 @@
       </div>
 
       <PriorityTag :priority="priority" />
-
-      <br />
 
       <table class="table is-striped is-fullwidth my-1">
         <thead>
@@ -270,6 +261,6 @@ const hyphenate = (val) => {
 }
 
 .is-fullheight {
-  height: 90%;
+  height: 100%;
 }
 </style>
