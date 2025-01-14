@@ -74,7 +74,15 @@
         </div>
       </template>
       <template #subtitle>
-        <div v-if="!zoomed">
+        <div v-if="zoomed">
+          <p>
+            Red circles show where people in this neighborhood gather based on
+            anonymous cellular data. Points of interest are used as an
+            approximation of where people might be. You can use this information
+            to find potential outreach locations.
+          </p>
+        </div>
+        <div v-else>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-red" />
@@ -102,14 +110,6 @@
               >
             </div>
           </div>
-        </div>
-        <div v-if="zoomed">
-          <p>
-            Red circles show where people in this neighborhood gather based on
-            anonymous cellular data. Points of interest are used as an
-            approximation of where people might be. You can use this information
-            to find potential outreach locations.
-          </p>
         </div>
       </template>
       <template #content>
