@@ -3,20 +3,23 @@
     class="dashboard-card-container"
     :class="['is-' + width, 'is-height-' + height]"
   >
-    <header v-if="!noHeader" class="dashboard-card-header">
+    <header v-if="!noHeader" class="dashboard-card-header my-3">
       <div
         class="is-flex is-flex-direction-row is-justify-content-space-between is-flex-wrap-wrap fullwidth"
       >
-        <h2 class="title mb-3">
+        <h2 v-if="$slots.title" class="title mb-3">
           <slot name="title" />
         </h2>
         <div><slot name="top-right" /></div>
       </div>
-      <h3 class="subtitle is-family-secondary">
+      <h3 v-if="$slots.subtitle" class="subtitle is-family-secondary">
         <slot name="subtitle" />
       </h3>
     </header>
-    <section class="dashboard-card-content is-family-secondary">
+    <section
+      v-if="$slots.content"
+      class="dashboard-card-content is-family-secondary my-3"
+    >
       <slot name="content" />
     </section>
   </div>
