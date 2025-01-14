@@ -103,7 +103,7 @@
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
-              <div class="icon square-grey" />
+              <div class="icon square" />
               <span
                 ><strong>Lower risk for overdose:</strong> neighborhoods our
                 model never predicted</span
