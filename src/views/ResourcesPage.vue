@@ -16,7 +16,7 @@
               <span v-if="showSidebar">Guides</span>
             </a>
             <a href="#publications">
-              <i class="fas fa-download mr-1" />
+              <i class="fas fa-newspaper mr-1" />
               <span v-if="showSidebar">Publications</span>
             </a>
             <a href="#links">
@@ -159,7 +159,7 @@
                 <div class="media">
                   <div class="media-left">
                     <span class="icon is-large">
-                      <i class="fas fa-3x fa-link"></i>
+                      <i class="fas fa-3x fa-newspaper"></i>
                     </span>
                   </div>
                   <div class="media-content">
@@ -199,7 +199,7 @@
                 <div class="media">
                   <div class="media-left">
                     <span class="icon is-large">
-                      <i class="fas fa-3x fa-link"></i>
+                      <i class="fas fa-3x fa-newspaper"></i>
                     </span>
                   </div>
                   <div class="media-content">
