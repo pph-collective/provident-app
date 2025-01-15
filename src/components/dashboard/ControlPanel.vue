@@ -1,5 +1,5 @@
 <template>
-  <DashboardCard :no-header="true" width="two-thirds" :height="1">
+  <DashboardCard :no-header="true" :height="1">
     <template #content>
       <div class="control-panel is-family-secondary">
         <div
@@ -7,6 +7,9 @@
           :key="'control-panel-dropdown-' + type"
           class="control-panel-dropdown control has-icons-left"
         >
+          <span
+            ><b>{{ options.title }}</b></span
+          >
           <span class="select">
             <select :id="type" v-model="selected[type]">
               <option
@@ -17,9 +20,9 @@
                 {{ option.name || option }}
               </option>
             </select>
-          </span>
-          <span class="icon is-small is-left pl-1">
-            <i :class="options.icon" />
+            <span class="icon is-small is-left pl-1">
+              <i :class="options.icon" />
+            </span>
           </span>
         </div>
       </div>

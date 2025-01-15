@@ -1,6 +1,26 @@
 <template>
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
+    <DashboardCard :height="1">
+      <template #title
+        >Neighborhoods at risk of overdose in Rhode Island</template
+      >
+      <template #subtitle
+        >This tool shows results from a machine learning model that was updated
+        between November 2021 and August 2024. The model used many datasets to
+        predict whether an area might be at risk for overdose. Shaded areas show
+        us where we might need to focus our overdose prevention efforts. You can
+        use this tool to find neighborhoods at risk of overdose across the state
+        and learn more about them.
+        <br />
+        <br />
+        <strong>
+          To use this tool, select an area on the map below to learn more about
+          it.
+        </strong>
+      </template>
+    </DashboardCard>
+
     <ControlPanel
       v-if="displayControlPanel"
       id="dashboard-control-panel"
@@ -28,13 +48,17 @@
             <button
               v-if="!zoomed"
               :disabled="!activeBG || !activeClickedStatus"
-              class="zoom-button button is-family-secondary is-secondary is-light"
+              class="zoom-button button is-family-secondary is-secondary is-light tooltip"
               @click="zoomBg"
             >
               <span class="icon">
                 <i class="fas fa-search-plus" />
               </span>
-              <span>Zoom to Block Group</span>
+              <span>Zoom to neighborhood</span>
+              <!-- Adds tooltip text if the button is disabled -->
+              <span v-if="!activeBG || !activeClickedStatus" class="tooltiptext"
+                >Select a neighborhood to see more details or zoom in</span
+              >
             </button>
             <button
               v-else
@@ -50,26 +74,42 @@
         </div>
       </template>
       <template #subtitle>
-        <div v-if="!zoomed">
+        <div v-if="zoomed">
+          <p>
+            Red circles show where people in this neighborhood gather based on
+            anonymous cellular data. Points of interest are used as an
+            approximation of where people might be. You can use this information
+            to find potential outreach locations.
+          </p>
+        </div>
+        <div v-else>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-red" />
-              <p>Persistently high risk for overdose</p>
+              <p>
+                <strong>Persistently high risk for overdose:</strong>
+                neighborhoods our model always predicted
+              </p>
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
               <div class="icon square-orange" />
-              <span>Sporadically high risk for overdose</span>
+              <span
+                ><strong>Sporadically high risk for overdose:</strong>
+                neighborhoods our model sometimes predicted</span
+              >
             </div>
           </div>
           <div class="icon-text">
             <div class="is-flex is-flex-direction-row">
-              <div class="icon square-grey" />
-              <span>Lower risk for overdose</span>
+              <div class="icon square" />
+              <span
+                ><strong>Lower risk for overdose:</strong> neighborhoods our
+                model never predicted</span
+              >
             </div>
           </div>
-          Click on a block group to see more details or zoom in
         </div>
       </template>
       <template #content>
@@ -94,7 +134,7 @@
             class="is-absolute"
           />
           <div v-if="activeBG && zoomed" class="instructions is-size-6-7">
-            Click on a <i class="fas fa-circle point-of-interest" /> point of
+            Select a <i class="fas fa-circle point-of-interest" /> point of
             interest to copy the address to your clipboard
           </div>
         </div>
@@ -103,8 +143,9 @@
 
     <DashboardCard id="stats" width="one-third" :height="5">
       <template #title><h3>Neighborhood Characteristics</h3></template>
-      <template v-if="modelDataPeriod.description" #subtitle>
-        {{ modelDataPeriod.description }}</template
+      <template #subtitle
+        >When you select a neighborhood, you can use the table below to compare
+        its characteristics to town and state values.</template
       >
       <template #content>
         <StatsWidget
@@ -113,6 +154,30 @@
           :municipality="computedMuni"
           :geoid="activeBG"
         />
+      </template>
+    </DashboardCard>
+
+    <DashboardCard :height="1">
+      <template #subtitle>Data Notes</template>
+      <template #content>
+        The PROVIDENT dashboard uses a predictive models to generate
+        neighborhood-level (census block group) insights. Predictive analytics
+        are forecasting tools that are powered by large datasets. They use
+        statistical models to identify patterns in large datasets. With
+        predictive analytics, we can use more data than ever before to
+        understand the overdose crisis and create a forecast of what to expect.
+        The PROVIDENT model consistently identifies the top 20% of neighborhoods
+        where more than 40% of overdose deaths subsequently occur. We included
+        public health data from state agencies like the Rhode Island Department
+        of Health. These data include things like fatal and non-fatal overdose
+        events and naloxone availability. We also used neighborhood data on
+        underlying overdose risks, such as poverty rates, unemployment trends,
+        and resources in each community. These data come from publicly available
+        datasets and other sources.
+
+        <ExternalLink href="/resources"
+          >Learn more about the PROVIDENT research project</ExternalLink
+        >
       </template>
     </DashboardCard>
   </div>
@@ -127,6 +192,7 @@ import geo from "@/assets/geojson/ri.json";
 import { getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
+import ExternalLink from "../../components/ExternalLink.vue";
 import DashboardCard from "../../components/dashboard/DashboardCard.vue";
 import ControlPanel from "../../components/dashboard/ControlPanel.vue";
 import MainMap from "../../components/dashboard/MainMap.vue";
@@ -216,10 +282,12 @@ const dropDowns = computed(() => {
     geography: {
       icon: "fas fa-globe",
       values: locations.value,
+      title: "Where do you want to look?",
     },
     zipcode: {
       icon: "fas fa-map",
       values: zipsDropdownOptions.value,
+      title: "Which zip code do you want to focus on?",
     },
   };
 });
@@ -331,10 +399,6 @@ const zoomBg = () => {
   }
 }
 
-.zoom-button {
-  min-width: 220px;
-}
-
 .instructions {
   position: absolute;
   top: 0;
@@ -370,5 +434,58 @@ const zoomBg = () => {
 
 .point-of-interest {
   color: $pori-red;
+}
+
+.zoom-button {
+  min-width: 220px;
+}
+
+// Hack: Sorry! Very quick fix so that the tooltip's opacity inherits an opacity of 1.
+.zoom-button:disabled {
+  opacity: 1 !important;
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+// Tooltip for the Zoom button
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 200px;
+  max-width: 100%;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  overflow-wrap: normal;
+  white-space: normal; /* Allow multiple lines for wrapping */
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
