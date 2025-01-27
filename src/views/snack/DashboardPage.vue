@@ -313,11 +313,6 @@ const updateControls = (newControls) => {
   }
 };
 
-console.log("DSSHBOARD");
-console.log(controls.value.zipcode);
-console.log(zipsDropdownOptions.value);
-console.log("END");
-
 useQueryParams([
   {
     param: "muni",
