@@ -25,6 +25,7 @@
       v-if="displayControlPanel"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
+      :init-value="controls"
       @selected="updateControls"
     />
 
@@ -318,7 +319,19 @@ const updateControls = (newControls) => {
   }
 };
 
+console.log(controls.value.geography.name);
+
 useQueryParams([
+  {
+    param: "muni",
+    ref: controls,
+    refField: "geography",
+    valid: (v) => locations.value.find((l) => l.name === v) !== undefined,
+    push: true,
+    getInitParam: () => controls.value.geography.name,
+    valToParam: (v) => v.name,
+    paramToVal: (v) => locations.value.find((l) => l.name === v),
+  },
   {
     param: "bg",
     ref: activeBG,
