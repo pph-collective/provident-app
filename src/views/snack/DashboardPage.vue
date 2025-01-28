@@ -339,8 +339,8 @@ useQueryParams([
     param: "bg",
     ref: activeBG,
     refField: undefined,
-    valid: () => true,
-    push: true,
+    valid: (v) =>
+      BLOCK_GROUPS.find(({ blockGroup }) => blockGroup === v) !== undefined,
     getInitParam: () => "",
   },
   {
