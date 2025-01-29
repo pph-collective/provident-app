@@ -84,13 +84,3 @@ export async function getDataset(period) {
     };
   }
 }
-
-export async function getZipcodes() {
-  try {
-    const document = await getDoc(doc(db, "map_data", "ri_zip_database"));
-    return getDataFromDoc(document);
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}

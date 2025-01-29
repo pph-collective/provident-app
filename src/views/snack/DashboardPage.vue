@@ -25,6 +25,7 @@
       v-if="displayControlPanel"
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
+      :init-value="controls"
       @selected="updateControls"
     />
 
@@ -184,12 +185,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
+import zipcodes from "@/assets/RI_ZIPS.json";
 
-import { getZipcodes } from "../../firebase.js";
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
 import ExternalLink from "../../components/ExternalLink.vue";
@@ -240,12 +241,6 @@ const displayControlPanel = computed(
   () => Object.keys(modelDataPeriod).length !== 0,
 );
 
-const zipcodes = ref([]);
-
-onMounted(async () => {
-  zipcodes.value = await getZipcodes();
-});
-
 const zipsDropdownOptions = computed(() => {
   let zips = [];
 
@@ -254,10 +249,10 @@ const zipsDropdownOptions = computed(() => {
 
     if (municipalities.length === 0) {
       // Set the result (for the dropdown) to all of the zip codes in RI
-      zips = zipcodes.value;
+      zips = [...zipcodes];
     } else {
       municipalities.forEach((m) => {
-        zips.push(...zipcodes.value.filter((z) => z.city === m));
+        zips.push(...zipcodes.filter((z) => z.city === m));
       });
     }
 
@@ -320,11 +315,32 @@ const updateControls = (newControls) => {
 
 useQueryParams([
   {
+    param: "muni",
+    ref: controls,
+    refField: "geography",
+    valid: (v) => locations.value.find((l) => l.name === v) !== undefined,
+    push: true,
+    getInitParam: () => controls.value.geography.name,
+    valToParam: (v) => v.name,
+    paramToVal: (v) => locations.value.find((l) => l.name === v),
+  },
+  {
+    param: "zip",
+    ref: controls,
+    refField: "zipcode",
+    valid: (v) =>
+      zipsDropdownOptions.value.find((z) => z.name === v) !== undefined,
+    push: true,
+    getInitParam: () => controls.value.zipcode.name,
+    valToParam: (v) => v.name,
+    paramToVal: (v) => zipsDropdownOptions.value.find((z) => z.name === v),
+  },
+  {
     param: "bg",
     ref: activeBG,
     refField: undefined,
-    valid: () => true,
-    push: true,
+    valid: (v) =>
+      BLOCK_GROUPS.find(({ blockGroup }) => blockGroup === v) !== undefined,
     getInitParam: () => "",
   },
   {
