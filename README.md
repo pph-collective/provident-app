@@ -27,6 +27,29 @@ yarn build
 yarn lint
 ```
 
+## API Key Setup
+
+### Setting up the Environment Variable
+
+Copy the `.env.example` file to create your own environment file:
+```bash
+  cp .env.example .env.local
+```
+
+>[!IMPORTANT]
+> Use `.env.local` (not `.env`) - this file is gitignored and won't be committed
+> Environment variables in Vite must be prefixed with `VITE_` to be accessible in the browser
+> Never commit your actual API keys to version control
+
+### MapBox
+
+This project uses MapBox for map rendering. To get the map working properly, you'll need to set up an API key.
+
+Open `.env.local` and add your actual API key:
+```
+  VITE_MAPBOX_API_KEY=your_actual_api_key_here
+```
+
 ### Setup Firebase Admin
 
 > [!NOTE]
@@ -46,3 +69,4 @@ The `firestore.rules` file (in the repo) was used to test edits to the firestore
 
 > [!NOTE]  
 > Activity logging is to be migrated over to using only Google Analytics [#338](https://github.com/pph-collective/provident-app/issues/338)
+
