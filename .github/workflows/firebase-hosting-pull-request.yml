@@ -14,7 +14,7 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: 📥 Install Dependencies
+      - name: 📥 Install Dependencies and Build
         run: yarn && yarn build
 
       - name: 🔥 Firebase Hosting
