@@ -16,6 +16,8 @@ import zipcodesGeo from "@/assets/geojson/ri_zipcodes.json";
 
 import { sortByProperty, priorityToColor } from "@/utils/utils.js";
 
+const MAPBOX_API_KEY = import.meta.env.VITE_MAPBOX_API_KEY;
+
 const props = defineProps({
   dataset: {
     type: Array,
@@ -154,8 +156,7 @@ const spec = computed(() => {
       {
         // Access token is restricted to certain domains in the mapbox settings
         name: "mapboxToken",
-        value:
-          "?access_token=pk.eyJ1IjoiY2N2LWJvdCIsImEiOiJja3ZsY2JzMHY2ZGRiMm9xMTQ0eW1nZTJsIn0.uydOaXlX1uQfxPrKfucB2A",
+        value: `?access_token=${MAPBOX_API_KEY}`,
       },
       { name: "basePoint", update: "invert('projection',[0,0])" },
       { name: "maxPoint", update: "invert('projection', [width, height])" },

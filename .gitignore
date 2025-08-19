@@ -10,6 +10,9 @@ node_modules
 # Private Keys Files
 serviceAccount.json
 
+# env
+.env
+
 # local env files
 .env.local
 .env.*.local
