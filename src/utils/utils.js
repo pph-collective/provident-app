@@ -78,29 +78,6 @@ export const evalSchema = (s, yup) => {
   return yup;
 };
 
-export const FORM_CONFIG = [
-  {
-    shortTitle: "Assessment",
-    title: "Neighborhood Rapid Assessment",
-    iconClass: "fas fa-clipboard",
-  },
-  {
-    shortTitle: "Plan",
-    title: "Six Month Resource Plan",
-    iconClass: "fas fa-tasks",
-  },
-  {
-    shortTitle: "Mid-way Plan Followup",
-    title: "Mid-way Followup to the Six Month Resource Plan",
-    iconClass: "fas fa-star-half",
-  },
-  {
-    shortTitle: "Plan Followup",
-    title: "Followup to Six Month Resource Plan",
-    iconClass: "fas fa-star",
-  },
-];
-
 export default {
   GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
@@ -114,5 +91,4 @@ export default {
   toISODateString,
   uniqueArray,
   uniqueId,
-  FORM_CONFIG,
 };
