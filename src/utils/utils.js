@@ -25,15 +25,6 @@ export const sortByProperty = (property) => (a, b) => {
   return 0;
 };
 
-export const today = () => {
-  return new Date().toLocaleDateString("sv");
-};
-
-// Returns date in "yyyy-mm-dd" format in local timezone
-export const toISODateString = (dateNumber) => {
-  return new Date(dateNumber).toLocaleDateString("sv");
-};
-
 export const uniqueId = () => {
   const dateString = Date.now().toString(36);
   const randomness = Math.random().toString(36).substr(2);
@@ -52,23 +43,12 @@ export const priorityToColor = {
   "Lower risk for overdose": "#DBD4D000", // Transparent
 };
 
-export const uniqueArray = (array) => {
-  const set = new Set(array);
-  return Array.from(set).sort();
-};
-
 export const poriRed = "#990000";
-
-export const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
 export default {
   MUNICIPALITIES,
   poriRed,
   tertileColorMap,
-  cloneDeep,
   sortByProperty,
-  today,
-  toISODateString,
-  uniqueArray,
   uniqueId,
 };
