@@ -4,9 +4,6 @@ export const MUNICIPALITIES = [
   ...new Set(GEO.map((g) => g.properties.name)),
 ].sort();
 
-export const GEOID_QUESTION_MODEL = "bg_id";
-export const MUNI_QUESTION_MODEL = "municipality";
-
 export const sortByProperty = (property) => (a, b) => {
   let valA = a[property];
   let valB = b[property];
@@ -64,28 +61,11 @@ export const poriRed = "#990000";
 
 export const cloneDeep = (value) => JSON.parse(JSON.stringify(value));
 
-export const evalSchema = (s, yup) => {
-  s.forEach((q) => {
-    for (const key in q) {
-      if (["condition", "validations", "read_only"].includes(key)) {
-        q[key] = eval(q[key]);
-      } else if (key === "component" && !q[key].startsWith("Form")) {
-        q[key] = "Form" + q[key];
-      }
-    }
-  });
-
-  return yup;
-};
-
 export default {
-  GEOID_QUESTION_MODEL,
   MUNICIPALITIES,
-  MUNI_QUESTION_MODEL,
   poriRed,
   tertileColorMap,
   cloneDeep,
-  evalSchema,
   sortByProperty,
   today,
   toISODateString,
