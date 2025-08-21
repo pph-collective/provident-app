@@ -1,7 +1,6 @@
 <template>
   <NavBar />
   <div id="content-container">
-    <NotificationsBar :notifications="notifications" />
     <router-view />
   </div>
   <BaseFooter />
@@ -25,16 +24,8 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useProvidentStore } from "./store";
-
 import NavBar from "@/components/NavBar.vue";
 import BaseFooter from "@/components/BaseFooter.vue";
-import NotificationsBar from "@/components/NotificationsBar.vue";
-
-const store = useProvidentStore();
-
-const notifications = computed(() => store.notifications);
 </script>
 
 <style lang="scss">
