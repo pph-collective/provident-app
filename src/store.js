@@ -1,12 +1,10 @@
 import { defineStore } from "pinia";
 import { getDataset, getModelDataPeriods } from "@/firebase.js";
-import utils from "@/utils/utils.js";
 
 export const useProvidentStore = defineStore("provident", {
   state: () => {
     return {
       loaded: false,
-      notifications: [],
       modelDataPeriod: {},
       dataset: {
         cbg: [],
@@ -34,20 +32,6 @@ export const useProvidentStore = defineStore("provident", {
     },
     setLoaded() {
       this.mutate({ property: "loaded", with: true });
-    },
-    addNotification({ color = "success", message }) {
-      const id = utils.uniqueId();
-      this.mutate({
-        property: "notifications",
-        with: [...this.notifications, { id, color, message }],
-      });
-      setTimeout(() => this.dismissNotification(id), 6000);
-    },
-    dismissNotification(id) {
-      this.mutate({
-        property: "notifications",
-        with: this.notifications.filter((n) => n.id !== id),
-      });
     },
   },
 });
