@@ -32,14 +32,6 @@
       >
         <div class="navbar-start">
           <router-link
-            data-cy="home"
-            to="/"
-            class="navbar-item has-text-primary"
-          >
-            Home
-          </router-link>
-
-          <router-link
             data-cy="dashboard"
             to="/dashboard"
             class="navbar-item has-text-primary"

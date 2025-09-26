@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/HomePage.vue";
 import Resources from "../views/ResourcesPage.vue";
 import Dashboard from "../views/snack/DashboardPage.vue";
 import { useProvidentStore } from "../store";
@@ -12,11 +11,6 @@ function sleep(ms) {
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
@@ -28,7 +22,7 @@ const routes = [
   },
   {
     path: "/:pathMatch(.*)*",
-    redirect: { name: "Home" },
+    redirect: { name: "Dashboard" },
   },
 ];
 
