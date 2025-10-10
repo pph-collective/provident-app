@@ -1,7 +1,7 @@
 <template>
   <LoadingSpinner :loading="loading" />
   <div class="dashboard container is-fullhd">
-    <DashboardCard :height="1">
+    <DashboardCard :height="1" class="do-not-print">
       <template #title
         >Neighborhoods at risk of overdose in Rhode Island</template
       >
@@ -446,6 +446,32 @@ const zoomBg = () => {
 .square-grey {
   @extend .square;
   background-color: $trajectory-grey;
+}
+
+// Add print styles for legend colors
+@media print {
+  .square,
+  .square-red,
+  .square-orange,
+  .square-grey {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .square-red {
+    background-color: $trajectory-red !important;
+    border-color: $trajectory-red !important;
+  }
+
+  .square-orange {
+    background-color: $trajectory-orange !important;
+    border-color: $trajectory-orange !important;
+  }
+
+  .square-grey {
+    background-color: $trajectory-grey !important;
+    border-color: $trajectory-grey !important;
+  }
 }
 
 .point-of-interest {

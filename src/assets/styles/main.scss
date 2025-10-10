@@ -150,41 +150,57 @@ fieldset[disabled] {
 }
 
 @media print {
-  body * {
-    display: none;
+  // Hide everything except content-container
+  #app > *:not(#content-container) {
+    display: none !important;
   }
 
-  .printable {
+  .do-not-print {
+      display: none !important;
+  }
+  
+  // Show only the content container
+  #content-container {
     display: block !important;
+    min-height: auto !important;
+    position: static !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  .printable * {
-    display: revert;
+  // Force dashboard to single column layout
+  .dashboard {
+    display: block !important; // Change from grid to block
+    padding: 0.5rem !important;
+    column-gap: 0 !important;
+    row-gap: 0.5rem !important;
   }
-
-  .printable {
-    position: absolute;
-    left:0;
-    top:0;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    background-color: white;
-    isolation: isolate;
-    white-space: pre-wrap;
+  
+  // Make all dashboard cards full width and stack vertically
+  .dashboard > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: unset !important;
+    grid-row: unset !important;
+    margin-bottom: 1rem !important;
+    page-break-inside: avoid !important;
   }
-
-  .sticky-bottom {
-    position: relative !important;
-  }
-
-  .not-printed {
-    display: none;
-  }
-
-  .page-break {
-    display: block;
-    page-break-before: always;
+  
+  // // Prevent page breaks between the control panel and map
+  // .dashboard-control-panel,
+  // .map {
+  //   page-break-inside: avoid !important;
+  //   page-break-after: avoid !important;
+  // }
+  
+  // // Keep the control panel and map together on the same page
+  // .dashboard-control-panel + .map,
+  // .dashboard-card:has(.dashboard-control-panel) + .dashboard-card:has(.map) {
+  //   page-break-before: avoid !important;
+  // }
+  
+  #app {
+    display: block !important;
   }
 }
 
