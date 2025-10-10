@@ -26,6 +26,7 @@
       id="dashboard-control-panel"
       :drop-downs="dropDowns"
       :init-value="controls"
+      class="do-not-print"
       @selected="updateControls"
     />
 
@@ -44,7 +45,10 @@
         }}
       </template>
       <template #top-right>
-        <div class="field is-grouped">
+        <h2 v-if="controls.zipcode.zip" class="title only-printed">
+          <b>Zip Code:</b> {{ controls.zipcode.zip }}
+        </h2>
+        <div class="field is-grouped do-not-print">
           <p class="control">
             <button
               v-if="!zoomed"
@@ -448,8 +452,8 @@ const zoomBg = () => {
   background-color: $trajectory-grey;
 }
 
-// Add print styles for legend colors
 @media print {
+  // Add print styles for legend colors
   .square,
   .square-red,
   .square-orange,
@@ -471,6 +475,25 @@ const zoomBg = () => {
   .square-grey {
     background-color: $trajectory-grey !important;
     border-color: $trajectory-grey !important;
+  }
+
+  // Dashboard
+  // Force dashboard to single column layout
+  .dashboard {
+    display: block !important; // Change from grid to block
+    padding: 0.5rem !important;
+    column-gap: 0 !important;
+    row-gap: 0.5rem !important;
+  }
+
+  // Make all dashboard cards full width and stack vertically
+  .dashboard > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: unset !important;
+    grid-row: unset !important;
+    margin-bottom: 1rem !important;
+    page-break-inside: avoid !important;
   }
 }
 

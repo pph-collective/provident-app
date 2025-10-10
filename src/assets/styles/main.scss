@@ -145,7 +145,7 @@ fieldset[disabled] {
   }
 }
 
-.printable, .only-printed, .page-break {
+.only-printed {
   display: none;
 }
 
@@ -158,6 +158,10 @@ fieldset[disabled] {
   .do-not-print {
       display: none !important;
   }
+
+  .only-printed {
+    display: revert;
+  }
   
   // Show only the content container
   #content-container {
@@ -167,38 +171,8 @@ fieldset[disabled] {
     padding: 0 !important;
     margin: 0 !important;
   }
-
-  // Force dashboard to single column layout
-  .dashboard {
-    display: block !important; // Change from grid to block
-    padding: 0.5rem !important;
-    column-gap: 0 !important;
-    row-gap: 0.5rem !important;
-  }
   
-  // Make all dashboard cards full width and stack vertically
-  .dashboard > * {
-    width: 100% !important;
-    max-width: 100% !important;
-    grid-column: unset !important;
-    grid-row: unset !important;
-    margin-bottom: 1rem !important;
-    page-break-inside: avoid !important;
-  }
-  
-  // // Prevent page breaks between the control panel and map
-  // .dashboard-control-panel,
-  // .map {
-  //   page-break-inside: avoid !important;
-  //   page-break-after: avoid !important;
-  // }
-  
-  // // Keep the control panel and map together on the same page
-  // .dashboard-control-panel + .map,
-  // .dashboard-card:has(.dashboard-control-panel) + .dashboard-card:has(.map) {
-  //   page-break-before: avoid !important;
-  // }
-  
+  // Ensure #app uses block layout for print - overrides Vue/Bulma flex/grid defaults
   #app {
     display: block !important;
   }
