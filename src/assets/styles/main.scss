@@ -145,46 +145,36 @@ fieldset[disabled] {
   }
 }
 
-.printable, .only-printed, .page-break {
+.only-printed {
   display: none;
 }
 
 @media print {
-  body * {
-    display: none;
+  // Hide everything except content-container
+  #app > *:not(#content-container) {
+    display: none !important;
   }
 
-  .printable {
-    display: block !important;
+  .do-not-print {
+      display: none !important;
   }
 
-  .printable * {
+  .only-printed {
     display: revert;
   }
-
-  .printable {
-    position: absolute;
-    left:0;
-    top:0;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    background-color: white;
-    isolation: isolate;
-    white-space: pre-wrap;
+  
+  // Show only the content container
+  #content-container {
+    display: block !important;
+    min-height: auto !important;
+    position: static !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-
-  .sticky-bottom {
-    position: relative !important;
-  }
-
-  .not-printed {
-    display: none;
-  }
-
-  .page-break {
-    display: block;
-    page-break-before: always;
+  
+  // Ensure #app uses block layout for print - overrides Vue/Bulma flex/grid defaults
+  #app {
+    display: block !important;
   }
 }
 
