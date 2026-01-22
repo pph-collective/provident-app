@@ -194,6 +194,7 @@ import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
 import zipcodes from "@/assets/RI_ZIPS.json";
+import hezToGeoid from "@/assets/HEZ_GEOIDS.json";
 
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
@@ -209,6 +210,7 @@ import { useQueryParams } from "../../composables/useQueryParams";
 const towns = MUNICIPALITIES.map((m) => ({
   name: m,
   municipalities: [m],
+  geoids: [],
 }));
 
 const BLOCK_GROUPS = geo.map((feature) => ({
@@ -236,8 +238,8 @@ const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 
 const locations = computed(() => {
-  const ri = { name: "All of Rhode Island", municipalities: [] };
-  return [ri, ...towns];
+  const ri = { name: "All of Rhode Island", municipalities: [], geoids: [] };
+  return [ri, ...hezToGeoid, ...towns];
 });
 
 const modelDataPeriod = computed(() => store.modelDataPeriod);
