@@ -124,7 +124,7 @@
             id="main-map"
             class="is-absolute"
             :dataset="dataset.cbg"
-            :filter-municipalities="controls.geography.municipalities"
+            :filter-geoids="controls.geography.geoids"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :active-block-group="activeBG"
@@ -207,16 +207,20 @@ import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParams } from "../../composables/useQueryParams";
 
-const towns = MUNICIPALITIES.map((m) => ({
-  name: m,
-  municipalities: [m],
-  geoids: [],
-}));
-
 const BLOCK_GROUPS = geo.map((feature) => ({
   municipality: feature.properties.name,
   blockGroup: feature.properties.bg_id,
 }));
+
+const towns = MUNICIPALITIES.map((m) => ({
+  name: m,
+  municipalities: [m],
+  geoids: BLOCK_GROUPS.filter((bg) => bg.municipality === m).map(
+    (bg) => bg.blockGroup,
+  ),
+}));
+
+console.log(towns);
 
 const store = useProvidentStore();
 const dataset = computed(() => {

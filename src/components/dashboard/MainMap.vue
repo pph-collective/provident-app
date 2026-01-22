@@ -23,7 +23,7 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  filterMunicipalities: {
+  filterGeoids: {
     type: Array,
     default() {
       return [];
@@ -58,10 +58,14 @@ const filteredZip = computed(() => {
 // filter geo data and simplify
 const filteredGeo = computed(() => {
   let filtered = geo;
-  if (props.filterMunicipalities.length > 0) {
+  if (props.filterGeoids.length > 0) {
     filtered = geo.filter((g) =>
-      props.filterMunicipalities.includes(g.properties.name),
+      props.filterGeoids.includes(g.properties.bg_id),
     );
+  }
+
+  if (!filtered || !Array.isArray(filtered)) {
+    filtered = [];
   }
 
   filtered.forEach((g) => {
