@@ -24,7 +24,9 @@
       <table class="table is-striped is-fullwidth my-1">
         <thead>
           <tr>
-            <th />
+            <th>
+              <span class="is-sr-only">Metric</span>
+            </th>
             <th class="py-1 px-0">
               <abbr :title="geoid">BG</abbr>
             </th>
