@@ -28,10 +28,16 @@
               <span class="is-sr-only">Metric</span>
             </th>
             <th class="py-1 px-0">
-              <abbr :title="geoid">BG</abbr>
+              <abbr title="Block Group">BG</abbr>
             </th>
             <th class="py-1 px-0">
-              <abbr :title="municipality">Town</abbr>
+              <abbr
+                :title="
+                  area.includes('HEZ') ? 'Health Equity Zone' : 'Municipality'
+                "
+              >
+                {{ area.includes("HEZ") ? "HEZ" : "Muni" }}
+              </abbr>
             </th>
             <th class="py-1 px-0">
               <abbr title="Rhode Island">RI</abbr>
@@ -77,6 +83,11 @@ const props = defineProps({
   dataset: {
     type: Object,
     required: true,
+  },
+  area: {
+    type: String,
+    required: true,
+    default: "",
   },
   areaGeoids: {
     type: Array,

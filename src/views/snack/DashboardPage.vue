@@ -161,6 +161,11 @@
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
           :municipality="computedMuni"
+          :area="
+            controls.geography.name === RI && computedMuni
+              ? computedMuni
+              : controls.geography.name
+          "
           :area-geoids="
             controls.geography.name === RI && computedMuni
               ? towns.find((t) => t.name === computedMuni).geoids
