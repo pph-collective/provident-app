@@ -162,14 +162,14 @@
           :dataset="dataset"
           :municipality="computedMuni"
           :area="
-            controls.geography.name === RI && computedMuni
+            controls?.geography?.name === RI && computedMuni
               ? computedMuni
-              : controls.geography.name
+              : controls?.geography?.name
           "
           :area-geoids="
-            controls.geography.name === RI && computedMuni
-              ? (towns.find((t) => t.name === computedMuni)?.geoids ?? [])
-              : controls.geography.geoids
+            controls?.geography?.name === RI && computedMuni
+              ? towns.find((t) => t.name === computedMuni).geoids
+              : controls?.geography?.geoids
           "
           :geoid="activeBG"
         />
