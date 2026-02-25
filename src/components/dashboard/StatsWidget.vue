@@ -83,6 +83,11 @@ const props = defineProps({
     required: false,
     default: () => [],
   },
+  municipality: {
+    type: String,
+    required: false,
+    default: "",
+  },
   geoid: {
     type: String,
     required: false,

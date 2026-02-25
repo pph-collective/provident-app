@@ -160,7 +160,12 @@
         <StatsWidget
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
-          :area-geoids="controls.geography.geoids"
+          :municipality="computedMuni"
+          :area-geoids="
+            controls.geography.name === RI
+              ? towns.find((t) => t.name === computedMuni).geoids
+              : controls.geography.geoids
+          "
           :geoid="activeBG"
         />
       </template>
