@@ -41,9 +41,9 @@
         {{
           zoomed
             ? `${
-                controls.geography.name === RI
+                controls?.geography?.name === RI
                   ? computedMuni
-                  : controls.geography.name
+                  : controls?.geography?.name
               } - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
