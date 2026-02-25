@@ -87,7 +87,6 @@ const props = defineProps({
   area: {
     type: String,
     required: true,
-    default: "",
   },
   areaGeoids: {
     type: Array,
