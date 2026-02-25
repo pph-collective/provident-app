@@ -162,7 +162,7 @@
           :dataset="dataset"
           :municipality="computedMuni"
           :area-geoids="
-            controls.geography.name === RI
+            controls.geography.name === RI && computedMuni
               ? towns.find((t) => t.name === computedMuni).geoids
               : controls.geography.geoids
           "
