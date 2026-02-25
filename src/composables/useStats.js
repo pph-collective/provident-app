@@ -23,10 +23,6 @@ export function useStats({
     return aq.from(dataset.value.cbg);
   });
 
-  // const townDt = computed(() => {
-  //   return aq.from(dataset.value.town);
-  // });
-
   const riDt = computed(() => {
     return aq.from([dataset.value.ri]);
   });
@@ -123,15 +119,6 @@ export function useStats({
     for (const metric of metrics) {
       agg[metric.field] = aq.op[metric.aggregate](metric.field);
     }
-
-    // if (withTertiles) {
-    //   for (const metric of metrics) {
-    //     agg[metric.field + "_tertile"] = aq.op.mean(metric.field + "_tertile");
-    //   }
-    //   for (const [group, groupMetrics] of Object.entries(groupedMetrics)) {
-    //     agg[group + "_tertile"] = aq.op.mean(group + "_tertile");
-    //   }
-    // }
 
     return filteredDt.rollup(agg).objects()[0];
   });
