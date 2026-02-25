@@ -40,7 +40,11 @@
         Map:
         {{
           zoomed
-            ? `${computedMuni} - ${activeBG}`
+            ? `${
+                controls.geography.name === RI
+                  ? computedMuni
+                  : controls.geography.name
+              } - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
       </template>
@@ -156,7 +160,7 @@
         <StatsWidget
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
-          :municipality="computedMuni"
+          :area-geoids="controls.geography.geoids"
           :geoid="activeBG"
         />
       </template>
@@ -207,6 +211,8 @@ import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParams } from "../../composables/useQueryParams";
 
+const RI = "All of Rhode Island";
+
 const BLOCK_GROUPS = geo.map((feature) => ({
   municipality: feature.properties.name,
   blockGroup: feature.properties.bg_id,
@@ -219,8 +225,6 @@ const towns = MUNICIPALITIES.map((m) => ({
     (bg) => bg.blockGroup,
   ),
 }));
-
-console.log(towns);
 
 const store = useProvidentStore();
 const dataset = computed(() => {
@@ -242,7 +246,7 @@ const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 
 const locations = computed(() => {
-  const ri = { name: "All of Rhode Island", municipalities: [], geoids: [] };
+  const ri = { name: RI, municipalities: [], geoids: [] };
   return [ri, ...hezToGeoid, ...towns];
 });
 

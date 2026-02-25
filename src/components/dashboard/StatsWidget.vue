@@ -78,10 +78,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  municipality: {
-    type: String,
+  areaGeoids: {
+    type: Array,
     required: false,
-    default: "",
+    default: () => [],
   },
   geoid: {
     type: String,
@@ -172,7 +172,7 @@ const { stats: current } = useStats({
   metrics,
   groupedMetrics,
   dataset: toRef(() => props.dataset),
-  municipality: toRef(() => props.municipality),
+  areaGeoids: toRef(() => props.areaGeoids),
   geoid: toRef(() => props.geoid),
 });
 
@@ -236,7 +236,7 @@ const communityComposition = [
 const { stats: communityStats } = useStats({
   metrics: communityComposition,
   dataset: toRef(() => props.dataset),
-  municipality: toRef(() => props.municipality),
+  areaGeoids: toRef(() => props.areaGeoids),
   geoid: toRef(() => props.geoid),
   withTertiles: false,
 });
