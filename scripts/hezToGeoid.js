@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const csv = fs.readFileSync("./data/PROVIDENT_HEZ_GEOIDs.csv", "utf8");
+const csv = fs.readFileSync("./data/PROVIDENT_HEZ_GEOIDS.csv", "utf8");
 const lines = csv.trim().split("\n").slice(1); // skip header
 
 const hezGroups = {};

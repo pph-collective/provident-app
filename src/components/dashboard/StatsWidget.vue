@@ -33,10 +33,12 @@
             <th class="py-1 px-0">
               <abbr
                 :title="
-                  area.includes('HEZ') ? 'Health Equity Zone' : 'Municipality'
+                  (area || '').includes('HEZ')
+                    ? 'Health Equity Zone'
+                    : 'Municipality'
                 "
               >
-                {{ area.includes("HEZ") ? "HEZ" : "Muni" }}
+                {{ (area || '').includes("HEZ") ? "HEZ" : "Muni" }}
               </abbr>
             </th>
             <th class="py-1 px-0">

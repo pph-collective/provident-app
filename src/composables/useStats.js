@@ -105,7 +105,8 @@ export function useStats({
     if (!areaGeoids.value || areaGeoids.value.length === 0) {
       return [];
     }
-    return bgs.value.filter((o) => areaGeoids.value.includes(o.bg_id));
+    const areaGeoidsSet = new Set(areaGeoids.value);
+    return bgs.value.filter((o) => areaGeoidsSet.has(o.bg_id));
   });
 
   const aggregated = computed(() => {
