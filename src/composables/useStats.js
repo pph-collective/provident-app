@@ -15,16 +15,12 @@ export function useStats({
   metrics,
   groupedMetrics = {},
   dataset,
-  municipality,
+  areaGeoids,
   geoid,
   withTertiles = true,
 }) {
   const dt = computed(() => {
     return aq.from(dataset.value.cbg);
-  });
-
-  const townDt = computed(() => {
-    return aq.from(dataset.value.town);
   });
 
   const riDt = computed(() => {
@@ -92,19 +88,6 @@ export function useStats({
     }
   });
 
-  // to update
-  const munis = computed(() => {
-    if (isData.value) {
-      return townDt.value
-        .cross(tertiles.value)
-        .derive(calcTertile)
-        .derive(groupTertile)
-        .objects();
-    } else {
-      return [];
-    }
-  });
-
   const bgs = computed(() => {
     if (isData.value) {
       return dt.value
@@ -118,8 +101,26 @@ export function useStats({
     }
   });
 
-  const muni = computed(() => {
-    return munis.value.find((o) => o.town === municipality.value) ?? {};
+  const filteredBgs = computed(() => {
+    if (!areaGeoids.value || areaGeoids.value.length === 0) {
+      return [];
+    }
+    return bgs.value.filter((o) => areaGeoids.value.includes(o.bg_id));
+  });
+
+  const aggregated = computed(() => {
+    if (filteredBgs.value.length === 0) {
+      return {};
+    }
+
+    const filteredDt = aq.from(filteredBgs.value);
+    const agg = {};
+
+    for (const metric of metrics) {
+      agg[metric.field] = aq.op[metric.aggregate](metric.field);
+    }
+
+    return filteredDt.rollup(agg).objects()[0];
   });
 
   const bg = computed(() => {
@@ -129,7 +130,7 @@ export function useStats({
   const stats = computed(() => {
     return {
       ri: ri.value,
-      municipality: muni.value,
+      area: aggregated.value,
       geoid: bg.value,
     };
   });

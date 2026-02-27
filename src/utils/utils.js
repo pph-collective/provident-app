@@ -40,7 +40,7 @@ export const tertileColorMap = new Map([
 export const priorityToColor = {
   "Persistently high risk for overdose": "#D00032",
   "Sporadically high risk for overdose": "#FF7F32",
-  "Lower risk for overdose": "#DBD4D000", // Transparent
+  "Lower risk for overdose": "transparent",
 };
 
 export const poriRed = "#990000";

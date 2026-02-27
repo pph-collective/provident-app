@@ -28,10 +28,16 @@
               <span class="is-sr-only">Metric</span>
             </th>
             <th class="py-1 px-0">
-              <abbr :title="geoid">BG</abbr>
+              <abbr title="Block Group">BG</abbr>
             </th>
             <th class="py-1 px-0">
-              <abbr :title="municipality">Town</abbr>
+              <abbr
+                :title="
+                  area.includes('HEZ') ? 'Health Equity Zone' : 'Municipality'
+                "
+              >
+                {{ area.includes("HEZ") ? "HEZ" : "Muni" }}
+              </abbr>
             </th>
             <th class="py-1 px-0">
               <abbr title="Rhode Island">RI</abbr>
@@ -78,6 +84,15 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  area: {
+    type: String,
+    required: true,
+  },
+  areaGeoids: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
   municipality: {
     type: String,
     required: false,
@@ -98,7 +113,7 @@ const metrics = [
     field: "below_poverty",
     title: "Poverty Status",
     info: "People living in poverty have very little money to meet their basic needs for things like housing and food.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Economic Resources",
     tertile_direction: "ascending",
@@ -107,7 +122,7 @@ const metrics = [
     field: "unemployed",
     title: "Unemployment Rate",
     info: "People who are unemployed can work and are looking for a job but haven’t been able to get one yet.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Economic Resources",
     tertile_direction: "ascending",
@@ -116,7 +131,7 @@ const metrics = [
     field: "housing_burden",
     title: "Rent Burden",
     info: "Households that put more than 30% of their income towards rent will have very little money left over.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Economic Resources",
     tertile_direction: "ascending",
@@ -125,7 +140,7 @@ const metrics = [
     field: "no_vehicle",
     title: "No Vehicle Available",
     info: "Households without any cars need to rely on public transportation to get around.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Economic Resources",
     tertile_direction: "ascending",
@@ -134,7 +149,7 @@ const metrics = [
     field: "living_alone",
     title: "Living Alone",
     info: "People who live alone may not have someone nearby who can check on them in an emergency.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Housing Environments",
     tertile_direction: "ascending",
@@ -143,7 +158,7 @@ const metrics = [
     field: "crowded_housing",
     title: "Crowded Housing",
     info: "People who live in crowded households might have trouble affording enough space to live comfortably.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Housing Environments",
     tertile_direction: "ascending",
@@ -152,7 +167,7 @@ const metrics = [
     field: "internet",
     title: "Internet Access",
     info: "People without Internet access might have trouble finding resources or making appointments online.",
-    aggregate: "median",
+    aggregate: "mean",
     formatter: pct,
     group: "Housing Environments",
     tertile_direction: "descending",
@@ -172,7 +187,7 @@ const { stats: current } = useStats({
   metrics,
   groupedMetrics,
   dataset: toRef(() => props.dataset),
-  municipality: toRef(() => props.municipality),
+  areaGeoids: toRef(() => props.areaGeoids),
   geoid: toRef(() => props.geoid),
 });
 
@@ -236,7 +251,7 @@ const communityComposition = [
 const { stats: communityStats } = useStats({
   metrics: communityComposition,
   dataset: toRef(() => props.dataset),
-  municipality: toRef(() => props.municipality),
+  areaGeoids: toRef(() => props.areaGeoids),
   geoid: toRef(() => props.geoid),
   withTertiles: false,
 });

@@ -1,7 +1,12 @@
 <template>
   <div
     class="priority-tag notification is-size-6-7 p-1 has-text-centered my-3"
-    :style="{ '--color': priorityToColor[priority] ?? '#DBD4D0' }"
+    :style="{
+      '--color':
+        priorityToColor[priority] === 'transparent'
+          ? '#DBD4D0'
+          : priorityToColor[priority] ?? '#DBD4D0',
+    }"
   >
     <p v-if="priority">
       <span class="has-text-weight-bold">{{ priority }}</span>
