@@ -40,7 +40,11 @@
         Map:
         {{
           zoomed
-            ? `${computedMuni} - ${activeBG}`
+            ? `${
+                controls?.geography?.name === RI
+                  ? computedMuni
+                  : controls?.geography?.name
+              } - ${activeBG}`
             : controls?.geography?.name ?? ""
         }}
       </template>
@@ -124,7 +128,7 @@
             id="main-map"
             class="is-absolute"
             :dataset="dataset.cbg"
-            :filter-municipalities="controls.geography.municipalities"
+            :filter-geoids="controls.geography.geoids"
             :zipcode="controls.zipcode"
             :data-cy="controls.geography.name"
             :active-block-group="activeBG"
@@ -157,6 +161,16 @@
           v-if="dataset.cbg.length > 0"
           :dataset="dataset"
           :municipality="computedMuni"
+          :area="
+            controls?.geography?.name === RI && computedMuni
+              ? computedMuni
+              : controls?.geography?.name
+          "
+          :area-geoids="
+            controls?.geography?.name === RI && computedMuni
+              ? towns.find((t) => t.name === computedMuni)?.geoids ?? []
+              : controls?.geography?.geoids
+          "
           :geoid="activeBG"
         />
       </template>
@@ -194,6 +208,7 @@ import { useProvidentStore } from "../../store";
 
 import geo from "@/assets/geojson/ri.json";
 import zipcodes from "@/assets/RI_ZIPS.json";
+import hezToGeoid from "@/assets/HEZ_GEOIDS.json";
 
 import { MUNICIPALITIES, sortByProperty } from "../../utils/utils";
 
@@ -206,14 +221,19 @@ import StatsWidget from "../../components/dashboard/StatsWidget.vue";
 import LoadingSpinner from "../../components/LoadingSpinner.vue";
 import { useQueryParams } from "../../composables/useQueryParams";
 
-const towns = MUNICIPALITIES.map((m) => ({
-  name: m,
-  municipalities: [m],
-}));
+const RI = "All of Rhode Island";
 
 const BLOCK_GROUPS = geo.map((feature) => ({
   municipality: feature.properties.name,
   blockGroup: feature.properties.bg_id,
+}));
+
+const towns = MUNICIPALITIES.map((m) => ({
+  name: m,
+  municipalities: [m],
+  geoids: BLOCK_GROUPS.filter((bg) => bg.municipality === m).map(
+    (bg) => bg.blockGroup,
+  ),
 }));
 
 const store = useProvidentStore();
@@ -236,8 +256,8 @@ const activeClickedStatus = ref(false);
 const zoomed = ref(false);
 
 const locations = computed(() => {
-  const ri = { name: "All of Rhode Island", municipalities: [] };
-  return [ri, ...towns];
+  const ri = { name: RI, municipalities: [], geoids: [] };
+  return [ri, ...hezToGeoid, ...towns];
 });
 
 const modelDataPeriod = computed(() => store.modelDataPeriod);
@@ -249,12 +269,14 @@ const zipsDropdownOptions = computed(() => {
   let zips = [];
 
   if (controls.value.geography) {
-    const { municipalities } = controls.value.geography;
+    const { name, municipalities } = controls.value.geography;
 
-    if (municipalities.length === 0) {
-      // Set the result (for the dropdown) to all of the zip codes in RI
+    if (name === RI) {
+      // Include all the zip codes
       zips = [...zipcodes];
     } else {
+      // If it's a municipality, include all of the zipcodes in it
+      // HEZs won't have this
       municipalities.forEach((m) => {
         zips.push(...zipcodes.filter((z) => z.city === m));
       });

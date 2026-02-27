@@ -70,7 +70,7 @@
             <StatsTableIcon
               :metric="metric.field"
               :format-fn="metric.formatter"
-              :stats="stats.municipality"
+              :stats="stats.area"
               :location="municipality"
               :icon="false"
             />
