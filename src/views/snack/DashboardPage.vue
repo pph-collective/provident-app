@@ -269,12 +269,14 @@ const zipsDropdownOptions = computed(() => {
   let zips = [];
 
   if (controls.value.geography) {
-    const { municipalities } = controls.value.geography;
+    const { name, municipalities } = controls.value.geography;
 
-    if (municipalities.length === 0) {
-      // Set the result (for the dropdown) to all of the zip codes in RI
+    if (name === RI) {
+      // Include all the zip codes
       zips = [...zipcodes];
     } else {
+      // If it's a municipality, include all of the zipcodes in it
+      // HEZs won't have this
       municipalities.forEach((m) => {
         zips.push(...zipcodes.filter((z) => z.city === m));
       });
