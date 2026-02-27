@@ -7,7 +7,7 @@ const hezGroups = {};
 
 lines.forEach((line) => {
   const [geoid, hez] = line.split(",");
-  if (hez && hez.trim()) {
+  if (hez?.trim()) {
     const hezName = hez.trim();
     if (!hezGroups[hezName]) {
       hezGroups[hezName] = [];
