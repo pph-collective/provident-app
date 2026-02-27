@@ -57,15 +57,12 @@ const filteredZip = computed(() => {
 
 // filter geo data and simplify
 const filteredGeo = computed(() => {
-  let filtered = geo;
+  const safeGeo = Array.isArray(geo) ? geo : [];
+  let filtered = safeGeo;
   if (props.filterGeoids.length > 0) {
-    filtered = geo.filter((g) =>
+    filtered = safeGeo.filter((g) =>
       props.filterGeoids.includes(g.properties.bg_id),
     );
-  }
-
-  if (!filtered || !Array.isArray(filtered)) {
-    filtered = [];
   }
 
   filtered.forEach((g) => {
