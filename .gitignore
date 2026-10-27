@@ -33,3 +33,5 @@ pnpm-debug.log*
 *.sw?
 
 hero_image_options
+
+.yarn/
