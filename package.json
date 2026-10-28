@@ -12,7 +12,6 @@
     "@vueform/multiselect": "^2.6.11",
     "arquero": "^5.4.1",
     "bulma": "^0.9.4",
-    "bulma-responsive-tables": "^1.2.5",
     "d3-format": "^3.1.2",
     "firebase": "^13.1.0",
     "pinia": "^2.3.1",

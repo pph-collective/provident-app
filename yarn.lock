@@ -2106,16 +2106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bulma-responsive-tables@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "bulma-responsive-tables@npm:1.2.5"
-  dependencies:
-    bulma: "npm:^0.9.0"
-  checksum: 10c0/1783f1a4cc8279ca8a8f790f589eaae170f85edc30414faa9bd2754357004ea983c6f7a60818b85c1ba6b0baaee595d6df9dac3a0020c10570888082f38253f1
-  languageName: node
-  linkType: hard
-
-"bulma@npm:^0.9.0, bulma@npm:^0.9.4":
+"bulma@npm:^0.9.4":
   version: 0.9.4
   resolution: "bulma@npm:0.9.4"
   checksum: 10c0/ee4db3427f8ba24fa83d112dca87b99ba009ded9b159f72c4c35e04d1d25c636c3275db1268315427226cdd6c27c00e4147d4696b89cf1c4d57945f80dd16331
@@ -5093,7 +5084,6 @@ __metadata:
     argparse: "npm:^2.0.1"
     arquero: "npm:^5.4.1"
     bulma: "npm:^0.9.4"
-    bulma-responsive-tables: "npm:^1.2.5"
     csv-parse: "npm:^5.6.0"
     d3-dsv: "npm:^3.0.1"
     d3-format: "npm:^3.1.2"

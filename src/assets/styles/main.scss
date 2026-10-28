@@ -1,5 +1,4 @@
 @import "variables.scss";
-@import "bulma-responsive-tables";
 
 $box-radius: 2px;
 
@@ -162,7 +161,7 @@ fieldset[disabled] {
   .only-printed {
     display: revert;
   }
-  
+
   // Show only the content container
   #content-container {
     display: block !important;
@@ -171,7 +170,7 @@ fieldset[disabled] {
     padding: 0 !important;
     margin: 0 !important;
   }
-  
+
   // Ensure #app uses block layout for print - overrides Vue/Bulma flex/grid defaults
   #app {
     display: block !important;
