@@ -38,7 +38,6 @@
     "eslint-plugin-prettier": "^5.5.7",
     "eslint-plugin-vue": "^9.33.0",
     "firebase-admin": "^11.11.1",
-    "firebase-tools": "^12.9.1",
     "lint-staged": "^14.0.1",
     "ndjson-cli": "^0.3.1",
     "prettier": "^3.9.10",
