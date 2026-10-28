@@ -7,9 +7,14 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
-  define: {
-    // https://github.com/vitejs/vite/issues/1973
-    "process.env": process.env,
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Bulma 0.9.x is unmaintained and uses deprecated Sass APIs
+        silenceDeprecations: ["import", "global-builtin", "color-functions", "if-function"],
+        quietDeps: true,
+      },
+    },
   },
   plugins: [vue()],
   server: {
@@ -17,9 +22,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": resolve(import.meta.dirname, "./src"),
       // allows @ to work in template - https://github.com/vitejs/vite/issues/2003
-      "/@": resolve(__dirname, "./src"),
+      "/@": resolve(import.meta.dirname, "./src"),
     },
   },
 });

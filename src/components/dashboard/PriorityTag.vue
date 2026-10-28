@@ -5,7 +5,7 @@
       '--color':
         priorityToColor[priority] === 'transparent'
           ? '#DBD4D0'
-          : priorityToColor[priority] ?? '#DBD4D0',
+          : (priorityToColor[priority] ?? '#DBD4D0'),
     }"
   >
     <p v-if="priority">

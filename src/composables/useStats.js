@@ -46,13 +46,11 @@ export function useStats({
   if (withTertiles) {
     for (const metric of metrics) {
       if (metric.tertile_direction === "ascending") {
-        calcTertile[
-          metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
+        calcTertile[metric.field + "_tertile"] =
+          `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 3 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 1)`;
       } else {
-        calcTertile[
-          metric.field + "_tertile"
-        ] = `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
+        calcTertile[metric.field + "_tertile"] =
+          `d => d['${metric.field}'] > d['${metric.field}_upper'] ? 1 : (d['${metric.field}'] >= d['${metric.field}_lower'] ? 2 : 3)`;
       }
     }
   }
