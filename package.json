@@ -33,7 +33,6 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@firebase/rules-unit-testing": "^3.0.4",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-vue": "^4.6.2",
