@@ -10,6 +10,8 @@ module.exports = {
     // override/add rules settings here, such as:
     // 'vue/no-unused-vars': 'error'
     "@typescript-eslint/no-var-requires": 0,
+    // v8 replaced no-var-requires with this rule; scripts/ are CommonJS
+    "@typescript-eslint/no-require-imports": 0,
   },
   parser: "vue-eslint-parser",
   parserOptions: {
