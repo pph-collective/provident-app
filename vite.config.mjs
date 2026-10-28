@@ -11,6 +11,15 @@ export default defineConfig({
     // https://github.com/vitejs/vite/issues/1973
     "process.env": process.env,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Bulma 0.9.x is unmaintained and uses deprecated Sass APIs
+        silenceDeprecations: ["import", "global-builtin", "color-functions", "if-function"],
+        quietDeps: true,
+      },
+    },
+  },
   plugins: [vue()],
   server: {
     port: 8080,
