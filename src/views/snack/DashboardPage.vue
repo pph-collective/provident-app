@@ -45,7 +45,7 @@
                   ? computedMuni
                   : controls?.geography?.name
               } - ${activeBG}`
-            : controls?.geography?.name ?? ""
+            : (controls?.geography?.name ?? "")
         }}
       </template>
       <template #top-right>
@@ -168,7 +168,7 @@
           "
           :area-geoids="
             controls?.geography?.name === RI && computedMuni
-              ? towns.find((t) => t.name === computedMuni)?.geoids ?? []
+              ? (towns.find((t) => t.name === computedMuni)?.geoids ?? [])
               : controls?.geography?.geoids
           "
           :geoid="activeBG"
